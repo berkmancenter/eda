@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  date: 2013-04-11 14:00:10
+  number: 1
+  edition: 
+  page_group: 
+  metadata: MyText
+
+two:
+  title: MyString
+  date: 2013-04-11 14:00:10
+  number: 1
+  edition: 
+  page_group: 
+  metadata: MyText
