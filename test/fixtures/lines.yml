@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  stanza: 
+  text: MyText
+  number: 1
+
+two:
+  stanza: 
+  text: MyText
+  number: 1
