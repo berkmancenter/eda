@@ -4,6 +4,7 @@ class CreateWorks < ActiveRecord::Migration
       t.string :title
       t.datetime :date
       t.integer :number
+      t.string :variant
       t.references :edition
       t.references :page_group
       t.text :metadata

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  notable_id: 1
+  notable_type: MyString
+  note: MyText
+  owner: 
+
+two:
+  notable_id: 1
+  notable_type: MyString
+  note: MyText
+  owner: 

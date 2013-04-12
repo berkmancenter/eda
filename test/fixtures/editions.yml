@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  author: MyString
+  date: 2013-04-12 09:53:57
+  work_number_prefix: MyString
+  completeness: 1
+  owner: 
+  description: MyText
+
+two:
+  name: MyString
+  author: MyString
+  date: 2013-04-12 09:53:57
+  work_number_prefix: MyString
+  completeness: 1
+  owner: 
+  description: MyText

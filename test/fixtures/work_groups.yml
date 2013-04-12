@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  type: 
+  parent_group: 
+  edition: 
+  owner: 
+  position: 1
+
+two:
+  name: MyString
+  type: 
+  parent_group: 
+  edition: 
+  owner: 
+  position: 1

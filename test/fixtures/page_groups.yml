@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  parent_group: 
+  editable: false
+  image_url: MyText
+  metadata: MyText
+  edition: 
+  type: 
+  position: 1
+
+two:
+  name: MyString
+  parent_group: 
+  editable: false
+  image_url: MyText
+  metadata: MyText
+  edition: 
+  type: 
+  position: 1

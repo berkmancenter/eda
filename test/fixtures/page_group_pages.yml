@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  page_group: 
+  page: 
+  position: 1
+
+two:
+  page_group: 
+  page: 
+  position: 1
