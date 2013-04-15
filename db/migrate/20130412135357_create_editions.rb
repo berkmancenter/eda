@@ -5,7 +5,7 @@ class CreateEditions < ActiveRecord::Migration
       t.string :author
       t.datetime :date
       t.string :work_number_prefix
-      t.integer :completeness
+      t.float :completeness
       t.references :owner
       t.text :description
 

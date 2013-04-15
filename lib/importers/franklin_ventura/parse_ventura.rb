@@ -1,3 +1,9 @@
+# This has a lot to do:
+# Create Franklin edition
+# Create the works, lines, stanzas, and line modifiers
+# Set numbers?
+# Variant collections
+
 require_relative 'error_checking.rb'
 require_relative 'field_parsing.rb'
 require_relative 'char_map.rb'
@@ -15,6 +21,14 @@ end
 
 class FranklinVenturaImporter
     def import(directory, from_year = 1850, to_year = 1886)
+        edition = Edition.new(
+            :name => 'The Poem of Emily Dickinson: Variorum Edition',
+            :author => 'R. W. Franklin',
+            :date => Date.new(1998, 1, 1),
+            :work_number_prefix => 'F',
+            :completeness => 1.0
+        )
+        poems = []
         in_poem = false
         poem, stanza, line = nil, nil, ''
 
@@ -45,7 +59,10 @@ class FranklinVenturaImporter
                     match = Title_extractor.match(line)
                     if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
                         multiline_title = !!match[:title].index('<R>')
-                        poem.save if poem
+                        if poem
+                            poem.save! 
+                            poems << poem
+                        end
                         poem = Work.new(:number => match[:number].to_i, :title => match[:title], :date => Date.new(filename.to_i))
                     end
                 end
@@ -117,7 +134,6 @@ class FranklinVenturaImporter
                         emendation << line
                     end
                 end
-
 
                 if in_revision
                     if line[0] == '@' && line.match(Revision_pattern).nil?
@@ -199,14 +215,10 @@ class FranklinVenturaImporter
                                 poem.variant = matches['variant']
                             else
                                 title = variant_titles.empty? ? poem.title : variant_titles.shift
-                                poem.save
+                                poem.save!
+                                poems << poem
                                 poem = Work.new(:number => poem.number, :title => title, :variant => matches['variant'], :date => Date.new(filename.to_i))
                             end
-                        end
-
-                        if matches['fascicle']
-                            poem.fascicle = parse_fascicle(matches['fascicle'])[0]
-                            poem.fascicle_position = parse_fascicle(matches['fascicle'])[1]
                         end
                     end
 
@@ -218,6 +230,19 @@ class FranklinVenturaImporter
                 end
             end
         end
-        poem.save if poem
+        if poem
+            poem.save
+            poems << poem
+        end
+        poems
+        edition.works = poems
+        edition.save!
+    end
+
+    def group_variants
+        Edition.find_by_author('R. W. Franklin')
+    end
+
+    def post_process(poems)
     end
 end

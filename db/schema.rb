@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20130412143224) do
     t.string   "author"
     t.datetime "date"
     t.string   "work_number_prefix"
-    t.integer  "completeness"
+    t.float    "completeness"
     t.integer  "owner_id"
     t.text     "description"
     t.datetime "created_at",         :null => false
