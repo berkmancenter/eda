@@ -1,4 +1,7 @@
 Eda::Application.routes.draw do
+    resources :editions do
+        resources :works
+    end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

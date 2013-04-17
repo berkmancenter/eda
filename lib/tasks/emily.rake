@@ -14,6 +14,20 @@ namespace :emily do
             importer.import(args[:filename])
         end
 
+        desc 'Import BYU Lexicon'
+        task :lexicon, [:filename] => [:environment] do |task, args|
+            require Rails.root.join('lib', 'importers', 'lexicon', 'parse_lexicon.rb').to_s
+            importer = LexiconImporter.new
+            importer.import(args[:filename])
+        end
+
+        desc 'Import Project Gutenberg works'
+        task :gutenberg, [:filename] => [:environment] do |task, args|
+            require Rails.root.join('lib', 'importers', 'gutenberg', 'parse_gutenberg.rb').to_s
+            importer = GutenbergImporter.new
+            importer.import(args[:filename])
+        end
+
         desc 'Create collections'
         task :collections, [:filename] => [:environment] do |task, args|
             CSV.open(args[:filename], :headers => true)

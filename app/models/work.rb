@@ -15,9 +15,9 @@ class Work < ActiveRecord::Base
         lines.find_by_number(number)
     end
 
-    def number
-        "#{edition.work_number_prefix}#{read_attribute(:number)}"
-    end
+    #def number
+    #    "#{edition.work_number_prefix}#{read_attribute(:number)}"
+    #end
         
     def apps_at_address(line, char_index)
         (divisions + emendations + revisions + alternates).select do |apparatus|
