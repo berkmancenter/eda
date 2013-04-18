@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  word: MyString
+  endings: MyString
+  part_of_speech: MyString
+
+two:
+  word: MyString
+  endings: MyString
+  part_of_speech: MyString
