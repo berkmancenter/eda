@@ -28,6 +28,14 @@ namespace :emily do
             importer.import(args[:filename])
         end
 
+        desc 'Import TEI file'
+        task :tei, [:edition, :filename] => [:environment] do |task, args|
+            require Rails.root.join('lib', 'importers', 'tei', 'parse.rb').to_s
+            importer = TEIImporter.new
+            edition = Edition.find_by_author(args[:edition])
+            importer.import(edition, args[:filename])
+        end
+
         desc 'Create collections'
         task :collections, [:filename] => [:environment] do |task, args|
             CSV.open(args[:filename], :headers => true)

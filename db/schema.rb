@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130412143224) do
+ActiveRecord::Schema.define(:version => 20130422152856) do
+
+  create_table "definitions", :force => true do |t|
+    t.integer  "word_id"
+    t.integer  "number"
+    t.text     "definition"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "definitions", ["word_id"], :name => "index_definitions_on_word_id"
 
   create_table "editions", :force => true do |t|
     t.string   "name"
@@ -116,6 +126,14 @@ ActiveRecord::Schema.define(:version => 20130412143224) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "words", :force => true do |t|
+    t.string   "word"
+    t.string   "endings"
+    t.string   "part_of_speech"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "work_appearances", :force => true do |t|
     t.integer  "work_id"
     t.string   "publication"
@@ -152,6 +170,16 @@ ActiveRecord::Schema.define(:version => 20130412143224) do
   add_index "work_groups", ["edition_id"], :name => "index_work_groups_on_edition_id"
   add_index "work_groups", ["owner_id"], :name => "index_work_groups_on_owner_id"
   add_index "work_groups", ["parent_group_id"], :name => "index_work_groups_on_parent_group_id"
+
+  create_table "work_page_groups", :force => true do |t|
+    t.integer  "work_id"
+    t.integer  "page_group_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "work_page_groups", ["page_group_id"], :name => "index_work_page_groups_on_page_group_id"
+  add_index "work_page_groups", ["work_id"], :name => "index_work_page_groups_on_work_id"
 
   create_table "works", :force => true do |t|
     t.string   "title"

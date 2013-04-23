@@ -2,6 +2,7 @@ class CreateLineModifiers < ActiveRecord::Migration
   def change
     create_table :line_modifiers do |t|
       t.references :work
+      t.integer :parent_id
       t.integer :start_line_number
       t.integer :start_address
       t.integer :end_line_number

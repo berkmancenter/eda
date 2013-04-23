@@ -5,7 +5,12 @@ module FieldParsing
             type_map = { 'i' => 'page_or_column', 'u' => 'line'}
         matches = text.match(division_pattern)
         if matches && matches['line_num'] && matches['last_chars'] && matches['type']
-            d = Division.new(:start_line_number => matches['line_num'].to_i, :end_line_number => matches['line_num'].to_i, :original_characters => CharMap::replace(matches['last_chars']), :subtype => type_map[matches['type']])
+            d = Division.new(
+                :start_line_number => matches['line_num'].to_i,
+                :end_line_number => matches['line_num'].to_i,
+                :original_characters => CharMap::replace(matches['last_chars']),
+                :subtype => type_map[matches['type']]
+            )
             d
         end
     end
@@ -15,7 +20,12 @@ module FieldParsing
             matches = text.match(emendation_pattern)
         if matches && matches['line_num'] && matches['alternates']
             alts = matches['alternates'].split('] ')
-            e = Emendation.new(:start_line_number => matches['line_num'].to_i, :end_line_number => matches['line_num'].to_i, :original_characters => CharMap::replace(alts[1]), :new_characters => CharMap::replace(alts[0]))
+            e = Emendation.new(
+                :start_line_number => matches['line_num'].to_i,
+                :end_line_number => matches['line_num'].to_i,
+                :original_characters => CharMap::replace(alts[1]),
+                :new_characters => CharMap::replace(alts[0])
+            )
             e
         end
     end
@@ -26,7 +36,12 @@ module FieldParsing
         if matches && matches['line_num'] && matches['alternates']
             alts = matches['alternates'].split('] ')
             if alts[0] && alts[1]
-                a = Alternate.new(:start_line_number => matches['line_num'].to_i, :end_line_number => matches['line_num'].to_i,:original_characters => CharMap::replace(alts[0]), :new_characters => CharMap::replace(alts[1]))
+                a = Alternate.new(
+                    :start_line_number => matches['line_num'].to_i,
+                    :end_line_number => matches['line_num'].to_i,
+                    :original_characters => CharMap::replace(alts[0]),
+                    :new_characters => CharMap::replace(alts[1])
+                )
                 a
             else
                 #puts stuff
@@ -40,7 +55,12 @@ module FieldParsing
         if matches && matches['line_num'] && matches['revisions']
             alts = matches['revisions'].split('] ')
             if alts[0] && alts[1]
-                r = Revision.new(:start_line_number => matches['line_num'].to_i, :end_line_number => matches['line_num'].to_i, :original_characters => CharMap::replace(alts[0]), :new_characters => CharMap::replace(alts[1]))
+                r = Revision.new(
+                    :start_line_number => matches['line_num'].to_i,
+                    :end_line_number => matches['line_num'].to_i,
+                    :original_characters => CharMap::replace(alts[0]),
+                    :new_characters => CharMap::replace(alts[1])
+                )
                 r.start_line_number = matches['line_num'].to_i
                 r
             else

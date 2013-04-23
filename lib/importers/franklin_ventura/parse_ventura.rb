@@ -63,7 +63,7 @@ class FranklinVenturaImporter
                             poem.save! 
                             poems << poem
                         end
-                        poem = Work.new(:number => match[:number].to_i, :title => match[:title], :date => Date.new(filename.to_i))
+                        poem = Work.new(:number => match[:number].to_i, :title => CharMap::replace_no_itals(match[:title]), :date => Date.new(filename.to_i))
                     end
                 end
 
@@ -205,7 +205,7 @@ class FranklinVenturaImporter
                         if matches['line_num'].to_i > 0
                             line_num = matches['line_num'].to_i
                         end
-                        stanza_line = Line.new(:text => matches['line'])
+                        stanza_line = Line.new(:text => CharMap::replace(matches['line']))
                         stanza_line.number = line_num if line_num
                         stanza.lines << stanza_line
 
@@ -217,7 +217,12 @@ class FranklinVenturaImporter
                                 title = variant_titles.empty? ? poem.title : variant_titles.shift
                                 poem.save!
                                 poems << poem
-                                poem = Work.new(:number => poem.number, :title => title, :variant => matches['variant'], :date => Date.new(filename.to_i))
+                                poem = Work.new(
+                                    :number => poem.number,
+                                    :title => CharMap::replace_no_itals(title),
+                                    :variant => CharMap::replace(matches['variant']),
+                                    :date => Date.new(filename.to_i)
+                                )
                             end
                         end
                     end
@@ -237,12 +242,22 @@ class FranklinVenturaImporter
         poems
         edition.works = poems
         edition.save!
+        post_process!
     end
 
     def group_variants
         Edition.find_by_author('R. W. Franklin')
     end
 
-    def post_process(poems)
+    def post_process!
+        works = Edition.find_by_author('R. W. Franklin').works
+        works.each do |work|
+            work.emendations.each do |e|
+                line = work.line(e.start_line_number)
+                e.start_address = line.text.index(e.original_characters) if line
+                e.end_address = e.start_address + e.original_characters.length if e.start_address
+                e.save!
+            end
+        end
     end
 end

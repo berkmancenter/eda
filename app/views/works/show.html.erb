@@ -1,0 +1,24 @@
+<h2><%= "#{@work.number}#{@work.variant} - #{@work.title}" %></h2>
+
+<% @work.stanzas.each do |stanza| %>
+    <p class="stanza">
+    <% stanza.lines.each do |line| %>
+        <span class="line" data-line="<%= line.number %>">
+            <% text, output = line, '' %>
+            <% while text %>
+                <% (text.chars.count).downto(0) do |i| %>
+                    <% text.mods_at(i).each do |mod| %>
+                        <% output = output.prepend(render_mod(mod) || '') %> 
+                    <% end %>
+                    <% output = output.prepend(text.chars[i] || '') %>
+                <% end %>
+                <% text = text.parent %>
+            <% end %>
+            <%= raw output %>
+            <% unless line.just_author_break? %>
+                <br />
+            <% end %>
+        </span>
+    <% end %>
+    </p>
+<% end %>
