@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130422152856) do
 
   create_table "line_modifiers", :force => true do |t|
     t.integer  "work_id"
+    t.integer  "parent_id"
     t.integer  "start_line_number"
     t.integer  "start_address"
     t.integer  "end_line_number"

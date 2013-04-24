@@ -2,7 +2,7 @@ class WorksController < ApplicationController
     before_filter :load_edition
 
     def index
-        @works = @edition.works
+        @works = @edition.works.order('number, variant')
     end
 
     def show

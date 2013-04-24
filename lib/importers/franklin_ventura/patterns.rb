@@ -7,7 +7,7 @@ module Patterns
     Variant_title_extractor = /@PNT2_2(_M)? = \t(?<title>.*$)/
 
     Poem_start_pattern = /(@PS|@POEM1S)/
-    Poem_end_pattern = /^(@N|@1|@VAR|@PARA|A transcript|and then|Another account|Mills's)/
+    Poem_end_pattern = /^(@N|@1|@VAR|@PARA|A transcript|and then in brackets|Another account|Mills's)/
 
     Division_pattern = /@N = <MI>Division<D>/
     Division_extractor = /@N = <MI>Division<D>(?<divisions>.*)/m

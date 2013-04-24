@@ -29,11 +29,11 @@ namespace :emily do
         end
 
         desc 'Import TEI file'
-        task :tei, [:edition, :filename] => [:environment] do |task, args|
+        task :tei, [:edition, :number, :variant, :filename] => [:environment] do |task, args|
             require Rails.root.join('lib', 'importers', 'tei', 'parse.rb').to_s
             importer = TEIImporter.new
             edition = Edition.find_by_author(args[:edition])
-            importer.import(edition, args[:filename])
+            importer.import(edition, args[:number], args[:variant], args[:filename])
         end
 
         desc 'Create collections'

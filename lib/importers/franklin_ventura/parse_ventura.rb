@@ -60,6 +60,7 @@ class FranklinVenturaImporter
                     if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
                         multiline_title = !!match[:title].index('<R>')
                         if poem
+                            assign_stanza_positions(poem)
                             poem.save! 
                             poems << poem
                         end
@@ -212,9 +213,10 @@ class FranklinVenturaImporter
                         # If we have a new variant, create a new poem
                         if matches['variant']
                             if poem.variant.nil?
-                                poem.variant = matches['variant']
+                                poem.variant = CharMap::replace_no_itals(matches['variant'])
                             else
                                 title = variant_titles.empty? ? poem.title : variant_titles.shift
+                                assign_stanza_positions(poem)
                                 poem.save!
                                 poems << poem
                                 poem = Work.new(
@@ -236,6 +238,7 @@ class FranklinVenturaImporter
             end
         end
         if poem
+            assign_stanza_positions(poem)
             poem.save
             poems << poem
         end
@@ -258,6 +261,12 @@ class FranklinVenturaImporter
                 e.end_address = e.start_address + e.original_characters.length if e.start_address
                 e.save!
             end
+        end
+    end
+    
+    def assign_stanza_positions(poem)
+        poem.stanzas.each_with_index do |s, i|
+            s.position = i
         end
     end
 end
