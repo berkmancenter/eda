@@ -7,26 +7,24 @@ module Patterns
     Variant_title_extractor = /@PNT2_2(_M)? = \t(?<title>.*$)/
 
     Poem_start_pattern = /(@PS|@POEM1S)/
-    Poem_end_pattern = /^(@N|@1|@VAR|@PARA|A transcript|and then in brackets|Another account|Mills's)/
+    Poem_end_pattern = /^(@N|@1|@VAR|@PARA)/
 
     Division_pattern = /@N = <MI>Division<D>/
-    Division_extractor = /@N = <MI>Division<D>(?<divisions>.*)/m
+    Division_extractor = /@N = <MI>Division<D>(?<divisions>.*)/
 
     Emendation_pattern = /@N(_3PTS)? = <MI>Emendation<D>/
-    Emendation_extractor = /@N(_3PTS)? = <MI>Emendation<D>(?<emendations>.*)/m
+    Emendation_extractor = /@N(_3PTS)? = <MI>Emendation<D>(?<emendations>.*)/
 
-    # @1 = <F53621%14>publication<%0>:<F255> 
-    # @1 = <F53621M%14>publication<D%0>:<F255> 
-    # @1 = <F53621>publication:<F255>
     Publication_pattern = /^@1 = <F53621M?(%14)?>publication(<D?%0>)?:<F255>/
-    Publication_extractor = /^@1 = <F53621M?(%14)?>publication(<D?%0>)?:<F255>(?<publications>.*)/m
+    Publication_extractor = /^@1 = <F53621M?(%14)?>publication(<D?%0>)?:<F255>(?<publications>.*)/
     Published_extractor = /<MI>(?<publication>[^<]*)<D> \(((?<day>\d{1,2}) (?<month>\w*) )?(?<year>\d{4})\), (?<pages>[-\d]+)( \(<MI>(?<source_variant>[A-Z])<D>\))?/
 
     Revision_pattern = /@VAR(_VS)? = <MI>Revision<D>/
-    Revision_extractor = /@VAR(_VS)? = <MI>Revision<D>(?<revisions>.*)/m
+    Revision_extractor = /@VAR(_VS)? = <MI>Revision<D>(?<revisions>.*)/
 
+    Ignore_next_line_pattern = /^@PARA = .*variant.*:/i
     Alternate_pattern = /@VAR(_VS)? =/
-    Alternate_extractor = /@VAR(_VS)? = (?<alternates>.*)/m
+    Alternate_extractor = /@VAR(_VS)? = (?<alternates>.*)/
 
     Stanza_start_pattern = Poem_start_pattern
     Stanza_boundary_pattern = /@PMS/

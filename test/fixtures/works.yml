@@ -5,7 +5,7 @@ one:
   date: 2013-04-11 14:00:10
   number: 1
   edition: 
-  page_group: 
+  image_group: 
   metadata: MyText
 
 two:
@@ -13,5 +13,5 @@ two:
   date: 2013-04-11 14:00:10
   number: 1
   edition: 
-  page_group: 
+  image_group: 
   metadata: MyText

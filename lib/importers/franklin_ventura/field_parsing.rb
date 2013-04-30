@@ -39,8 +39,9 @@ module FieldParsing
                 a = Alternate.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
-                    :original_characters => CharMap::replace(alts[0]),
-                    :new_characters => CharMap::replace(alts[1])
+                    :original_characters => CharMap::replace(alts[1]),
+                    :new_characters => CharMap::replace(alts[0]),
+                    :subtype => 'alternate'
                 )
                 a
             else
