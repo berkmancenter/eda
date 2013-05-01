@@ -200,8 +200,16 @@ class FranklinVenturaImporter
         locate_emendations!(edition)
         locate_divisions!(edition)
         locate_alternates!(edition)
+        fix_exceptions!(edition)
         group_variants(edition)
         check_for_errors(edition)
+    end
+
+    def fix_exceptions!(edition)
+        w = Work.find_by_number_and_variant(325, 'C')
+        w.stanzas.each_with_index{|s| s.destroy if s.position > 6} if w
+        w = Work.find_by_number_and_variant(321, 'C')
+        w.stanzas.each_with_index{|s| s.destroy if s.position > 0} if w
     end
 
     def group_variants(edition)
@@ -211,10 +219,10 @@ class FranklinVenturaImporter
                 group << work
             elsif group.count > 1 && group.last.number != work.number
                 wg = WorkGroup.new(:name => "#{group.last.number} variants")
-                group.each do |w|
-                    wg.works << w
-                end
+                group.each{ |w| wg.works << w }
                 wg.save!
+                group = [work]
+            else
                 group = [work]
             end
         end
@@ -234,19 +242,37 @@ class FranklinVenturaImporter
         end
     end
 
+    def pattern(chars)
+        Regexp.new("(^|\\b|\\s)#{Regexp.escape(chars)}($|\\b|\\s)")
+    end
+
     def locate_emendations!(edition)
         edition.works.each do |work|
             work.emendations.each do |e|
+                next unless e.start_address == nil && e.new_characters
+                pattern = pattern(e.new_characters)
                 line = work.line(e.start_line_number)
-                if line && line.text.index(e.original_characters)
-                    e.start_address = line.text.index(e.new_characters)
-                    e.end_address = e.start_address + e.new_characters.length if e.start_address
-                    e.save!
-                    line.text = line.text.sub(e.new_characters, '')
-                    line.save!
+                mods = line.line_modifiers
+                if mods.count > 1
+                    mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
+                    mods.each do |mod|
+                        pull_emendation(line, mod)
+                    end
+                else
+                    pull_emendation(line, e)
                 end
             end
         end
+    end
+
+    def pull_emendation(line, e)
+        return unless e.new_characters && match = line.text.match(pattern(e.new_characters))
+        e.start_address = match.offset(0)[0]
+        e.start_address += 1 if match[0][0] == ' '
+        e.end_address = e.start_address + e.new_characters.length if e.start_address
+        e.save!
+        line.text = line.text.sub(e.new_characters, '')
+        line.save!
     end
 
     def locate_divisions!(edition)

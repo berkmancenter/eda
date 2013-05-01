@@ -34,6 +34,12 @@ module ErrorChecking
         puts "Missing poem numbers: #{missing.join(', ')}" unless missing.empty?
     end
 
+    def puts_maladdressed_mods(poem)
+        poem.line_modifiers.each do |mod|
+            puts "#{mod.type} #{mod.id} @ #{mod.start_line_number} - #{mod.start_address} : (#{mod.original_characters}) - (#{mod.new_characters}) - '#{poem.line(mod.start_line_number).text if poem.line(mod.start_line_number)}'" if mod.start_address == nil || mod.start_line_number == nil || mod.start_line_number == 0
+        end
+    end
+
     def find_errors(poems)
         puts_missing_numbers(poems)
         poems.each do |poem|
@@ -44,6 +50,9 @@ module ErrorChecking
         end
         poems.each do |poem|
             puts_mismatched_lines(poem)
+        end
+        poems.each do |poem|
+            puts_maladdressed_mods(poem)
         end
     end
 end
