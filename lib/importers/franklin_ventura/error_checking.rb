@@ -1,21 +1,29 @@
+class Array
+    def subtract_once(b)
+        h = b.inject({}) {|memo, v|
+            memo[v] ||= 0; memo[v] += 1; memo
+        }
+        reject { |e| h.include?(e) && (h[e] -= 1) >= 0 }
+    end
+end
+
 module ErrorChecking
     def puts_empty(poem)
-        puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.year}) has no lines" if poem.lines.empty?
+        puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}) has no lines" if poem.lines.empty?
     end
 
     def puts_sparse(poem)
         confirmed_sparse = ['244[A]', '277[A]', '283[A]', '314[A]', '376[A]', '442[A]', '496[A]', '501[A]', '529[A]', '534[A]', '572[A]', '577[A]', '822[A]', '852[A]', '923[A]', '935[A]', '1166[A]', '1286A', '1296A', '1349A']
         if poem.lines.count == 1 && !confirmed_sparse.include?(CharMap::replace_no_itals(poem.number.to_s + poem.variant))
-            puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.year}) has few lines"
+            puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}) has few lines"
         end
     end
 
     def puts_mismatched_lines(poem)
-        last_numbered_line = poem.lines.reverse.find{|l| !l.number.nil?}
-        if last_numbered_line
-            real_line_number = poem.lines.index{|l| l.number == last_numbered_line.number && l.text == last_numbered_line.text } + 1
-            puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.year}): line numbers don't match (#{last_numbered_line.number} - #{real_line_number})" unless last_numbered_line.number == real_line_number
-        end
+        line_numbers = poem.lines.map{|l| l.number}
+        good_number_range = (1..poem.lines.count).to_a 
+        problem_lines = (line_numbers.subtract_once(good_number_range)) + (good_number_range.subtract_once(line_numbers)).sort!
+        puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}): line numbers don't match (#{problem_lines})" unless problem_lines.empty?
     end
 
     def puts_missing_numbers(poems)

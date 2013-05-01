@@ -141,6 +141,7 @@ class FranklinVenturaImporter
                 # Add stanza to poem if complete
                 if line.match(Poem_end_pattern)
                     poem.stanzas << stanza
+                    close_poem(poem)
                     in_poem = false
                 end
             end
@@ -178,10 +179,7 @@ class FranklinVenturaImporter
         assign_stanza_positions(poem)
         poem.save!
         @poems << poem
-    end
-
-    def group_variants
-        Edition.find_by_author('R. W. Franklin')
+        poem = nil
     end
 
     def line_number(poem, stanza, matches)
@@ -204,6 +202,28 @@ class FranklinVenturaImporter
         locate_emendations!(edition)
         locate_divisions!(edition)
         locate_alternates!(edition)
+        group_variants(edition)
+        check_for_errors(edition)
+    end
+
+    def group_variants(edition)
+        group = []
+        edition.works.each do |work|
+            if group.empty? || group.last.number == work.number
+                group << work
+            elsif group.count > 1 && group.last.number != work.number
+                wg = WorkGroup.new(:name => "#{group.last.number} variants")
+                group.each do |w|
+                    wg.works << w
+                end
+                wg.save!
+                group = [work]
+            end
+        end
+    end
+
+    def check_for_errors(edition)
+        find_errors(edition.works.all)
     end
 
     def prep_modifier(modifier, extractor, extracted)
