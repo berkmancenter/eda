@@ -141,7 +141,6 @@ class FranklinVenturaImporter
                 # Add stanza to poem if complete
                 if line.match(Poem_end_pattern)
                     poem.stanzas << stanza
-                    close_poem(poem)
                     in_poem = false
                 end
             end
@@ -179,7 +178,6 @@ class FranklinVenturaImporter
         assign_stanza_positions(poem)
         poem.save!
         @poems << poem
-        poem = nil
     end
 
     def line_number(poem, stanza, matches)
