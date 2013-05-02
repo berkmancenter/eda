@@ -187,7 +187,7 @@ class FranklinVenturaImporter
             line_num = 1
         elsif stanza.lines.last && stanza.lines.last.number
             line_num = stanza.lines.last.number + 1
-        elsif poem.stanzas.last.lines.last.number
+        elsif poem.stanzas.last.lines.last && poem.stanzas.last.lines.last.number
             line_num = poem.stanzas.last.lines.last.number + 1
         end
         if matches['line_num'].to_i > 0
@@ -252,8 +252,8 @@ class FranklinVenturaImporter
                 next unless e.start_address == nil && e.new_characters
                 pattern = pattern(e.new_characters)
                 line = work.line(e.start_line_number)
-                mods = line.line_modifiers
-                if mods.count > 1
+                mods = line.line_modifiers if line
+                if mods && mods.count > 1
                     mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
                     mods.each do |mod|
                         pull_emendation(line, mod)
@@ -266,7 +266,7 @@ class FranklinVenturaImporter
     end
 
     def pull_emendation(line, e)
-        return unless e.new_characters && match = line.text.match(pattern(e.new_characters))
+        return unless line && e.new_characters && match = line.text.match(pattern(e.new_characters))
         e.start_address = match.offset(0)[0]
         e.start_address += 1 if match[0][0] == ' '
         e.end_address = e.start_address + e.new_characters.length if e.start_address
