@@ -37,19 +37,22 @@ class JohnsonImporter
         #File.write(Rails.root.join('tmp', 'johnson.xml'), poems.join(''))
         doc = Nokogiri::XML::Document.parse(poems.join(''), nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
         doc.css('poem').each do |poem|
-            content = poem.css('text').map{|n| n.content}.join('')
+            content = poem.css('text').map{|n| n.content}.join('').strip
             work = Work.new(:number => poem.css('number').text, :title => content.lines.first)
-            stanza = Stanza.new
-            content.lines do |line|
+            stanza = Stanza.new(:position => 0)
+            stanza_count = 0
+            content.lines.each_with_index do |line, i|
                 if line == "\n"
                     work.stanzas << stanza
-                    stanza = Stanza.new
+                    stanza_count += 1
+                    stanza = Stanza.new(:position => stanza_count)
                 else
-                    stanza.lines << Line.new(:text => line.strip)
+                    stanza.lines << Line.new(:text => line.strip, :number => i + 1)
                 end
             end
             work.stanzas << stanza
             work.save!
+            edition.works << work
         end
         edition.save!
     end

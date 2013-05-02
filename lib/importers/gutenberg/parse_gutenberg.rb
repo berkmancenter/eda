@@ -25,8 +25,8 @@ class GutenbergImporter
                 stanzas = poem_body.split(/\r\n<br>/)
                 p = Work.new(:title => matches[:title])
                 line_num = 1
-                stanzas.each do |stanza|
-                    s = Stanza.new
+                stanzas.each_with_index do |stanza, i|
+                    s = Stanza.new(:position => i)
                     stanza.split(/<br>\r\n/).each do |line|
                         text = line.gsub('<br>', '').strip
                         unless text.empty?

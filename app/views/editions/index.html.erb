@@ -1,0 +1,8 @@
+<h2>Editions</h2>
+<ul>
+    <% @editions.each do |edition| %>
+        <li>
+        <%= link_to("#{edition.name}", edition_works_path(edition)) %> by <%= edition.author %>
+        </li>
+    <% end %>
+</ul>

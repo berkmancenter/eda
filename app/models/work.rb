@@ -1,8 +1,8 @@
 class Work < ActiveRecord::Base
     belongs_to :edition
     belongs_to :image_group
-    has_many :stanzas
-    has_many :lines, :through => :stanzas
+    has_many :stanzas, :order => 'position'
+    has_many :lines, :through => :stanzas, :order => 'number'
     has_many :line_modifiers
     has_many :divisions
     has_many :emendations

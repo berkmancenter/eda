@@ -22,7 +22,7 @@ end
 class FranklinVenturaImporter
     def create_edition
         Edition.new(
-            :name => 'The Poem of Emily Dickinson: Variorum Edition',
+            :name => 'The Poems of Emily Dickinson: Variorum Edition',
             :author => 'R. W. Franklin',
             :date => Date.new(1998, 1, 1),
             :work_number_prefix => 'F',

@@ -1,8 +1,8 @@
-<h2><%= raw "#{@work.number}#{@work.variant} - #{@work.title}" %></h2>
+<h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
 
-<% @work.stanzas.order('position').each do |stanza| %>
+<% @work.stanzas.each do |stanza| %>
     <p class="stanza" data-number="<%= stanza.position %>">
-    <% stanza.lines.order('number').each do |line| %>
+    <% stanza.lines.each do |line| %>
         <span class="line" data-line="<%= line.number %>">
             <%= raw render_line(line) %>
             <% unless line.just_author_break? %>
