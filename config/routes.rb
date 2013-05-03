@@ -2,7 +2,8 @@ Eda::Application.routes.draw do
     resources :editions do
         resources :works
     end
-    root :to => 'editions#index'
+    root :to => 'static_pages#home'
+    match 'about' => 'static_pages#about'
     match 'lexicon' => 'words#index'
     resources :words
   # The priority is based upon order of creation:
