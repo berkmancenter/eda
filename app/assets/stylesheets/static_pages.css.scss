@@ -3,7 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .static-pages {
-  padding: 0 1em;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 1em 8em 1em;
 }
 
 .home {
@@ -14,9 +16,5 @@
   .subtitle {
     font-family: Georgia, serif;
     margin-left: 27px * 2;
-  }
-
-  .welcome {
-    max-width: 640px;
   }
 }
