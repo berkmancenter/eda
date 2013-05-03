@@ -14,6 +14,7 @@ module WorkHelper
     def render_line(line)
         output = ''
         line.chars.each_with_index do |char, i|
+            #output += i.to_s
             line.mods_at(i).each do |mod|
                 output += render_mod(mod)
             end

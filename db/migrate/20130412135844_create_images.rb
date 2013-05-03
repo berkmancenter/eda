@@ -1,6 +1,6 @@
-class CreatePages < ActiveRecord::Migration
+class CreateImages < ActiveRecord::Migration
   def change
-    create_table :pages do |t|
+    create_table :images do |t|
       t.text :image_url
       t.text :metadata
       t.text :credits

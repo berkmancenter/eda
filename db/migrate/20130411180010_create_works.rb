@@ -6,12 +6,12 @@ class CreateWorks < ActiveRecord::Migration
       t.integer :number
       t.string :variant
       t.references :edition
-      t.references :page_group
+      t.references :image_group
       t.text :metadata
 
       t.timestamps
     end
     add_index :works, :edition_id
-    add_index :works, :page_group_id
+    add_index :works, :image_group_id
   end
 end

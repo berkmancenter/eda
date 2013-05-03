@@ -20,253 +20,284 @@ class MatchData
 end
 
 class FranklinVenturaImporter
-    def import(directory, from_year = 1850, to_year = 1886)
-        edition = Edition.new(
-            :name => 'The Poem of Emily Dickinson: Variorum Edition',
+    def create_edition
+        Edition.new(
+            :name => 'The Poems of Emily Dickinson: Variorum Edition',
             :author => 'R. W. Franklin',
             :date => Date.new(1998, 1, 1),
             :work_number_prefix => 'F',
             :completeness => 1.0
         )
-        poems = []
-        in_poem = false
-        poem, stanza, line = nil, nil, ''
+    end
 
-        tags = []
-        variant_titles = []
-
-        multiline_title = false
-        in_division, in_emendation, in_alternate, in_revision, in_publication = false, false, false, false, false
-        division, emendation, alternate, revision, publication = '', '', '', '', ''
+    def process_file(file)
+        in_poem, ignore_next_line = false, false
+        poem, stanza = nil, nil
+        tags, variant_titles = [], []
         held_holder_code, held_holder_subcode, held_holder_id = nil, nil, nil
+        file.each_line do |line|
+            # Find tags that we'll have to translate
+            #line.scan(/<([-0-9A-Z%]*)>/) { |m| tags << m[0] }
+            if ignore_next_line
+                ignore_next_line = false
+                next
+            end
+            if line.match(Ignore_next_line_pattern)
+                ignore_next_line = true
+            end
+
+            # Is this a title?
+            if line.match(Title_pattern)
+                match = Title_extractor.match(line)
+                if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
+                    close_poem(poem) if poem
+                    poem = Work.new(
+                        :number => match[:number].to_i,
+                        :title => CharMap::replace_no_itals(match[:title]),
+                        :date => Date.new(File.basename(file.path).to_i)
+                    )
+                end
+            end
+
+            if held_holder_code && in_poem
+                poem.holder_code = held_holder_code
+                held_holder_code = nil
+            end
+            if held_holder_subcode && in_poem
+                poem.holder_subcode = held_holder_subcode
+                held_holder_subcode = nil
+            end
+            if held_holder_id && in_poem
+                poem.holder_id = held_holder_id
+                held_holder_id = nil
+            end
+
+            if holder_match = line.match(Holder_extractor)
+                held_holder_code = holder_match[:loc_code].upcase.strip if holder_match[:loc_code]
+                held_holder_subcode = holder_match[:subloc_code].upcase.strip if holder_match[:subloc_code]
+                if holder_match[:subloc_code] == 'PC'
+                    held_holder_subcode = '1896PC'
+                end
+                held_holder_id = holder_match[:id].strip if holder_match[:id]
+            end
+
+            # Is this a second or third title?
+            match = Variant_title_extractor.match(line)
+            variant_titles << match[:title] if match && match[:title]
+
+            in_poem = true if line.match(Poem_start_pattern)
+
+            # Add all our line modifieres
+            add_modifiers!(poem, line)
+
+            if line.match(Publication_pattern)
+                publications = line.match(Publication_extractor)['publications']
+                publications.scan(Published_extractor) do |match|
+                    args = Hash[Published_extractor.names.zip(match)]
+                    begin
+                        date = Date.parse([args['year'], args['month'], args['day']].join('-').gsub(/-*$/, ''))
+                    rescue
+                        date = nil
+                    end
+                    poem.appearances << WorkAppearance.new(:year => args['year'].to_i, :date => date)
+                end
+            end
+
+            if in_poem
+                # Setup the stanza
+                stanza = Stanza.new if line.match(Stanza_start_pattern)
+
+                if line.match(Stanza_boundary_pattern)
+                    poem.stanzas << stanza
+                    stanza = Stanza.new
+                end
+
+                matches = Poem_line_extractors.map{ |e| e.match(line) } \
+                    .delete_if{|m| m.nil?} \
+                    .reduce({}){|captures, match| captures.merge(match.named_captures)}
+
+                unless matches.empty?
+                    # If we have a new variant, create a new poem
+                    if matches['variant']
+                        if poem.variant.nil?
+                            poem.variant = CharMap::replace_no_itals(matches['variant'])
+                        else
+                            title = variant_titles.empty? ? poem.title : variant_titles.shift
+                            close_poem(poem)
+                            poem = Work.new(
+                                :number => poem.number,
+                                :title => CharMap::replace_no_itals(title),
+                                :variant => CharMap::replace(matches['variant']),
+                                :date => Date.new(File.basename(file.path).to_i)
+                            )
+                        end
+                    end
+
+                    stanza_line = Line.new(:text => CharMap::replace(matches['line']))
+                    stanza_line.number = line_number(poem, stanza, matches)
+                    stanza.lines << stanza_line
+                end
+
+                # Add stanza to poem if complete
+                if line.match(Poem_end_pattern)
+                    poem.stanzas << stanza
+                    in_poem = false
+                end
+            end
+        end
+        close_poem(poem) if poem
+    end
+
+    def import(directory, from_year = 1850, to_year = 1886)
+        edition = create_edition
+        @poems = []
 
         Dir.open(directory).sort.each do |filename|
             next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
-            File.open("#{directory}/#{filename}").each_line do |line|
-
-                # Find tags that we'll have to translate
-                line.scan(/<([-0-9A-Z%]*)>/) { |m| tags << m[0] }
-
-                # Continue adding to the title
-                if multiline_title
-                    poem.title = poem.title[0..-5] + ' ' + line.strip!
-                    multiline_title = false
-                    next
-                end
-
-                # Is this a title?
-                if line.match(Title_pattern)
-                    match = Title_extractor.match(line)
-                    if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
-                        multiline_title = !!match[:title].index('<R>')
-                        if poem
-                            assign_stanza_positions(poem)
-                            poem.save! 
-                            poems << poem
-                        end
-                        poem = Work.new(:number => match[:number].to_i, :title => CharMap::replace_no_itals(match[:title]), :date => Date.new(filename.to_i))
-                    end
-                end
-
-                if held_holder_code && in_poem
-                    poem.holder_code = held_holder_code
-                    held_holder_code = nil
-                end
-                if held_holder_subcode && in_poem
-                    poem.holder_subcode = held_holder_subcode
-                    held_holder_subcode = nil
-                end
-                if held_holder_id && in_poem
-                    poem.holder_id = held_holder_id
-                    held_holder_id = nil
-                end
-
-                if holder_match = line.match(Holder_extractor)
-                    held_holder_code = holder_match[:loc_code].upcase.strip if holder_match[:loc_code]
-                    held_holder_subcode = holder_match[:subloc_code].upcase.strip if holder_match[:subloc_code]
-                    if holder_match[:subloc_code] == 'PC'
-                        held_holder_subcode = '1896PC'
-                    end
-                    held_holder_id = holder_match[:id].strip if holder_match[:id]
-
-                end
-
-                # Is this a second or third title?
-                match = Variant_title_extractor.match(line)
-                variant_titles << match[:title] if match && match[:title]
-
-                in_poem = true if line.match(Poem_start_pattern)
-
-                in_division = true if line.match(Division_pattern)
-                in_emendation = true if line.match(Emendation_pattern)
-                in_publication = true if line.match(Publication_pattern)
-                in_revision = true if line.match(Revision_pattern) && in_poem
-                in_alternate = true if line.match(Alternate_pattern) && in_poem && !in_revision
-
-                def prep_modifier(modifier, extractor, extracted)
-                    modifier.match(extractor)[extracted].lines.to_a.join(' ') \
-                        .split('<_><|><~>').drop(1).map{|d| d.gsub("\r\n ",'').strip.split('<R>') }.flatten
-                end
-
-                if in_division
-                    if line[0] == '@' && line.match(Division_pattern).nil?
-                        divisions = prep_modifier(division, Division_extractor, 'divisions')
-                        divisions.each do |div|
-                            d = get_division(div)
-                            poem.divisions << d if d 
-                        end
-                        in_division = false
-                        division = ''
-                    else
-                        division << line
-                    end
-                end
-
-                if in_emendation
-                    if line[0] == '@' && line.match(Emendation_pattern).nil?
-                        emendations = prep_modifier(emendation, Emendation_extractor, 'emendations')
-                        emendations.each do |emend|
-                            e = get_emendation(emend)
-                            poem.emendations << e if e
-                        end
-                        in_emendation = false
-                        emendation = ''
-                    else
-                        emendation << line
-                    end
-                end
-
-                if in_revision
-                    if line[0] == '@' && line.match(Revision_pattern).nil?
-                        revisions = prep_modifier(revision, Revision_extractor, 'revisions')
-                        revisions.each do |emend|
-                            e = get_revision(emend)
-                            poem.revisions << e if e
-                        end
-                        in_revision = false
-                        revision = ''
-                    else
-                        revision << line
-                    end
-                end
-
-                if in_alternate
-                    if line[0] == '@' && line.match(Alternate_pattern).nil?
-                        alternates = prep_modifier(alternate, Alternate_extractor, 'alternates')
-                        alternates.each do |vari|
-                            v = get_alternate(vari)
-                            poem.alternates << v if v
-                        end
-                        in_alternate = false
-                        alternate = ''
-                    else
-                        alternate << line
-                    end
-                end
-
-                if in_publication
-                    if line[0] == '@' && line.match(Publication_pattern).nil?
-                        publications = publication.match(Publication_extractor)['publications'].lines.to_a.join(' ').gsub("\r\n ",'').strip
-                        publications.scan(Published_extractor) do |match|
-                            args = Hash[Published_extractor.names.zip(match)]
-                            begin
-                            date = Date.parse([args['year'], args['month'], args['day']].join('-').gsub(/-*$/, ''))
-                            rescue
-                                date = nil
-                            end
-                            poem.appearances << WorkAppearance.new(:year => args['year'].to_i, :date => date)
-                        end
-                        in_publication = false
-                        publication = ''
-                    else
-                        publication << line
-                    end
-                end
-
-                if in_poem
-                    # Setup the stanza
-                    if line.match(Stanza_start_pattern)
-                        stanza = Stanza.new
-                    end
-                    if line.match(Stanza_boundary_pattern)
-                        poem.stanzas << stanza
-                        stanza = Stanza.new
-                    end
-
-                    # Add line to stanza
-                    matches = Poem_line_extractors.map{ |e| e.match(line) }.delete_if{|m| m.nil?}.reduce({}) {|captures, match| captures.merge(match.named_captures)}
-                    unless matches.empty?
-                        if stanza.lines.empty? && poem.stanzas.empty?
-                            line_num = 1
-                        elsif stanza.lines.last && stanza.lines.last.number
-                            line_num = stanza.lines.last.number + 1
-                        elsif poem.stanzas.last.lines.last.number
-                            line_num = poem.stanzas.last.lines.last.number + 1
-                        end
-                        if matches['line_num'].to_i > 0
-                            line_num = matches['line_num'].to_i
-                        end
-                        stanza_line = Line.new(:text => CharMap::replace(matches['line']))
-                        stanza_line.number = line_num if line_num
-                        stanza.lines << stanza_line
-
-                        # If we have a new variant, create a new poem
-                        if matches['variant']
-                            if poem.variant.nil?
-                                poem.variant = CharMap::replace_no_itals(matches['variant'])
-                            else
-                                title = variant_titles.empty? ? poem.title : variant_titles.shift
-                                assign_stanza_positions(poem)
-                                poem.save!
-                                poems << poem
-                                poem = Work.new(
-                                    :number => poem.number,
-                                    :title => CharMap::replace_no_itals(title),
-                                    :variant => CharMap::replace(matches['variant']),
-                                    :date => Date.new(filename.to_i)
-                                )
-                            end
-                        end
-                    end
-
-                    # Add stanza to poem if complete
-                    if line.match(Poem_end_pattern)
-                        poem.stanzas << stanza
-                        in_poem = false
-                    end
-                end
-            end
+            process_file(File.open("#{directory}/#{filename}"))
         end
-        if poem
-            assign_stanza_positions(poem)
-            poem.save
-            poems << poem
-        end
-        poems
-        edition.works = poems
+
+        edition.works = @poems
         edition.save!
-        post_process!
+        post_process!(edition)
     end
 
-    def group_variants
-        Edition.find_by_author('R. W. Franklin')
-    end
-
-    def post_process!
-        works = Edition.find_by_author('R. W. Franklin').works
-        works.each do |work|
-            work.emendations.each do |e|
-                line = work.line(e.start_line_number)
-                e.start_address = line.text.index(e.original_characters) if line
-                e.end_address = e.start_address + e.original_characters.length if e.start_address
-                e.save!
+    def add_modifiers!(poem, line)
+        ['division', 'emendation', 'revision', 'alternate'].each do |var|
+            capped = var.camelize
+            next unless line.match("Patterns::#{capped}_pattern".constantize)
+            instances = prep_modifier(line, "Patterns::#{capped}_extractor".constantize, var.pluralize)
+            instances.each do |instance|
+                i = self.send("get_#{var}", instance)
+                poem.line_modifiers << i if i 
             end
         end
     end
-    
+
+    def close_poem(poem)
+        assign_stanza_positions(poem)
+        poem.save!
+        @poems << poem
+    end
+
+    def line_number(poem, stanza, matches)
+        line_num = nil
+        # Get line number
+        if stanza.lines.empty? && (poem.stanzas.empty? || poem.stanzas.count == 1)
+            line_num = 1
+        elsif stanza.lines.last && stanza.lines.last.number
+            line_num = stanza.lines.last.number + 1
+        elsif poem.stanzas.last.lines.last && poem.stanzas.last.lines.last.number
+            line_num = poem.stanzas.last.lines.last.number + 1
+        end
+        if matches['line_num'].to_i > 0
+            line_num = matches['line_num'].to_i
+        end
+        line_num
+    end
+
+    def post_process!(edition)
+        locate_emendations!(edition)
+        locate_divisions!(edition)
+        locate_alternates!(edition)
+        fix_exceptions!(edition)
+        group_variants(edition)
+        check_for_errors(edition)
+    end
+
+    def fix_exceptions!(edition)
+        w = Work.find_by_number_and_variant(325, 'C')
+        w.stanzas.each_with_index{|s| s.destroy if s.position > 6} if w
+        w = Work.find_by_number_and_variant(321, 'C')
+        w.stanzas.each_with_index{|s| s.destroy if s.position > 0} if w
+    end
+
+    def group_variants(edition)
+        group = []
+        edition.works.each do |work|
+            if group.empty? || group.last.number == work.number
+                group << work
+            elsif group.count > 1 && group.last.number != work.number
+                wg = WorkGroup.new(:name => "#{group.last.number} variants")
+                group.each{ |w| wg.works << w }
+                wg.save!
+                group = [work]
+            else
+                group = [work]
+            end
+        end
+    end
+
+    def check_for_errors(edition)
+        find_errors(edition.works.all)
+    end
+
+    def prep_modifier(modifier, extractor, extracted)
+        modifier.match(extractor)[extracted].split('<_><|><~>').drop(1).map{|d| d.gsub("\r\n ",'').strip.split('<R>') }.flatten.delete_if{|d| d.include?('<MI>')}
+    end
+
     def assign_stanza_positions(poem)
         poem.stanzas.each_with_index do |s, i|
             s.position = i
+        end
+    end
+
+    def pattern(chars)
+        Regexp.new("(^|\\b|\\s)#{Regexp.escape(chars)}($|\\b|\\s)")
+    end
+
+    def locate_emendations!(edition)
+        edition.works.each do |work|
+            work.emendations.each do |e|
+                next unless e.start_address == nil && e.new_characters
+                pattern = pattern(e.new_characters)
+                line = work.line(e.start_line_number)
+                mods = line.line_modifiers if line
+                if mods && mods.count > 1
+                    mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
+                    mods.each do |mod|
+                        pull_emendation(line, mod)
+                    end
+                else
+                    pull_emendation(line, e)
+                end
+            end
+        end
+    end
+
+    def pull_emendation(line, e)
+        return unless line && e.new_characters && match = line.text.match(pattern(e.new_characters))
+        e.start_address = match.offset(0)[0]
+        e.start_address += 1 if match[0][0] == ' '
+        e.end_address = e.start_address + e.new_characters.length if e.start_address
+        e.save!
+        line.text = line.text.sub(e.new_characters, '')
+        line.save!
+    end
+
+    def locate_divisions!(edition)
+        edition.works.each do |work|
+            work.divisions.each do |e|
+                line = work.line(e.start_line_number)
+                if line && line.text.index(e.original_characters)
+                    e.start_address = line.text.index(e.original_characters) + e.original_characters.length
+                    e.end_address = e.start_address if e.start_address
+                    e.save!
+                end
+            end
+        end
+    end
+
+    def locate_alternates!(edition)
+        edition.works.each do |work|
+            work.alternates.each do |e|
+                line = work.line(e.start_line_number)
+                if line && line.text.index(e.new_characters)
+                    e.start_address = line.text.index(e.new_characters)
+                    e.end_address = e.start_address if e.start_address
+                    e.save!
+                end
+            end
         end
     end
 end

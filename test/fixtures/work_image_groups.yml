@@ -1,11 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  page_group: 
-  page: 
-  position: 1
+  work: 
+  image_group: 
 
 two:
-  page_group: 
-  page: 
-  position: 1
+  work: 
+  image_group: 

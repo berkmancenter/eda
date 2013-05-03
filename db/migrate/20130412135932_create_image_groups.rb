@@ -1,6 +1,6 @@
-class CreatePageGroups < ActiveRecord::Migration
+class CreateImageGroups < ActiveRecord::Migration
   def change
-    create_table :page_groups do |t|
+    create_table :image_groups do |t|
       t.string :name
       t.references :parent_group
       t.boolean :editable
@@ -12,7 +12,7 @@ class CreatePageGroups < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :page_groups, :parent_group_id
-    add_index :page_groups, :edition_id
+    add_index :image_groups, :parent_group_id
+    add_index :image_groups, :edition_id
   end
 end

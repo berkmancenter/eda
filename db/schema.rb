@@ -37,6 +37,41 @@ ActiveRecord::Schema.define(:version => 20130422152856) do
 
   add_index "editions", ["owner_id"], :name => "index_editions_on_owner_id"
 
+  create_table "image_group_images", :force => true do |t|
+    t.integer  "image_group_id"
+    t.integer  "image_id"
+    t.integer  "position"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "image_group_images", ["image_group_id"], :name => "index_image_group_images_on_image_group_id"
+  add_index "image_group_images", ["image_id"], :name => "index_image_group_images_on_image_id"
+
+  create_table "image_groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "parent_group_id"
+    t.boolean  "editable"
+    t.text     "image_url"
+    t.text     "metadata"
+    t.integer  "edition_id"
+    t.string   "type"
+    t.integer  "position"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "image_groups", ["edition_id"], :name => "index_image_groups_on_edition_id"
+  add_index "image_groups", ["parent_group_id"], :name => "index_image_groups_on_parent_group_id"
+
+  create_table "images", :force => true do |t|
+    t.text     "image_url"
+    t.text     "metadata"
+    t.text     "credits"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "line_modifiers", :force => true do |t|
     t.integer  "work_id"
     t.integer  "parent_id"
@@ -76,41 +111,6 @@ ActiveRecord::Schema.define(:version => 20130422152856) do
   end
 
   add_index "notes", ["owner_id"], :name => "index_notes_on_owner_id"
-
-  create_table "page_group_pages", :force => true do |t|
-    t.integer  "page_group_id"
-    t.integer  "page_id"
-    t.integer  "position"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "page_group_pages", ["page_group_id"], :name => "index_page_group_pages_on_page_group_id"
-  add_index "page_group_pages", ["page_id"], :name => "index_page_group_pages_on_page_id"
-
-  create_table "page_groups", :force => true do |t|
-    t.string   "name"
-    t.integer  "parent_group_id"
-    t.boolean  "editable"
-    t.text     "image_url"
-    t.text     "metadata"
-    t.integer  "edition_id"
-    t.string   "type"
-    t.integer  "position"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "page_groups", ["edition_id"], :name => "index_page_groups_on_edition_id"
-  add_index "page_groups", ["parent_group_id"], :name => "index_page_groups_on_parent_group_id"
-
-  create_table "pages", :force => true do |t|
-    t.text     "image_url"
-    t.text     "metadata"
-    t.text     "credits"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "stanzas", :force => true do |t|
     t.integer  "work_id"
@@ -172,15 +172,15 @@ ActiveRecord::Schema.define(:version => 20130422152856) do
   add_index "work_groups", ["owner_id"], :name => "index_work_groups_on_owner_id"
   add_index "work_groups", ["parent_group_id"], :name => "index_work_groups_on_parent_group_id"
 
-  create_table "work_page_groups", :force => true do |t|
+  create_table "work_image_groups", :force => true do |t|
     t.integer  "work_id"
-    t.integer  "page_group_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer  "image_group_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
-  add_index "work_page_groups", ["page_group_id"], :name => "index_work_page_groups_on_page_group_id"
-  add_index "work_page_groups", ["work_id"], :name => "index_work_page_groups_on_work_id"
+  add_index "work_image_groups", ["image_group_id"], :name => "index_work_image_groups_on_image_group_id"
+  add_index "work_image_groups", ["work_id"], :name => "index_work_image_groups_on_work_id"
 
   create_table "works", :force => true do |t|
     t.string   "title"
@@ -188,13 +188,13 @@ ActiveRecord::Schema.define(:version => 20130422152856) do
     t.integer  "number"
     t.string   "variant"
     t.integer  "edition_id"
-    t.integer  "page_group_id"
+    t.integer  "image_group_id"
     t.text     "metadata"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   add_index "works", ["edition_id"], :name => "index_works_on_edition_id"
-  add_index "works", ["page_group_id"], :name => "index_works_on_page_group_id"
+  add_index "works", ["image_group_id"], :name => "index_works_on_image_group_id"
 
 end
