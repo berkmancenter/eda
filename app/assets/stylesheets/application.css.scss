@@ -65,13 +65,19 @@ body {
   }
 
   header {
+    background: url("ornament-small.png") repeat-x 0 16px;
     margin: 0;
-    padding: .5em 4em;
+    padding: 0;
 
-    background: yellow;
 
     h1 {
+      background: $darkGray;
+      display: inline-block;
       font-family: Georgia, serif;
+      padding: 24px 27px;
+      margin: 0 0 0 27px*2;
+      white-space: nowrap;
+      width: 27px * 16;
     }
   }
 }
