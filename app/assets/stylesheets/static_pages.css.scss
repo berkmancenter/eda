@@ -6,15 +6,13 @@
   margin: 0 auto;
   max-width: 800px;
   padding: 0 1em 8em 1em;
-}
 
-.home {
   h1 {
-    display: none;
-  }
-
-  .subtitle {
     font-family: Georgia, serif;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: normal;
     margin-left: 27px * 2;
   }
 }
+
