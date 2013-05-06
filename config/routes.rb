@@ -1,11 +1,18 @@
 Eda::Application.routes.draw do
+
+    root :to => 'static_pages#home'
+
     resources :editions do
         resources :works
+        resources :pages
     end
-    root :to => 'static_pages#home'
+    resources :words
+
     match 'about' => 'static_pages#about'
     match 'lexicon' => 'words#index'
-    resources :words
+
+    #get 'search(/:q)' => 'works#search', :as => 'search_works'
+    #devise_for :users
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
