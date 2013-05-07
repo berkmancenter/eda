@@ -1,0 +1,15 @@
+.interactive-image {
+  width: 34%;
+  display: inline-block;
+  margin: 0;
+}
+
+.__seadragon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.__seadragon>div>div:last-child {
+  display: none;
+}
+

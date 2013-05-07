@@ -9,6 +9,7 @@ Eda::Application.routes.draw do
     resources :words
 
     match 'about' => 'static_pages#about'
+    match 'layout' => 'static_pages#layout'
     match 'lexicon' => 'words#index'
 
     #get 'search(/:q)' => 'works#search', :as => 'search_works'
