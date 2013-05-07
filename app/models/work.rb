@@ -11,6 +11,13 @@ class Work < ActiveRecord::Base
     has_many :appearances, :class_name => 'WorkAppearance'
     attr_accessible :date, :metadata, :number, :title, :variant
 
+    searchable do
+        text :title
+        text :lines do
+            lines.map{|l| l.text }
+        end
+    end
+
     def line(number)
         lines.find_by_number(number)
     end
