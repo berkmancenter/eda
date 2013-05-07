@@ -4,7 +4,7 @@ namespace :emily do
         task :ventura, [:dir, :start_year, :end_year] => [:environment] do |task, args|
             require Rails.root.join('lib', 'importers', 'franklin_ventura', 'parse_ventura.rb').to_s
             start_year = args[:start_year] || 1850
-            end_year = args[:end_year] || 1860
+            end_year = args[:end_year] || 1882
             importer = FranklinVenturaImporter.new
             importer.import(args[:dir], start_year.to_i, end_year.to_i)
         end
