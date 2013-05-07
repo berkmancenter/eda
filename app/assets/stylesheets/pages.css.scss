@@ -4,10 +4,19 @@ $tan: #e7cf98;
 $lightTan: #eeddb5;
 
 .pages-show {
-  #interactive-image-container {
-    width: 34%;
+  #search-container {
+    background: red;
     display: inline-block;
     margin: 0;
+    max-width: 320px;
+    vertical-align: top;
+    width: 29%;
+  }
+
+  #interactive-image-container {
+    display: inline-block;
+    margin: 0;
+    width: 34%;
   }
 
   /**
