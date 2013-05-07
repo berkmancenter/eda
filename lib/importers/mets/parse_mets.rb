@@ -8,6 +8,7 @@ class MetsImporter
         collection = Collection.new(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         edition = Edition.find_by_author('R. W. Franklin')
         Dir.open(directory).each do |filename|
+            next if filename[0] == '.'
             file = File.open("#{directory}/#{filename}")
             doc = Nokogiri::XML(file)
             doc.css('structMap div[TYPE=PAGE]').each do |page|
@@ -19,6 +20,7 @@ class MetsImporter
                 image = Image.new(:image_url => image_url, :metadata => {'Imported' => Time.now.to_s}, :credits => 'Harvard credits')
                 work = Work.find_by_number(franklin_number[1]) if franklin_number
                 pg = Page.new
+                pg.edition = edition
                 if work
                     pg.work = work
                     unless ig = work.image_group
@@ -35,6 +37,7 @@ class MetsImporter
                 pg.image_group_image = igi
                 ig.image_group_images << igi
                 ig.save!
+                pg.save!
                 if work
                     collection.children << ig
                     collection.save!
