@@ -20,6 +20,7 @@ class MetsImporter
                 image = Image.new(:image_url => image_url, :metadata => {'Imported' => Time.now.to_s}, :credits => 'Harvard credits')
                 work = Work.find_by_number(franklin_number[1]) if franklin_number
                 pg = Page.new
+                pg.edition = edition
                 if work
                     pg.work = work
                     unless ig = work.image_group
