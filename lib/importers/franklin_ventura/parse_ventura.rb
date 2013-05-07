@@ -53,7 +53,7 @@ class FranklinVenturaImporter
                     close_poem(poem) if poem
                     poem = Work.new(
                         :number => match[:number].to_i,
-                        :title => CharMap::replace_no_itals(match[:title]),
+                        :title => CharMap::replace_no_itals(match[:title]).strip,
                         :date => Date.new(File.basename(file.path).to_i)
                     )
                 end
@@ -126,7 +126,7 @@ class FranklinVenturaImporter
                             close_poem(poem)
                             poem = Work.new(
                                 :number => poem.number,
-                                :title => CharMap::replace_no_itals(title),
+                                :title => CharMap::replace_no_itals(title).strip,
                                 :variant => CharMap::replace(matches['variant']),
                                 :date => Date.new(File.basename(file.path).to_i)
                             )
