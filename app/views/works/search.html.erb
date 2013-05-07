@@ -2,6 +2,7 @@
 <%= form_tag search_works_path, :method => 'get' do %>
     <%= label_tag(:q, 'Search for:') %>
     <%= text_field_tag(:q, params[:q]) %>
+    <%= render 'shared/forms/edition_selector' %>
     <%= submit_tag('Search') %>
 <% end %>
 <% if @works %>

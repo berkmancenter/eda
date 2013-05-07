@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   add_index "image_groups", ["parent_group_id"], :name => "index_image_groups_on_parent_group_id"
 
   create_table "images", :force => true do |t|
-    t.text     "image_url"
+    t.text     "url"
     t.text     "metadata"
     t.text     "credits"
     t.datetime "created_at", :null => false
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   add_index "stanzas", ["work_id"], :name => "index_stanzas_on_work_id"
 
   create_table "users", :force => true do |t|
+    t.integer  "current_edition_id"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.string   "email",                  :default => "", :null => false
