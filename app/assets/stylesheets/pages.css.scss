@@ -4,13 +4,24 @@ $tan: #e7cf98;
 $lightTan: #eeddb5;
 
 .pages-show {
+  /**
+   * search-container has search menu & all search-related sections:
+   * search, browse, lexicon
+   */
   #search-container {
-    background: red;
+    background: $lightTan;
+    border-radius: .2em;
+    color: $darkGray;
     display: inline-block;
     margin: 0;
     max-width: 320px;
+    padding: .5em;
     vertical-align: top;
     width: 29%;
+
+    label {
+      display: none;
+    }
   }
 
   #interactive-image-container {
@@ -25,7 +36,7 @@ $lightTan: #eeddb5;
    */
   #work-container {
     background: $lightTan;
-    border-radius: .15em;
+    border-radius: .2em;
     color: $darkGray;
     display: inline-block;
     margin: 0;
