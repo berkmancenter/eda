@@ -6,6 +6,8 @@ class StaticPagesController < ApplicationController
   end
 
   def layout
-    @work = Work.find(34)
+    @page = Page.find(8511)
+    @work = @page.work
+    @image = @page.image_group_image.image
   end
 end

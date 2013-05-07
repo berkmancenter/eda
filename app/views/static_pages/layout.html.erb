@@ -4,7 +4,10 @@
   </div>
 
   <div id="interactive-image-container">
-    <%= render( { partial: "shared/interactive_image" } ) %>
+    <%= render( {
+      partial: "shared/interactive_image",
+      object: @image
+    } ) %>
   </div>
 
   <div id="work-container">
