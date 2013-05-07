@@ -1,10 +1,12 @@
 namespace :emily do
     namespace :import do
         desc 'Import Franklin ventura files'
-        task :ventura, [:dir] => [:environment] do |task, args|
+        task :ventura, [:dir, :start_year, :end_year] => [:environment] do |task, args|
             require Rails.root.join('lib', 'importers', 'franklin_ventura', 'parse_ventura.rb').to_s
+            start_year = args[:start_year] || 1850
+            end_year = args[:end_year] || 1882
             importer = FranklinVenturaImporter.new
-            importer.import(args[:dir])
+            importer.import(args[:dir], start_year.to_i, end_year.to_i)
         end
 
         desc 'Import Johnson works'
@@ -34,6 +36,13 @@ namespace :emily do
             importer = TEIImporter.new
             edition = Edition.find_by_author(args[:edition])
             importer.import(edition, args[:number], args[:variant], args[:filename])
+        end
+
+        desc 'Import METS records'
+        task :mets, [:directory] => [:environment] do |task, args|
+            require Rails.root.join('lib', 'importers', 'mets', 'parse_mets.rb').to_s
+            importer = MetsImporter.new
+            importer.import(args[:directory])
         end
 
         desc 'Create collections'
