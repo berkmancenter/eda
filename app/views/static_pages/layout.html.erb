@@ -1,8 +1,10 @@
-<section class="pages-show">
+<div class="pages-show">
 
 <div id="search-container" style="width: 29%; max-width: 320px; background: red; display: inline-block; vertical-align: top; margin: 0;"><h2>search</h2></div>
 
-<%= render( { partial: "shared/interactive_image" } ) %>
+<div id="interactive-image-container">
+  <%= render( { partial: "shared/interactive_image" } ) %>
+</div>
 
 <div id="work-container">
   <%= render( {
@@ -11,5 +13,5 @@
   } ) %>
 </div>
 
-</section>
+</div>
 

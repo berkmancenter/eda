@@ -6,6 +6,6 @@ class StaticPagesController < ApplicationController
   end
 
   def layout
-    @work = Work.first
+    @work = Work.find(34)
   end
 end
