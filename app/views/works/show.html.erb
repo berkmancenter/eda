@@ -1,14 +1,6 @@
 <h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
 
-<% @work.stanzas.each do |stanza| %>
-    <p class="stanza" data-number="<%= stanza.position %>">
-    <% stanza.lines.each do |line| %>
-        <span class="line" data-line="<%= line.number %>">
-            <%= raw render_line(line) %>
-            <% unless line.just_author_break? %>
-                <br />
-            <% end %>
-        </span>
-    <% end %>
-    </p>
-<% end %>
+<%= render( {
+  partial: "shared/work_transcription",
+  object: @work
+} ) %>

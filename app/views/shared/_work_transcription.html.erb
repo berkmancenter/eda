@@ -1,0 +1,14 @@
+<article class="work-transcription">
+<% @work.stanzas.each do |stanza| %>
+    <p class="stanza" data-number="<%= stanza.position %>">
+    <% stanza.lines.each do |line| %>
+        <span class="line" data-line="<%= line.number %>">
+            <%= raw render_line(line) %>
+            <% unless line.just_author_break? %>
+                <br />
+            <% end %>
+        </span>
+    <% end %>
+    </p>
+<% end %>
+</article>

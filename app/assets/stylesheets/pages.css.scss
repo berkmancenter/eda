@@ -1,3 +1,31 @@
-// Place all the styles related to the Pages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+$darkGray: #333;
+$lightGray: #535353;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+
+.pages-show {
+  .interactive-image {
+    width: 34%;
+    display: inline-block;
+    margin: 0;
+  }
+
+  /**
+   * work container has work menu & all work-related sections:
+   * transcription, edition switcher, notes, reading list
+   */
+  #work-container {
+    background: $lightTan;
+    border-radius: .15em;
+    color: $darkGray;
+    display: inline-block;
+    margin: 0;
+    vertical-align: top;
+    width: 34%;
+
+    .work-transcription {
+      font-size: .9em;
+      padding: 2em;
+    }
+  }
+}
