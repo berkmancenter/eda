@@ -1,6 +1,14 @@
 <section class="interactive-image">
   <!-- we need to be passed an Image object and use the image_url property here -->
   <script src="<%= @image.image_url %>.js?width=auto&height=512px"></script>
+
+  <div class="page-controls">
+    <!-- TODO: link_to next page -->
+    <a id="prev-page" href="#" title="Previous Page" alt="Previous Page" class="change-page"></a>
+    <a id="sbs-view" href="#" title="Reading View" alt="Reading View"></a>
+    <a id="next-page" href="#" title="Next Page" alt="Next Page" class="change-page"></a>
+  </div>
+
   <div class="credits">
     <p>copyright so and so.</p>
     <p>copyright so and so.</p>

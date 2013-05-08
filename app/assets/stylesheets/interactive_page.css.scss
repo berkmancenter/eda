@@ -1,3 +1,8 @@
+$darkGray: #333;
+$lightGray: #535353;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+
 .__seadragon {
   background: transparent !important;
   border: none !important;
@@ -7,3 +12,32 @@
   display: none;
 }
 
+.page-controls {
+  margin-top: 1em;
+  text-align: center;
+
+  a {
+    background: url("sbs-icon.png") no-repeat;
+    display: inline-block;
+    height: 32px;
+    margin: 0 10%;
+    width: 32px;
+  }
+
+  a.change-page {
+    border: solid 2px $tan;
+    border-radius: 32px;
+  }
+
+  a.change-page:hover {
+    background-color: $lightGray;
+  }
+
+  #sbs-view{
+    background-position: -32px 0;
+  }
+
+  #next-page {
+    background-position: -64px 0;
+  }
+}
