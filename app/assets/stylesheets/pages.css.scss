@@ -30,6 +30,10 @@ $lightTan: #eeddb5;
     background: $lightTan;
     border-radius: .2em;
     color: $darkGray;
+
+    section {
+      display: none;
+    }
   }
 
   /**

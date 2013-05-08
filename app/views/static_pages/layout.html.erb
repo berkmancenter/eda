@@ -1,14 +1,23 @@
 <div class="pages-show">
 
-  <div id="search-panel">
+  <div id="search-panel" class="tab-menu">
     <ul class="panel-menu">
-      <li><a href="#" class="selected">Search</a></li>
+      <li><a href="#">Search</a></li>
       <li><a href="#">Browse</a></li>
       <li><a href="#">Lexicon</a></li>
     </ul>
+
     <div class="panel-content">
       <%= render( {
         partial: "shared/search_works"
+      } ) %>
+
+      <%= render( {
+        partial: "shared/browse_works"
+      } ) %>
+
+      <%= render( {
+        partial: "shared/browse_lexicon"
       } ) %>
     </div>
   </div>
