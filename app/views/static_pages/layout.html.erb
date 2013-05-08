@@ -29,9 +29,9 @@
     } ) %>
   </div>
 
-  <div id="work-panel">
+  <div id="work-panel" class="tab-menu">
     <ul class="panel-menu">
-      <li><a href="#" class="selected">Manuscript</a></li>
+      <li><a href="#">Manuscript</a></li>
       <li><a href="#">Notes</a></li>
       <li><a href="#">Reading List</a></li>
     </ul>
@@ -39,6 +39,16 @@
     <div class="panel-content">
       <%= render( {
         partial: "shared/work_transcription",
+        object: @work
+      } ) %>
+
+      <%= render( {
+        partial: "shared/work_notes",
+        object: @work
+      } ) %>
+
+      <%= render( {
+        partial: "shared/work_reading_list",
         object: @work
       } ) %>
     </div>

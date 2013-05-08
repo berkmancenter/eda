@@ -30,6 +30,7 @@ $lightTan: #eeddb5;
     background: $lightTan;
     border-radius: .2em;
     color: $darkGray;
+    padding: .5em;
 
     section {
       display: none;
@@ -46,10 +47,6 @@ $lightTan: #eeddb5;
     max-width: 320px;
     vertical-align: top;
     width: 29%;
-
-    .panel-content {
-      padding: .5em;
-    }
 
     label {
       display: none;
@@ -74,7 +71,7 @@ $lightTan: #eeddb5;
 
     .work-transcription {
       font-size: .9em;
-      padding: 2em;
+      padding: 1.5em;
     }
   }
 }
