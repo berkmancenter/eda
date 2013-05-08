@@ -1,9 +1,16 @@
 <div class="pages-show">
 
-  <div id="search-container">
-    <%= render( {
-      partial: "shared/search_works"
-    } ) %>
+  <div id="search-panel">
+    <ul class="panel-menu">
+      <li><a href="#" class="selected">Search</a></li>
+      <li><a href="#">Browse</a></li>
+      <li><a href="#">Lexicon</a></li>
+    </ul>
+    <div class="panel-content">
+      <%= render( {
+        partial: "shared/search_works"
+      } ) %>
+    </div>
   </div>
 
   <div id="interactive-image-container">
@@ -13,11 +20,19 @@
     } ) %>
   </div>
 
-  <div id="work-container">
-    <%= render( {
-      partial: "shared/work_transcription",
-      object: @work
-    } ) %>
+  <div id="work-panel">
+    <ul class="panel-menu">
+      <li><a href="#" class="selected">Manuscript</a></li>
+      <li><a href="#">Notes</a></li>
+      <li><a href="#">Reading List</a></li>
+    </ul>
+
+    <div class="panel-content">
+      <%= render( {
+        partial: "shared/work_transcription",
+        object: @work
+      } ) %>
+    </div>
   </div>
 
 </div>

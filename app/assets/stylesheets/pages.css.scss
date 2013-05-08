@@ -4,20 +4,48 @@ $tan: #e7cf98;
 $lightTan: #eeddb5;
 
 .pages-show {
-  /**
-   * search-container has search menu & all search-related sections:
-   * search, browse, lexicon
-   */
-  #search-container {
+  .panel-menu {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      height: 2.2em;
+      margin: 0 .5em;
+    }
+
+    a, a:visited {
+      color: $lightGray;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 1.2em;
+    }
+
+    a:hover, a.selected {
+      color: $tan;
+    }
+  }
+
+  .panel-content {
     background: $lightTan;
     border-radius: .2em;
     color: $darkGray;
+  }
+
+  /**
+   * search-panel has search menu & all search-related sections:
+   * search, browse, lexicon
+   */
+  #search-panel {
     display: inline-block;
     margin: 0;
     max-width: 320px;
-    padding: .5em;
     vertical-align: top;
     width: 29%;
+
+    .panel-content {
+      padding: .5em;
+    }
 
     label {
       display: none;
@@ -31,13 +59,10 @@ $lightTan: #eeddb5;
   }
 
   /**
-   * work container has work menu & all work-related sections:
+   * work-panel has work menu & all work-related sections:
    * transcription, edition switcher, notes, reading list
    */
-  #work-container {
-    background: $lightTan;
-    border-radius: .2em;
-    color: $darkGray;
+  #work-panel {
     display: inline-block;
     margin: 0;
     vertical-align: top;
