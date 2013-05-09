@@ -7,6 +7,8 @@ class PagesController < ApplicationController
 
     def show
         @page = Page.find(params[:id])
+        @work = @page.work
+        @image = @page.image_group_image.image
     end
 
     def load_edition
