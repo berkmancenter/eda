@@ -1,6 +1,9 @@
 <section class="interactive-image">
-  <!-- we need to be passed an Image object and use the image_url property here -->
-  <script src="<%= @image.image_url %>.js?width=auto&height=512px"></script>
+  <% if @image == nil || (@image.image_url || "").empty? %>
+    <%= image_tag( image_path( "missing_image.jpg" ) ) %>
+  <% else %>
+    <script src="<%= @image.image_url %>.js?width=auto&height=512px"></script>
+  <% end %>
 
   <div class="page-controls">
     <!-- TODO: link_to next page -->
