@@ -12,6 +12,8 @@ module FieldParsing
                 :subtype => type_map[matches['type']]
             )
             d
+        else
+            puts "mod: " + text
         end
     end
 
@@ -27,6 +29,8 @@ module FieldParsing
                 :new_characters => CharMap::replace(alts[0])
             )
             e
+        else
+            puts "mod: " + text
         end
     end
 
@@ -45,7 +49,7 @@ module FieldParsing
                 )
                 a
             else
-                #puts stuff
+                puts "mod: " + text
             end
         end
     end
@@ -65,7 +69,7 @@ module FieldParsing
                 r.start_line_number = matches['line_num'].to_i
                 r
             else
-                #puts stuff
+                puts "mod: " + text
             end
         end
     end

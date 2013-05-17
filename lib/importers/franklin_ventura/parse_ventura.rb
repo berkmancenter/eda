@@ -121,6 +121,7 @@ class FranklinVenturaImporter
                     if matches['variant']
                         if poem.variant.nil?
                             poem.variant = CharMap::replace_no_itals(matches['variant'])
+                            puts "poem: #{poem.number} #{poem.variant}"
                         else
                             title = variant_titles.empty? ? poem.title : variant_titles.shift
                             close_poem(poem)
@@ -130,6 +131,7 @@ class FranklinVenturaImporter
                                 :variant => CharMap::replace(matches['variant']),
                                 :date => Date.new(File.basename(file.path).to_i)
                             )
+                            puts "poem: #{poem.number} #{poem.variant}"
                         end
                     end
 
@@ -233,7 +235,16 @@ class FranklinVenturaImporter
     end
 
     def prep_modifier(modifier, extractor, extracted)
-        modifier.match(extractor)[extracted].split('<_><|><~>').drop(1).map{|d| d.gsub("\r\n ",'').strip.split('<R>') }.flatten.delete_if{|d| d.include?('<MI>')}
+        mods = modifier.match(extractor)[extracted].split('<_><|><~>').drop(1) \
+            .map{|d| d.gsub("\r\n ",'').strip.split('<R>') }.flatten \
+            .delete_if do |d|
+                if d.include?('<MI>') 
+                    puts "mod: #{d}"
+                    true
+                else
+                    false 
+                end
+            end
     end
 
     def assign_stanza_positions(poem)

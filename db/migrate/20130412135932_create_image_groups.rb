@@ -1,7 +1,7 @@
 class CreateImageGroups < ActiveRecord::Migration
   def change
     create_table :image_groups do |t|
-      t.string :name
+      t.text :name
       t.references :parent_group
       t.boolean :editable
       t.text :image_url

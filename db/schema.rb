@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   add_index "image_group_images", ["image_id"], :name => "index_image_group_images_on_image_id"
 
   create_table "image_groups", :force => true do |t|
-    t.string   "name"
+    t.text     "name"
     t.integer  "parent_group_id"
     t.boolean  "editable"
     t.text     "image_url"
@@ -196,16 +196,6 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   add_index "work_groups", ["edition_id"], :name => "index_work_groups_on_edition_id"
   add_index "work_groups", ["owner_id"], :name => "index_work_groups_on_owner_id"
   add_index "work_groups", ["parent_group_id"], :name => "index_work_groups_on_parent_group_id"
-
-  create_table "work_image_groups", :force => true do |t|
-    t.integer  "work_id"
-    t.integer  "image_group_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "work_image_groups", ["image_group_id"], :name => "index_work_image_groups_on_image_group_id"
-  add_index "work_image_groups", ["work_id"], :name => "index_work_image_groups_on_work_id"
 
   create_table "works", :force => true do |t|
     t.string   "title"

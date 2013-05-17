@@ -36,7 +36,7 @@ module ErrorChecking
 
     def puts_maladdressed_mods(poem)
         poem.line_modifiers.each do |mod|
-            puts "#{mod.type} #{mod.id} @ #{mod.start_line_number} - #{mod.start_address} : (#{mod.original_characters}) - (#{mod.new_characters}) - '#{poem.line(mod.start_line_number).text if poem.line(mod.start_line_number)}'" if mod.start_address == nil || mod.start_line_number == nil || mod.start_line_number == 0
+            puts "#{mod.type} #{mod.id} @ Poem: #{poem.number}#{poem.variant} Line: #{mod.start_line_number} - #{mod.start_address} : (#{mod.original_characters}) - (#{mod.new_characters}) - '#{poem.line(mod.start_line_number).text if poem.line(mod.start_line_number)}'" if mod.start_address == nil || mod.start_line_number == nil || mod.start_line_number == 0
         end
     end
 
