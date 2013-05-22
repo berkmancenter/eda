@@ -23,4 +23,16 @@ $( function( ) {
   } );
 
   $( window ).trigger( "hashchange" );
+
+
+
+    $("#no-edits").click(function () {
+        $(".stanza").toggleClass("no-edits");
+    });
+
+
+    $("#linebreak-emily").click(function () {
+        $(".stanza").toggleClass("linebreak-emily");
+    });
+
 } );

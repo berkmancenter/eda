@@ -79,6 +79,41 @@ $darkTan: #897144;
     .work-transcription {
       font-size: .9em;
       padding: 1.5em;
+
+
+
+      .line {
+          display: block;
+      }
+
+      br {
+          display: none;
+      }
+
+      ins:before {
+          content:"(";
+          font-weight: bold;
+      }
+
+      ins:after {
+          content:")";
+          font-weight: bold;
+      }
+
+      rt {
+          font-size: 10px;
+      }
+
+      .no-edits ins, .no-edits del, .no-edits rt {
+          display: none;
+      }
+
+      .linebreak-emily span, .linebreak-emily br.emily {
+          display: inline;
+      }
+
+
+
     }
   }
 }

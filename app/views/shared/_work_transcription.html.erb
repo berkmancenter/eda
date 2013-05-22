@@ -1,4 +1,9 @@
 <section class="work-transcription">
+  <label>
+      <input id="no-edits" type="checkbox" name="edits" value="no" />Hide edits</label>
+  <label>
+      <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />Emily's line breaks</label>
+
 <% @work.stanzas.each do |stanza| %>
     <p class="stanza" data-number="<%= stanza.position %>">
     <% stanza.lines.each do |line| %>
