@@ -12,6 +12,7 @@ class Work < ActiveRecord::Base
     attr_accessible :date, :metadata, :number, :title, :variant
 
     searchable do
+        integer :edition_id
         text :title
         text :lines do
             lines.map{|l| l.text }
