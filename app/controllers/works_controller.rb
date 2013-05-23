@@ -10,6 +10,12 @@ class WorksController < ApplicationController
     end
 
     def search
+        if user_signed_in?
+            current_user.current_edition = params[:current_edition]
+        else
+            session[:current_edition] = params[:current_edition]
+        end
+
         if params[:q]
             @works = Work.search{ fulltext params[:q] }.results
         end

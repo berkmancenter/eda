@@ -13,7 +13,7 @@ Eda::Application.routes.draw do
     match 'lexicon' => 'words#index'
 
     get 'search(/:q)' => 'works#search', :as => 'search_works'
-    #devise_for :users
+    devise_for :users
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

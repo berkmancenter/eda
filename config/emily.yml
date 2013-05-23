@@ -1,0 +1,11 @@
+defaults: &DEFAULTS
+    default_edition: "The Poems of Emily Dickinson: Variorum Edition"
+
+development:
+  <<: *DEFAULTS
+
+test:
+  <<: *DEFAULTS
+
+production:
+  <<: *DEFAULTS
