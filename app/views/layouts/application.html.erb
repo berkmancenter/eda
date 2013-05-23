@@ -2,7 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Emily Dickinson Archive</title>
+  <% if yield( :title ).empty? %>
+    <title>Emily Dickinson Archive</title>
+  <% else %>
+    <title><%= yield( :title ) %></title>
+  <% end %>
   <meta name="viewport" content="width=device-width">
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
