@@ -30,9 +30,9 @@ class Page < ActiveRecord::Base
             next_images_work = next_image.image_group.work
             if next_works_image == image.image
                 # We're looking at an image with multiple works on it
-                next_work_id = 
+                next_work_id = nil #TODO
                 next_image_id = image.id
-                return Page.find_by_work_id_and_image_group_image_id(
+                return Page.find_by_work_id_and_image_group_image_id( next_work_id, next_image_id )
             elsif next_images_work == work
                 # We're looking at a work spanning multiple images
             end

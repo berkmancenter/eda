@@ -1,8 +1,8 @@
 <section class="interactive-image">
-  <% if @image == nil || (@image.image_url || "").empty? %>
+  <% if @image == nil || (@image.url || "").empty? %>
     <%= image_tag( image_path( "missing_image.jpg" ) ) %>
   <% else %>
-    <script src="<%= @image.image_url %>.js?width=auto&height=512px"></script>
+    <script src="<%= @image.url %>.js?width=auto&height=512px"></script>
   <% end %>
 
   <div class="page-controls">
