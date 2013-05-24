@@ -7,6 +7,7 @@ class CreateEditions < ActiveRecord::Migration
       t.string :work_number_prefix
       t.float :completeness
       t.references :owner
+      t.references :root_image_group
       t.text :description
 
       t.timestamps

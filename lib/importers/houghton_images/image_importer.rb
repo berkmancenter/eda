@@ -7,7 +7,7 @@ class ImageImporter
         CSV.foreach(filename, :headers => true) do |row|
             url = "archival_master/deliverable/#{row['filename'][0..-2]}2"
             image = Image.find_by_url(url)
-            image.url = url
+            image.url = row['url']
             image.full_width = row['width'].to_i
             image.full_height = row['height'].to_i
             image.save

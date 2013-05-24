@@ -21,13 +21,19 @@ end
 
 class FranklinVenturaImporter
     def create_edition
-        Edition.new(
+        edition = Edition.new(
             :name => 'The Poems of Emily Dickinson: Variorum Edition',
             :author => 'R. W. Franklin',
             :date => Date.new(1998, 1, 1),
             :work_number_prefix => 'F',
             :completeness => 1.0
         )
+        edition.create_root_image_group(
+            :name => "Images for #{edition.name}",
+            :editable => false,
+            :position => 0
+        )
+        edition
     end
 
     def process_file(file)
@@ -303,8 +309,8 @@ class FranklinVenturaImporter
         edition.works.each do |work|
             work.alternates.each do |e|
                 line = work.line(e.start_line_number)
-                if line && line.text.index(e.new_characters)
-                    e.start_address = line.text.index(e.new_characters)
+                if line && line.text.index(e.original_characters)
+                    e.start_address = line.text.index(e.original_characters)
                     e.end_address = e.start_address if e.start_address
                     e.save!
                 end

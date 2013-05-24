@@ -13,9 +13,10 @@
   </div>
 
   <div class="credits">
-    <p>copyright so and so.</p>
-    <p>copyright so and so.</p>
-    <p>copyright so and so.</p>
+      <% @image.metadata.each do |key, value| %>
+          <dt><%= key %></dt><dd><%= value %></dd>
+      <% end %>
+      <dt>Credits</dt><dd><%= @image.credits %></dd>
   </div>
 </section>
 
