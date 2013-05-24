@@ -7,6 +7,7 @@ describe ( "ImageGroupImage model" ) {
 
   describe ( "with valid data" ) {
     it { should be_valid }
+    it { should respond_to( :image_group ) }
     it { should respond_to( :image ) }
   }
 }

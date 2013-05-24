@@ -7,5 +7,6 @@ describe ( "Image model" ) {
 
   describe ( "with valid data" ) {
     it { should be_valid }
+    it { should respond_to( :url ) }
   }
 }

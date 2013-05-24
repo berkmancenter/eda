@@ -13,16 +13,19 @@ FactoryGirl.define do
     factory :work_one do
       title "An altered look about the hills --\n"
       number 140
+      image_group :factory => :igrp_one
     end
 
     factory :work_two do
       title "Belshazzar had a Letter --\n"
       number 1459
+      image_group :factory => :igrp_two
     end
 
     factory :work_three do
       title "The face I carry with me -- last --\n"
       number 336
+      image_group :factory => :igrp_three
     end
 
     factory :work_variant do
