@@ -30,9 +30,10 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
     t.string   "work_number_prefix"
     t.float    "completeness"
     t.integer  "owner_id"
+    t.integer  "root_image_group_id"
     t.text     "description"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   add_index "editions", ["owner_id"], :name => "index_editions_on_owner_id"
@@ -68,8 +69,10 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
     t.text     "url"
     t.text     "metadata"
     t.text     "credits"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "full_width"
+    t.integer  "full_height"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "line_modifiers", :force => true do |t|

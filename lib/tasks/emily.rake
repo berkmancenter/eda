@@ -1,12 +1,12 @@
 namespace :emily do
     namespace :import do
         desc 'Import Franklin ventura files'
-        task :ventura, [:dir, :start_year, :end_year] => [:environment] do |task, args|
+        task :ventura, [:directory, :start_year, :end_year] => [:environment] do |task, args|
             require Rails.root.join('lib', 'importers', 'franklin_ventura', 'parse_ventura.rb').to_s
             start_year = args[:start_year] || 1850
-            end_year = args[:end_year] || 1882
+            end_year = args[:end_year] || 1886
             importer = FranklinVenturaImporter.new
-            importer.import(args[:dir], start_year.to_i, end_year.to_i)
+            importer.import(args[:directory], start_year.to_i, end_year.to_i)
         end
 
         desc 'Import Johnson works'
@@ -30,6 +30,12 @@ namespace :emily do
             importer.import(args[:filename])
         end
 
+        desc 'Import image URLs'
+        task :images, [:filename] => [:environment] do |task, args|
+            require Rails.root.join('lib', 'importers', 'houghton_images', 'image_importer.rb').to_s
+            ImageImporter.new.import(args[:filename])
+        end
+
         desc 'Import TEI file'
         task :tei, [:edition, :number, :variant, :filename] => [:environment] do |task, args|
             require Rails.root.join('lib', 'importers', 'tei', 'parse.rb').to_s
@@ -43,6 +49,13 @@ namespace :emily do
             require Rails.root.join('lib', 'importers', 'mets', 'parse_mets.rb').to_s
             importer = MetsImporter.new
             importer.import(args[:directory])
+        end
+
+        desc 'Import minimum content to test'
+        task :test_data, [:data_directory] => [:environment] do |t, args|
+            Rake::Task["emily:import:ventura"].execute({:directory => args[:data_directory] + '/franklin_ventura', :start_year => 1860, :end_year => 1862})
+            Rake::Task["emily:import:mets"].execute({:directory => args[:data_directory] + '/mets'})
+            Rake::Task["emily:import:images"].execute({:filename => args[:data_directory] + '/images.csv'})
         end
 
         desc 'Create collections'

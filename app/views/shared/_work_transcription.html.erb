@@ -1,4 +1,6 @@
 <section class="work-transcription">
+    <%= render :partial => 'shared/forms/edition_selector' %>
+    <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
   <label>
       <input id="no-edits" type="checkbox" name="edits" value="no" />Hide edits</label>
   <label>
@@ -10,7 +12,7 @@
         <span class="line" data-line="<%= line.number %>">
             <%= raw render_line(line) %>
             <% unless line.just_author_break? %>
-                <br />
+                <br class="emily author"/>
             <% end %>
         </span>
     <% end %>

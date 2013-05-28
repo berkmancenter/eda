@@ -4,6 +4,8 @@ class CreateImages < ActiveRecord::Migration
       t.text :url
       t.text :metadata
       t.text :credits
+      t.integer :full_width
+      t.integer :full_height
 
       t.timestamps
     end
