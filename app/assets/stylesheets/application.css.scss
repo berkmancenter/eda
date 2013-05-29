@@ -44,6 +44,18 @@ summary {
     display: block;
 }
 
+/**
+ * General page layout structure:
+ *
+ * html
+ *   body class="control-ler action"
+ *     header
+ *       h1
+ *     section class="view"
+ *       h1
+ *     footer
+ */
+
 html {
   color: $tan;
   font-family: sans-serif;

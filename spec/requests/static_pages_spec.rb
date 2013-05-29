@@ -10,6 +10,10 @@ describe 'static pages requests' do
       should have_selector( 'title', { text: 'Emily Dickinson Archive' } )
     }
 
+    it {
+      should have_selector( 'body.static-pages.home' )
+    }
+
   end
 
   describe 'get /about' do

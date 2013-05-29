@@ -2,17 +2,34 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.static-pages {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 1em 8em 1em;
 
-  h1 {
-    font-family: Georgia, serif;
-    font-size: 1.5em;
-    font-style: italic;
-    font-weight: normal;
-    margin-left: 27px * 2;
+body.static-pages {
+  .view {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 0 1em 8em 1em;
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 1.5em;
+      font-style: italic;
+      font-weight: normal;
+      margin-left: 27px * 2;
+    }
   }
 }
+
+body.static-pages.home {
+  header {
+    display: none;
+  }
+
+  .home-logo {
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 3em;
+    text-align: center;
+  }
+}
+
 

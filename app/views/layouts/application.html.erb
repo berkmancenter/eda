@@ -15,7 +15,7 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="<%= body_class( params ) %>">
   <header>
   <h1>Emily Dickinson Archive</h1>
   </header>
@@ -27,6 +27,12 @@
   <footer>
   <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
   </footer>
+
+  <%=
+#    if ( Rails.env.development? )
+#        debug( params )
+#    end
+  %>
 
 </body>
 </html>
