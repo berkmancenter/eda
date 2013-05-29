@@ -18,5 +18,9 @@ describe ( "Page model" ) {
   }
 
   describe ( "with valid next page" ) {
+    subject { page_one.next }
+
+    it { should be_valid }
+    it { should = page_two }
   }
 }
