@@ -10,6 +10,9 @@ class Work < ActiveRecord::Base
     has_many :revisions
     has_many :appearances, :class_name => 'WorkAppearance'
     attr_accessible :date, :metadata, :number, :title, :variant
+    after_initialize :setup_defaults
+
+    serialize :metadata
 
     searchable do
         integer :edition_id
@@ -34,17 +37,28 @@ class Work < ActiveRecord::Base
     end
 
     def holder_code=(code)
+        self.metadata['holder_code'] = code
     end
 
     def holder_subcode=(subcode)
+        self.metadata['holder_subcode'] = subcode
     end
 
     def holder_id=(id)
+        self.metadata['holder_id'] = id
     end
 
-    def fascicle=(id)
+    def fascicle=(fascicle)
+        self.metadata['fascicle'] = fascicle
     end
 
-    def fascicle_position=(id)
+    def fascicle_position=(position)
+        self.metadata['fascicle_position'] = position
+    end
+
+    private
+    
+    def setup_defaults
+        self.metadata ||= {}
     end
 end

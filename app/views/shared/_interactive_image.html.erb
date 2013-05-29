@@ -13,9 +13,7 @@
   </div>
 
   <div class="credits">
-      <% @image.metadata.each do |key, value| %>
-          <dt><%= key %></dt><dd><%= value %></dd>
-      <% end %>
+      <%= render :partial => 'shared/metadata', :object => @image %>
       <dt>Credits</dt><dd><%= @image.credits %></dd>
   </div>
 </section>

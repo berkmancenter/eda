@@ -177,7 +177,7 @@ class FranklinVenturaImporter
             instances = prep_modifier(line, "Patterns::#{capped}_extractor".constantize, var.pluralize)
             instances.each do |instance|
                 i = self.send("get_#{var}", instance)
-                poem.line_modifiers << i if i 
+                poem.line_modifiers.push(*i) if i 
             end
         end
     end
@@ -295,9 +295,13 @@ class FranklinVenturaImporter
     def locate_divisions!(edition)
         edition.works.each do |work|
             work.divisions.each do |e|
-                line = work.line(e.start_line_number)
-                if line && line.text.index(e.original_characters)
-                    e.start_address = line.text.index(e.original_characters) + e.original_characters.length
+                if e.parent
+                    line = e.parent.chars.join
+                elsif work.line(e.start_line_number)
+                    line = work.line(e.start_line_number).text
+                end
+                if line && line.index(e.original_characters)
+                    e.start_address = line.index(e.original_characters) + e.original_characters.length
                     e.end_address = e.start_address if e.start_address
                     e.save!
                 end

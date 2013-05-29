@@ -1,17 +1,48 @@
 require_relative 'char_map.rb'
 module FieldParsing
     def get_division(text)
-        division_pattern = /(?<line_num>\d*) (?<last_chars>.*) <F38376>(?<type>(i|u))<F(255|58586)>/
-            type_map = { 'i' => 'page_or_column', 'u' => 'line'}
+        division_pattern = /^(?<line_num>\d*) (?<division>.*)$/
+        break_pattern = / <F38376(MI|M)?>(i|u)<F(255|58586)(D)?>/
+        type_map = { 'i' => 'page_or_column', 'u' => 'line'}
         matches = text.match(division_pattern)
-        if matches && matches['line_num'] && matches['last_chars'] && matches['type']
-            d = Division.new(
-                :start_line_number => matches['line_num'].to_i,
-                :end_line_number => matches['line_num'].to_i,
-                :original_characters => CharMap::replace(matches['last_chars']),
-                :subtype => type_map[matches['type']]
-            )
-            d
+        divs = []
+        if matches && matches['line_num'] && matches['division']
+            # Create an emedation if this is a division with an implicit emendation
+            emendation = matches['division'].split('] ')
+            if emendation.count > 1
+                chars = emendation[1]
+                e = Emendation.new(
+                    :start_line_number => matches['line_num'].to_i,
+                    :end_line_number => matches['line_num'].to_i,
+                    :original_characters => chars.gsub(break_pattern, ''),
+                    :new_characters => emendation[0]
+                )
+            else
+                chars = matches['division']
+            end
+            # We can have multiple new breaks per line, so build an array of
+            # all the last characters in a line and their following line break
+            all_lines = chars.split(break_pattern)
+            all_lines.delete_if{|l| ['MI', 'M', '255', '58586', 'D'].include? l}
+            all_lines.delete_at(all_lines.length - 1) unless ['i', 'u'].include?(all_lines.last)
+            if all_lines.count % 2 != 0
+                puts e.inspect
+                puts "ALL Lines: #{all_lines}"
+                exit
+            end
+            all_lines.each_slice(2) { |line_end| 
+                divs << Division.new(
+                    :start_line_number => matches['line_num'].to_i,
+                    :end_line_number => matches['line_num'].to_i,
+                    :original_characters => CharMap::replace(line_end[0]),
+                    :subtype => type_map[line_end[1]]
+                )
+            }
+            if e
+                e.children = divs.dup
+                divs << e
+            end
+            return divs
         else
             puts "mod: " + text
         end

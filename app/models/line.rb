@@ -9,7 +9,7 @@ class Line < ActiveRecord::Base
   end
 
   def mods_at(address)
-      line_modifiers.where(:start_address => address)
+      line_modifiers.where(:start_address => address, :parent_id => nil)
       #work.line_modifiers.all.select{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
   end
 
