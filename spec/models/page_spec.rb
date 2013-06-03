@@ -17,10 +17,18 @@ describe ( "Page model" ) {
     it { should respond_to( :image_url ) }
   }
 
-  describe ( "with valid next page" ) {
-    subject { page_one.next }
+  describe ( "next page having same work/different image" ) {
+    let ( :page_one_next ) { page_one.next }
+
+    subject { page_one_next }
 
     it { should be_valid }
     it { should = page_two }
+
+    subject { page_one_next.work }
+    it { should = page_one.work }
+
+    subject { page_one_next.image_url }
+    it { should = page_one.image_url }
   }
 }
