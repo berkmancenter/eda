@@ -2,7 +2,10 @@
 
 <section class="view">
 
-<h1><%= yield :title %></h1>
+  <%= render( {
+    partial: 'shared/about_panel_menu'
+  } ) %>
 
+  <p>The Emily Dickinson Archive seeks to make the Dickinson manuscripts available in open access, around the world, paired with transcriptions and other resources &ndash; inspiring new scholarship and discourse on this literary icon.</p>
 </section>
 

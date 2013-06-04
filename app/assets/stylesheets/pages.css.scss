@@ -7,41 +7,6 @@ $darkTan: #897144;
 .pages.show .view {
   min-width: 960px;
 
-  .panel-menu {
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: inline-block;
-      height: 2.2em;
-      margin: 0 .5em;
-    }
-
-    a, a:visited {
-      color: $lightGray;
-      font-family: Georgia, serif;
-      font-style: italic;
-      font-size: 1.2em;
-    }
-
-    a:hover, a.selected {
-      color: $tan;
-    }
-  }
-
-
-  .panel-content {
-    background: $lightTan;
-    border-radius: .2em;
-    box-shadow: 0px 3px 4px 0px $darkTan;
-    color: $darkGray;
-    padding: .5em;
-
-    section {
-      display: none;
-    }
-  }
-
   /**
    * search-panel has search menu & all search-related sections:
    * search, browse, lexicon

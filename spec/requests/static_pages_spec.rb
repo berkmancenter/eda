@@ -14,6 +14,10 @@ describe 'static pages requests' do
       should have_selector( 'body.static-pages.home' )
     }
 
+    it { 
+      should have_selector( 'a', { text: 'Home' } )
+    }
+
   end
 
   describe 'get /about' do
@@ -24,7 +28,7 @@ describe 'static pages requests' do
     }
 
     it {
-      should have_selector( 'h1', { text: 'About Emily Dickinson Archive' } )
+      should have_selector( '.about-panel-menu' )
     }
 
   end

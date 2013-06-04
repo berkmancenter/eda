@@ -17,15 +17,28 @@
 </head>
 <body class="<%= body_class( params ) %>">
   <header>
-  <h1>Emily Dickinson Archive</h1>
+    <h1>Emily Dickinson Archive</h1>
+
+    <div class="menu-container">
+      <% if ( params[ :action ] != 'home' ) %>
+        <%= render( {
+          partial: 'shared/main_nav',
+          object: params
+        } ) %>
+      <% end %>
+    </div>
+
+    <div class="hr"></div>
   </header>
-   <p class="notice"><%= notice %></p>
-   <p class="alert"><%= alert %></p>
+
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 
 <%= yield %>
 
   <footer>
-  <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
+    <div class="hr"></div>
+    <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
   </footer>
 
   <%=

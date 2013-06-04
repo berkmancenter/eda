@@ -20,6 +20,11 @@ body.static-pages {
       font-weight: normal;
       margin-left: 27px * 2;
     }
+
+    .panel-menu li {
+      margin: 0 1em;
+
+    }
   }
 }
 
@@ -44,7 +49,6 @@ body.static-pages.home {
   }
 
   h1 {
-    border-bottom: 2px solid $lightGray;
     margin: 0 0 2em 0;
     padding: 1em;
   }

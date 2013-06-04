@@ -1,0 +1,7 @@
+<nav class="main">
+  <ul>
+    <li><%= link_to( 'Home', root_url, ( params[ :action ] == 'home' ? { class: 'selected' } : nil ) ) %></li>
+    <li><%= link_to( 'About', about_url, ( params[ :action ] == 'about' ? { class: 'selected' } : nil ) ) %></li>
+  </ul>
+</nav>
+

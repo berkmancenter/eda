@@ -1,0 +1,28 @@
+$darkGray: #333;
+$lightGray: #535353;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+
+nav.main {
+  display: inline-block;
+  text-align: left;
+  text-transform: uppercase;
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 1em;
+  }
+
+  a, a:visited {
+    color: $lightGray;
+  }
+
+  a:hover, a.selected {
+    color: $tan;
+  }
+}

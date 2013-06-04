@@ -2,22 +2,31 @@
 <section class="view">
   <b class="home-logo">Emily Dickinson Archive</b>
 
-<h1>An open-access website for the manuscripts of Emily Dickinson</h1>
+  <h1>An open-access website for the manuscripts of Emily Dickinson</h1>
 
-<section class="welcome">
+  <div class="menu-container">
+    <%= render( {
+      partial: 'shared/main_nav',
+      object: params
+    } ) %>
+  </div>
 
-<p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
-<p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
-<p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
+  <div class="hr"></div>
 
-</section>
+  <section class="welcome">
 
-<nav class="icon-links">
-<ul>
-  <li><a href="javascript:void(0);">Browse Manuscripts</a></li>
-  <li><a href="javascript:void(0);">Lexicon</a></li>
-</ul>
-</nav>
+    <p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
+    <p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
+    <p>Welcome to the Emily Dickinson Archive where manuscripts of Dickinson's poetry, along with transcriptions and annotations from scholarly editions, available in open access inspiring new scholarship and discourse on this literary icon.</p>
+
+  </section>
+
+  <nav class="icon-links">
+  <ul>
+    <li><a href="javascript:void(0);">Browse Manuscripts</a></li>
+    <li><a href="javascript:void(0);">Lexicon</a></li>
+  </ul>
+  </nav>
 
 </section>
 

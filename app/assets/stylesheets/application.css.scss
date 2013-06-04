@@ -81,7 +81,7 @@ body {
   header {
     background: url("ornament-small.png") repeat-x 0 16px;
     margin: 0;
-    padding: 0;
+    padding: 0 0 1em 0;
 
 
     h1 {
@@ -97,8 +97,6 @@ body {
   }
 
   footer {
-    border-top: 2px solid $lightGray;
-
     p {
       font-family: Georgia, serif;
       font-size: .8em;
@@ -108,3 +106,21 @@ body {
   }
 }
 
+/**
+ * some site-wide classes
+ */
+
+.hr {
+  border: solid 1px $lightGray;
+  height: 0px;
+  margin: 1em 0;
+  width: 100%;
+}
+
+.menu-container {
+  display: block;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
