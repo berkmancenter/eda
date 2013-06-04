@@ -20,9 +20,9 @@ describe 'layout requests' do
 
     it { should have_selector( 'footer nav.footer' ) }
 
-    it { should have_selector( 'footer nav.footer a', { text: 'Terms & Conditions' } ) }
-    it { should have_selector( 'footer nav.footer a', { text: 'Privacy' } ) }
-    it { should have_selector( 'footer nav.footer a', { text: 'Contact Us' } ) }
+    it { should have_selector( 'footer nav.footer a[href="' + terms_url + '"]', { text: 'Terms & Conditions' } ) }
+    it { should have_selector( 'footer nav.footer a[href="' + privacy_url + '"]', { text: 'Privacy' } ) }
+    it { should have_selector( 'footer nav.footer a[href="' + contact_url + '"]', { text: 'Contact Us' } ) }
   end
 
 end
