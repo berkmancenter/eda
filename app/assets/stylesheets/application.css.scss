@@ -103,6 +103,28 @@ body {
       margin: 1em auto;
       max-width: 800px;
     }
+
+    nav li {
+      display: inline-block;
+      list-style-type: none;
+      margin: 0 1em;
+    }
+
+    a.berkman-link {
+      background: url('berkman_logo_small.png');
+      display: inline-block;
+      height: 24px;
+      vertical-align: middle;
+      width: 48px;
+    }
+
+    a, a:visited {
+      color: $lightGray;
+    }
+
+    a:hover {
+      color: $tan;
+    }
   }
 }
 
