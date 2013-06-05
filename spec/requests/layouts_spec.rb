@@ -12,7 +12,14 @@ describe 'layout requests' do
 
     it { should have_selector( 'header h1' ) }
 
-    it { should have_selector( 'header div.menu-container' ) }
+    it { should have_selector( 'header nav.main' ) }
+    it { should have_selector( 'header nav.main a[href="' + root_url + '"]', { text: 'Home' } ) }
+    it { should have_selector( 'header nav.main a[href="' + about_url + '"]', { text: 'About' } ) }
+
+    it { should have_selector( 'header nav.user' ) }
+
+    # without being signed in yet
+    it { should have_selector( 'header nav.user a[href="' + new_user_session_url + '"]', { text: 'Sign In' } ) }
 
     it { should have_selector( 'footer' ) }
 
