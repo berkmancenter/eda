@@ -13,7 +13,7 @@
  */
 
 $darkGray: #333;
-$lightGray: #535353;
+$lightGray: #888;
 $tan: #e7cf98;
 $lightTan: #eeddb5;
 
@@ -70,8 +70,12 @@ body {
   min-width: 512px;
 
   a, a:visited {
-    color: $tan;
+    color: $lightGray;
     text-decoration: none;
+  }
+
+  a:hover, a.selected {
+    color: $lightTan;
   }
 
   a:hover {
@@ -116,14 +120,6 @@ body {
       height: 24px;
       vertical-align: middle;
       width: 48px;
-    }
-
-    a, a:visited {
-      color: $lightGray;
-    }
-
-    a:hover {
-      color: $tan;
     }
   }
 }

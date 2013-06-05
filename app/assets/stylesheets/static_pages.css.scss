@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 $darkGray: #333;
-$lightGray: #535353;
+$lightGray: #888;
 $tan: #e7cf98;
 $lightTan: #eeddb5;
 
@@ -23,7 +23,20 @@ body.static-pages {
 
     .panel-menu li {
       margin: 0 1em;
+    }
+  }
 
+  h2 {
+    font-weight: normal;
+    margin: 2em 0 1em 0;
+  }
+
+  .reference-list {
+    font-size: 1.2em;
+    list-style-type: none;
+
+    li {
+      margin: .4em 0;
     }
   }
 }
