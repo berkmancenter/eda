@@ -15,15 +15,18 @@ FactoryGirl.define do
       work_number_prefix "F"
       completeness 1
     end
+
+    factory :tested do
+      name 'Test Edition'
+      author 'Ryan Westphal'
+      date '2013-06-06'
+      work_number_prefix 'R'
+      completeness 0.1
+    end
   end
 
   factory :work do
     #edition :johnson
-
-    factory :work_no_stanzas do
-      title "no_stanzas"
-      number 0
-    end
 
     #edition :franklin
 
@@ -51,6 +54,15 @@ FactoryGirl.define do
       number 2
       variant "B"
     end
+
+    #edition :tested
+
+    factory :work_no_stanzas_no_image_group do
+      title "no_stanzas, no_image_group"
+      number 1
+    end
+
+
   end
 
   factory :stanza do

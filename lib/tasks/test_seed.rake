@@ -10,11 +10,6 @@ namespace :db do
       johnson = FactoryGirl.create( :johnson );
       johnson.save!
 
-      # some works
-      work_no_stanzas = FactoryGirl.create( :work_no_stanzas );
-      work_no_stanzas.edition = johnson;
-      work_no_stanzas.save!
-
       #
       # franklin
       #
@@ -142,6 +137,18 @@ namespace :db do
       page_six.work = work_three;
       page_six.image_group_image = igi_six;
       page_six.save!
+
+      #
+      # tested
+      # 
+      tested = FactoryGirl.create( :tested );
+      tested.save!
+
+      # some works
+      tw = FactoryGirl.create( :work_no_stanzas_no_image_group );
+      tw.edition = tested;
+      tw.save!
+
     end
   end
 end
