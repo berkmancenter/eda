@@ -12,11 +12,9 @@
     <a id="next-page" href="#" title="Next Page" alt="Next Page" class="change-page"></a>
   </div>
 
-  <div class="credits">
-      <% @image.metadata.each do |key, value| %>
-          <dt><%= key %></dt><dd><%= value %></dd>
-      <% end %>
-      <dt>Credits</dt><dd><%= @image.credits %></dd>
-  </div>
+  <dl class="credits">
+    <dt>Metadata</dt><dd><%= @image.metadata %></dd>
+    <dt>Credits</dt><dd><%= @image.credits %></dd>
+  </dl>
 </section>
 
