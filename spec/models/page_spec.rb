@@ -20,17 +20,10 @@ describe ( "Page model" ) {
   }
 
   describe ( "next page having same work/different image" ) {
-    let ( :page_one_next ) { page_one.next }
-
-    subject { page_one_next }
-
-    it { should be_valid }
-    it { should = page_two }
-
-    subject { page_one_next.work }
-    it { should = page_one.work }
-
-    subject { page_one_next.image_url }
-    it { should = page_one.image_url }
+    it {
+      page_one_next = page_one.next;
+      page_one_next.work_id.should = page_one.work_id;
+      page_one_next.image_url.should_not = page_one.image_url;
+    }
   }
 }
