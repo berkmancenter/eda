@@ -1,12 +1,14 @@
 require "spec_helper"
 
 describe ( "Page model" ) {
-  let ( :page_one ) { FactoryGirl.create( :page_one ) }
-  let ( :page_two ) { FactoryGirl.create( :page_two ) }
-  let ( :page_three ) { FactoryGirl.create( :page_three ) }
-  let ( :page_four ) { FactoryGirl.create( :page_four ) }
-  let ( :page_five ) { FactoryGirl.create( :page_five ) }
-  let ( :page_six ) { FactoryGirl.create( :page_six ) }
+  # page ids are entered by design
+  let ( :page_one ) { Page.find( 1 ) }
+  let ( :page_two ) { Page.find( 2 ) }
+  #let ( :page_two ) { FactoryGirl.create( :page_two ) }
+  #let ( :page_three ) { FactoryGirl.create( :page_three ) }
+  #let ( :page_four ) { FactoryGirl.create( :page_four ) }
+  #let ( :page_five ) { FactoryGirl.create( :page_five ) }
+  #let ( :page_six ) { FactoryGirl.create( :page_six ) }
 
   describe ( "with valid data" ) {
     subject { page_one }

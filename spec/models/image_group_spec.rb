@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ( "ImageGroup model" ) {
   describe ( "type = Collection" ) {
-    let ( :igrp ) { FactoryGirl.create( :igrp_harvard ) }
+    let ( :igrp ) { ImageGroup.find_by_name( 'Harvard Collection' ) }
 
     subject { igrp }
 

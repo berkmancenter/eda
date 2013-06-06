@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe ( "ImageGroupImage model" ) {
-  let ( :igi ) { FactoryGirl.create( :igi_one ) }
+  let ( :igi ) { ImageGroupImage.first }
 
   subject { igi }
 

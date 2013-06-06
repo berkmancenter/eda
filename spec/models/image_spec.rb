@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe ( "Image model" ) {
-  let ( :image ) { FactoryGirl.create( :image_one ) }
+  let ( :image ) { Image.first }
 
   subject { image }
 

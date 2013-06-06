@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe( "Work model" ) {
-  let ( :work ) { FactoryGirl.create( :work_one ) }
+  let ( :work ) { Work.first }
 
   subject { work }
 
