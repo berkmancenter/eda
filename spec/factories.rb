@@ -30,22 +30,39 @@ FactoryGirl.define do
 
     #edition :franklin
 
-    factory :work_one do
-      title "An altered look about the hills --\n"
-      number 140
+    factory :work_f1a do
+      title 'Awake ye muses nine, sing me a strain divine'
+      number 1
+      variant 'A'
       #image_group :igrp_one
     end
 
-    factory :work_two do
-      title "Belshazzar had a Letter --\n"
-      number 1459
+    factory :work_f2a do
+      title 'Sic transit gloria mundi'
+      number 2
+      variant 'A'
       #image_group :igrp_two
     end
 
-    factory :work_three do
-      title "We lose -- because we win -- "
-      number 21
+    factory :work_f2b do
+      title 'Sic transit gloria mundi'
+      number 2
+      variant 'B'
+      #image_group nil
+    end
+
+    factory :work_f3a do
+      title 'On this wondrous sea'
+      number 3
+      variant 'A'
       #image_group :igrp_three
+    end
+
+    factory :work_f3b do
+      title 'On this wondrous sea'
+      number 3
+      variant 'B'
+      #image_group nil
     end
 
     factory :work_variant do
@@ -114,7 +131,7 @@ FactoryGirl.define do
     end
 
     factory :igrp_one do
-      name "An altered look about the hills --\n"
+      name 'Awake ye muses nine, sing me a strain divine'
       #parent_group :igrp_harvard
       metadata nil
       type nil
@@ -122,7 +139,7 @@ FactoryGirl.define do
     end
 
     factory :igrp_two do
-      name "Belshazzar had a Letter --\n"
+      name 'Sic transit gloria mundi'
       #parent_group :igrp_harvard
       metadata nil
       type nil
@@ -130,7 +147,7 @@ FactoryGirl.define do
     end
 
     factory :igrp_three do
-      name "The face I carry with me -- last --\n"
+      name 'On this wondrous sea'
       #parent_group :igrp_harvard
       metadata nil
       type nil
@@ -188,17 +205,17 @@ FactoryGirl.define do
     # edition :franklin
 
     factory :page_one do
-      #work :work_one
+      #work :work_f1
       #image_group_image :igi_one
     end
 
     factory :page_two do
-      #work :work_one
+      #work :work_f1
       #image_group_image :igi_two
     end
 
     factory :page_three do
-      #work :work_one
+      #work :work_f1
       #image_group_image :igi_three
     end
 

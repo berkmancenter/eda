@@ -38,20 +38,20 @@ namespace :db do
       igrp_three.save!
 
       # some works
-      work_one = FactoryGirl.create( :work_one );
-      work_one.edition = franklin;
-      work_one.image_group = igrp_one;
-      work_one.save!
+      work_f1a = FactoryGirl.create( :work_f1a );
+      work_f1a.edition = franklin;
+      work_f1a.image_group = igrp_one;
+      work_f1a.save!
 
-      work_two = FactoryGirl.create( :work_two );
-      work_two.edition = franklin;
-      work_two.image_group = igrp_two;
-      work_two.save!
+      work_f2a = FactoryGirl.create( :work_f2a );
+      work_f2a.edition = franklin;
+      work_f2a.image_group = igrp_two;
+      work_f2a.save!
 
-      work_three = FactoryGirl.create( :work_three );
-      work_three.edition = franklin;
-      work_three.image_group = igrp_three;
-      work_three.save!
+      work_f3a = FactoryGirl.create( :work_f3a );
+      work_f3a.edition = franklin;
+      work_f3a.image_group = igrp_three;
+      work_f3a.save!
 
       # some images
       image_one = FactoryGirl.create( :image_one );
@@ -104,37 +104,37 @@ namespace :db do
       # finally, some pages
       page_one = FactoryGirl.create( :page_one );
       page_one.edition = franklin;
-      page_one.work = work_one;
+      page_one.work = work_f1a;
       page_one.image_group_image = igi_one;
       page_one.save!
 
       page_two = FactoryGirl.create( :page_two );
       page_two.edition = franklin;
-      page_two.work = work_one;
+      page_two.work = work_f1a;
       page_two.image_group_image = igi_two;
       page_two.save!
 
       page_three = FactoryGirl.create( :page_three );
       page_three.edition = franklin;
-      page_three.work = work_one;
+      page_three.work = work_f1a;
       page_three.image_group_image = igi_three;
       page_three.save!
 
       page_four = FactoryGirl.create( :page_four );
       page_four.edition = franklin;
-      page_four.work = work_two;
+      page_four.work = work_f2a;
       page_four.image_group_image = igi_four;
       page_four.save!
 
       page_five = FactoryGirl.create( :page_five );
       page_five.edition = franklin;
-      page_five.work = work_two;
+      page_five.work = work_f2a;
       page_five.image_group_image = igi_five;
       page_five.save!
 
       page_six = FactoryGirl.create( :page_six );
       page_six.edition = franklin;
-      page_six.work = work_three;
+      page_six.work = work_f3a;
       page_six.image_group_image = igi_six;
       page_six.save!
 
