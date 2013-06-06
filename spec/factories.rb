@@ -130,6 +130,7 @@ FactoryGirl.define do
       position nil
     end
 
+    # an image group contains all the images for a poem and their order
     factory :igrp_one do
       name 'Awake ye muses nine, sing me a strain divine'
       #parent_group :igrp_harvard
