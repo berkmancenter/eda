@@ -35,6 +35,7 @@ class Page < ActiveRecord::Base
                 return Page.find_by_work_id_and_image_group_image_id( next_work_id, next_image_id )
             elsif next_images_work == work
                 # We're looking at a work spanning multiple images
+                return Page.find_by_work_id_and_image_group_image_id( work.id, next_image.id )
             end
         end
 
