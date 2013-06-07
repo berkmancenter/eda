@@ -6,7 +6,7 @@ describe ( 'works requests' ) {
   describe ( 'get /editions/:edition_id/works/:id' ) {
 
     describe ( 'with no stanzas' ) {
-      let ( :work ) { Work.find_by_title( 'no_stanzas' ) }
+      let ( :work ) { Work.find_by_title( 'no_stanzas, no_image_group' ) }
 
       before { visit edition_work_url( { edition_id: work.edition_id, id: work.id } ) }
 
