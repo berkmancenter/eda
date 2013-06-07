@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe ( "Page model" ) {
-  # page ids are entered by design
+  # tied to specific test data
   let ( :page_one ) { Page.find( 1 ) }
   let ( :page_two ) { Page.find( 2 ) }
   #let ( :page_two ) { FactoryGirl.create( :page_two ) }

@@ -5,6 +5,7 @@ Eda::Application.routes.draw do
     resources :editions do
         resources :works
         resources :pages
+        resources :image_groups
     end
     resources :words
 
