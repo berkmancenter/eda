@@ -26,14 +26,17 @@ namespace :db do
 
       # image groups (do these need edition?)
       igrp_one = FactoryGirl.create( :igrp_one );
+      igrp_one.edition = franklin;
       igrp_one.parent_group = igrp_harvard;
       igrp_one.save!
 
       igrp_two = FactoryGirl.create( :igrp_two );
+      igrp_two.edition = franklin;
       igrp_two.parent_group = igrp_harvard;
       igrp_two.save!
 
       igrp_three = FactoryGirl.create( :igrp_three );
+      igrp_three.edition = franklin;
       igrp_three.parent_group = igrp_harvard;
       igrp_three.save!
 
