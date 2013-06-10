@@ -13,8 +13,14 @@ describe ( 'image groups requests (sbs)' ) {
 
       it { 
         should have_selector( 'title', { text: igrp_name } );
-
       }
+
+      it ( 'should have img tags for all ImageGroup images' ) {
+        should have_selector( "img[src*='#{igrp.images[0].image.preview_url}']" );
+        should have_selector( "img[src*='#{igrp.images[1].image.preview_url}']" );
+        should have_selector( "img[src*='#{igrp.images[2].image.preview_url}']" );
+      }
+
     }
   }
 }
