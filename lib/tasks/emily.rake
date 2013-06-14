@@ -1,66 +1,72 @@
 namespace :emily do
+
+    desc 'Process Harvard images to remove color bars and copyright info'
+    task :process_harvard_images, [:image_dir, :output_dir] => [:environment] do |t, args|
+        HarvardImageProcessor.new.process_directory(args[:image_dir], args[:output_dir])
+    end
+
     namespace :import do
-        desc 'Import Franklin ventura files'
-        task :ventura, [:directory, :start_year, :end_year] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'franklin_ventura', 'parse_ventura.rb').to_s
-            start_year = args[:start_year] || 1850
-            end_year = args[:end_year] || 1886
-            importer = FranklinVenturaImporter.new
-            importer.import(args[:directory], start_year.to_i, end_year.to_i)
+
+        namespace :transcriptions do
+            desc 'Import transcription corrections'
+            task :corrections, [:filename] => [:environment] do |task, args|
+                CorrectionsImporter.new.import(args[:filename])
+            end
+
+            desc 'Import Johnson works'
+            task :johnson, [:filename] => [:environment] do |task, args|
+                JohnsonImporter.new.import(args[:filename])
+            end
+
+            desc 'Import Project Gutenberg works'
+            task :gutenberg, [:filename] => [:environment] do |task, args|
+                GutenbergImporter.new.import(args[:filename])
+            end
+
+            desc 'Import Franklin ventura files'
+            task :franklin, [:directory, :start_year, :end_year] => [:environment] do |task, args|
+                start_year = args[:start_year] || 1850
+                end_year = args[:end_year] || 1886
+                FranklinVentura::Importer.new.import(args[:directory], start_year.to_i, end_year.to_i)
+            end
         end
 
-        desc 'Import Johnson works'
-        task :johnson, [:filename] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'johnson', 'parse_johnson.rb').to_s
-            importer = JohnsonImporter.new
-            importer.import(args[:filename])
+        namespace :images do 
+            desc 'Import image instances from METS records'
+            task :harvard, [:directory] => [:franklin, :environment] do |task, args|
+                HarvardImageImporter.new.import(args[:directory])
+            end
+
+            desc 'Import Amherst images'
+            task :amherst => [:environment] do
+            end
+
+            desc "Import images from BPL's Flickr"
+            task :bpl => [:environment] do |t|
+                BPLFlickrImporter.new.import
+            end
+
+            desc 'Import Library of Congress images'
+            task :loc => [:environment] do
+                # These don't exist yet
+            end
         end
 
         desc 'Import BYU Lexicon'
         task :lexicon, [:filename] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'lexicon', 'parse_lexicon.rb').to_s
-            importer = LexiconImporter.new
-            importer.import(args[:filename])
-        end
-
-        desc 'Import Project Gutenberg works'
-        task :gutenberg, [:filename] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'gutenberg', 'parse_gutenberg.rb').to_s
-            importer = GutenbergImporter.new
-            importer.import(args[:filename])
-        end
-
-        desc 'Import image URLs'
-        task :images, [:filename] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'houghton_images', 'image_importer.rb').to_s
-            ImageImporter.new.import(args[:filename])
+            LexiconImporter.new.import(args[:filename])
         end
 
         desc 'Import TEI file'
         task :tei, [:edition, :number, :variant, :filename] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'tei', 'parse.rb').to_s
-            importer = TEIImporter.new
             edition = Edition.find_by_author(args[:edition])
-            importer.import(edition, args[:number], args[:variant], args[:filename])
+            TEIImporter.new.import(edition, args[:number], args[:variant], args[:filename])
         end
 
-        desc 'Import METS records'
-        task :mets, [:directory] => [:environment] do |task, args|
-            require Rails.root.join('lib', 'importers', 'mets', 'parse_mets.rb').to_s
-            importer = MetsImporter.new
-            importer.import(args[:directory])
-        end
-
-        desc 'Import minimum content to test'
+        desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
-            Rake::Task["emily:import:ventura"].execute({:directory => args[:data_directory] + '/franklin_ventura', :start_year => 1860, :end_year => 1862})
-            Rake::Task["emily:import:mets"].execute({:directory => args[:data_directory] + '/mets'})
-            Rake::Task["emily:import:images"].execute({:filename => args[:data_directory] + '/images.csv'})
-        end
-
-        desc 'Create collections'
-        task :collections, [:filename] => [:environment] do |task, args|
-            CSV.open(args[:filename], :headers => true)
+            Rake::Task["emily:import:transcriptions:franklin"].execute({:directory => args[:data_directory] + '/franklin_ventura', :start_year => 1862, :end_year => 1862})
+            Rake::Task["emily:import:images:harvard"].execute({:directory => args[:data_directory] + '/mets'})
         end
     end
 end

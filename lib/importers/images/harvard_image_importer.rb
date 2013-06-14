@@ -35,7 +35,7 @@
 #
 # Pages traverse the leafs of the edition image tree and the work list
 
-class MetsImporter
+class HarvardImageImporter
     def import(directory)
         collection = Collection.new(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         edition = Edition.find_by_author('R. W. Franklin')
@@ -75,6 +75,9 @@ class MetsImporter
                 franklin_numbers = page['LABEL'].scan(/Fr(\d{1,4})\D/)
                 puts franklin_numbers.inspect
                 franklin_numbers.each do |franklin_number|
+                    if Work.where(:number => franklin_number[0]).count > 1
+                        puts "Multiple works with number #{franklin_number[0]}"
+                    end
                     works << Work.find_by_number(franklin_number[0])
                 end
                 puts works.inspect
