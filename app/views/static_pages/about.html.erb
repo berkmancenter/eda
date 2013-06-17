@@ -1,8 +1,21 @@
 <% provide :title, "About Emily Dickinson Archive" %>
 
-<section class="static-pages about">
+<section class="view">
 
-<h1><%= yield :title %></h1>
+  <%= render( {
+    partial: 'shared/about_panel_menu'
+  } ) %>
+
+  <p>The goal of this site is to gather in one place images of all surviving Dickinson autograph manuscripts and letters; contemporary transcripts of Dickinson poems and letters that do not survive in autograph; and a historical array of editors' attempts to translate those autograph materials into printed form. The Emily Dickinson Archive is designed to inspire new scholarship and discourse on this literary icon.</p>
+
+  <h2>Key Features</h2>
+
+  <ul>
+    <li>Find poems easily with multiple index and reference tools</li>
+    <li>Study the poet's own handwriting, variants, and arrangement of her work</li>
+    <li>Read and compare editions, word choice, and transcriptions through time</li>
+    <li>Facilitate new scholarship by providing tools for creating annotations, transcriptions, and reading lists</li>
+  </ul>
 
 </section>
 

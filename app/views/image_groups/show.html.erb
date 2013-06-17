@@ -1,0 +1,11 @@
+<% provide :title, @image_group.name %>
+
+<section class="view">
+  <h2><%= @image_group.name %></h2>
+
+  <div class="sbs-pages">
+    <% @image_group.images.each { |igi| %>
+      <div><%= image_tag( igi.image.preview_url ) %></div>
+    <% } %>
+  </div>
+</section>

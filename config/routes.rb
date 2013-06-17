@@ -5,11 +5,17 @@ Eda::Application.routes.draw do
     resources :editions do
         resources :works
         resources :pages
+        resources :image_groups
     end
     resources :words
 
     match 'about' => 'static_pages#about'
-    match 'layout' => 'static_pages#layout'
+    match 'faq' => 'static_pages#faq'
+    match 'team' => 'static_pages#team'
+    match 'terms' => 'static_pages#terms'
+    match 'privacy' => 'static_pages#privacy'
+    match 'contact' => 'static_pages#contact'
+
     match 'lexicon' => 'words#index'
 
     get 'search(/:q)' => 'works#search', :as => 'search_works'

@@ -2,17 +2,107 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.static-pages {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 1em 8em 1em;
+$darkGray: #333;
+$lightGray: #888;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
 
-  h1 {
-    font-family: Georgia, serif;
-    font-size: 1.5em;
-    font-style: italic;
+body.static-pages {
+  .view {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 0 1em 8em 1em;
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 1.1em;
+      font-variant: small-caps; 
+      font-weight: normal;
+      margin-left: 27px * 2;
+    }
+
+    .panel-menu li {
+      margin: 0 1em;
+    }
+  }
+
+  h2 {
     font-weight: normal;
-    margin-left: 27px * 2;
+    margin: 2em 0 1em 0;
+  }
+
+  .reference-list {
+    font-size: 1.2em;
+    list-style-type: none;
+
+    li {
+      margin: .4em 0;
+    }
   }
 }
+
+body.static-pages.home {
+  text-align: center;
+
+  header {
+    display: none;
+  }
+
+  .home-logo {
+    background: url('ornament-med-tan.png') repeat-x 0 0;
+    display: inline-block;
+    font-family: Georgia, serif;
+    font-size: 36px;
+    font-weight: normal;
+    height: 128px;
+    margin: 0 auto;
+    padding-top: 96px;
+    text-align: center;
+    width: 530px;
+  }
+
+  h1 {
+    margin: 0 0 2em 0;
+    padding: 1em;
+  }
+
+  .view p {
+    text-align: left;
+  }
+
+  .welcome {
+    border-right: 2px solid $lightGray;
+    display: inline-block;
+    max-width: 60%;
+    padding: 2em 2em 2em 0;
+  }
+
+  .icon-links {
+    display: inline-block;
+    vertical-align: top;
+
+    ul {
+      margin: 2em;
+      padding: 0;
+    }
+
+    li {
+      list-style-type: none;
+      margin: 1em 0;
+    }
+
+    a {
+      border: 2px solid $tan;
+      display: block;
+      height: 96px;
+      width: 96px;
+    }
+  }
+
+  footer {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+}
+
 

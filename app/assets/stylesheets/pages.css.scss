@@ -1,46 +1,11 @@
 $darkGray: #333;
-$lightGray: #535353;
+$lightGray: #888;
 $tan: #e7cf98;
 $lightTan: #eeddb5;
 $darkTan: #897144;
 
-.pages-show {
+.pages.show .view {
   min-width: 960px;
-
-  .panel-menu {
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: inline-block;
-      height: 2.2em;
-      margin: 0 .5em;
-    }
-
-    a, a:visited {
-      color: $lightGray;
-      font-family: Georgia, serif;
-      font-style: italic;
-      font-size: 1.2em;
-    }
-
-    a:hover, a.selected {
-      color: $tan;
-    }
-  }
-
-
-  .panel-content {
-    background: $lightTan;
-    border-radius: .2em;
-    box-shadow: 0px 3px 4px 0px $darkTan;
-    color: $darkGray;
-    padding: .5em;
-
-    section {
-      display: none;
-    }
-  }
 
   /**
    * search-panel has search menu & all search-related sections:
@@ -75,45 +40,5 @@ $darkTan: #897144;
     min-width: 320px;
     vertical-align: top;
     width: 34%;
-
-    .work-transcription {
-      font-size: .9em;
-      padding: 1.5em;
-
-
-
-      .line {
-          display: block;
-      }
-
-      br {
-          display: none;
-      }
-
-      ins:before {
-          content:"(";
-          font-weight: bold;
-      }
-
-      ins:after {
-          content:")";
-          font-weight: bold;
-      }
-
-      rt {
-          font-size: 10px;
-      }
-
-      .no-edits ins, .no-edits del, .no-edits rt {
-          display: none;
-      }
-
-      .linebreak-emily span, .linebreak-emily br.emily {
-          display: inline;
-      }
-
-
-
-    }
   }
 }
