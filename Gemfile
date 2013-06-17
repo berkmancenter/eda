@@ -10,6 +10,7 @@ gem 'nokogiri'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'devise'
+gem 'flickraw'
 
 group :development, :test do
   gem 'rspec-rails'
