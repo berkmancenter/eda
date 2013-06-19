@@ -1,11 +1,17 @@
 class ImageGroup < ActiveRecord::Base
-  belongs_to :parent_group, :class_name => 'ImageGroup'
-  belongs_to :edition
-  has_many :image_group_images
-  has_many :children, :class_name => 'ImageGroup', :foreign_key => 'parent_group_id'
-  has_many :images, :through => :image_group_images
-  has_one :work
-  attr_accessible :editable, :image_url, :metadata, :name, :position, :type
-  serialize :metadata
-  alias_attribute :images, :image_group_images
+    belongs_to :edition
+    has_many :image_group_images, :order => :position
+    has_one :work
+    attr_accessible :editable, :image_url, :metadata, :name, :type
+    serialize :metadata
+    acts_as_nested_set
+    include TheSortableTree::Scopes
+
+    def image_after(image)
+        image_group_images.where{position > image.position}.order(:position).first
+    end
+
+    def images
+        self_and_descendants.map{|ig| ig.image_group_images.map(&:image)}.flatten
+    end
 end

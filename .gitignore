@@ -23,3 +23,6 @@ config/database.yml
 # Ignore vim swap
 *.swp
 *.swo
+
+# Ignore manuscript images
+/app/assets/images/previews

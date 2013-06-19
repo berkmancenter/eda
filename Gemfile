@@ -10,6 +10,9 @@ gem 'nokogiri'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'devise'
+gem 'squeel'
+gem 'awesome_nested_set'
+gem 'the_sortable_tree'
 
 group :development, :test do
   gem 'rspec-rails'

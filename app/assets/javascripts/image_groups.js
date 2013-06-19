@@ -1,6 +1,6 @@
 $( function( ) {
   $( ".sbs-pages" ).turn( {
-    width: 960,
-    height: 768
+    width: 1000,
+    height: 800,
   } );
 } );

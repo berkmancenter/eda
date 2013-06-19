@@ -4,8 +4,8 @@
   <h2><%= @image_group.name %></h2>
 
   <div class="sbs-pages">
-    <% @image_group.images.each { |igi| %>
-      <div><%= image_tag( igi.image.preview_url ) %></div>
+    <% @image_group.image_group_images.each { |igi| %>
+      <div><%= link_to (image_tag( preview_url(igi.image) )), edition_page_path(@edition, @edition.pages.find_by_image_group_image_id(igi.id)) %></div>
     <% } %>
   </div>
 </section>

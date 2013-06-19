@@ -5,3 +5,4 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Image.create(:url => Eda::Application.config.emily['placeholder_image_url'], :credits => 'PLACEHOLDER')
