@@ -31,9 +31,10 @@ module FranklinVentura
             )
             edition.create_root_image_group(
                 :name => "Images for #{edition.name}",
-                :editable => false,
-                :position => 0
+                :editable => false
             )
+            edition.root_image_group.edition = edition
+            edition.root_image_group.save!
             edition
         end
 

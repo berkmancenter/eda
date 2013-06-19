@@ -11,6 +11,9 @@ gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'devise'
 gem 'flickraw'
+gem 'squeel'
+gem 'awesome_nested_set'
+gem 'the_sortable_tree'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -18,6 +21,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'factory_girl_rails'
 end
 
 # Gems used only for assets and not required

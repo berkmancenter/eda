@@ -1,21 +1,25 @@
 <section class="work-transcription">
     <%= render :partial => 'shared/forms/edition_selector' %>
+    <% if @work %>
     <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
   <label>
       <input id="no-edits" type="checkbox" name="edits" value="no" />Hide edits</label>
   <label>
       <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />Emily's line breaks</label>
 
-<% @work.stanzas.each do |stanza| %>
-    <p class="stanza" data-number="<%= stanza.position %>">
-    <% stanza.lines.each do |line| %>
-        <span class="line" data-line="<%= line.number %>">
-            <%= raw render_line(line) %>
-            <% unless line.just_author_break? %>
-                <br class="emily author"/>
-            <% end %>
-        </span>
+    <% @work.stanzas.each do |stanza| %>
+        <p class="stanza" data-number="<%= stanza.position %>">
+        <% stanza.lines.each do |line| %>
+            <span class="line" data-line="<%= line.number %>">
+                <%= raw render_line(line) %>
+                <% unless line.just_author_break? %>
+                    <br class="emily author"/>
+                <% end %>
+            </span>
+        <% end %>
+        </p>
     <% end %>
-    </p>
+<% else %>
+    <p><em>No transcription of this image</em></p>
 <% end %>
 </section>

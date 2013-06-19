@@ -1,4 +1,4 @@
-<div class="pages-show">
+<section class="view">
 
   <div id="search-panel" class="tab-menu">
     <ul class="panel-menu">
@@ -8,17 +8,9 @@
     </ul>
 
     <div class="panel-content">
-      <%= render( {
-        partial: "shared/search_works"
-      } ) %>
-
-      <%= render( {
-        partial: "shared/browse_works"
-      } ) %>
-
-      <%= render( {
-        partial: "shared/browse_lexicon"
-      } ) %>
+      <%= render( { partial: "shared/search_works" } ) %>
+      <%= render( { partial: "shared/browse_works" } ) %>
+      <%= render( { partial: "shared/browse_lexicon" } ) %>
     </div>
   </div>
 
@@ -37,22 +29,11 @@
     </ul>
 
     <div class="panel-content">
-      <%= render( {
-        partial: "shared/work_transcription",
-        object: @work
-      } ) %>
-
-      <%= render( {
-        partial: "shared/work_notes",
-        object: @work
-      } ) %>
-
-      <%= render( {
-        partial: "shared/work_reading_list",
-        object: @work
-      } ) %>
+      <%= render( { partial: "shared/work_transcription", } ) %>
+      <%= render( { partial: "shared/work_notes", } ) %>
+      <%= render( { partial: "shared/work_reading_list", } ) %>
     </div>
   </div>
 
-</div>
+</section>
 

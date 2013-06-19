@@ -51,19 +51,22 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
 
   create_table "image_groups", :force => true do |t|
     t.text     "name"
-    t.integer  "parent_group_id"
     t.boolean  "editable"
     t.text     "image_url"
     t.text     "metadata"
     t.integer  "edition_id"
     t.string   "type"
-    t.integer  "position"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "image_groups", ["edition_id"], :name => "index_image_groups_on_edition_id"
-  add_index "image_groups", ["parent_group_id"], :name => "index_image_groups_on_parent_group_id"
+  add_index "image_groups", ["lft"], :name => "index_image_groups_on_lft"
+  add_index "image_groups", ["parent_id"], :name => "index_image_groups_on_parent_id"
+  add_index "image_groups", ["rgt"], :name => "index_image_groups_on_rgt"
 
   create_table "images", :force => true do |t|
     t.text     "url"

@@ -15,18 +15,52 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="<%= body_class( params ) %>">
   <header>
-  <h1>Emily Dickinson Archive</h1>
+    <h1>Emily Dickinson Archive</h1>
+
+    <div class="menu-container">
+      <% if ( params[ :action ] != 'home' ) %>
+        <%= render( {
+          partial: 'shared/main_nav',
+          object: params
+        } ) %>
+
+        <%= render( {
+          partial: 'shared/user_nav',
+          object: params
+        } ) %>
+      <% end %>
+    </div>
+
+    <div class="hr"></div>
   </header>
-   <p class="notice"><%= notice %></p>
-   <p class="alert"><%= alert %></p>
+
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 
 <%= yield %>
 
   <footer>
-  <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
+    <div class="hr"></div>
+    <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
+    <nav class="footer">
+      <ul>
+        <li><%= link_to( '', 'http://cyber.law.harvard.edu', { class: 'berkman-link', title: 'Berkman Center for Internet and Society' } ) %></li>
+
+        <li><%= link_to( 'Terms & Conditions', terms_url ) %></li>
+        <li><%= link_to( 'Privacy', privacy_url ) %></li>
+        <li><%= link_to( 'Contact Us', contact_url ) %></li>
+      </ul>
+    </nav>
+    
   </footer>
+
+  <%=
+    if ( Rails.env.development? )
+        debug( params )
+    end
+  %>
 
 </body>
 </html>

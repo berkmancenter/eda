@@ -7,13 +7,32 @@ class JohnsonImporter
             :work_number_prefix => 'J',
             :completeness => 0.95
         )
+        edition.create_root_image_group(
+            :name => "Images for #{edition.name}",
+            :editable => false,
+        )
+        edition.root_image_group.edition = edition
+        edition.root_image_group.save!
+
         text = File.readlines(filename)
         text.delete_if { |line| line.match /^\s*\[\s*\d*\s*\]\s*$/ }
         in_manuscript_block = false
         number_pattern = /^\s*\d+\s*$/ 
             text.map! do |line|
             output = nil
-            if line.match(/Manuscript/) || line.match(/^\s*(Manuscripts?|Publication):/) || line.match(/^ {5}\w/) || line.match(/^\s*\d+((-|, )\d+)?(\.|\])/) || (line.length >= 70 && line.index('[no stanza').nil? && line.index('version of 18').nil?) || line.match(/No autograph/) || line.match(/This.*poem/) || line.match(/These lines/) || line.match(/4 \[If/)
+            if line.match(/Manuscript/) ||
+                line.match(/^\s*(Manuscripts?|Publication):/) ||
+                line.match(/^ {5}\w/) ||
+                line.match(/^\s*\d+((-|, )\d+)?(\.|\])/) ||
+                line.match(/No autograph/) ||
+                line.match(/This.*poem/) ||
+                line.match(/These lines/) ||
+                line.match(/4 \[If/) ||
+                (
+                    line.length >= 70 && 
+                    line.index('[no stanza').nil? &&
+                    line.index('version of 18').nil?
+                )
                 in_manuscript_block = true
             end
 

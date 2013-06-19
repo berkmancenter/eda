@@ -1,0 +1,24 @@
+$darkGray: #333;
+$lightGray: #888;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+
+nav.main, nav.user {
+  display: inline-block;
+  text-align: left;
+  text-transform: uppercase;
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 1em;
+  }
+}
+
+nav.user {
+  float: right;
+}

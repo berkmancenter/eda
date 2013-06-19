@@ -2,19 +2,34 @@
   <% if @image == nil || (@image.url || "").empty? %>
     <%= image_tag( image_path( "missing_image.jpg" ) ) %>
   <% else %>
-    <script src="<%= @image.url %>.js?width=auto&height=512px"></script>
+      <div id="page-image" style="height: 500px"></div>
+      <%= javascript_include_tag "openseadragon" %>
+      <script>
+            OpenSeadragon({
+                id:            "page-image",
+                prefixUrl: '/assets/',
+                tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{@image.url}.tif.dzi" %>'
+            });
+      </script>
   <% end %>
 
   <div class="page-controls">
     <!-- TODO: link_to next page -->
     <a id="prev-page" href="#" title="Previous Page" alt="Previous Page" class="change-page"></a>
-    <a id="sbs-view" href="#" title="Reading View" alt="Reading View"></a>
-    <a id="next-page" href="#" title="Next Page" alt="Next Page" class="change-page"></a>
+    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) %>
+
+    <%= if ( @page.next != nil )
+            link_to( '', edition_page_url( {
+                edition_id: @page.next.edition_id, id: @page.next.id
+            } ), {
+                id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page'
+            } );
+    end %>
   </div>
 
-  <div class="credits">
+  <dl class="credits">
       <%= render :partial => 'shared/metadata', :object => @image %>
       <dt>Credits</dt><dd><%= @image.credits %></dd>
-  </div>
+  </dl>
 </section>
 

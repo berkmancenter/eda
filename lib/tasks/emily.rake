@@ -1,12 +1,21 @@
 namespace :emily do
 
-    desc 'Process Harvard images to remove color bars and copyright info'
-    task :process_harvard_images, [:image_dir, :output_dir] => [:environment] do |t, args|
-        HarvardImageProcessor.new.process_directory(args[:image_dir], args[:output_dir])
+    namespace :generate do
+        desc 'Process Harvard images to remove color bars and copyright info'
+        task :harvard_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            output_dir = args[:output_dir] || Eda::Application.config.emily['image_directory']
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            HarvardImageProcessor.new.process_directory(args[:input_dir], output_dir, web_image_output_dir)
+        end
+
+        desc 'Create web-ready images for page turning'
+        task :web_images, [:input_dir, :output_dir] => [:environment] do |t, args|
+            output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            HarvardImageProcessor.new.process_directory_for_web(args[:input_dir], output_dir)
+        end
     end
 
     namespace :import do
-
         namespace :transcriptions do
             desc 'Import transcription corrections'
             task :corrections, [:filename] => [:environment] do |task, args|
@@ -15,26 +24,31 @@ namespace :emily do
 
             desc 'Import Johnson works'
             task :johnson, [:filename] => [:environment] do |task, args|
-                JohnsonImporter.new.import(args[:filename])
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'johnson.txt')
+                JohnsonImporter.new.import(filename)
             end
 
             desc 'Import Project Gutenberg works'
             task :gutenberg, [:filename] => [:environment] do |task, args|
-                GutenbergImporter.new.import(args[:filename])
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'gutenberg.html')
+                GutenbergImporter.new.import(filename)
             end
 
             desc 'Import Franklin ventura files'
             task :franklin, [:directory, :start_year, :end_year] => [:environment] do |task, args|
                 start_year = args[:start_year] || 1850
                 end_year = args[:end_year] || 1886
-                FranklinVentura::Importer.new.import(args[:directory], start_year.to_i, end_year.to_i)
+                directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
+                FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
         end
 
         namespace :images do 
             desc 'Import image instances from METS records'
-            task :harvard, [:directory] => [:franklin, :environment] do |task, args|
-                HarvardImageImporter.new.import(args[:directory])
+            task :harvard, [:directory, :j_to_f_map_file] => [:environment] do |task, args|
+                directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
+                map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
+                HarvardImageImporter.new.import(directory, map_file)
             end
 
             desc 'Import Amherst images'
@@ -42,8 +56,8 @@ namespace :emily do
             end
 
             desc "Import images from BPL's Flickr"
-            task :bpl => [:environment] do |t|
-                BPLFlickrImporter.new.import
+            task :bpl, [:image_dir] => [:environment] do |t, args|
+                BPLFlickrImporter.new.import(args[:image_dir])
             end
 
             desc 'Import Library of Congress images'
@@ -54,7 +68,8 @@ namespace :emily do
 
         desc 'Import BYU Lexicon'
         task :lexicon, [:filename] => [:environment] do |task, args|
-            LexiconImporter.new.import(args[:filename])
+            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'lexicon.csv')
+            LexiconImporter.new.import(filename)
         end
 
         desc 'Import TEI file'
@@ -65,8 +80,9 @@ namespace :emily do
 
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
-            Rake::Task["emily:import:transcriptions:franklin"].execute({:directory => args[:data_directory] + '/franklin_ventura', :start_year => 1862, :end_year => 1862})
-            Rake::Task["emily:import:images:harvard"].execute({:directory => args[:data_directory] + '/mets'})
+            Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862})
+            Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:images:harvard"].execute
         end
     end
 end
