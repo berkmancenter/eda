@@ -2,7 +2,7 @@
   <% if @image == nil || (@image.url || "").empty? %>
     <%= image_tag( image_path( "missing_image.jpg" ) ) %>
   <% else %>
-      <div id="page-image" style="height: 500px"></div>
+      <div id="page-image" style="height: 700px"></div>
       <%= javascript_include_tag "openseadragon" %>
       <script>
             OpenSeadragon({

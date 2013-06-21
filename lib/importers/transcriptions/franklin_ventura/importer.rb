@@ -158,7 +158,7 @@ module FranklinVentura
             close_poem(poem) if poem
         end
 
-        def import(directory, from_year = 1850, to_year = 1886)
+        def import(directory, from_year = 1850, to_year = 1886, error_check = true)
             edition = create_edition
             @poems = []
 
@@ -169,7 +169,7 @@ module FranklinVentura
 
             edition.works = @poems
             edition.save!
-            post_process!(edition)
+            post_process!(edition, error_check)
         end
 
         def add_modifiers!(poem, line)
@@ -206,13 +206,13 @@ module FranklinVentura
             line_num
         end
 
-        def post_process!(edition)
+        def post_process!(edition, error_check = false)
             locate_emendations!(edition)
             locate_divisions!(edition)
             locate_alternates!(edition)
             fix_exceptions!(edition)
             group_variants(edition)
-            check_for_errors(edition)
+            check_for_errors(edition) if error_check
         end
 
         def fix_exceptions!(edition)
