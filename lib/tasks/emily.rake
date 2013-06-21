@@ -35,11 +35,12 @@ namespace :emily do
             end
 
             desc 'Import Franklin ventura files'
-            task :franklin, [:directory, :start_year, :end_year] => [:environment] do |task, args|
+            task :franklin, [:directory, :start_year, :end_year, :error_check] => [:environment] do |task, args|
                 start_year = args[:start_year] || 1850
                 end_year = args[:end_year] || 1886
+                error_check = args[:error_check] || true
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
-                FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
+                FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i, error_check)
             end
         end
 
@@ -56,8 +57,9 @@ namespace :emily do
             end
 
             desc "Import images from BPL's Flickr"
-            task :bpl, [:image_dir] => [:environment] do |t, args|
-                BPLFlickrImporter.new.import(args[:image_dir])
+            task :bpl, [:image_dir, :j_to_f_map_file] => [:environment] do |t, args|
+                map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
+                BPLFlickrImporter.new.import(args[:image_dir], map_file)
             end
 
             desc 'Import Library of Congress images'
@@ -80,8 +82,8 @@ namespace :emily do
 
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
-            Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862})
-            Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862, :error_check => false})
+            #Rake::Task["emily:import:transcriptions:johnson"].execute
             Rake::Task["emily:import:images:harvard"].execute
         end
     end
