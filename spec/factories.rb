@@ -91,7 +91,7 @@ FactoryGirl.define do
   factory :image do
     factory :image_one do
       url "ms_am_1118_10_10_0001"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTozOCAtMDQwMA==\n"
+      metadata nil # nil metadata test
       credits "Provided by Harvard University"
     end
 
