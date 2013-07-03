@@ -4125,9 +4125,11 @@ $.extend( $.Viewer.prototype, $.EventHandler.prototype, $.ControlDock.prototype,
                 } else {
                     //inline configuration
                     $TileSource = $.TileSource.determineType( _this, tileSource );
-                    options = $TileSource.prototype.configure.apply( _this, [ tileSource ]);
-                    readySource = new $TileSource( options );
-                    openTileSource( _this, readySource );
+                    if ( $TileSource ) {
+                      options = $TileSource.prototype.configure.apply( _this, [ tileSource ]);
+                      readySource = new $TileSource( options );
+                      openTileSource( _this, readySource );
+                    }
                 }
             } else {
                 //can assume it's already a tile source implementation
@@ -6249,10 +6251,12 @@ $.TileSource.prototype = {
     
         callback = function( data ){
             var $TileSource = $.TileSource.determineType( _this, data, url );
-            options = $TileSource.prototype.configure.apply( _this, [ data, url ]);
-            readySource = new $TileSource( options );
-            _this.ready = true;
-            _this.raiseEvent( 'ready', readySource );
+            if ( $TileSource ) {
+              options = $TileSource.prototype.configure.apply( _this, [ data, url ]);
+              readySource = new $TileSource( options );
+              _this.ready = true;
+              _this.raiseEvent( 'ready', readySource );
+            }
         };
 
         if( url.match(/\.js$/) ){
