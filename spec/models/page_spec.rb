@@ -22,6 +22,8 @@ describe ( "Page model" ) {
   describe ( "next page having same work/different image" ) {
     it {
       page_one_next = page_one.next;
+      page_one_next.should_not == nil; # as per test data
+
       page_one_next.work_id.should eq( page_one.work_id );
       page_one_next.image_url.should_not eq( page_one.image_url );
     }

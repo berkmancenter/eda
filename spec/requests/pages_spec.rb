@@ -15,10 +15,14 @@ describe ( 'pages requests' ) {
 
         should have_selector( '#interactive-image-panel' );
 
-        next_page = test_page.next;
-        should have_selector( 'a[title="Next Page"][href="' + edition_page_url( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
-
         should have_selector( '#work-panel' );
+      }
+
+      it ( 'should have a valid next page' ) {
+        next_page = test_page.next;
+        next_page.should_not == nil; # as per test data
+
+        page.should have_selector( 'a[title="Next Page"][href="' + edition_page_url( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
       }
     }
   }
