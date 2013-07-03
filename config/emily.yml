@@ -5,9 +5,9 @@ defaults: &DEFAULTS
 development:
     <<: *DEFAULTS
     image_host: "http://localhost/iipsrv/iipsrv.fcgi"
-    image_directory: "/home/justin/Desktop/images/output/zoomable"
+    image_directory: "/mnt/hgfs/eda_images/output/zoomable"
     web_image_directory: "previews/"
-    data_directory: "/home/justin/projects/emily/app/data"
+    data_directory: "/home/rwestphal/Berkman/eda_data"
 
 test:
     <<: *DEFAULTS
