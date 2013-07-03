@@ -7,7 +7,7 @@ development:
     image_host: "http://localhost/iipsrv/iipsrv.fcgi"
     image_directory: "/mnt/hgfs/eda_images/output/zoomable"
     web_image_directory: "previews/"
-    data_directory: "/home/rwestphal/Berkman/eda_data"
+    data_directory: "eda_data"
 
 test:
     <<: *DEFAULTS
