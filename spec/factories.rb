@@ -202,32 +202,32 @@ FactoryGirl.define do
     # edition :franklin
 
     factory :page_one do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_one
     end
 
     factory :page_two do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_two
     end
 
     factory :page_three do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_three
     end
 
     factory :page_four do
-      #work :work_two
+      #work :work_f2a
       #image_group_image :igi_four
     end
 
     factory :page_five do
-      #work :work_two
+      #work :work_f2a
       #image_group_image :igi_five
     end
 
     factory :page_six do
-      #work :work_three
+      #work :work_f3a
       #image_group_image :igi_six
     end
   end

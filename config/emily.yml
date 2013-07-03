@@ -6,10 +6,11 @@ development:
     <<: *DEFAULTS
     image_host: "http://localhost/iipsrv/iipsrv.fcgi"
     image_directory: "/mnt/hgfs/eda_images/output/zoomable"
-    web_image_directory: "previews/"
+    web_image_directory: "previews"
     data_directory: "eda_data"
 
 test:
+    web_image_directory: "previews_test"
     <<: *DEFAULTS
 
 production:
