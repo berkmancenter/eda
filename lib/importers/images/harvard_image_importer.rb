@@ -81,7 +81,7 @@ class HarvardImageImporter
                     image_for_sheet_group.image = image
 
                     # Find the works contained in this image
-                    works = works_from_label(edition, page['LABEL'], johnson_franklin_map)
+                    works = works_from_page(edition, page, johnson_franklin_map)
 
                     next if works.empty?
 
@@ -93,15 +93,19 @@ class HarvardImageImporter
             editions.each(&:save!)
             collection.save!
         end
+        Work.includes(:pages).where({:pages => {:work_id => nil}}).each do |work|
+            puts "creating page for work: #{work.number} #{work.variant}"
+            create_work_page_without_image(work)
+        end
     end
 
     def page_has_works?(editions, page, johnson_franklin_map)
-        editions.any?{|e| !works_from_label(e, page['LABEL'], johnson_franklin_map).empty? }
+        editions.any?{|e| !works_from_page(e, page, johnson_franklin_map).empty? }
     end
 
     def doc_has_works?(edition, doc, johnson_franklin_map)
         doc.css('structMap div[TYPE=PAGE]').any? do |page|
-            !works_from_label(edition, page['LABEL'], johnson_franklin_map).empty?
+            !works_from_page(edition, page, johnson_franklin_map).empty?
         end
     end
 
@@ -116,7 +120,8 @@ class HarvardImageImporter
         )
     end
 
-    def works_from_label(edition, label, johnson_franklin_map)
+    def works_from_page(edition, page, johnson_franklin_map)
+        label = page['LABEL']
         return [] unless label
         johnson = false
         if edition.author == 'Thomas H. Johnson'
@@ -124,6 +129,9 @@ class HarvardImageImporter
             f_j_map = Hash[CSV.read(johnson_franklin_map, {:headers => true, :converters => :integer}).to_a[1..-1]].invert
         end
         works = []
+        call_number_pattern = /ms_am_1118_3_(\d{1,3})_\d{4}/
+        call_number = page.css('fptr').first['FILEID']
+        call_number_matches = call_number.match(call_number_pattern)
         franklin_numbers = label.scan(/Fr(\d{1,4})(\D|$)/)
         johnson_numbers = label.scan(/J(\d{1,4})(\D|$)/)
         work_numbers = johnson ? johnson_numbers : franklin_numbers
@@ -131,13 +139,31 @@ class HarvardImageImporter
             work_number = work_number[0].to_i
             next unless work_number
             if edition.works.where(:number => work_number).count > 1
-                puts "Multiple works in '#{edition.name}' with number #{work_number}"
+                work = edition.works.where(:number => work_number).all.find do |w|
+                    call_number_matches &&
+                        w.metadata['holder_id'] &&
+                        w.metadata['holder_code'] &&
+                        w.metadata['holder_code'] == 'H' &&
+                        w.metadata['holder_id'] == call_number_matches[1]
+                end
+                #puts "Multiple works in '#{edition.name}' with number #{work_number}"
+                puts "Didn't pick a variant for #{work_number} with '#{call_number_matches}' from #{call_number}" unless work
             end
             # Just pull the first one
-            works << edition.works.find_by_number(work_number)
+            works << (work ? work : edition.works.find_by_number(work_number))
         end
         works.compact!
         works
+    end
+
+    def create_work_page_without_image(work)
+        page = work.edition.pages.new
+        page.work = work
+        unless work.image_group
+            work.image_group = ImageGroup.new(:name => "Images for #{work.title}")
+        end
+        work.save!
+        page.save!
     end
 
     def create_work_pages!(edition, works, image, image_for_sheet)

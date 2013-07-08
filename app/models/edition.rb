@@ -7,7 +7,9 @@ class Edition < ActiveRecord::Base
     attr_accessible :author, :completeness, :date, :description, :name, :work_number_prefix
 
     def work_after(work)
-        works.where{(number > work.number) | ((number == work.number) & (variant != work.variant))}.order(:number, :variant).first
+        works.where{
+            (number > work.number) | ((number == work.number) & (variant > work.variant))
+        }.order(:number, :variant).first
     end
 
     def image_group_after(image_group)
@@ -34,6 +36,13 @@ class Edition < ActiveRecord::Base
             :image_group_id => root_image_group.self_and_descendants.map(&:id),
             :image_id => work.image_group.image_group_images.map{|igi| igi.image.id}
         )
+    end
+
+    def image_group_image_from_image(image)
+        ImageGroupImage.where(
+            :image_group_id => root_image_group.self_and_descendants.map(&:id),
+            :image_id => image.id
+        ).first
     end
 
     def works_in_image(image)

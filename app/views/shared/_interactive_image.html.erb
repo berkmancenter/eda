@@ -14,9 +14,8 @@
   <% end %>
 
   <div class="page-controls">
-    <!-- TODO: link_to next page -->
     <a id="prev-page" href="#" title="Previous Page" alt="Previous Page" class="change-page"></a>
-    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) %>
+    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
     <%= if next_page = @page.next
             link_to( '', edition_page_url( {
@@ -27,9 +26,11 @@
     end %>
   </div>
 
+  <% if @image %>
   <dl class="credits">
       <%= render :partial => 'shared/metadata', :object => @image %>
       <dt>Credits</dt><dd><%= @image.credits %></dd>
   </dl>
+  <% end %>
 </section>
 
