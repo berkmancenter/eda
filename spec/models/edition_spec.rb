@@ -13,33 +13,45 @@ describe( "Edition model" ) {
 
   describe "#work_after" do
       context "no works exist with a greater number or letter" do
-          it "returns nil"
+          it "returns nil" {}
       end
       context "a work exists with the same number and a greater variant letter" do
-          it "returns the work with the closest variant letter greater than the current"
+          it "returns the work with the closest variant letter greater than the current" {}
       end
       context "a work exists with a greater number and no greater variants exist" do
-          it "returns the work with the closest number greater than the current"
+          it "returns the work with the closest number greater than the current" {}
       end
   end
 
   describe "#image_group_after" do
       context "image group has children" do
-          it "returns the first child"
+          it "returns the first child" {}
       end
       context "image group does not have children" do
-          it "returns the next sibling of its closest ancestor to have a next sibling"
+          it "returns the next sibling of its closest ancestor to have a next sibling" {}
+      end
+      context "image group is last image group" do
+          it "returns nil" {}
       end
   end
 
   describe "#image_after" do
+      context "image group has an image with a greater position number" do
+          it "returns the image with the next greatest position number" {}
+      end
+      context "image group does not have an image with a greater position number" do
+          it "returns the first image of the next image group" {}
+      end
+      context "last image of last image group" do
+          it "returns nil" {}
+      end
   end
 
   describe "#images_of_work" do
-      it "returns all the images of the work in reading order"
+      it "returns all the images of the work in reading order" {}
   end
 
   describe "#works_in_image" do
-      it "returns all the works shown in an image ordered by number"
+      it "returns all the works shown in an image ordered by number" {}
   end
 }

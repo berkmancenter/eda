@@ -27,7 +27,7 @@ class Page < ActiveRecord::Base
 
         logger.info("Next image's first work: #{next_images_first_work.id if next_images_first_work} - Next work's first image: #{next_works_first_image.id if next_works_first_image}")
 
-        return Page.find_by_work_id_and_image_group_image_id( work.id, next_image.id ) \ 
+        return Page.find_by_work_id_and_image_group_image_id( work.id, next_image.id ) \
             if next_images_first_work == work && next_works_first_image != image
 
         return Page.find_by_work_id_and_image_group_image_id( next_work.id, image.id ) \

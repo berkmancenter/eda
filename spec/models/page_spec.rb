@@ -20,31 +20,34 @@ describe Page do
   }
 
   describe "#next" do
-      context "has a work an no image" {}
-      context "has an image and no work" {}
-      describe ( "current image and work are the last image and work" ) {
+      context "has a work and no image" do
+          it "returns the page containing the next work" {}
+      end
+      context "has an image and no work" do
+          # This shouldn't happen
+          it "returns the page containing the next image" {}
+      end
+      context "current work continues onto another image" do
+          it "returns the page containing the same work and the work's next image" {}
+      end
+      context "has both an image and a work" do
+          it "returns the next work"
+      end
+      context "current image and work are the last image and work" do
           it "returns nil" {}
-      }
-      describe ( "current image is the last, but current work is not the last" ) {
+      end
+      context "current image is the last, but current work is not the last" do
           it "returns a page containing the next work and no image" {}
-      }
-      describe ( "current work is the last, but current image is not the last" ) {
+      end
+      context "current work is the last, but current image is not the last" do
           it "returns a page containing the next image and no work" {}
-      }
-      describe ( "next page is a work without any images" ) {
-          it "returns a page containing the next work and no image" {}
-      }
-      describe ( "next page is an image without any associated works" ) {
-          it "returns a page containing the next image and no work" {}
-      }
-      describe ( "current work continues onto another image" ) {}
-      describe ( "current image shows current work and another work" ) {
-          it {
-          page_one_next = page_one.next;
-          page_one_next.work_id.should eq( page_one.work_id );
-          page_one_next.image_url.should_not eq( page_one.image_url );
-      }
-      }
-      describe ( "next page with different image and different work" ) {}
+      end
+      context "current image shows current work and another work" do
+          it "ignores the other work and returns the next work by number" do
+              page_one_next = page_one.next;
+              page_one_next.work_id.should eq( page_one.work_id );
+              page_one_next.image_url.should_not eq( page_one.image_url );
+          end
+      end
   end
 end
