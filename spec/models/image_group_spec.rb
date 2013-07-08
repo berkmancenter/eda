@@ -17,7 +17,7 @@ describe ( "ImageGroup model" ) {
       }
 
       it { 
-        igrp.parent_group.should eq( nil );
+        igrp.parent.should eq( nil );
       }
 
     }

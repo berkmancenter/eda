@@ -90,31 +90,31 @@ FactoryGirl.define do
   # metadata is not designed enough to test
   factory :image do
     factory :image_one do
-      url "http://zoom.it/oL3Y"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTozOCAtMDQwMA==\n"
+      url "ms_am_1118_10_10_0001"
+      metadata nil # nil metadata test
       credits "Provided by Harvard University"
     end
 
     factory :image_two do
-      url "http://zoom.it/aoUu"
+      url "ms_am_1118_10_10_0002"
       #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMTowMDowNSAtMDQwMA==\n"
       credits "Provided by Harvard University"
     end
 
     factory :image_three do
-      url "http://zoom.it/c0nk"
+      url "ms_am_1118_10_10_0003"
       #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMTowMDozOSAtMDQwMA==\n"
       credits "Provided by Harvard University"
     end
 
     factory :image_four do
-      url "http://zoom.it/WJnR"
+      url "ms_am_1118_10_10_0004"
       #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTo0OSAtMDQwMA==\n"
       credits "Provided by Harvard University"
     end
 
     factory :image_five do
-      url "http://zoom.it/2wzu"
+      url "ms_am_1118_10_10_0005"
       #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTo1MCAtMDQwMA==\n"
       credits "Provided by Harvard University"
     end
@@ -123,36 +123,32 @@ FactoryGirl.define do
   factory :image_group do 
     factory :igrp_harvard do
       name "Harvard Collection"
-      parent_group nil
+      #parent nil
       metadata {{ "Library" => "Houghton" }}
       edition nil
       type "Collection"
-      position nil
     end
 
     # an image group contains all the images for a poem and their order
     factory :igrp_one do
       name 'Awake ye muses nine, sing me a strain divine'
-      #parent_group :igrp_harvard
+      #parent :igrp_harvard
       metadata nil
       type nil
-      position 1
     end
 
     factory :igrp_two do
       name 'Sic transit gloria mundi'
-      #parent_group :igrp_harvard
+      #parent :igrp_harvard
       metadata nil
       type nil
-      position 2
     end
 
     factory :igrp_three do
       name 'On this wondrous sea'
-      #parent_group :igrp_harvard
+      #parent :igrp_harvard
       metadata nil
       type nil
-      position 3
     end
   end
 
@@ -206,32 +202,32 @@ FactoryGirl.define do
     # edition :franklin
 
     factory :page_one do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_one
     end
 
     factory :page_two do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_two
     end
 
     factory :page_three do
-      #work :work_f1
+      #work :work_f1a
       #image_group_image :igi_three
     end
 
     factory :page_four do
-      #work :work_two
+      #work :work_f2a
       #image_group_image :igi_four
     end
 
     factory :page_five do
-      #work :work_two
+      #work :work_f2a
       #image_group_image :igi_five
     end
 
     factory :page_six do
-      #work :work_three
+      #work :work_f3a
       #image_group_image :igi_six
     end
   end

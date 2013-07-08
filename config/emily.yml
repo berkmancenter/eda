@@ -10,6 +10,7 @@ development:
     data_directory: "/home/justin/projects/emily/app/data"
 
 test:
+    web_image_directory: "previews_test"
     <<: *DEFAULTS
 
 production:

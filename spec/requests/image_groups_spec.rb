@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include ImagesHelper;
+
 describe ( 'image groups requests (sbs)' ) {
   subject { page }
 
@@ -16,11 +18,14 @@ describe ( 'image groups requests (sbs)' ) {
       }
 
       it ( 'should have img tags for all ImageGroup images' ) {
-        should have_selector( "img[src*='#{igrp.images[0].image.preview_url}']" );
-        should have_selector( "img[src*='#{igrp.images[1].image.preview_url}']" );
-        should have_selector( "img[src*='#{igrp.images[2].image.preview_url}']" );
+        should have_selector( "img[src*='#{preview_url( igrp.images[0] )}']" );
+        should have_selector( "img[src*='#{preview_url( igrp.images[1] )}']" );
+        should have_selector( "img[src*='#{preview_url( igrp.images[2] )}']" );
       }
 
+      it ( 'should include turn.js' ) {
+        should have_selector( "script[src*='turn.min.js']" );
+      }
     }
   }
 }
