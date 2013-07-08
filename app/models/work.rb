@@ -16,6 +16,7 @@ class Work < ActiveRecord::Base
 
     searchable do
         integer :edition_id
+        string(:number) { |work| work.number.to_s }
         text :title
         text :lines do
             lines.map{|l| l.text }

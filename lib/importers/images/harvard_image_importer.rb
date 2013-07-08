@@ -57,7 +57,15 @@ class HarvardImageImporter
                 image_url = doc.at(%Q|file[ID="#{file_id}"]|).at('FLocat')['href']
                 next unless image_url && page['LABEL']
                 image_url = image_url.match(/(ms_.*)\.jp2/)[1]
-                image = Image.new(:url => image_url, :metadata => {'Imported' => Time.now.to_s}, :credits => 'Harvard credits')
+                web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
+                width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
+                image = Image.new(
+                    :url => image_url,
+                    :metadata => {'Imported' => Time.now.to_s},
+                    :credits => 'Harvard credits',
+                    :web_width => width,
+                    :web_height => height
+                )
 
                 # Add same image to the collection group
                 image_for_collection_group = collection.image_group_images.build(:position => collection.children.count)
@@ -142,6 +150,7 @@ class HarvardImageImporter
             end
             work_group_image = work.image_group.image_group_images.new(:position => work.image_group.image_group_images.count)
             work_group_image.image = image
+            work_group_image.save!
             work.save!
             page.save!
         end

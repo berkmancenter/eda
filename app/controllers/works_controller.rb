@@ -17,7 +17,12 @@ class WorksController < ApplicationController
         end
 
         if params[:q]
-            @works = Work.search{ fulltext params[:q] }.results
+            @search = Work.search do
+                with(:edition_id, params[:current_edition]) if params[:current_edition]
+                fulltext params[:q] do
+                    fields(:lines, :title => 2.0)
+                end
+            end
         end
     end
 

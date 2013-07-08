@@ -6,6 +6,8 @@ class CreateImages < ActiveRecord::Migration
       t.text :credits
       t.integer :full_width
       t.integer :full_height
+      t.integer :web_width
+      t.integer :web_height
 
       t.timestamps
     end
