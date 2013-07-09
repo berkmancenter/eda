@@ -13,6 +13,8 @@ class Work < ActiveRecord::Base
     has_many :appearances, :class_name => 'WorkAppearance'
     attr_accessible :date, :metadata, :number, :title, :variant
     after_initialize :setup_defaults
+    default_scope order(:number, :variant)
+    scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
 
     serialize :metadata
 
