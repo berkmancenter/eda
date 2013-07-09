@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
     belongs_to :current_edition, :class_name => 'Edition'
+    has_many :notes, :inverse_of => :owner
 
     # Include default devise modules. Others available are:
     # :token_authenticatable, :confirmable,
@@ -12,6 +13,10 @@ class User < ActiveRecord::Base
     attr_accessible :email
 
     before_create :set_defaults
+
+    def note_for(notable)
+        notable.notes.where(:owner_id => id).first
+    end
 
     private
 

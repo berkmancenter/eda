@@ -1,6 +1,10 @@
 <section class="work-notes">
   <h2>Notes</h2>
-
+  <% if user_signed_in? %>
+      <%= render :partial => 'shared/forms/note', :object => @note %>
+  <% else %>
+      <p>Please <%= link_to 'sign in', new_user_session_path %> to add notes to this image.</p>
+  <% end %>
 </section>
 
 

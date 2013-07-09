@@ -11,7 +11,11 @@ Eda::Application.routes.draw do
             end
         end
     end
+    resources :images do 
+        resources :notes
+    end
     resources :words
+
 
     match 'about' => 'static_pages#about'
     match 'faq' => 'static_pages#faq'

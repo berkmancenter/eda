@@ -9,6 +9,12 @@ class PagesController < ApplicationController
         @page = Page.find(params[:id])
         @work = @page.work
         @image = @page.image_group_image.image if @page.image_group_image
+        if user_signed_in? 
+            unless @note = current_user.note_for(@image)
+                @note = @image.notes.new
+            end
+        end
+        render
     end
 
     def load_edition
