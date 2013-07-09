@@ -59,13 +59,24 @@ class Work < ActiveRecord::Base
         self.metadata['fascicle_position'] = position
     end
 
-    def image_after(image)
+    def image_position(image)
         igis = image_group_images.where(:image_id => image.id)
-        return unless igis.count > 0
-        image_position = igis.first.position
+        return if igis.empty?
+        return igis.first.position
+    end
+
+    def image_after(image)
+        image_position = image_position(image)
         next_images = image_group_images.where{position > image_position}
-        return unless next_images.count > 0
+        return if next_images.empty?
         next_images.order(:position).first.image
+    end
+
+    def image_before(image)
+        image_position = image_position(image)
+        previous_images = image_group_images.where{position < image_position}
+        return if previous_images.empty?
+        previous_images.order('position DESC').first.image
     end
 
     private

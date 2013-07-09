@@ -12,6 +12,12 @@ class Edition < ActiveRecord::Base
         }.order(:number, :variant).first
     end
 
+    def work_before(work)
+        works.where{
+            (number < work.number) | ((number == work.number) & (variant < work.variant))
+        }.order('number DESC, variant DESC').first
+    end
+
     def image_group_after(image_group)
         igs = []
         ImageGroup.each_with_level(image_group.root.self_and_descendants) do |ig, level|

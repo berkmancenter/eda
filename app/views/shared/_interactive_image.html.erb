@@ -14,7 +14,14 @@
   <% end %>
 
   <div class="page-controls">
-    <a id="prev-page" href="#" title="Previous Page" alt="Previous Page" class="change-page"></a>
+    <%= if previous_page = @page.previous
+            link_to( '', edition_page_url( {
+                edition_id: previous_page.edition_id, id: previous_page.id
+            } ), {
+                id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
+            } );
+    end %>
+
     <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
     <%= if next_page = @page.next
