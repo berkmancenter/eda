@@ -91,32 +91,42 @@ FactoryGirl.define do
   factory :image do
     factory :image_one do
       url "ms_am_1118_10_10_0001"
-      metadata nil # nil metadata test
+      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
       credits "Provided by Harvard University"
+      web_width 500
+      web_height 750
     end
 
     factory :image_two do
       url "ms_am_1118_10_10_0002"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMTowMDowNSAtMDQwMA==\n"
+      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
       credits "Provided by Harvard University"
+      web_width 500
+      web_height 748
     end
 
     factory :image_three do
       url "ms_am_1118_10_10_0003"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMTowMDozOSAtMDQwMA==\n"
+      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
       credits "Provided by Harvard University"
+      web_width 500
+      web_height 746
     end
 
     factory :image_four do
       url "ms_am_1118_10_10_0004"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTo0OSAtMDQwMA==\n"
+      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
       credits "Provided by Harvard University"
+      web_width 549
+      web_height 750
     end
 
     factory :image_five do
       url "ms_am_1118_10_10_0005"
-      #metadata "---\nImported: !binary |-\n  MjAxMy0wNS0yMyAxMDo1OTo1MCAtMDQwMA==\n"
+      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
       credits "Provided by Harvard University"
+      web_width 500
+      web_height 745
     end
   end
 
