@@ -1,3 +1,6 @@
 <section class="browse-works">
   <h2>Browse</h2>
+  <% ('A'..'Z').to_a.each do |first_letter| %>
+      <%= link_to first_letter, by_letter_works_path(first_letter) %>
+  <% end %>
 </section>

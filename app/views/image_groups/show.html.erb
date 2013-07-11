@@ -5,7 +5,7 @@
 
   <div class="sbs-pages">
     <% @image_group.image_group_images.each { |igi| %>
-        <div>
+        <div class="own-size" style="width: <%= igi.image.web_width %>px; height: <%= igi.image.web_height %>px;">
         <% if page = @edition.pages.find_by_image_group_image_id(igi.id) %>
             <%= link_to (image_tag( preview_url(igi.image) )), edition_page_path(@edition, page) %>
         <% else %>
@@ -15,3 +15,5 @@
     <% } %>
   </div>
 </section>
+
+<%= javascript_include_tag 'turn.min' %>

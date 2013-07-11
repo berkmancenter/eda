@@ -1,5 +1,16 @@
 <nav class="user">
-  <ul>
-    <li><%= link_to( 'Sign In', new_user_session_url, ( params[ :controller ][/devise/] != nil ? { class: 'selected' } : nil ) ) %></li>
-  </ul>
+    <ul>
+    <% if user_signed_in? %>
+        <li>
+            <%= link_to( 'My Account', edit_user_registration_url, ({ class: 'selected' } unless params[:controller][/devise/].nil?) ) %>
+        </li>
+        <li>
+            <%= link_to( 'Sign Out', destroy_user_session_url, { :method => :delete } ) %>
+        </li>
+    <% else %>
+        <li>
+            <%= link_to( 'Sign In', new_user_session_url, ({ class: 'selected' } unless params[:controller][/devise/].nil?) ) %>
+        </li>
+    <% end %>
+    </ul>
 </nav>

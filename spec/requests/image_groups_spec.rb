@@ -23,6 +23,9 @@ describe ( 'image groups requests (sbs)' ) {
         should have_selector( "img[src*='#{preview_url( igrp.images[2] )}']" );
       }
 
+      it ( 'should include turn.js' ) {
+        should have_selector( "script[src*='turn.min.js']" );
+      }
     }
   }
 }

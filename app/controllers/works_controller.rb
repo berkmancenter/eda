@@ -1,8 +1,15 @@
 class WorksController < ApplicationController
-    before_filter :load_edition, :except => :search
 
     def index
-        @works = @edition.works.order('number, variant')
+        if params[:edition_id]
+            load_edition
+            @works = @edition.works.order(:number, :variant)
+        elsif params[:first_letter]
+            @works = Work.starts_with(params[:first_letter])
+        else
+            @works = Work.all
+        end
+        render :layout => !request.xhr?
     end
 
     def show
@@ -17,9 +24,16 @@ class WorksController < ApplicationController
         end
 
         if params[:q]
-            @works = Work.search{ fulltext params[:q] }.results
+            @search = Work.search do
+                with(:edition_id, params[:current_edition]) if params[:current_edition]
+                fulltext params[:q] do
+                    fields(:lines, :title => 2.0)
+                end
+            end
         end
     end
+
+    private
 
     def load_edition
         @edition = Edition.find(params[:edition_id])

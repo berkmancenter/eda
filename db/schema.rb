@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
     t.text     "credits"
     t.integer  "full_width"
     t.integer  "full_height"
+    t.integer  "web_width"
+    t.integer  "web_height"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end

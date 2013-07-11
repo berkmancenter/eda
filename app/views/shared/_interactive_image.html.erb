@@ -14,22 +14,30 @@
   <% end %>
 
   <div class="page-controls">
-    <!-- TODO: link_to next page -->
-    <a id="prev-page" href="#" title="Previous Page" alt="Previous Page" class="change-page"></a>
-    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) %>
-
-    <%= if ( @page.next != nil )
+    <%= if previous_page = @page.previous
             link_to( '', edition_page_url( {
-                edition_id: @page.next.edition_id, id: @page.next.id
+                edition_id: previous_page.edition_id, id: previous_page.id
+            } ), {
+                id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
+            } );
+    end %>
+
+    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
+
+    <%= if next_page = @page.next
+            link_to( '', edition_page_url( {
+                edition_id: next_page.edition_id, id: next_page.id
             } ), {
                 id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page'
             } );
     end %>
   </div>
 
+  <% if @image %>
   <dl class="credits">
       <%= render :partial => 'shared/metadata', :object => @image %>
       <dt>Credits</dt><dd><%= @image.credits %></dd>
   </dl>
+  <% end %>
 </section>
 

@@ -1,7 +1,6 @@
-<h2><%= @edition.name %></h2>
 <ul>
 <% @works.each do |work| %>
-    <li><%= link_to(raw(work.title ? "#{@edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" : (work.lines.first.text if work.lines.first)), edition_work_path(@edition, work)) %></li>
+    <li><%= link_to(raw(work.title ? "#{work.edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" : (work.lines.first.text if work.lines.first)), edition_work_path(work.edition, work)) %></li>
 <% end %>
 </ul>
 
