@@ -21,26 +21,26 @@ describe Page do
 
   describe "#next" do
       context "has a work and no image" do
-          it "returns the page containing the next work" {}
+          pending 'it "returns the page containing the next work"'
       end
       context "has an image and no work" do
           # This shouldn't happen
-          it "returns the page containing the next image" {}
+          pending 'it "returns the page containing the next image"'
       end
       context "current work continues onto another image" do
-          it "returns the page containing the same work and the work's next image" {}
+          pending 'it "returns the page containing the same work and the work\'s next image"'
       end
       context "has both an image and a work" do
           it "returns the next work"
       end
       context "current image and work are the last image and work" do
-          it "returns nil" {}
+          pending 'it "returns nil"'
       end
       context "current image is the last, but current work is not the last" do
-          it "returns a page containing the next work and no image" {}
+          pending 'it "returns a page containing the next work and no image"'
       end
       context "current work is the last, but current image is not the last" do
-          it "returns a page containing the next image and no work" {}
+          pending 'it "returns a page containing the next image and no work"'
       end
       context "current image shows current work and another work" do
           it "ignores the other work and returns the next work by number" do

@@ -7,11 +7,11 @@ describe( "Work model" ) {
 
   describe "#image_after" do
       context "work doesn't have an image with a greater position number" do
-          it "returns nil" {}
+          pending 'it "returns nil"'
       end
 
       context "work has an image with a greater position number" do
-          it "returns the image with the next greatest position number" {}
+          pending 'it "returns the image with the next greatest position number"'
       end
   end
   describe( "with valid data" ) {
