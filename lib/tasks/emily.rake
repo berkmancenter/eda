@@ -15,6 +15,14 @@ namespace :emily do
         end
     end
 
+    namespace :connect do
+        desc 'Connect all existing transcriptions together'
+        task :transcriptions, [:j_to_f_map_file] => [:environment] do |task, args|
+            map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
+            TranscriptionConnecter.new.connect(map_file)
+        end
+    end
+
     namespace :import do
         namespace :transcriptions do
             desc 'Import transcription corrections'

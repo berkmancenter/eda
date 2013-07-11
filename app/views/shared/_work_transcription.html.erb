@@ -1,4 +1,11 @@
 <section class="work-transcription">
+
+    <ul>
+        <% @work.cross_edition_work_group.works.each do |other_work| %>
+            <%= render :partial => 'works/list_item', :locals => { :work => other_work } %>
+        <% end %>
+    </ul>
+
     <%= render :partial => 'shared/forms/edition_selector' %>
     <% if @work %>
     <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
@@ -22,4 +29,10 @@
 <% else %>
     <p><em>No transcription of this image</em></p>
 <% end %>
+    <h3>Related Works in This Edition</h3>
+    <ul>
+        <% @work.variants.each do |work| %>
+            <%= render :partial => 'works/list_item', :locals => {:work => work} %>
+        <% end %>
+    </ul>
 </section>

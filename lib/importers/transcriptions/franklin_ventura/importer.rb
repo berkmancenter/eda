@@ -186,6 +186,7 @@ module FranklinVentura
 
         def close_poem(poem)
             assign_stanza_positions(poem)
+            create_cross_edition_work_group!(poem)
             poem.save!
             @poems << poem
         end
@@ -253,6 +254,14 @@ module FranklinVentura
                     false 
                 end
                 end
+        end
+
+        def create_cross_edition_work_group!(work)
+            work.cross_edition_work_group = CrossEditionWorkGroup.new(:name => "Works related to #{work.title} in other editions")
+            wgw = work.cross_edition_work_group.work_group_works.build
+            wgw.work = work
+            wgw.save!
+            work.cross_edition_work_group.save!
         end
 
         def assign_stanza_positions(poem)

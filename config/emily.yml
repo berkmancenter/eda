@@ -1,6 +1,5 @@
 defaults: &DEFAULTS
     default_edition: "The Poems of Emily Dickinson: Variorum Edition"
-    placeholder_image_url: "http://www.archives.gov/exhibits/featured_documents/henry_o_flipper/images/letter_page_02.jpg"
 
 development:
     <<: *DEFAULTS

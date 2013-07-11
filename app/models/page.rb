@@ -17,7 +17,7 @@ class Page < ActiveRecord::Base
         end
 
         # Head on to the next work
-        if next_work = edition.work_after(work)
+        if next_work = work.next
             igis = next_work.image_group_images
 
             # Head to an imageless page if we don't have an image
@@ -37,7 +37,7 @@ class Page < ActiveRecord::Base
             return Page.with_work_and_image(work, igi)
         end
 
-        if previous_work = edition.work_before(work)
+        if previous_work = work.previous
             igis = previous_work.image_group_images
             return Page.with_imageless_work(previous_work) if igis.empty?
             bare_image = igis.order('position DESC').first.image
@@ -53,6 +53,10 @@ class Page < ActiveRecord::Base
     end
 
     def self.with_work_and_image(work, igi)
-        where(:work_id => work.id, :image_group_image_id => igi.id).first
+        if igi
+            where(:work_id => work.id, :image_group_image_id => igi.id).first
+        else
+            where(:work_id => work.id, :image_group_image_id => nil).first
+        end
     end
 end

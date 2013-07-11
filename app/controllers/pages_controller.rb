@@ -6,6 +6,11 @@ class PagesController < ApplicationController
     end
 
     def show
+        if user_signed_in?
+            current_user.current_edition = @edition
+            current_user.save!
+        end
+        session[:current_edition] = @edition.id
         @page = Page.find(params[:id])
         @work = @page.work
         if @page.image_group_image

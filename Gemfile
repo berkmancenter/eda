@@ -14,6 +14,7 @@ gem 'flickraw'
 gem 'squeel'
 gem 'awesome_nested_set'
 gem 'the_sortable_tree'
+gem 'formtastic'
 
 group :development, :test do
   gem 'rspec-rails'

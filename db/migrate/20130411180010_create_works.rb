@@ -7,6 +7,7 @@ class CreateWorks < ActiveRecord::Migration
       t.string :variant
       t.references :edition
       t.references :image_group
+      t.references :cross_edition_work_group
       t.text :metadata
 
       t.timestamps

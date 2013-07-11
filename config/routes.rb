@@ -11,6 +11,7 @@ Eda::Application.routes.draw do
             end
         end
     end
+    resources :reading_lists
     resources :works do
         collection do
             match '/:first_letter' => 'works#index', :as => :by_letter, :first_letter => /[A-Za-z]/
