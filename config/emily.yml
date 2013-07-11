@@ -10,6 +10,7 @@ development:
     data_directory: "eda_data"
 
 test:
+    image_host: "http://localhost/iipsrv/iipsrv.fcgi"
     web_image_directory: "previews_test"
     <<: *DEFAULTS
 
