@@ -13,12 +13,7 @@ class ReadingListsController < ApplicationController
     end
 
     def update
-        params[:reading_list][:work_ids].each do |work_id|
-            next if work_id.empty?
-            wgw = @reading_list.work_group_works.build
-            wgw.work = Work.find(work_id)
-            wgw.save!
-        end
+        @reading_list.work_ids = params[:reading_list][:work_ids]
         @reading_list.save!
         redirect_to reading_list_path(@reading_list)
     end
