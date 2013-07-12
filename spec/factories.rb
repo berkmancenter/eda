@@ -83,8 +83,47 @@ FactoryGirl.define do
   end
 
   factory :stanza do
+    factory :z_f1a0 do
+      #work :work_f1a
+      position 0
+    end
+  end
 
-    #work :work_three
+  factory :line do
+    factory :l_f1a01 do
+      text 'Awake ye muses nine, sing me a strain divine,'
+      number 1
+    end
+
+    factory :l_f1a02 do
+      text 'unwind the solemn twine, and tie my Valentine!'
+      number 2
+    end
+
+    factory :l_f1a03 do
+      text '        --- --- ---'
+      number 3
+    end
+
+    factory :l_f1a04 do
+      text 'Oh the Earth was <i>made</i> for lovers, for damsel, and hopeless swain,'
+      number 4
+    end
+
+    factory :l_f1a05 do
+      text 'for sighing, and gentle whispering, and <i>unity</i> made of <i>twain,</i>'
+      number 5
+    end
+
+    factory :l_f1a06 do
+      text 'all things do go a courting, in earth, or sea, or air,'
+      number 6
+    end
+
+    factory :l_f1a07 do
+      text 'God hath made nothing single but <i>thee</i> in his world so fair!'
+      number 7
+    end
   end
 
   # metadata is not designed enough to test

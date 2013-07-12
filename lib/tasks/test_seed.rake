@@ -2,7 +2,8 @@ require 'factory_girl_rails'
 
 namespace :db do
   namespace :test do
-    task :prepare => :environment do
+    task :seed => :environment do
+      Sunspot.remove_all!
 
       #
       # johnson
@@ -41,16 +42,54 @@ namespace :db do
       igrp_three.save!
 
       # some works
+ 
+      # work_f1a
       work_f1a = FactoryGirl.create( :work_f1a );
       work_f1a.edition = franklin;
       work_f1a.image_group = igrp_one;
       work_f1a.save!
 
+      z_f1a0 = FactoryGirl.create( :z_f1a0 );
+      z_f1a0.work = work_f1a;
+      z_f1a0.save!
+
+      l_f1a01 = FactoryGirl.create( :l_f1a01 );
+      l_f1a01.stanza = z_f1a0;
+      l_f1a01.save!
+
+      l_f1a02 = FactoryGirl.create( :l_f1a02 );
+      l_f1a02.stanza = z_f1a0;
+      l_f1a02.save!
+
+      l_f1a03 = FactoryGirl.create( :l_f1a03 );
+      l_f1a03.stanza = z_f1a0;
+      l_f1a03.save!
+
+      l_f1a04 = FactoryGirl.create( :l_f1a04 );
+      l_f1a04.stanza = z_f1a0;
+      l_f1a04.save!
+
+      l_f1a05 = FactoryGirl.create( :l_f1a05 );
+      l_f1a05.stanza = z_f1a0;
+      l_f1a05.save!
+
+      l_f1a06 = FactoryGirl.create( :l_f1a06 );
+      l_f1a06.stanza = z_f1a0;
+      l_f1a06.save!
+
+      l_f1a07 = FactoryGirl.create( :l_f1a07 );
+      l_f1a07.stanza = z_f1a0;
+      l_f1a07.save!
+
+      work_f1a.index!
+
+      # work_f2a
       work_f2a = FactoryGirl.create( :work_f2a );
       work_f2a.edition = franklin;
       work_f2a.image_group = igrp_two;
       work_f2a.save!
 
+      # work_f3a
       work_f3a = FactoryGirl.create( :work_f3a );
       work_f3a.edition = franklin;
       work_f3a.image_group = igrp_three;
@@ -152,6 +191,7 @@ namespace :db do
       tw.edition = tested;
       tw.save!
 
+      Sunspot.commit
     end
   end
 end
