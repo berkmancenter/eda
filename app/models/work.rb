@@ -1,6 +1,7 @@
 class Work < ActiveRecord::Base
     belongs_to :edition
     belongs_to :image_group
+    belongs_to :cross_edition_work_group
     has_many :image_group_images, :through => :image_group
     has_many :stanzas, :order => 'position'
     has_many :lines, :through => :stanzas, :order => 'number'
@@ -11,9 +12,10 @@ class Work < ActiveRecord::Base
     has_many :alternates
     has_many :revisions
     has_many :appearances, :class_name => 'WorkAppearance'
+
     attr_accessible :date, :metadata, :number, :title, :variant
     after_initialize :setup_defaults
-    default_scope order(:number, :variant)
+    default_scope order(:edition_id, :number, :variant)
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
 
     serialize :metadata
@@ -31,9 +33,25 @@ class Work < ActiveRecord::Base
         lines.find_by_number(number)
     end
 
-    #def number
-    #    "#{edition.work_number_prefix}#{read_attribute(:number)}"
-    #end
+    def full_title
+        "#{edition.work_number_prefix}#{number}#{variant} - #{title}"
+    end
+    
+    def next
+        edition.works.where{
+            (number > my{number}) | ((number == my{number}) & (variant > my{variant}))
+        }.order(:number, :variant).first
+    end
+
+    def previous
+        edition.works.where{
+            (number < my{number}) | ((number == my{number}) & (variant < my{variant}))
+        }.order(:number, :variant).last
+    end
+
+    def variants
+        edition.works.where{(number == my{number}) & (variant != my{variant})}
+    end
         
     def apps_at_address(line, char_index)
         (divisions + emendations + revisions + alternates).select do |apparatus|

@@ -212,9 +212,10 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
     t.string   "variant"
     t.integer  "edition_id"
     t.integer  "image_group_id"
+    t.integer  "cross_edition_work_group_id"
     t.text     "metadata"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   add_index "works", ["edition_id"], :name => "index_works_on_edition_id"

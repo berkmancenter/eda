@@ -94,7 +94,7 @@ class HarvardImageImporter
             collection.save!
         end
         Work.includes(:pages).where({:pages => {:work_id => nil}}).each do |work|
-            puts "creating page for work: #{work.number} #{work.variant}"
+            puts "creating page for imageless work: #{work.number} #{work.variant}"
             create_work_page_without_image(work)
         end
     end

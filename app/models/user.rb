@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
     belongs_to :current_edition, :class_name => 'Edition'
     has_many :notes, :inverse_of => :owner
+    has_many :reading_lists, :foreign_key => 'owner_id'
 
     # Include default devise modules. Others available are:
     # :token_authenticatable, :confirmable,

@@ -1,6 +1,6 @@
 <ul>
 <% @works.each do |work| %>
-    <li><%= link_to(raw(work.title ? "#{work.edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" : (work.lines.first.text if work.lines.first)), edition_work_path(work.edition, work)) %></li>
+    <%= render :partial => 'works/list_item', :locals => {:work => work} %>
 <% end %>
 </ul>
 
