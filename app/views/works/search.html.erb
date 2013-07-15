@@ -7,7 +7,7 @@
 <% end %>
 <% if @search %>
     <h3><%= @search.total %> Results</h3>
-    <ul>
+    <ul class="search-results">
         <% @search.results.each do |work| %>
             <li>
             <% if page = Page.find_by_work_id(work.id) %>
