@@ -48,6 +48,7 @@ describe ( 'pages requests' ) {
 
           should have_selector( '.search-results' );
 
+          should have_css( '.search-results a', { count: 1 } );
         }
 
       }
