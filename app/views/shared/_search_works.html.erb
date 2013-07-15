@@ -1,14 +1,13 @@
 <section class="search-works">
-<%= form_tag search_works_path, :method => 'get' do %>
+<%= form_tag edition_page_path( @edition, @page ), :method => 'get' do %>
   <%= label_tag(:q, 'Search for:') %>
   <%= text_field_tag(:q, params[:q]) %>
-  <%= submit_tag('Search') %>
+  <%= button_tag 'Search', :name => nil %>
 <% end %>
-<% if @works %>
-  <ul>
-    <% @works.each do |work| %>
-      <li><%= work.title %></li>
-    <% end %>
-  </ul>
+<% if @search %>
+  <%= render( {
+    partial: 'shared/search_works_results',
+    object: @search
+  } ) %>
 <% end %>
 </section>

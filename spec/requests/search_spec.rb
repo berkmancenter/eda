@@ -21,6 +21,7 @@ describe ( 'search requests' ) {
 
     it ( 'should return a search page' ) {
       should have_selector( 'form[action="/search"]' );
+      should have_selector( 'input[name="q"]' );
     }
 
     it ( 'should have a result list' ) {
@@ -38,13 +39,14 @@ describe ( 'search requests' ) {
 
     it ( 'should return a search page' ) {
       should have_selector( 'form[action="/search"]' );
+      should have_selector( 'input[name="q"]' );
     }
 
-    it ( 'should not have a result list' ) {
+    it {
       should have_selector( '.search-results' );
     }
 
-    it ( 'should not have any results' ) {
+    it {
       should_not have_selector( '.search-results a' );
     }
   }

@@ -21,6 +21,16 @@ class PagesController < ApplicationController
                 end
             end
         end
+
+        if params[ :q ]
+          @search = Work.search do
+            #with( :edition_id, @edition.id )
+            fulltext params[ :q ] do
+              fields( :lines, :title => 2.0 )
+            end
+          end
+        end
+
         render
     end
 

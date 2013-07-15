@@ -4,13 +4,16 @@ Eda::Application.routes.draw do
 
     resources :editions do
         resources :works
+
         resources :pages
+
         resources :image_groups do
             collection do 
                 post :rebuild
             end
         end
     end
+
     resources :reading_lists
     resources :works do
         collection do
@@ -37,6 +40,7 @@ Eda::Application.routes.draw do
     match 'lexicon' => 'words#index'
 
     get 'search(/:q)' => 'works#search', :as => 'search_works'
+
     devise_for :users
   # The priority is based upon order of creation:
   # first created -> highest priority.

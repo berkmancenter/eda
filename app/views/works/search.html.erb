@@ -7,15 +7,9 @@
 <% end %>
 <% if @search %>
     <h3><%= @search.total %> Results</h3>
-    <ul class="search-results">
-        <% @search.results.each do |work| %>
-            <li>
-            <% if page = Page.find_by_work_id(work.id) %>
-                <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_page_path(work.edition, page)) %>
-            <% else %>
-                <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_work_path(work.edition, work)) %>
-            <% end %>
-            </li>
-        <% end %>
-    </ul>
+
+    <%= render( {
+      partial: 'shared/search_works_results',
+      object: @search
+    } ) %>
 <% end %>
