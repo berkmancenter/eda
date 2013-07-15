@@ -13,6 +13,7 @@ class WorksController < ApplicationController
     end
 
     def show
+      load_edition
         @work = Work.includes(:line_modifiers, :stanzas => [:lines]).find(params[:id])
     end
 
