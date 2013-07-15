@@ -10,8 +10,10 @@ development:
     data_directory: "/home/justin/projects/emily/app/data"
 
 test:
-    web_image_directory: "previews_test"
     <<: *DEFAULTS
+    image_host: "http://interop.lib.harvard.edu:9080/cgi-bin/iipsrv.fcgi"
+    image_directory: "/home/iip/dev/images/tiff"
+    web_image_directory: "previews_test"
 
 production:
     <<: *DEFAULTS
