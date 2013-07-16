@@ -1,13 +1,25 @@
 <section class="search-works">
-<%= form_tag edition_page_path( @edition, @page ), :method => 'get' do %>
+
+<%= form_tag action_url, :method => 'get' do %>
   <%= label_tag(:q, 'Search for:') %>
   <%= text_field_tag(:q, params[:q]) %>
+  <%= render 'shared/forms/edition_selector' %>
   <%= button_tag 'Search', :name => nil %>
 <% end %>
+
 <% if @search %>
-  <%= render( {
-    partial: 'shared/search_works_results',
-    object: @search
-  } ) %>
+  <h2><%= pluralize( @search.total, 'Result' ) %></h2>
+  <ul class="search-results">
+    <% @search.results.each do |work| %>
+      <li>
+      <% if page = Page.find_by_work_id(work.id) %>
+          <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_page_path(work.edition, page)) %>
+      <% else %>
+          <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_work_path(work.edition, work)) %>
+      <% end %>
+      </li>
+    <% end %>
+  </ul>
 <% end %>
+
 </section>

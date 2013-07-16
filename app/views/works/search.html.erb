@@ -1,16 +1,10 @@
-<section class="search-works">
-<h2>Search</h2>
-<%= form_tag search_works_path, :method => 'get' do %>
-    <%= label_tag(:q, 'Search for:') %>
-    <%= text_field_tag(:q, params[:q]) %>
-    <%= render 'shared/forms/edition_selector' %>
-    <%= submit_tag('Search') %>
-<% end %>
-<% if @search %>
-    <h3><%= @search.total %> Results</h3>
+<section class="view">
+  <h1>Search</h1>
 
-    <%= render( {
-      partial: 'shared/search_works_results',
-      object: @search
-    } ) %>
-<% end %>
+  <%= render( {
+    partial: "shared/search_works",
+    locals: {
+      action_url: search_works_path
+    }
+  } ) %>
+</section>
