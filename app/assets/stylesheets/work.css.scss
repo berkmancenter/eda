@@ -2,6 +2,21 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$darkGray: #333;
+$lightGray: #888;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+$darkTan: #897144;
+
+.works-search.view {
+  background: $lightTan;
+  border-radius: .2em;
+  box-shadow: 0px 3px 4px 0px $darkTan;
+  color: $darkGray;
+  padding: 1em;
+
+}
+
 // work-transcription section rendered from shared
 .work-transcription {
   font-size: .9em;

@@ -1,0 +1,56 @@
+$darkGray: #333;
+$lightGray: #888;
+$tan: #e7cf98;
+$lightTan: #eeddb5;
+$darkTan: #897144;
+
+.search-works {
+  button {
+    background: none;
+    border: none;
+
+    span {
+      display: none;
+    }
+  }
+
+  label {
+    display: none;
+  }
+}
+
+.search-works-options {
+  a, a:visited {
+    color: $darkGray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $lightGray;
+    text-decoration: none;
+  }
+
+  h2 {
+    display: inline-block;
+  }
+
+  h2:before {
+    content: "▲ ";
+    font-size: .8em;
+  }
+
+  input, select {
+    display: none;
+  }
+}
+
+
+.search-works-options.open {
+  h2:before {
+    content: "▼ ";
+  }
+
+  input, select {
+    display: block;
+  }
+}

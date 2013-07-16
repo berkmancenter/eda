@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ( 'search requests' ) {
+  # require test:seed
   subject { page }
 
   describe ( 'get /search' ) {
@@ -16,7 +17,6 @@ describe ( 'search requests' ) {
   }
 
   describe ( 'get /search/awake (default edition)' ) {
-    # require test:seed
     before { visit "#{search_works_path( 'awake' )}" } #?current_edition=3" }
 
     it ( 'should return a search page' ) {
@@ -34,7 +34,6 @@ describe ( 'search requests' ) {
   }
 
   describe ( 'get /search/awake?current_edition=1 ( no results in this edition )' ) {
-    # require test:seed
     before { visit "#{search_works_path( 'awake' )}?current_edition=1" }
 
     it ( 'should return a search page' ) {
@@ -49,5 +48,22 @@ describe ( 'search requests' ) {
     it {
       should_not have_selector( '.search-results a' );
     }
+  }
+
+  describe ( 'with search submit' ) {
+    before {
+      visit search_works_path;
+      fill_in( 'Search for:', { with: 'awake' } );
+      click_button( 'Search' );
+    }
+
+    it ( 'should have performed a search' ) {
+      should have_selector( '.search-works form input[name="q"][value="awake"]' );
+
+      should have_selector( '.search-results' );
+
+      should have_css( '.search-results a', { count: 1 } );
+    }
+
   }
 }

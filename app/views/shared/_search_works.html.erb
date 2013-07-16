@@ -1,10 +1,15 @@
 <section class="search-works">
+  <h1>Search Works</h1>
 
 <%= form_tag action_url, :method => 'get' do %>
   <%= label_tag(:q, 'Search for:') %>
   <%= text_field_tag(:q, params[:q]) %>
-  <%= render 'shared/forms/edition_selector' %>
-  <%= button_tag 'Search', :name => nil %>
+  <%= button_tag raw( "#{image_tag( 'search.png' )} <span>Search<span>" ), :name => nil %>
+
+  <div class="search-works-options">
+    <a href="javascript:void(0);"><h2>Search options</h2></a>
+    <%= render 'shared/forms/edition_selector' %>
+  </div>
 <% end %>
 
 <% if @search %>
