@@ -12,7 +12,7 @@ describe ( 'search requests' ) {
     }
 
     it ( 'should not have a result list' ) {
-      should_not have_selector( '.search-results' );
+      should_not have_selector( '.search-works-results' );
     }
   }
 
@@ -25,11 +25,11 @@ describe ( 'search requests' ) {
     }
 
     it ( 'should have a result list' ) {
-      should have_selector( '.search-results' );
+      should have_selector( '.search-works-results' );
     }
 
     it ( 'should have one result' ) {
-      should have_css( '.search-results a', { count: 1 } );
+      should have_css( '.search-works-results a', { count: 1 } );
     }
   }
 
@@ -42,11 +42,11 @@ describe ( 'search requests' ) {
     }
 
     it {
-      should have_selector( '.search-results' );
+      should have_selector( '.search-works-results' );
     }
 
     it {
-      should_not have_selector( '.search-results a' );
+      should_not have_selector( '.search-works-results a' );
     }
   }
 
@@ -60,9 +60,9 @@ describe ( 'search requests' ) {
     it ( 'should have performed a search' ) {
       should have_selector( '.search-works form input[name="q"][value="awake"]' );
 
-      should have_selector( '.search-results' );
+      should have_selector( '.search-works-results' );
 
-      should have_css( '.search-results a', { count: 1 } );
+      should have_css( '.search-works-results a', { count: 1 } );
     }
 
   }

@@ -4,7 +4,13 @@ $tan: #e7cf98;
 $lightTan: #eeddb5;
 $darkTan: #897144;
 
-.search-works {
+@mixin border-radius-top( $r ) {
+  -moz-border-radius: 0px;
+  -webkit-border-radius: $r $r 0px 0px;
+  border-radius: $r $r 0px 0px; 
+}
+
+.search-works-form {
   button {
     background: none;
     border: none;
@@ -35,15 +41,16 @@ $darkTan: #897144;
   }
 
   h2:before {
-    content: "▲ ";
+    content: "▶ ";
+    display: inline-block;
     font-size: .8em;
+    width: 1em;
   }
 
   input, select {
     display: none;
   }
 }
-
 
 .search-works-options.open {
   h2:before {
@@ -52,5 +59,17 @@ $darkTan: #897144;
 
   input, select {
     display: block;
+  }
+}
+
+.search-works-results {
+  h2 {
+    background: $darkGray;
+    @include border-radius-top( .3em );
+    color: $lightGray;
+    font-style: italic;
+    padding: .2em .2em;
+    margin: 0 -.4em;
+    text-align: center;
   }
 }

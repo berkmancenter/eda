@@ -46,9 +46,9 @@ describe ( 'pages requests' ) {
         it ( 'should have performed a search' ) {
           should have_selector( '.search-works form input[name="q"][value="awake"]' );
 
-          should have_selector( '.search-results' );
+          should have_selector( '.search-works-results' );
 
-          should have_css( '.search-results a', { count: 1 } );
+          should have_css( '.search-works-results a', { count: 1 } );
         }
 
       }
