@@ -24,4 +24,8 @@ module WorkHelper
         end
         output
     end
+
+    def render_work_result_link(  work )
+      raw( "<span class='work-number'>#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
+    end
 end

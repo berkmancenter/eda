@@ -95,6 +95,20 @@ namespace :db do
       work_f3a.image_group = igrp_three;
       work_f3a.save!
 
+      # work_f131a
+      work_f131a = FactoryGirl.create( :work_f131a );
+      work_f131a.edition = franklin;
+      work_f131a.image_group = igrp_one;
+      work_f131a.save!
+
+      z_f131a0 = FactoryGirl.create( :z_f131a0 );
+      z_f131a0.work = work_f131a;
+      z_f131a0.save!
+
+      l_f131a01 = FactoryGirl.create( :l_f131a01 );
+      l_f131a01.stanza = z_f131a0;
+      l_f131a01.save!
+
       # some images
       image_one = FactoryGirl.create( :image_one );
       image_one.save!

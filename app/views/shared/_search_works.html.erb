@@ -17,13 +17,14 @@
   <% if @search %>
   <div class="search-works-results">
     <h2><%= pluralize( @search.total, 'result' ) %></h2>
+
     <ul>
       <% @search.results.each do |work| %>
         <li>
         <% if page = Page.find_by_work_id(work.id) %>
-            <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_page_path(work.edition, page)) %>
+          <%= link_to( render_work_result_link( work ), edition_page_path(work.edition, page)) %>
         <% else %>
-            <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_work_path(work.edition, work)) %>
+          <%= link_to( render_work_result_link( work ), edition_work_path(work.edition, work)) %>
         <% end %>
         </li>
       <% end %>

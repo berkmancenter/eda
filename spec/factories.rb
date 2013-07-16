@@ -72,6 +72,13 @@ FactoryGirl.define do
       variant "B"
     end
 
+    factory :work_f131a do
+      title 'Besides the Autumn poets sing'
+      number 131
+      variant 'A'
+      #image_group nil
+    end
+
     #edition :tested
 
     factory :work_no_stanzas_no_image_group do
@@ -87,9 +94,15 @@ FactoryGirl.define do
       #work :work_f1a
       position 0
     end
+
+    factory :z_f131a0 do
+      #work :work_f131a
+      position 0
+    end
   end
 
   factory :line do
+    # f1a
     factory :l_f1a01 do
       text 'Awake ye muses nine, sing me a strain divine,'
       number 1
@@ -124,6 +137,13 @@ FactoryGirl.define do
       text 'God hath made nothing single but <i>thee</i> in his world so fair!'
       number 7
     end
+
+    # f131a
+    factory :l_f131a01 do
+      text 'Besides the Autumn poets sing'
+      number 1
+    end
+
   end
 
   # metadata is not designed enough to test

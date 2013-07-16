@@ -72,4 +72,41 @@ $darkTan: #897144;
     margin: 0 -.4em;
     text-align: center;
   }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  a, a:visited {
+    background: $lightTan;
+    border-top: solid 1px $lightGray;
+    color: $darkGray;
+    display: block;
+    margin: 0 -.4em;
+    padding: .5em;
+  }
+
+  a:hover {
+    background: $tan;
+    color: $darkGray;
+    text-decoration: none;
+  }
+
+  .work-title, .work-number {
+  }
+
+  .work-number {
+    display: inline-block;
+    float: right;
+    text-align: right;
+    white-space: nowrap;
+    width: 4em;
+  }
 }
