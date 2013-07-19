@@ -23,6 +23,15 @@ namespace :emily do
         end
     end
 
+    namespace :find_errors do
+        desc 'Check all transcriptions for errors'
+        task :transcriptions => [:environment] do |task|
+            Edition.all.each do |edition|
+                TranscriptionErrorFinder.new.find_errors(edition.works)
+            end
+        end
+    end
+
     namespace :import do
         namespace :transcriptions do
             desc 'Import transcription corrections'
@@ -48,7 +57,7 @@ namespace :emily do
                 end_year = args[:end_year] || 1886
                 error_check = args[:error_check] || true
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
-                FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i, error_check)
+                FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
         end
 
@@ -91,7 +100,7 @@ namespace :emily do
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
             Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862, :error_check => false})
-            #Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:transcriptions:johnson"].execute
             Rake::Task["emily:import:images:harvard"].execute
         end
     end

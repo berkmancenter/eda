@@ -4,12 +4,10 @@
 # Set numbers?
 # Variant collections
 
-require_relative 'error_checking.rb'
 require_relative 'field_parsing.rb'
 require_relative 'char_map.rb'
 require_relative 'patterns.rb'
 
-include ErrorChecking
 include FieldParsing
 include Patterns
 
@@ -158,7 +156,7 @@ module FranklinVentura
             close_poem(poem) if poem
         end
 
-        def import(directory, from_year = 1850, to_year = 1886, error_check = true)
+        def import(directory, from_year = 1850, to_year = 1886)
             edition = create_edition
             @poems = []
 
@@ -169,7 +167,7 @@ module FranklinVentura
 
             edition.works = @poems
             edition.save!
-            post_process!(edition, error_check)
+            post_process!(edition)
         end
 
         def add_modifiers!(poem, line)
@@ -207,13 +205,12 @@ module FranklinVentura
             line_num
         end
 
-        def post_process!(edition, error_check = false)
+        def post_process!(edition)
             locate_emendations!(edition)
             locate_divisions!(edition)
             locate_alternates!(edition)
             fix_exceptions!(edition)
             group_variants(edition)
-            check_for_errors(edition) if error_check
         end
 
         def fix_exceptions!(edition)
@@ -237,10 +234,6 @@ module FranklinVentura
                     group = [work]
                 end
             end
-        end
-
-        def check_for_errors(edition)
-            find_errors(edition.works.all)
         end
 
         def prep_modifier(modifier, extractor, extracted)

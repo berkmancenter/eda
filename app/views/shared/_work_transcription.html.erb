@@ -1,6 +1,6 @@
 <section class="work-transcription">
 
-  <% if @work.cross_edition_work_group != nil %>
+  <% unless @work.cross_edition_work_group.nil? %>
     <ul>
         <% @work.cross_edition_work_group.works.each do |other_work| %>
             <%= render :partial => 'works/list_item', :locals => { :work => other_work } %>

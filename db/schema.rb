@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   create_table "work_appearances", :force => true do |t|
     t.integer  "work_id"
     t.string   "publication"
+    t.string   "pages"
     t.integer  "year"
     t.datetime "date"
     t.datetime "created_at",  :null => false

@@ -7,14 +7,14 @@ class Array
     end
 end
 
-module ErrorChecking
+class TranscriptionErrorFinder
     def puts_empty(poem)
         puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}) has no lines" if poem.lines.empty?
     end
 
     def puts_sparse(poem)
         confirmed_sparse = ['244[A]', '277[A]', '283[A]', '314[A]', '376[A]', '442[A]', '496[A]', '501[A]', '529[A]', '534[A]', '572[A]', '577[A]', '822[A]', '852[A]', '923[A]', '935[A]', '1166[A]', '1286A', '1296A', '1349A']
-        if poem.lines.count == 1 && !confirmed_sparse.include?(CharMap::replace_no_itals(poem.number.to_s + poem.variant))
+        if poem.lines.count == 1 && !confirmed_sparse.include?((poem.number.to_s + poem.variant).gsub('<i>','').gsub('</i>'))
             puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}) has few lines"
         end
     end
