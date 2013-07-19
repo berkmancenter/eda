@@ -13,9 +13,30 @@ class TranscriptionErrorFinder
     end
 
     def puts_sparse(poem)
-        confirmed_sparse = ['244[A]', '277[A]', '283[A]', '314[A]', '376[A]', '442[A]', '496[A]', '501[A]', '529[A]', '534[A]', '572[A]', '577[A]', '822[A]', '852[A]', '923[A]', '935[A]', '1166[A]', '1286A', '1296A', '1349A']
-        if poem.lines.count == 1 && !confirmed_sparse.include?((poem.number.to_s + poem.variant).gsub('<i>','').gsub('</i>'))
-            puts "Poem #{poem.number}#{poem.variant if poem.variant} (#{poem.date.year}) has few lines"
+        confirmed_sparse = [
+            'F244[A]',
+            'F277[A]',
+            'F283[A]',
+            'F314[A]',
+            'F376[A]',
+            'F442[A]',
+            'F496[A]',
+            'F501[A]',
+            'F529[A]',
+            'F534[A]',
+            'F572[A]',
+            'F577[A]',
+            'F822[A]',
+            'F852[A]',
+            'F923[A]',
+            'F935[A]',
+            'F1166[A]',
+            'F1286A',
+            'F1296A',
+            'F1349A'
+        ]
+        if poem.lines.count <= 3 && !confirmed_sparse.include?("#{poem.edition.work_number_prefix}#{poem.number}#{poem.variant}".gsub(/(<i>|<\/i>)/,''))
+            puts "Poem #{poem.edition.work_number_prefix}#{poem.number}#{poem.variant if poem.variant} (#{poem.date.year if poem.date}) has few lines"
         end
     end
 
@@ -40,8 +61,15 @@ class TranscriptionErrorFinder
         end
     end
 
+    def puts_without_numbers(poems)
+        poems.each do |poem|
+            puts "Poem ID: #{poem.id} doesn't have a number" if poem.number.nil?
+        end
+    end
+
     def find_errors(poems)
         puts_missing_numbers(poems)
+        puts_without_numbers(poems)
         poems.each do |poem|
             puts_empty(poem)
         end
