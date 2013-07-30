@@ -52,6 +52,17 @@ $darkTan: #897144;
       display: inline;
   }
 
+  .work-body {
+    font-family: "PT Serif";
+    padding: 3em 1.5em 2em;
+    
+    .stanza {
+        margin-bottom: 1.5em;
+    }
 
-
+    .page-break {
+        border-width: 1px 0 0 0;
+        border-style: dotted;
+    }
+  }
 }

@@ -1,9 +1,14 @@
 class WorksController < ApplicationController
+    before_filter :authenticate_user!, only: [:edit, :update]
+    before_filter :load_work, only: [:edit, :update]
+    before_filter :load_edition, except: [:index, :search]
+    before_filter :check_owner, only: [:edit, :update]
+    before_filter :setup_child_edition, only: :update
 
     def index
         if params[:edition_id]
             load_edition
-            @works = @edition.works.order(:number, :variant)
+            @works = @edition.all_works
         elsif params[:first_letter]
             @works = Work.starts_with(params[:first_letter])
         else
@@ -13,8 +18,37 @@ class WorksController < ApplicationController
     end
 
     def show
-      load_edition
-        @work = Work.includes(:line_modifiers, :stanzas => [:lines]).find(params[:id])
+        @work = @edition.all_works.includes(:line_modifiers, :stanzas => [:lines]).find(params[:id])
+        respond_to do |format|
+            format.html
+            format.txt{ render layout: false }
+        end
+    end
+
+    def new
+        @work = Work.new
+    end
+
+    def create
+        @work = @edition.works.create(params[:work])
+        # TODO: Create page
+    end
+
+    def edit
+        render :layout => !request.xhr?
+    end
+
+    def update
+        if @work.edition == @edition.parent
+            parent_work = @work
+            @work = parent_work.dup
+            @work.edition = @edition
+            @work.revises_work = parent_work
+        end
+        @work.update_attributes(params[:work])
+        @work.save!
+        @edition.replace_work_in_pages!(parent_work, @work) if @work.edition == @edition.parent
+        redirect_to edition_work_path(@edition, @work)
     end
 
     def search
@@ -36,7 +70,28 @@ class WorksController < ApplicationController
 
     private
 
+    def check_owner
+        unless current_user == @edition.owner
+            flash[:alert] = 'You must be the owner of the current edition in order to edit works.'
+            if request.env['HTTP_REFERER']
+                redirect_to :back 
+            else
+                redirect_to edition_works_path(@edition)
+            end
+        end
+    end
+
+    def load_work
+        @work = Work.find(params[:id])
+    end
+
     def load_edition
         @edition = Edition.find(params[:edition_id])
+    end
+
+    def setup_child_edition
+        if @edition.parent && !@edition.inherited_everything_yet?
+            @edition.copy_everything_from_parent!
+        end
     end
 end

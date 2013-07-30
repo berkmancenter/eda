@@ -22,7 +22,7 @@
             } );
     end %>
 
-    <%= link_to('', image_group_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
+    <%= link_to('', image_set_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
     <%= if next_page = @page.next
             link_to( '', edition_page_url( {

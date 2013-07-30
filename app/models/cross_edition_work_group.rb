@@ -1,2 +1,0 @@
-class CrossEditionWorkGroup < WorkGroup
-end

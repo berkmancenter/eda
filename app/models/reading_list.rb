@@ -1,2 +1,2 @@
-class ReadingList < WorkGroup
+class ReadingList < WorkSet
 end

@@ -1,14 +1,8 @@
 <h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
 
 <%= render( {
-  partial: "shared/work_transcription",
+  partial: "works/transcriptions/show",
   object: @work
 } ) %>
 
 <%= render :partial => 'shared/metadata', :object => @work %>
-
-<% if @work.image_group %>
-    <% @work.image_group.images.each do |image| %>
-        <%= image_tag( preview_url(image), { "data-image-id" => image.id }) %>
-    <% end %>
-<% end %>

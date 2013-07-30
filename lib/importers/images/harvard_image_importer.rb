@@ -38,7 +38,7 @@
 require 'csv'
 class HarvardImageImporter
     def import(directory, johnson_franklin_map)
-        collection = Collection.new(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
+        collection = Collection.create!(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         editions = Edition.where(:author => ['Thomas H. Johnson', 'R. W. Franklin'])
 
         Dir.open(directory).each do |filename|
@@ -68,8 +68,10 @@ class HarvardImageImporter
                 )
 
                 # Add same image to the collection group
-                image_for_collection_group = collection.image_group_images.build(:position => collection.children.count)
-                image_for_collection_group.image = image
+                is = ImageSet.new
+                is.image = image
+                is.save!
+                is.move_to_child_of collection
 
                 editions.each_with_index do |edition, i|
                     next if sheet_groups[i].nil?
@@ -77,8 +79,10 @@ class HarvardImageImporter
                     # to see the backs of pages when page turning, etc.
 
                     # Create an image and add it to the sheet group
-                    image_for_sheet_group = sheet_groups[i].image_group_images.build(:position => page['ORDER'].to_i)
-                    image_for_sheet_group.image = image
+                    image_for_sheet_set = ImageSet.new
+                    image_for_sheet_set.image = image
+                    image_for_sheet_set.save!
+                    image_for_sheet_set.move_to_child_of sheet_groups[i]
 
                     # Find the works contained in this image
                     works = works_from_page(edition, page, johnson_franklin_map)
@@ -86,17 +90,21 @@ class HarvardImageImporter
                     next if works.empty?
 
                     # Create a page for every work this image contains
-                    create_work_pages!(edition, works, image, image_for_sheet_group)
+                    create_work_pages!(edition, works, image, image_for_sheet_set)
                 end
             end
             sheet_groups.compact.each(&:save!)
             editions.each(&:save!)
             collection.save!
         end
-        Work.includes(:pages).where({:pages => {:work_id => nil}}).each do |work|
+        pageless_works.each do |work|
             puts "creating page for imageless work: #{work.number} #{work.variant}"
             create_work_page_without_image(work)
         end
+    end
+
+    def pageless_works
+        Work.find(Work.all.map(&:id) - Page.all.map{|p| p.work.id if p.work_set}.compact)
     end
 
     def page_has_works?(editions, page, johnson_franklin_map)
@@ -110,7 +118,7 @@ class HarvardImageImporter
     end
 
     def new_sheet_group(edition, doc)
-        edition.root_image_group.children.new(
+        is = ImageSet.create!(
             :name => doc.at('mets')['LABEL'],
             :editable => false,
             :metadata => {
@@ -118,6 +126,8 @@ class HarvardImageImporter
                 'URI' => doc.at_css('identifier[type="uri"]').text
             }
         )
+        is.move_to_child_of edition.image_set
+        is
     end
 
     def works_from_page(edition, page, johnson_franklin_map)
@@ -158,26 +168,15 @@ class HarvardImageImporter
 
     def create_work_page_without_image(work)
         page = work.edition.pages.new
-        page.work = work
-        unless work.image_group
-            work.image_group = ImageGroup.new(:name => "Images for #{work.title}")
-        end
-        work.save!
+        page.work_set = work.edition.work_set.leaf_containing(work)
         page.save!
     end
 
     def create_work_pages!(edition, works, image, image_for_sheet)
         works.each do |work|
             page = edition.pages.new
-            page.image = image_for_sheet
-            page.work = work
-            unless work.image_group
-                work.image_group = ImageGroup.new(:name => "Images for #{work.title}")
-            end
-            work_group_image = work.image_group.image_group_images.new(:position => work.image_group.image_group_images.count)
-            work_group_image.image = image
-            work_group_image.save!
-            work.save!
+            page.image_set = image_for_sheet
+            page.work_set = edition.work_set.leaf_containing(work)
             page.save!
         end
     end

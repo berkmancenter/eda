@@ -8,12 +8,14 @@ class JohnsonImporter
             :work_number_prefix => 'J',
             :completeness => 0.95
         )
-        edition.create_root_image_group(
+        edition.create_image_set(
             :name => "Images for #{edition.name}",
-            :editable => false,
+            :editable => true,
         )
-        edition.root_image_group.edition = edition
-        edition.root_image_group.save!
+        edition.create_work_set(
+            name: "Works in #{edition.name}",
+            editable: true
+        )
 
         text = File.readlines(filename)
         text = delete_page_numbers(text)

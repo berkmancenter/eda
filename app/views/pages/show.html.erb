@@ -8,24 +8,21 @@
     </ul>
 
     <div class="panel-content">
-      <%= render( {
+      <%= render(
         partial: "shared/search_works",
         locals: {
           action_url: edition_page_path( @edition, @page )
         }
-      } ) %>
+      ) %>
 
-      <%= render( { partial: "shared/browse_works" } ) %>
+      <%= render partial: "shared/browse_works" %>
 
-      <%= render( { partial: "shared/browse_lexicon" } ) %>
+      <%= render partial: "shared/browse_lexicon" %>
     </div>
   </div>
 
   <div id="interactive-image-panel">
-    <%= render( {
-      partial: "shared/interactive_image",
-      object: @image
-    } ) %>
+    <%= render partial: "shared/interactive_image" %>
   </div>
 
   <div id="work-panel" class="tab-menu">
@@ -36,9 +33,9 @@
     </ul>
 
     <div class="panel-content">
-      <%= render( { partial: "shared/work_transcription", } ) %>
-      <%= render( { partial: "shared/work_notes", } ) %>
-      <%= render( { partial: "shared/work_reading_list", } ) %>
+      <%= render partial: "works/transcriptions/show" %>
+      <%= render partial: "works/notes" %>
+      <%= render partial: "shared/work_reading_list" %>
     </div>
   </div>
 

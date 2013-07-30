@@ -1,62 +1,31 @@
 class Page < ActiveRecord::Base
     belongs_to :edition
-    belongs_to :work
-    belongs_to :image_group_image
+    belongs_to :work_set
+    belongs_to :image_set
 
-    alias_attribute :image, :image_group_image
+    def work
+        work_set.work if work_set
+    end
 
-    def image_url
-        image_group_image.image.url
+    def image
+        image_set.image if image_set
     end
 
     def next
-        # The current work continues onto another image
-        if image_group_image && works_next_image = work.image_after(image_group_image.image)
-            igi = edition.image_group_image_from_image(works_next_image)
-            return Page.with_work_and_image(work, igi)
-        end
-
-        # Head on to the next work
-        if next_work = work.next
-            igis = next_work.image_group_images
-
-            # Head to an imageless page if we don't have an image
-            return Page.with_imageless_work(next_work) if igis.empty?
-
-            bare_image = igis.order(:position).first.image
-            return Page.with_work_and_image(
-                next_work,
-                edition.image_group_image_from_image(bare_image)
-            )
-        end
+        edition.pages.with_work(work_set.right_sibling.work).first if work_set
     end
 
     def previous
-        if image_group_image && works_previous_image = work.image_before(image_group_image.image)
-            igi = edition.image_group_image_from_image(works_previous_image)
-            return Page.with_work_and_image(work, igi)
-        end
-
-        if previous_work = work.previous
-            igis = previous_work.image_group_images
-            return Page.with_imageless_work(previous_work) if igis.empty?
-            bare_image = igis.order('position DESC').first.image
-            return Page.with_work_and_image(
-                previous_work,
-                edition.image_group_image_from_image(bare_image)
-            )
-        end
+        edition.pages.with_work(work_set.left_sibling.work).first if work_set
     end
 
     def self.with_imageless_work(work)
-        where(:work_id => work.id, :image_group_image_id => nil).first
+        where(work_set_id: edition.work_set.leaf_containing(work).id, image_set_id: nil).first
     end
 
-    def self.with_work_and_image(work, igi)
-        if igi
-            where(:work_id => work.id, :image_group_image_id => igi.id).first
-        else
-            where(:work_id => work.id, :image_group_image_id => nil).first
-        end
+    def self.with_work_and_image(work_set, image_set)
+        work_set = edition.work_set.leaf_containing(work) unless work_set.is_a? WorkSet
+        image_set = edition.image_set.leaf_containing(image) unless image_set.is_a? ImageSet
+        where(work_set: work_set, image_set: image_set).first
     end
 end

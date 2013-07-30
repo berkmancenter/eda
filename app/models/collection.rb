@@ -1,3 +1,2 @@
-class Collection < ImageGroup
-  # attr_accessible :title, :body
+class Collection < ImageSet
 end

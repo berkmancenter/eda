@@ -1,6 +1,6 @@
 <ul>
 <% @works.each do |work| %>
-    <%= render :partial => 'works/list_item', :locals => {:work => work} %>
+    <%= render :partial => 'works/list_item', :locals => {work: work, edition: @edition || work.edition} %>
 <% end %>
 </ul>
 

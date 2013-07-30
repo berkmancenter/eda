@@ -1,1 +1,12 @@
-<li><%= link_to(raw(work.title ? "#{work.edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" : (work.lines.first.text if work.lines.first)), edition_page_path(work.edition, work.pages.includes(:image_group_image).order('image_group_images.position').first)) %></li>
+<li>
+<%=
+link_to(
+    raw(
+        work.title ?
+        "#{edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" :
+        (work.lines.first.text if work.lines.first)
+    ),
+    edition_page_path(edition, work.edition.pages.with_work(work).first)
+)
+%> | <%= link_to "work", edition_work_path(edition, work) %>
+</li>

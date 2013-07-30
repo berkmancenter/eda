@@ -31,7 +31,11 @@ module RenderSortableTreeHelper
       def show_link
         node = options[:node]
         ns   = options[:namespace]
-        url  = h.edition_image_group_url(options[:edition], node)
+        if node.is_a? ImageSet
+            url = h.edition_image_set_url(options[:edition], node)
+        elsif node.is_a? WorkSet
+            url = h.edition_work_set_url(options[:edition], node)
+        end
         title_field = options[:title]
 
         "<h4>#{ h.link_to(node.send(title_field), url) }</h4>"

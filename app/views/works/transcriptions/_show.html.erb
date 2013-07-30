@@ -1,14 +1,15 @@
 <section class="work-transcription">
 
-  <% unless @work.cross_edition_work_group.nil? %>
+  <% if @work && !@work.cross_edition_work_set.nil? %>
     <ul>
-        <% @work.cross_edition_work_group.works.each do |other_work| %>
-            <%= render :partial => 'works/list_item', :locals => { :work => other_work } %>
+        <% @work.cross_edition_work_set.all_works.each do |other_work| %>
+            <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
         <% end %>
     </ul>
   <% end %>
 
-    <%= render :partial => 'shared/forms/edition_selector' %>
+    <%= render partial: 'shared/forms/edition_selector' %>
+    <%= link_to "New", new_edition_path %>
     <% if @work %>
     <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
   <label>
@@ -16,6 +17,7 @@
   <label>
       <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />Emily's line breaks</label>
 
+    <div class="work-body">
     <% @work.stanzas.each do |stanza| %>
         <p class="stanza" data-number="<%= stanza.position %>">
         <% stanza.lines.each do |line| %>
@@ -28,13 +30,18 @@
         <% end %>
         </p>
     <% end %>
+    </div>
 <% else %>
+    <% if @edition.owner == current_user %>
+        <%= link_to 'Create new transcription', new_edition_work_path(@edition) %>
+    <% else %>
     <p><em>No transcription of this image</em></p>
+    <% end %>
 <% end %>
     <h3>Related Works in This Edition</h3>
     <ul>
         <% @work.variants.each do |work| %>
-            <%= render :partial => 'works/list_item', :locals => {:work => work} %>
+            <%= render partial: 'works/list_item', locals: {work: work, edition: @edition || work.edition} %>
         <% end %>
     </ul>
 </section>

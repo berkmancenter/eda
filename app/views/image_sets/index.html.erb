@@ -1,0 +1,3 @@
+<ol class="sortable_tree" data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>">
+<%= build_server_tree(@image_sets, type: :sortable, edition: @edition, title: :name, rebuild_url: rebuild_edition_image_sets_url(@edition)) %>
+</ol>

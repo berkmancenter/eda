@@ -4,7 +4,7 @@ module ImagesHelper
         return "#{Eda::Application.config.emily['web_image_directory']}/#{image.url}.jpg";
     end
 
-    def image_group_url(edition, image)
-        edition_image_group_url(edition, image.image_groups.find{|ig| ig.root == edition.root_image_group})
+    def image_set_url(edition, image)
+        edition_image_set_url(edition, edition.image_set.leaf_containing(image))
     end
 end

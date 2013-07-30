@@ -21,18 +21,20 @@ module FranklinVentura
     class Importer
         def create_edition
             edition = Edition.new(
-                :name => 'The Poems of Emily Dickinson: Variorum Edition',
-                :author => 'R. W. Franklin',
-                :date => Date.new(1998, 1, 1),
-                :work_number_prefix => 'F',
-                :completeness => 1.0
+                name: 'The Poems of Emily Dickinson: Variorum Edition',
+                author: 'R. W. Franklin',
+                date: Date.new(1998, 1, 1),
+                work_number_prefix: 'F',
+                completeness: 1.0
             )
-            edition.create_root_image_group(
-                :name => "Images for #{edition.name}",
-                :editable => false
+            edition.create_image_set(
+                name: "Images for #{edition.name}",
+                editable: true
             )
-            edition.root_image_group.edition = edition
-            edition.root_image_group.save!
+            edition.create_work_set(
+                name: "Works in #{edition.name}",
+                editable: true
+            )
             edition
         end
 
@@ -58,9 +60,9 @@ module FranklinVentura
                     if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
                         close_poem(poem) if poem
                         poem = Work.new(
-                            :number => match[:number].to_i,
-                            :title => CharMap::replace_no_itals(match[:title]).strip,
-                            :date => Date.new(File.basename(file.path).to_i)
+                            number: match[:number].to_i,
+                            title: CharMap::replace_no_itals(match[:title]).strip,
+                            date: Date.new(File.basename(file.path).to_i)
                         )
                     end
                 end
@@ -132,16 +134,16 @@ module FranklinVentura
                                 title = variant_titles.empty? ? poem.title : variant_titles.shift
                                 close_poem(poem)
                                 poem = Work.new(
-                                    :number => poem.number,
-                                    :title => CharMap::replace_no_itals(title).strip,
-                                    :variant => CharMap::replace(matches['variant']),
-                                    :date => Date.new(File.basename(file.path).to_i)
+                                    number: poem.number,
+                                    title: CharMap::replace_no_itals(title).strip,
+                                    variant: CharMap::replace(matches['variant']),
+                                    date: Date.new(File.basename(file.path).to_i)
                                 )
                                 puts "poem: #{poem.number} #{poem.variant}"
                             end
                         end
 
-                        stanza_line = Line.new(:text => CharMap::replace(matches['line']))
+                        stanza_line = Line.new(:text => CharMap::replace(matches['line']).strip)
                         stanza_line.number = line_number(poem, stanza, matches)
                         stanza.lines << stanza_line
                     end
@@ -226,8 +228,13 @@ module FranklinVentura
                 if group.empty? || group.last.number == work.number
                     group << work
                 elsif group.count > 1 && group.last.number != work.number
-                    wg = WorkGroup.new(:name => "#{group.last.number} variants")
-                    group.each{ |w| wg.works << w }
+                    wg = WorkSet.create!(:name => "#{group.last.number} variants")
+                    group.each do |w|
+                        ws = WorkSet.create!
+                        ws.work = w
+                        ws.move_to_child_of wg
+                        ws.save!
+                    end
                     wg.save!
                     group = [work]
                 else
@@ -250,11 +257,13 @@ module FranklinVentura
         end
 
         def create_cross_edition_work_group!(work)
-            work.cross_edition_work_group = CrossEditionWorkGroup.new(:name => "Works related to #{work.title} in other editions")
-            wgw = work.cross_edition_work_group.work_group_works.build
-            wgw.work = work
-            wgw.save!
-            work.cross_edition_work_group.save!
+            cews = CrossEditionWorkSet.new(:name => "Works related to #{work.title} in other editions")
+            work.cross_edition_work_set = cews
+            ws = WorkSet.new
+            ws.work = work
+            ws.save!
+            ws.move_to_child_of cews
+            work.save!
         end
 
         def assign_stanza_positions(poem)

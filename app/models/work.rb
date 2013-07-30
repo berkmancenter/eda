@@ -1,21 +1,21 @@
 class Work < ActiveRecord::Base
     belongs_to :edition
-    belongs_to :image_group
-    belongs_to :cross_edition_work_group
-    has_many :image_group_images, :through => :image_group
-    has_many :stanzas, :order => 'position'
-    has_many :lines, :through => :stanzas, :order => 'number'
-    has_many :pages
+    belongs_to :cross_edition_work_set
+    belongs_to :revises_work, class_name: 'Work'
+
+    has_many :sets, as: :nestable, class_name: 'WorkSet'
+    has_many :stanzas, order: :position
+    has_many :lines, through: :stanzas, order: :number
     has_many :line_modifiers
     has_many :divisions
     has_many :emendations
     has_many :alternates
     has_many :revisions
-    has_many :appearances, :class_name => 'WorkAppearance'
+    has_many :appearances, class_name: 'WorkAppearance'
 
-    attr_accessible :date, :metadata, :number, :title, :variant
+    attr_accessible :date, :metadata, :number, :title, :variant, :text
     after_initialize :setup_defaults
-    default_scope order(:edition_id, :number, :variant)
+    default_scope order(:number, :variant)
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
 
     serialize :metadata
@@ -79,24 +79,33 @@ class Work < ActiveRecord::Base
         self.metadata['fascicle_position'] = position
     end
 
-    def image_position(image)
-        igis = image_group_images.where(:image_id => image.id)
-        return if igis.empty?
-        return igis.first.position
-    end
-
-    def image_after(image)
-        image_position = image_position(image)
-        next_images = image_group_images.where{position > image_position}
-        return if next_images.empty?
-        next_images.order(:position).first.image
-    end
-
-    def image_before(image)
-        image_position = image_position(image)
-        previous_images = image_group_images.where{position < image_position}
-        return if previous_images.empty?
-        previous_images.order('position DESC').first.image
+    def text=(text)
+        line_modifiers.delete_all
+        stanza = Stanza.new(position: 0)
+        new_stanzas = []
+        page_break_pattern = /^((\*\s*){3,}|(-\s*){3,}|(_\s*){3,})$/
+        stanza_break_pattern = /^\s*$/
+        line_number = 0
+        text.lines.each_with_index do |line, i|
+            if line.match(page_break_pattern)
+                address = text.lines.to_a[i - 1].length - 2
+                self.divisions << Division.new(
+                    start_line_number: line_number,
+                    end_line_number: line_number,
+                    start_address: address,
+                    end_address: address, 
+                    subtype: 'page_or_column',
+                )
+            elsif line.match(stanza_break_pattern)
+                new_stanzas << stanza
+                stanza = Stanza.new(position: new_stanzas.count)
+            else
+                line_number += 1
+                stanza.lines.new(number: line_number, text: line.strip)
+            end
+        end
+        new_stanzas << stanza
+        self.stanzas = new_stanzas
     end
 
     private

@@ -1,0 +1,2 @@
+class CrossEditionWorkSet < WorkSet
+end

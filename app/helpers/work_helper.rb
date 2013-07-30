@@ -3,11 +3,11 @@ module WorkHelper
         return unless mod
         case mod.type
         when 'Emendation', 'Revision'
-            render :partial => "shared/#{mod.type.downcase}", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.type.downcase}", :locals => { :mod => mod }
         when 'Division'
-            render :partial => "shared/#{mod.subtype}_division", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.subtype}_division", :locals => { :mod => mod }
         when 'Alternate'
-            render :partial => "shared/#{mod.subtype}", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.subtype}", :locals => { :mod => mod }
         end
     end
 
@@ -27,5 +27,23 @@ module WorkHelper
 
     def render_work_result_link(  work )
       raw( "<span class='work-number'>#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
+    end
+
+    def lines_in_text_area(work)
+        work.lines.count + work.stanzas.count + work.divisions.page_breaks.count
+    end
+
+    def flat_text(work)
+        with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }
+    end
+
+    def with_format(format, &block)
+        old_formats = formats
+        begin
+            self.formats = [format]
+            return block.call
+        ensure
+            self.formats = old_formats
+        end
     end
 end
