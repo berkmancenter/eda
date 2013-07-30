@@ -32,8 +32,4 @@ class PagesController < ApplicationController
 
         render
     end
-
-    def load_edition
-        @edition = Edition.find(params[:edition_id])
-    end
 end

@@ -34,7 +34,7 @@ module WorkHelper
     end
 
     def flat_text(work)
-        with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }
+        with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
     def with_format(format, &block)

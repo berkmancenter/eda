@@ -1,5 +1,7 @@
 class ImageSetsController < ApplicationController
+    before_filter :authenticate_user!, only: :rebuild
     before_filter :load_edition
+    before_filter :check_edition_owner, only: :rebuild
     before_filter :copy_tree_from_parent, only: :rebuild
     include TheSortableTreeController::Rebuild
 
@@ -17,10 +19,6 @@ class ImageSetsController < ApplicationController
 
     private
     
-    def load_edition
-        @edition = Edition.find( params[ :edition_id ] )
-    end
-
     def copy_tree_from_parent
         if @edition.parent && !@edition.inherited_everything_yet?
             @edition.copy_everything_from_parent!

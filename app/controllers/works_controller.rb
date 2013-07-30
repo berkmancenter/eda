@@ -2,7 +2,7 @@ class WorksController < ApplicationController
     before_filter :authenticate_user!, only: [:edit, :update]
     before_filter :load_work, only: [:edit, :update]
     before_filter :load_edition, except: [:index, :search]
-    before_filter :check_owner, only: [:edit, :update]
+    before_filter :check_edition_owner, only: [:edit, :update]
     before_filter :setup_child_edition, only: :update
 
     def index
@@ -70,23 +70,8 @@ class WorksController < ApplicationController
 
     private
 
-    def check_owner
-        unless current_user == @edition.owner
-            flash[:alert] = 'You must be the owner of the current edition in order to edit works.'
-            if request.env['HTTP_REFERER']
-                redirect_to :back 
-            else
-                redirect_to edition_works_path(@edition)
-            end
-        end
-    end
-
     def load_work
         @work = Work.find(params[:id])
-    end
-
-    def load_edition
-        @edition = Edition.find(params[:edition_id])
     end
 
     def setup_child_edition

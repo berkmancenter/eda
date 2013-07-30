@@ -2,4 +2,10 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  create_own_edition: 'Please create your own edition before editing works.'
+  edit_work: 'Edit work'
+  new_transcription: 'Create new transcription'
+  sign_in: 'sign in'
+  edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
+  hide_edits: 'Hide Edits'
+  emily_line_breaks: "Emily's line breaks"
