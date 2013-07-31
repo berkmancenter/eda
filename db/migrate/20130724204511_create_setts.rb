@@ -11,6 +11,7 @@ class CreateSetts < ActiveRecord::Migration
       t.integer :depth
       t.references :nestable
       t.string :nestable_type
+      t.references :owner
 
       t.timestamps
     end
@@ -20,5 +21,6 @@ class CreateSetts < ActiveRecord::Migration
     add_index :setts, :nestable_id
     add_index :setts, :nestable_type
     add_index :setts, :type
+    add_index :setts, :owner_id
   end
 end

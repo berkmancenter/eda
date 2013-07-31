@@ -1,8 +1,4 @@
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
-$darkTan: #897144;
+@import "colors";
 
 .panel-menu {
   margin: 0;
@@ -28,7 +24,7 @@ $darkTan: #897144;
 .panel-content {
   background: $lightTan;
   border-radius: .2em;
-  box-shadow: 0px 3px 4px 0px $darkTan;
+  box-shadow: 0px 3px 4px 0px $darkTan, 0 1px 20px 3px $shadowGray;
   color: $darkGray;
   padding: .5em;
 

@@ -1,5 +1,12 @@
 <section class="work-transcription">
 
+<!--
+    <div>
+    <%= render partial: 'shared/forms/edition_selector' %>
+    <%= link_to "New", new_edition_path %>
+    </div>
+-->
+
 <% if @work %>
     <div class="work-body">
     <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
@@ -16,6 +23,18 @@
         </p>
     <% end %>
     </div>
+
+    <div>
+<% if user_signed_in? %>
+    <%= link_to t(:edit_work), edit_edition_work_path(@edition, @work) %>
+<% else %>
+    <p>
+    <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
+    </p>
+<% end %>
+    </div>
+
+    <div>
     <label>
         <input id="no-edits" type="checkbox" name="edits" value="no" />
         <%= t :hide_edits %>
@@ -24,24 +43,26 @@
         <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />
         <%= t :emily_line_breaks %>
     </label>
+    </div>
+
+    <div>
+    <h3>Related Works in This Edition</h3>
+    <ul>
+        <% @work.variants.each do |work| %>
+            <%= render partial: 'works/list_item', locals: {work: work, edition: @edition || work.edition} %>
+        <% end %>
+    </ul>
+    </div>
 <% else %>
+    <div>
     <% if @edition.owner == current_user %>
         <%= link_to t(:new_transcription), new_edition_work_path(@edition) %>
     <% else %>
         <p><em>No transcription of this image</em></p>
     <% end %>
+    </div>
 <% end %>
 
-    <%= render partial: 'shared/forms/edition_selector' %>
-    <%= link_to "New", new_edition_path %>
-
-<% if user_signed_in? %>
-    <%= link_to t(:edit_work), edit_edition_work_path(@edition, @work) %>
-<% else %>
-    <p>
-    <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
-    </p>
-<% end %>
 
 <% if @work && !@work.cross_edition_work_set.nil? %>
     <ul>
@@ -51,10 +72,4 @@
     </ul>
 <% end %>
 
-    <h3>Related Works in This Edition</h3>
-    <ul>
-        <% @work.variants.each do |work| %>
-            <%= render partial: 'works/list_item', locals: {work: work, edition: @edition || work.edition} %>
-        <% end %>
-    </ul>
 </section>

@@ -1,7 +1,4 @@
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
+@import "colors";
 
 .__seadragon {
   background: transparent !important;
@@ -10,6 +7,10 @@ $lightTan: #eeddb5;
 
 .__seadragon>div>div:last-child {
   display: none;
+}
+
+.missing-image {
+    text-align: center;
 }
 
 .page-controls {

@@ -3,7 +3,11 @@ Eda::Application.routes.draw do
     root :to => 'static_pages#home'
 
     resources :editions do
-        resources :works
+        resources :works do
+            member do
+                post :add_to_reading_list
+            end
+        end
         resources :pages
         resources :image_sets do
             collection do 

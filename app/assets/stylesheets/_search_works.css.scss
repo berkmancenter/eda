@@ -1,8 +1,4 @@
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
-$darkTan: #897144;
+@import "colors";
 
 @mixin border-radius-top( $r ) {
   -moz-border-radius: 0px;

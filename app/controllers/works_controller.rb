@@ -1,6 +1,6 @@
 class WorksController < ApplicationController
     before_filter :authenticate_user!, only: [:edit, :update]
-    before_filter :load_work, only: [:edit, :update]
+    before_filter :load_work, only: [:edit, :update, :add_to_reading_list]
     before_filter :load_edition, except: [:index, :search]
     before_filter :check_edition_owner, only: [:edit, :update]
     before_filter :setup_child_edition, only: :update
@@ -66,6 +66,12 @@ class WorksController < ApplicationController
                 end
             end
         end
+    end
+
+    def add_to_reading_list
+        @reading_list = ReadingList.find(params[:reading_list_id])
+        @reading_list.add_work(@work)
+        render text: !!@reading_list.save!
     end
 
     private

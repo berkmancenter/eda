@@ -9,3 +9,4 @@ en:
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
   hide_edits: 'Hide Edits'
   emily_line_breaks: "Emily's line breaks"
+  reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
