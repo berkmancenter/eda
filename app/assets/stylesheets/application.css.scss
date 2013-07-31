@@ -15,10 +15,7 @@
  *= require_tree .
  */
 
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
+@import "colors";
 
 /* apply a natural box layout model to all elements */
 /* http://paulirish.com/2012/box-sizing-border-box-ftw/ */
