@@ -25,6 +25,13 @@ FactoryGirl.define do
     end
   end
 
+  factory :work_set do
+    factory :wset_franklin do
+      name 'Works in Franklin Edition'
+      editable true
+    end
+  end
+
   factory :work do
     #edition :johnson
 
@@ -34,35 +41,35 @@ FactoryGirl.define do
       title 'Awake ye muses nine, sing me a strain divine'
       number 1
       variant 'A'
-      #image_group :igrp_one
+      #image_set :iset_one
     end
 
     factory :work_f2a do
       title 'Sic transit gloria mundi'
       number 2
       variant 'A'
-      #image_group :igrp_two
+      #image_set :iset_two
     end
 
     factory :work_f2b do
       title 'Sic transit gloria mundi'
       number 2
       variant 'B'
-      #image_group nil
+      #image_set nil
     end
 
     factory :work_f3a do
       title 'On this wondrous sea'
       number 3
       variant 'A'
-      #image_group :igrp_three
+      #image_set :iset_three
     end
 
     factory :work_f3b do
       title 'On this wondrous sea'
       number 3
       variant 'B'
-      #image_group nil
+      #image_set nil
     end
 
     factory :work_variant do
@@ -76,13 +83,13 @@ FactoryGirl.define do
       title 'Besides the Autumn poets sing'
       number 131
       variant 'A'
-      #image_group nil
+      #image_set nil
     end
 
     #edition :tested
 
-    factory :work_no_stanzas_no_image_group do
-      title "no_stanzas, no_image_group"
+    factory :work_no_stanzas_no_image_set do
+      title "no_stanzas, no_image_set"
       number 1
     end
 
@@ -189,73 +196,38 @@ FactoryGirl.define do
     end
   end
 
-  factory :image_group do 
-    factory :igrp_harvard do
-      name "Harvard Collection"
+  factory :collection do
+    factory :iset_harvard do
+      name 'Harvard Collection'
       #parent nil
       metadata {{ "Library" => "Houghton" }}
-      edition nil
-      type "Collection"
-    end
-
-    # an image group contains all the images for a poem and their order
-    factory :igrp_one do
-      name 'Awake ye muses nine, sing me a strain divine'
-      #parent :igrp_harvard
-      metadata nil
-      type nil
-    end
-
-    factory :igrp_two do
-      name 'Sic transit gloria mundi'
-      #parent :igrp_harvard
-      metadata nil
-      type nil
-    end
-
-    factory :igrp_three do
-      name 'On this wondrous sea'
-      #parent :igrp_harvard
-      metadata nil
-      type nil
+      type 'Collection'
     end
   end
 
-  factory :image_group_image do
-    factory :igi_one do
-      #image_group :igrp_one
-      #image :image_one
-      position 1
+  factory :image_set do 
+    factory :iset_franklin do
+      name 'Images for Franklin Edition'
+      editable true
     end
 
-    factory :igi_two do
-      #image_group :igrp_one
-      #image :image_two
-      position 2
+    # an image set contains all the images for a poem and their order
+    factory :iset_one do
+      name 'Awake ye muses nine, sing me a strain divine'
+      #parent :iset_harvard
+      metadata nil
     end
 
-    factory :igi_three do
-      #image_group :igrp_one
-      #image :image_three
-      position 3
+    factory :iset_two do
+      name 'Sic transit gloria mundi'
+      #parent :iset_harvard
+      metadata nil
     end
 
-    factory :igi_four do
-      #image_group :igrp_two
-      #image :image_three
-      position 1
-    end
-
-    factory :igi_five do
-      #image_group :igrp_two
-      #image :image_four
-      position 2
-    end
-
-    factory :igi_six do
-      #image_group :igrp_three
-      #image :image_five
-      position 1
+    factory :iset_three do
+      name 'On this wondrous sea'
+      #parent :iset_harvard
+      metadata nil
     end
   end
 
@@ -272,32 +244,32 @@ FactoryGirl.define do
 
     factory :page_one do
       #work :work_f1a
-      #image_group_image :igi_one
+      #image_set :igi_one
     end
 
     factory :page_two do
       #work :work_f1a
-      #image_group_image :igi_two
+      #image_set :igi_two
     end
 
     factory :page_three do
       #work :work_f1a
-      #image_group_image :igi_three
+      #image_set :igi_three
     end
 
     factory :page_four do
       #work :work_f2a
-      #image_group_image :igi_four
+      #image_set :igi_four
     end
 
     factory :page_five do
       #work :work_f2a
-      #image_group_image :igi_five
+      #image_set :igi_five
     end
 
     factory :page_six do
       #work :work_f3a
-      #image_group_image :igi_six
+      #image_set :igi_six
     end
   end
 end
