@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: works
+#
+#  id                        :integer          not null, primary key
+#  title                     :string(255)
+#  date                      :datetime
+#  number                    :integer
+#  variant                   :string(255)
+#  metadata                  :text
+#  edition_id                :integer
+#  image_set_id              :integer
+#  cross_edition_work_set_id :integer
+#  revises_work_id           :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#
+
 class Work < ActiveRecord::Base
     belongs_to :edition
     belongs_to :cross_edition_work_set

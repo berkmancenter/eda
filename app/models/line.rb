@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: lines
+#
+#  id         :integer          not null, primary key
+#  stanza_id  :integer
+#  text       :text
+#  number     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Line < ActiveRecord::Base
   belongs_to :stanza
   has_one :work, :through => :stanza

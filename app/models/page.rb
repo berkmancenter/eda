@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: pages
+#
+#  id           :integer          not null, primary key
+#  edition_id   :integer
+#  work_set_id  :integer
+#  image_set_id :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 class Page < ActiveRecord::Base
     belongs_to :edition
     belongs_to :work_set
