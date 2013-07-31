@@ -6,6 +6,7 @@ $darkTan: #897144;
 
 .pages.show .view {
   min-width: 960px;
+  margin: 0 2em;
 
   /**
    * search-panel has search menu & all search-related sections:
@@ -14,7 +15,7 @@ $darkTan: #897144;
   #search-panel {
     display: inline-block;
     margin: 0;
-    max-width: 320px;
+    max-width: 420px;
     vertical-align: top;
     width: 29%;
 
@@ -40,5 +41,6 @@ $darkTan: #897144;
     min-width: 320px;
     vertical-align: top;
     width: 34%;
+    max-width: 420px;
   }
 }

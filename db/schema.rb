@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(:version => 20130724204511) do
     t.integer  "depth"
     t.integer  "nestable_id"
     t.string   "nestable_type"
+    t.integer  "owner_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20130724204511) do
   add_index "setts", ["lft"], :name => "index_setts_on_lft"
   add_index "setts", ["nestable_id"], :name => "index_setts_on_nestable_id"
   add_index "setts", ["nestable_type"], :name => "index_setts_on_nestable_type"
+  add_index "setts", ["owner_id"], :name => "index_setts_on_owner_id"
   add_index "setts", ["parent_id"], :name => "index_setts_on_parent_id"
   add_index "setts", ["rgt"], :name => "index_setts_on_rgt"
   add_index "setts", ["type"], :name => "index_setts_on_type"

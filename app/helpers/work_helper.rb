@@ -26,7 +26,7 @@ module WorkHelper
     end
 
     def render_work_result_link(  work )
-      raw( "<span class='work-number'>#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
+      raw( "<span class='work-number'>#{work.edition.work_number_prefix}#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
     end
 
     def lines_in_text_area(work)

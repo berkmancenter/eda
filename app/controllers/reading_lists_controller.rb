@@ -13,7 +13,7 @@ class ReadingListsController < ApplicationController
     end
 
     def update
-        @reading_list.work_ids = params[:reading_list][:work_ids]
+        @reading_list.works = Work.find(params[:reading_list][:works].reject(&:blank?))
         @reading_list.save!
         redirect_to reading_list_path(@reading_list)
     end
