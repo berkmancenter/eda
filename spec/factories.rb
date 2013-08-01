@@ -51,35 +51,30 @@ FactoryGirl.define do
       title 'Awake ye muses nine, sing me a strain divine'
       number 1
       variant 'A'
-      #image_set :iset_one
     end
 
     factory :work_f2a do
       title 'Sic transit gloria mundi'
       number 2
       variant 'A'
-      #image_set :iset_two
     end
 
     factory :work_f2b do
       title 'Sic transit gloria mundi'
       number 2
       variant 'B'
-      #image_set nil
     end
 
     factory :work_f3a do
       title 'On this wondrous sea'
       number 3
       variant 'A'
-      #image_set :iset_three
     end
 
     factory :work_f3b do
       title 'On this wondrous sea'
       number 3
       variant 'B'
-      #image_set nil
     end
 
     factory :work_variant do
@@ -93,7 +88,6 @@ FactoryGirl.define do
       title 'Besides the Autumn poets sing'
       number 131
       variant 'A'
-      #image_set nil
     end
 
     #edition :tested
@@ -234,19 +228,19 @@ FactoryGirl.define do
     # an image set contains all the images for a poem and their order
     factory :iset_one do
       name 'Awake ye muses nine, sing me a strain divine'
-      #parent :iset_harvard
+      #parent :iset_franklin
       metadata nil
     end
 
     factory :iset_two do
       name 'Sic transit gloria mundi'
-      #parent :iset_harvard
+      #parent :iset_franklin
       metadata nil
     end
 
     factory :iset_three do
       name 'On this wondrous sea'
-      #parent :iset_harvard
+      #parent :iset_franklin
       metadata nil
     end
   end
@@ -263,33 +257,33 @@ FactoryGirl.define do
     # edition :franklin
 
     factory :page_one do
-      #work :work_f1a
-      #image_set :igi_one
+      #work_set :work_f1a
+      #image_set :iset_one#1
     end
 
     factory :page_two do
-      #work :work_f1a
-      #image_set :igi_two
+      #work_set :work_f1a
+      #image_set :iset_one#2
     end
 
     factory :page_three do
-      #work :work_f1a
-      #image_set :igi_three
+      #work_set :work_f1a
+      #image_set :iset_one#3
     end
 
     factory :page_four do
-      #work :work_f2a
-      #image_set :igi_four
+      #work_set :work_f2a
+      #image_set :iset_two#1
     end
 
     factory :page_five do
-      #work :work_f2a
-      #image_set :igi_five
+      #work_set :work_f2a
+      #image_set :iset_two#2
     end
 
     factory :page_six do
-      #work :work_f3a
-      #image_set :igi_six
+      #work_set :work_f3a
+      #image_set :iset_three#1
     end
   end
 end
