@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: editions
+#
+#  id                 :integer          not null, primary key
+#  name               :string(255)
+#  author             :string(255)
+#  date               :datetime
+#  work_number_prefix :string(255)
+#  completeness       :float
+#  description        :text
+#  owner_id           :integer
+#  work_set_id        :integer
+#  image_set_id       :integer
+#  parent_id          :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
 class Edition < ActiveRecord::Base
     belongs_to :owner, :class_name => 'User'
     belongs_to :parent, :class_name => 'Edition'

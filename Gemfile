@@ -18,6 +18,7 @@ gem 'formtastic'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'annotate'
 end
 
 group :test do

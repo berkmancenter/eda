@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ( 'pages requests' ) {
+describe 'pages requests' do
   subject { page }
 
   describe ( 'get /editions/:edition_id/pages/:id' ) {
@@ -63,5 +63,5 @@ describe ( 'pages requests' ) {
     }
 
   }
-}
+end
 
