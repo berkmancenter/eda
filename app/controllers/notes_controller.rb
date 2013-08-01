@@ -1,9 +1,9 @@
 class NotesController < ApplicationController
     before_filter :authenticate_user!
-    before_filter :load_image
+    before_filter :load_image_set
 
     def create
-        @note = @image.notes.new(params[:note])
+        @note = @sett.notes.new(params[:note])
         @note.owner = current_user
         if request.xhr?
             render :text => !!@note.save!
@@ -24,7 +24,7 @@ class NotesController < ApplicationController
 
     private
     
-    def load_image
-        @image = Image.find(params[:image_id])
+    def load_image_set
+        @sett = ImageSet.find(params[:image_set_id])
     end
 end

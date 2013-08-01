@@ -168,12 +168,14 @@ class HarvardImageImporter
 
     def create_work_page_without_image(work)
         page = work.edition.pages.new
+        page.image_set = ImageSet.create
         page.work_set = work.edition.work_set.leaf_containing(work)
         page.save!
     end
 
     def create_work_pages!(edition, works, image, image_for_sheet)
         works.each do |work|
+            work.image_set << image
             page = edition.pages.new
             page.image_set = image_for_sheet
             page.work_set = edition.work_set.leaf_containing(work)

@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
     before_create :set_defaults
 
     def note_for(notable)
+        return unless notable.notes
         notable.notes.where(:owner_id => id).first
     end
 

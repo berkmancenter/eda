@@ -20,6 +20,7 @@ class Work < ActiveRecord::Base
     belongs_to :edition
     belongs_to :cross_edition_work_set
     belongs_to :revises_work, class_name: 'Work'
+    belongs_to :image_set
 
     has_many :sets, as: :nestable, class_name: 'WorkSet'
     has_many :stanzas, order: :position
@@ -130,5 +131,6 @@ class Work < ActiveRecord::Base
     
     def setup_defaults
         self.metadata ||= {}
+        self.image_set = ImageSet.new
     end
 end

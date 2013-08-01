@@ -13,12 +13,8 @@ class PagesController < ApplicationController
         session[:current_edition] = @edition.id
         @page = Page.find(params[:id])
         @work = @page.work
-        if @image = @page.image
-            if user_signed_in? 
-                unless @note = current_user.note_for(@image)
-                    @note = @image.notes.new
-                end
-            end
+        unless user_signed_in? && @note = current_user.note_for(@page.image_set)
+            @note = @page.image_set.notes.new
         end
 
         if params[ :q ]
