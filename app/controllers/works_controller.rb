@@ -3,7 +3,6 @@ class WorksController < ApplicationController
     before_filter :load_work, only: [:edit, :update, :add_to_reading_list]
     before_filter :load_edition, except: [:index, :search]
     before_filter :check_edition_owner, only: [:edit, :update]
-    before_filter :setup_child_edition, only: :update
 
     def index
         if params[:edition_id]
@@ -39,6 +38,7 @@ class WorksController < ApplicationController
     end
 
     def update
+        setup_child_edition
         if @work.edition == @edition.parent
             parent_work = @work
             @work = parent_work.dup

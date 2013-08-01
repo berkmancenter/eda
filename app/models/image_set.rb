@@ -24,6 +24,13 @@ class ImageSet < Sett
         self.nestable = image
     end
 
+    def <<(image)
+        is = ImageSet.new
+        is.image = image
+        is.save!
+        is.move_to_child_of self
+    end
+
     def all_images
         self_and_descendants.map{|image_set| image_set.image}.compact
     end

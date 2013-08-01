@@ -15,6 +15,7 @@ $( function( ) {
     return false;
   } );
 
+  /* Setup drawers */
   $( notesSelector ).addClass( "bottom drawer" ).css('display', 'none').find('h2').appendTo(drawerHandleSelector);
   $( drawerHandleSelector ).addClass('visible').on('click', function() {
       if ($(this).parent().get(0) == $(notesSelector).get(0)) {
@@ -22,8 +23,11 @@ $( function( ) {
       } else {
         $(this).prependTo($(notesSelector));
       }
-      $( notesSelector ).slideToggle();
+      $( $(this).data('drawer') ).slideToggle();
   });
+
+  /* Setup nav drawer */
+  //$( navSelector ).addClass( "left drawer" ).css('display', 'none');
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {

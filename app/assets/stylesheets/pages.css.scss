@@ -50,7 +50,14 @@
 
   .visible.drawer-handle {
       display: block;
-      position: absolute;
+      position: fixed;
+  }
+
+  .left.drawer-handle {
+      width: 25px;
+      height: 55px;
+      left: 0;
+      top: 18%;
   }
 
   .bottom.drawer-handle {
@@ -61,6 +68,7 @@
       text-align: center;
       vertical-align: middle;
       line-height: 25px;
+      box-shadow: 0 0 10px $shadowGray;
       h2 {
           margin: 0;
       }
@@ -69,6 +77,18 @@
   .drawer {
       background-color: $tan;
       padding: 2em;
+
+      &.left {
+          position: absolute;
+          left: 0;
+          top: 15%;
+
+          .drawer-handle {
+              right: -25px;
+              top: 3%;
+          }
+      }
+
       &.bottom {
           position: fixed;
           bottom: 0;
@@ -78,6 +98,7 @@
           .drawer-handle {
               top: -25px;
               bottom: auto;
+              position: absolute;
           }
 
           #note_note {
