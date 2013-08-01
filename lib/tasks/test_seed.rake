@@ -19,7 +19,7 @@ namespace :db do
       franklin.create_image_set( FactoryGirl.attributes_for :iset_franklin )
       franklin.create_work_set( FactoryGirl.attributes_for :wset_franklin )
 
-      franklin.save!
+      franklin.save
 
       # harvard collection root
       # (image set for franklin)
@@ -30,7 +30,7 @@ namespace :db do
       franklin.image_set.children << iset_one
 
       iset_one.image = FactoryGirl.create( :image_one )
-      iset_one.save!
+      iset_one.save
 
       # not sure what to do about collections, do they get a clone of every iset?
       #iset_harvard.children << FactoryGirl.create( :iset_one )
@@ -39,7 +39,7 @@ namespace :db do
 #      iset_two = FactoryGirl.create( :iset_two );
 #      iset_two.edition = franklin;
 #      iset_two.parent = iset_harvard;
-#      iset_two.save!
+#      iset_two.save
       #iset_two = FactoryGirl.create :iset_two
       #franklin.image_set.children << iset_two
 
@@ -47,7 +47,7 @@ namespace :db do
 #      iset_three = FactoryGirl.create( :iset_three );
 #      iset_three.edition = franklin;
 #      iset_three.parent = iset_harvard;
-#      iset_three.save!
+#      iset_three.save
       #iset_three = FactoryGirl.create :iset_three
       #franklin.image_set.children << iset_three
 
@@ -55,45 +55,50 @@ namespace :db do
 #      # some works
 # 
 #      # work_f1a
-#      work_f1a = FactoryGirl.create( :work_f1a );
-#      work_f1a.edition = franklin;
-#      work_f1a.image_group = iset_one;
-#      work_f1a.save!
-#
-#      z_f1a0 = FactoryGirl.create( :z_f1a0 );
-#      z_f1a0.work = work_f1a;
-#      z_f1a0.save!
-#
-#      l_f1a01 = FactoryGirl.create( :l_f1a01 );
-#      l_f1a01.stanza = z_f1a0;
-#      l_f1a01.save!
-#
-#      l_f1a02 = FactoryGirl.create( :l_f1a02 );
-#      l_f1a02.stanza = z_f1a0;
-#      l_f1a02.save!
-#
-#      l_f1a03 = FactoryGirl.create( :l_f1a03 );
-#      l_f1a03.stanza = z_f1a0;
-#      l_f1a03.save!
-#
-#      l_f1a04 = FactoryGirl.create( :l_f1a04 );
-#      l_f1a04.stanza = z_f1a0;
-#      l_f1a04.save!
-#
-#      l_f1a05 = FactoryGirl.create( :l_f1a05 );
-#      l_f1a05.stanza = z_f1a0;
-#      l_f1a05.save!
-#
-#      l_f1a06 = FactoryGirl.create( :l_f1a06 );
-#      l_f1a06.stanza = z_f1a0;
-#      l_f1a06.save!
-#
-#      l_f1a07 = FactoryGirl.create( :l_f1a07 );
-#      l_f1a07.stanza = z_f1a0;
-#      l_f1a07.save!
-#
-#      work_f1a.index!
-#
+      work_f1a = FactoryGirl.create( :work_f1a )
+      work_f1a.edition = franklin
+      #work_f1a.image_set = iset_one
+      work_f1a.save
+
+      wset_f1a = WorkSet.new
+      wset_f1a.work = work_f1a
+      wset_f1a.save
+      franklin.work_set.children << wset_f1a
+
+      z_f1a0 = FactoryGirl.create( :z_f1a0 )
+      z_f1a0.work = work_f1a
+      z_f1a0.save
+
+      l_f1a01 = FactoryGirl.create( :l_f1a01 );
+      l_f1a01.stanza = z_f1a0;
+      l_f1a01.save
+
+      l_f1a02 = FactoryGirl.create( :l_f1a02 );
+      l_f1a02.stanza = z_f1a0;
+      l_f1a02.save
+
+      l_f1a03 = FactoryGirl.create( :l_f1a03 );
+      l_f1a03.stanza = z_f1a0;
+      l_f1a03.save
+
+      l_f1a04 = FactoryGirl.create( :l_f1a04 );
+      l_f1a04.stanza = z_f1a0;
+      l_f1a04.save
+
+      l_f1a05 = FactoryGirl.create( :l_f1a05 );
+      l_f1a05.stanza = z_f1a0;
+      l_f1a05.save
+
+      l_f1a06 = FactoryGirl.create( :l_f1a06 );
+      l_f1a06.stanza = z_f1a0;
+      l_f1a06.save
+
+      l_f1a07 = FactoryGirl.create( :l_f1a07 );
+      l_f1a07.stanza = z_f1a0;
+      l_f1a07.save
+
+      work_f1a.index!
+
 #      # work_f2a
 #      work_f2a = FactoryGirl.create( :work_f2a );
 #      work_f2a.edition = franklin;
@@ -136,45 +141,14 @@ namespace :db do
 #      image_five = FactoryGirl.create( :image_five );
 #      image_five.save!
 #
-#      # image group images
-#      igi_one = FactoryGirl.create( :igi_one );
-#      igi_one.image_group = iset_one;
-#      igi_one.image = image_one;
-#      igi_one.save!
 #
-#      igi_two = FactoryGirl.create( :igi_two );
-#      igi_two.image_group = iset_one;
-#      igi_two.image = image_two;
-#      igi_two.save!
-#
-#      igi_three = FactoryGirl.create( :igi_three );
-#      igi_three.image_group = iset_one;
-#      igi_three.image = image_three;
-#      igi_three.save!
-#
-#      igi_four = FactoryGirl.create( :igi_four );
-#      igi_four.image_group = iset_two;
-#      igi_four.image = image_three;
-#      igi_four.save!
-#
-#      igi_five = FactoryGirl.create( :igi_five );
-#      igi_five.image_group = iset_two;
-#      igi_five.image = image_four;
-#      igi_five.save!
-#
-#      igi_six = FactoryGirl.create( :igi_six );
-#      igi_six.image_group = iset_three;
-#      igi_six.image = image_five;
-#      igi_six.save!
-#
-#
-#      # finally, some pages
-#      page_one = FactoryGirl.create( :page_one );
-#      page_one.edition = franklin;
-#      page_one.work = work_f1a;
-#      page_one.image_group_image = igi_one;
-#      page_one.save!
-#
+      # finally, some pages
+      page_one = FactoryGirl.create( :page_one )
+      page_one.edition = franklin
+      page_one.work_set = wset_f1a
+      page_one.image_set = iset_one
+      page_one.save
+
 #      page_two = FactoryGirl.create( :page_two );
 #      page_two.edition = franklin;
 #      page_two.work = work_f1a;
