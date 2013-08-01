@@ -23,26 +23,34 @@ namespace :db do
 
       # harvard collection root
       # (image set for franklin)
-      iset_harvard = FactoryGirl.create :iset_harvard
-      iset_harvard.save!
+      #iset_harvard = FactoryGirl.create :iset_harvard
 
       # image sets
       iset_one = FactoryGirl.create :iset_one
+      franklin.image_set.children << iset_one
+
+      iset_one.image = FactoryGirl.create( :image_one )
       iset_one.save!
-      #iset_one.edition = franklin;
-      iset_harvard << iset_one
-      franklin.image_set << iset_one
+
+      # not sure what to do about collections, do they get a clone of every iset?
+      #iset_harvard.children << FactoryGirl.create( :iset_one )
       #iset_one.parent = iset_harvard;
 
 #      iset_two = FactoryGirl.create( :iset_two );
 #      iset_two.edition = franklin;
 #      iset_two.parent = iset_harvard;
 #      iset_two.save!
+      #iset_two = FactoryGirl.create :iset_two
+      #franklin.image_set.children << iset_two
+
 #
 #      iset_three = FactoryGirl.create( :iset_three );
 #      iset_three.edition = franklin;
 #      iset_three.parent = iset_harvard;
 #      iset_three.save!
+      #iset_three = FactoryGirl.create :iset_three
+      #franklin.image_set.children << iset_three
+
 #
 #      # some works
 # 
