@@ -29,8 +29,11 @@ namespace :db do
       iset_one = FactoryGirl.create :iset_one
       franklin.image_set.children << iset_one
 
-      iset_one.image = FactoryGirl.create( :image_one )
-      iset_one.save
+      iset_one_i1 = ImageSet.new
+      iset_one_i1.image = FactoryGirl.create( :image_one )
+      iset_one_i1.save
+
+      iset_one.children << iset_one_i1
 
       # not sure what to do about collections, do they get a clone of every iset?
       #iset_harvard.children << FactoryGirl.create( :iset_one )
@@ -146,7 +149,7 @@ namespace :db do
       page_one = FactoryGirl.create( :page_one )
       page_one.edition = franklin
       page_one.work_set = wset_f1a
-      page_one.image_set = iset_one
+      page_one.image_set = iset_one_i1
       page_one.save
 
 #      page_two = FactoryGirl.create( :page_two );
