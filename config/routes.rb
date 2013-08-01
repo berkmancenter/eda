@@ -21,6 +21,10 @@ Eda::Application.routes.draw do
         end
     end
 
+    resources :image_sets do
+        resources :notes
+    end
+
     resources :reading_lists
     resources :works do
         collection do
@@ -32,10 +36,6 @@ Eda::Application.routes.draw do
             match '/:first_letter' => 'words#index', :as => :by_letter, :first_letter => /[A-Za-z]/
         end
     end
-    resources :images do 
-        resources :notes
-    end
-
 
     match 'about' => 'static_pages#about'
     match 'faq' => 'static_pages#faq'

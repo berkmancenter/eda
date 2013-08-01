@@ -13,13 +13,13 @@ class TranscriptionConnecter
                 next unless j_f_map.keys.include?(work.number)
                 franklin_work = franklin.works.find_by_number(j_f_map[work.number])
                 next unless franklin_work
-                work_group = franklin_work.cross_edition_work_group
-                work.cross_edition_work_group = work_group
-                wgw = work_group.work_group_works.build
-                wgw.work = work
+                work_group = franklin_work.cross_edition_work_set
+                work.cross_edition_work_set = work_group
+                ws = WorkSet.create
+                ws.work = work
+                ws.move_to_child_of work_group
                 work.save!
-                wgw.save!
-                franklin_work.save!
+                ws.save!
             end
         end
     end

@@ -168,6 +168,7 @@ class HarvardImageImporter
 
     def create_work_page_without_image(work)
         page = work.edition.pages.new
+        page.image_set = ImageSet.create
         page.work_set = work.edition.work_set.leaf_containing(work)
         page.save!
     end

@@ -48,11 +48,16 @@
       display: inline;
   }
 
-  .work-body {
+}
+
+.work-body, form.work #work_text {
     font-family: "PT Serif";
+    font-size: 12px;
+    color: $darkGray;
     padding: 1em 1.5em 2em;
     white-space: nowrap;
-    
+    background-color: $lightTan;
+
     .stanza {
         margin-bottom: 1.5em;
     }
@@ -62,5 +67,4 @@
         border-style: dotted;
         display: block;
     }
-  }
 }
