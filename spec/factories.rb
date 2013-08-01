@@ -26,8 +26,18 @@ FactoryGirl.define do
   end
 
   factory :work_set do
+    factory :wset_johnson do
+      name 'Works in Johnson Edition'
+      editable true
+    end
+
     factory :wset_franklin do
       name 'Works in Franklin Edition'
+      editable true
+    end
+
+    factory :wset_tested do
+      name 'Works in Test Edition'
       editable true
     end
   end
@@ -206,8 +216,18 @@ FactoryGirl.define do
   end
 
   factory :image_set do 
+    factory :iset_johnson do
+      name 'Images for Johnson Edition'
+      editable true
+    end
+
     factory :iset_franklin do
       name 'Images for Franklin Edition'
+      editable true
+    end
+
+    factory :iset_tested do
+      name 'Images for Test Edition'
       editable true
     end
 
