@@ -24,11 +24,11 @@ class Page < ActiveRecord::Base
     end
 
     def next
-        edition.pages.with_work(work_set.right_sibling.work).first if work_set
+        edition.pages.with_work(work_set.right_sibling.work).first if work_set and work_set.right_sibling
     end
 
     def previous
-        edition.pages.with_work(work_set.left_sibling.work).first if work_set
+        edition.pages.with_work(work_set.left_sibling.work).first if work_set and work_set.left_sibling
     end
 
     def self.with_imageless_work(work)
