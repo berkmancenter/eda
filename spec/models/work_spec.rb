@@ -23,12 +23,9 @@ describe( "Work model" ) {
 
   describe( "with an edition" ) {
     describe( "the work's edition" ) {
-      let ( :edition ) { work.edition }
-
-      subject { edition }
-
-      it { should be_valid }
-      it { should respond_to( :works ) }
+      it {
+        work.edition.should_not eq( nil )
+      }
     }
   }
 }
