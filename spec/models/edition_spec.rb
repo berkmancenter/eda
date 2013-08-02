@@ -3,13 +3,22 @@ require 'spec_helper'
 describe( "Edition model" ) {
   subject { edition }
 
-  describe( "with valid data" ) {
-    let ( :edition ) { Edition.find_by_work_number_prefix( 'J' ) }
+  context 'with pages, works, and images' do
+    let ( :edition ) { Edition.find_by_work_number_prefix 'F' }
 
     it {
       should be_valid
+      should respond_to :work_set
+      should respond_to :image_set
+      should respond_to :pages
     }
-  }
+  end
+
+  describe '#all_works' do
+    context 'user edition with works that modify base edition' do
+      pending 'it should have all base edition works'
+    end
+  end
 
   describe "#work_after" do
       context "no works exist with a greater number or letter" do
