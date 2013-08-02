@@ -32,7 +32,7 @@ class Page < ActiveRecord::Base
     end
 
     def self.with_imageless_work(work)
-        where(work_set_id: edition.work_set.leaf_containing(work).id, image_set_id: nil).first
+        where(work_set_id: work.edition.work_set.leaf_containing(work).id, image_set_id: nil).first
     end
 
     def self.with_work_and_image(work_set, image_set)

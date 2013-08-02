@@ -7,7 +7,7 @@ describe 'pages requests' do
     # require test:seed
     let ( :test_page ) { Page.find( 1 ) } # franklin, test work_f1a, image_one
 
-    describe ( 'with valid work, stanzas, image' ) {
+    context 'with valid work, stanzas, image' do
       before { visit edition_page_path( test_page.edition, test_page ) }
 
       it ( 'should have three main sections' ){ 
@@ -24,19 +24,40 @@ describe 'pages requests' do
 
         page.should have_selector( 'a[title="Next Page"][href="' + edition_page_url( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
       }
-    }
+    end
 
-    describe ( 'search panel' ) {
-      describe ( 'without search q' ) {
+    context 'with work no stanzas, no image' do
+      let ( :w ) { Work.find_by_title 'no_stanzas' }
+
+      before {
+        p = Page.with_imageless_work w
+        visit edition_page_path p.edition, p
+      }
+
+      it do
+        should have_title 'Emily Dickinson Archive'
+      end
+
+      it 'should have missing image' do
+        should have_selector 'img[src*="missing_image.jpg"]'
+      end
+
+      it 'should have work title' do
+        should have_text "#{w.number}#{w.variant}"
+      end
+    end
+
+    describe ( 'search panel' ) do
+      context 'without search q' do
         before { visit edition_page_path( test_page.edition, test_page ) }
 
         it ( 'should have search works form' ) {
           should have_selector( '.search-works' );
           should have_selector( '.search-works form input[name="q"]' );
         }
-      }
+      end
 
-      describe ( 'with search submit' ) {
+      context 'with search submit' do
         before {
           visit edition_page_path( test_page.edition, test_page );
           fill_in( 'Search for:', { with: 'awake' } );
@@ -50,9 +71,8 @@ describe 'pages requests' do
 
           should have_css( '.search-works-results a', { count: 1 } );
         }
-
-      }
-    }
+      end
+    end
 
     describe ( 'browse panel' ) {
       before { visit edition_page_path( test_page.edition, test_page ) }

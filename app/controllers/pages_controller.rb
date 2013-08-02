@@ -14,7 +14,7 @@ class PagesController < ApplicationController
         @page = Page.find(params[:id])
         @work = @page.work
         unless user_signed_in? && @note = current_user.note_for(@page.image_set)
-            @note = @page.image_set.notes.new
+            @note = @page.image_set.notes.new if @page.image_set
         end
 
         if params[ :q ]
