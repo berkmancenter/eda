@@ -211,14 +211,21 @@ namespace :db do
       tested.save
 
       # some works
-      tw = FactoryGirl.create( :work_no_stanzas_no_image_set )
-      tw.edition = tested
-      tw.save
+      tw_no_stanzas = FactoryGirl.create :tw_no_stanzas
+      tw_no_stanzas.edition = tested
+      tw_no_stanzas.save
 
-      wset_tw = WorkSet.new
-      wset_tw.work = tw
-      wset_tw.save
-      franklin.work_set.children << wset_tw
+      wset_tw_no_stanzas = WorkSet.new
+      wset_tw_no_stanzas.work = tw_no_stanzas
+      wset_tw_no_stanzas.save
+      tested.work_set.children << wset_tw_no_stanzas
+
+      # finally, some pages
+      tp_work_no_stanzas_no_image = FactoryGirl.create :tp_work_no_stanzas_no_image
+      tp_work_no_stanzas_no_image.edition = tested
+      tp_work_no_stanzas_no_image.work_set = wset_tw_no_stanzas
+      tp_work_no_stanzas_no_image.image_set = nil
+      tp_work_no_stanzas_no_image.save
 
       Sunspot.commit
     end

@@ -20,7 +20,7 @@ FactoryGirl.define do
       name 'Test Edition'
       author 'Ryan Westphal'
       date '2013-06-06'
-      work_number_prefix 'R'
+      work_number_prefix 'T'
       completeness 0.1
     end
   end
@@ -92,8 +92,8 @@ FactoryGirl.define do
 
     #edition :tested
 
-    factory :work_no_stanzas_no_image_set do
-      title "no_stanzas, no_image_set"
+    factory :tw_no_stanzas do
+      title 'no_stanzas'
       number 1
     end
 
@@ -285,6 +285,13 @@ FactoryGirl.define do
       #work_set :work_f3a
       #image_set :iset_three#1
     end
+
+    # edition :tested
+    factory :tp_work_no_stanzas_no_image do
+      #work_set :tw_no_stanzas
+      #image_set nil
+    end
+
   end
 end
 
