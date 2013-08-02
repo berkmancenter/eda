@@ -50,7 +50,7 @@ describe ( 'search requests' ) {
     }
   }
 
-  describe ( 'with search submit' ) {
+  context 'with search submit' do
     before {
       visit search_works_path;
       fill_in( 'Search for:', { with: 'awake' } );
@@ -64,6 +64,5 @@ describe ( 'search requests' ) {
 
       should have_css( '.search-works-results a', { count: 1 } );
     }
-
-  }
+  end
 }
