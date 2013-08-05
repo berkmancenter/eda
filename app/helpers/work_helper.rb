@@ -37,6 +37,17 @@ module WorkHelper
         with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
+    def work_link(work, edition)
+        link_to(
+            raw(
+                work.title ?
+                work.full_title :
+                (work.lines.first.text if work.lines.first)
+        ),
+            edition_page_path(edition, work.edition.pages.with_work(work).first)
+        )
+    end
+
     def with_format(format, &block)
         old_formats = formats
         begin

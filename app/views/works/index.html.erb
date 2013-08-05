@@ -10,7 +10,7 @@
     <tr>
         <td><%= work.number %></td>
         <td><%= strip_tags work.variant %></td>
-        <td><%= work.title %></td>
+        <td><%= work_link(work, @edition) %></td>
         <td><%= work.date.strftime('%Y') %></td>
     </tr>
     <%# render :partial => 'works/list_item', :locals => {work: work, edition: @edition || work.edition} %>
