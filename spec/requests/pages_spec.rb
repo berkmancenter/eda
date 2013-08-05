@@ -7,7 +7,7 @@ describe 'pages requests' do
     # require test:seed
     let ( :test_page ) { Page.find( 1 ) } # franklin, test work_f1a, image_one
 
-    context 'with valid work, stanzas, image' do
+    context 'with valid work, stanzas, image', :js => true do
       before { visit edition_page_path( test_page.edition, test_page ) }
 
       it ( 'should have three main sections' ){ 
@@ -17,12 +17,16 @@ describe 'pages requests' do
 
         should have_selector( '#work-panel' );
       }
+    end
+
+    context 'with valid next image' do
+      before { visit edition_page_path( test_page.edition, test_page ) }
 
       it ( 'should have a valid next page' ) {
         next_page = test_page.next;
         next_page.should_not == nil;
 
-        page.should have_selector( 'a[title="Next Page"][href="' + edition_page_url( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
+        page.should have_selector( 'a[title="Next Page"][href="' + edition_page_path( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
       }
     end
 

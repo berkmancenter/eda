@@ -2,6 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <% if @work != nil %>
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=<%= edition_works_url @work.edition %>" />
+    </noscript>
+  <% end %>
+
   <% if yield( :title ).empty? %>
     <title>Emily Dickinson Archive</title>
   <% else %>
