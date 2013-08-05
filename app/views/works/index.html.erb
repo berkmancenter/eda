@@ -1,6 +1,21 @@
-<ul>
+<table class="works">
+    <thead>
+        <tr>
+            <th>Number</th><th>Variant</th><th>Title</th><th>Date</th><th>Recipient</th>
+        </tr>
+    </thead>
+    <tbody>
 <% @works.each do |work| %>
-    <%= render :partial => 'works/list_item', :locals => {work: work, edition: @edition || work.edition} %>
+    
+    <tr>
+        <td><%= work.number %></td>
+        <td><%= strip_tags work.variant %></td>
+        <td><%= work_link(work, @edition) %></td>
+        <td><%= work.date.strftime('%Y') %></td>
+        <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
+    </tr>
+    <%# render :partial => 'works/list_item', :locals => {work: work, edition: @edition || work.edition} %>
 <% end %>
+    </tbody>
 </ul>
 

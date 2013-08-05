@@ -12,9 +12,13 @@
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
 
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    
+  
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 </head>
 <body class="<%= body_class( params ) %>">
   <header>
@@ -44,7 +48,6 @@
 
   <footer>
     <div class="hr"></div>
-    <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
     <nav class="footer">
       <ul>
         <li><%= link_to( '', 'http://cyber.law.harvard.edu', { class: 'berkman-link', title: 'Berkman Center for Internet and Society' } ) %></li>
