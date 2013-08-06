@@ -38,14 +38,16 @@ module WorkHelper
     end
 
     def work_link(work, edition)
+      page_with_work = work.edition.pages.with_work(work)
+
         link_to(
             raw(
                 work.title ?
                 work.full_title :
                 (work.lines.first.text if work.lines.first)
         ),
-            edition_page_path(edition, work.edition.pages.with_work(work).first)
-        )
+            edition_page_path(edition, page_with_work.first)
+        ) if page_with_work.count > 0
     end
 
     def with_format(format, &block)
