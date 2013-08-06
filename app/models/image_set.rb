@@ -25,6 +25,7 @@ class ImageSet < Sett
     end
 
     def <<(image)
+        self.save!
         is = ImageSet.new
         is.image = image
         is.save!
