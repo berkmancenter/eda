@@ -3,7 +3,11 @@
 .pages.show .view {
   min-width: 960px;
   max-width: 1600px;
-  margin: 0 auto;
+  margin: 0;
+
+  .panel-content {
+    height: 700px;
+  }
 
   /**
    * search-panel has search menu & all search-related sections:
