@@ -6,7 +6,6 @@
     </thead>
     <tbody>
 <% @works.each do |work| %>
-    
     <tr>
         <td><%= work.number %></td>
         <td><%= strip_tags work.variant %></td>
@@ -14,8 +13,6 @@
         <td><%= work.date.strftime('%Y') %></td>
         <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
     </tr>
-    <%# render :partial => 'works/list_item', :locals => {work: work, edition: @edition || work.edition} %>
 <% end %>
     </tbody>
-</ul>
-
+</table>

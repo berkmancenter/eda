@@ -59,6 +59,14 @@ namespace :emily do
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
                 FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
+
+            desc 'Group variants into work sets'
+            task :group_variants, [:edition_prefix] => [:environment] do |task, args|
+                edition_prefix = args[:edition_prefix] || 'F'
+                edition = Edition.find_by_work_number_prefix(edition_prefix)
+                FranklinVentura::Importer.new.group_variants(edition)
+            end
+
         end
 
         namespace :images do 
