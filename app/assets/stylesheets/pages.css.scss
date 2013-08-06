@@ -1,12 +1,23 @@
 @import "colors";
 
+.pages.show {
+  overflow: hidden;
+}
+
 .pages.show .view {
-  min-width: 960px;
-  max-width: 1600px;
+  left: 0;
   margin: 0;
+  position: absolute;
+  right: 0;
+  top: 8em;
+  bottom: 4em;
 
   .panel-content {
-    height: 700px;
+    bottom: 1em;
+    overflow: auto;
+    position: absolute;
+    top: 2.5em;
+    width: 100%;
   }
 
   /**
@@ -14,11 +25,17 @@
    * search, browse, lexicon
    */
   #search-panel {
-    display: inline-block;
+    bottom: 0;
+    left: 0;
     margin: 0;
-    max-width: 420px;
+    position: absolute;
+    top: 0;
     vertical-align: top;
-    width: 29%;
+    width: 30%;
+    
+    .panel-content {
+      border-radius: 0 .2em .2em 0;
+    }
 
     .search-works h1 {
       display: none;
@@ -26,10 +43,13 @@
   }
 
   #interactive-image-panel {
-    display: inline-block;
+    bottom: 0;
+    left: 31%;
     margin: 0;
-    min-width: 320px;
-    width: 34%;
+    position: absolute;
+    top: 0;
+    width: 38%;
+
   }
 
   /**
@@ -37,12 +57,19 @@
    * transcription, edition switcher, notes, reading list
    */
   #work-panel {
-    display: inline-block;
+    bottom: 0;
+    display: block;
     margin: 0;
-    min-width: 320px;
+    position: absolute;
+    right: 0;
+    top: 0;
     vertical-align: top;
-    width: 34%;
-    max-width: 420px;
+    width: 30%;
+
+    .panel-content {
+      border-radius: .2em 0 0 .2em;
+    }
+
   }
 
   .drawer-handle {
@@ -112,3 +139,13 @@
       }
   }
 }
+
+.pages.show footer {
+  bottom: 0;
+  height: 5em;
+  left: 0;
+  position: fixed;
+  right: 0;
+}
+
+/* media break at columns=28em */
