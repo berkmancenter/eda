@@ -16,18 +16,16 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-  $( notesSelector ).addClass( "bottom drawer" ).css('display', 'none').find('h2').appendTo(drawerHandleSelector);
-  $( drawerHandleSelector ).addClass('visible').on('click', function() {
-      if ($(this).parent().get(0) == $(notesSelector).get(0)) {
-        $(this).insertBefore($(notesSelector));
-      } else {
-        $(this).prependTo($(notesSelector));
-      }
-      $( $(this).data('drawer') ).slideToggle();
-  });
+  $( drawerHandleSelector ).click( function( ) {
+    $( this ).closest( notesSelector ).toggleClass( 'collapsed' );
+  } );
 
-  /* Setup nav drawer */
-  //$( navSelector ).addClass( "left drawer" ).css('display', 'none');
+  setTimeout( function( ) {
+    // show the notes for 2s to let the user know they exist
+    // then hide them
+    $( drawerHandleSelector ).click( );
+  }, 2000 );
+
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {

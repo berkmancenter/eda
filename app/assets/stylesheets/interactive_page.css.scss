@@ -14,7 +14,11 @@
 }
 
 .page-controls {
-  margin-top: 1em;
+  bottom: 48px;
+  height: 40px;
+  left: 0;
+  position: absolute;
+  right: 0;
   text-align: center;
 
   a {
@@ -41,4 +45,15 @@
   #next-page {
     background-position: -64px 0;
   }
+}
+
+.credits {
+  bottom: 0;
+  font-size: .9em;
+  left: 0;
+  height: 48px;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
 }
