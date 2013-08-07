@@ -4,7 +4,7 @@ describe( 'editions requests' ) {
   subject { page }
 
   describe( 'get /editions' ) {
-    before { visit editions_url }
+    before { visit editions_path }
 
     it { 
       # generic test to make sure non-static pages are at least compiling

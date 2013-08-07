@@ -26,7 +26,7 @@ describe 'pages requests' do
         next_page = test_page.next;
         next_page.should_not == nil;
 
-        page.should have_selector( 'a[title="Next Page"][href="' + edition_page_path( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
+        page.should have_selector( 'a[title="Next Page"][href*="' + edition_page_path( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
       }
     end
 
