@@ -3,7 +3,8 @@ $( function( ) {
   var tabSelector = ".panel-menu a";
   var contentSelector = ".panel-content>section";
   var notesSelector = ".work-notes";
-  var drawerHandleSelector = '.drawer-handle';
+
+  var $drawerHandle = $( '.drawer-handle' );
 
   tabs.find( tabSelector ).click( function( ) {
     var state = { };
@@ -16,18 +17,26 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-  $( notesSelector ).addClass( "bottom drawer" ).css('display', 'none').find('h2').appendTo(drawerHandleSelector);
-  $( drawerHandleSelector ).addClass('visible').on('click', function() {
-      if ($(this).parent().get(0) == $(notesSelector).get(0)) {
-        $(this).insertBefore($(notesSelector));
-      } else {
-        $(this).prependTo($(notesSelector));
-      }
-      $( $(this).data('drawer') ).slideToggle();
-  });
+  $drawerHandle.click( function( ) {
+    $( this ).closest( notesSelector ).toggleClass( 'collapsed' );
+  } );
 
-  /* Setup nav drawer */
-  //$( navSelector ).addClass( "left drawer" ).css('display', 'none');
+  if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
+    $drawerHandle.closest( notesSelector ).addClass( 'collapsed' );
+  } else {
+    setTimeout( function( ) {
+      // show the notes for 2s to let the user know they exist
+      // then hide them
+      $drawerHandle.click( );
+      window.sessionStorage.setItem( 'seenDrawer', 'true' );
+    }, 2000 );
+  }
+
+  setTimeout( function( ) {
+    // enable drawer transitions only after initial setup
+    $( notesSelector ).addClass( 'work-notes-transitions' );
+  }, 33 );
+
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {

@@ -1,12 +1,23 @@
 @import "colors";
 
+.pages.show {
+  overflow: hidden;
+}
+
 .pages.show .view {
-  min-width: 960px;
-  max-width: 1600px;
+  left: 0;
   margin: 0;
+  position: absolute;
+  right: 0;
+  top: 8em;
+  bottom: 4em;
 
   .panel-content {
-    height: 700px;
+    bottom: 1em;
+    overflow: auto;
+    position: absolute;
+    top: 2.5em;
+    width: 100%;
   }
 
   /**
@@ -14,11 +25,17 @@
    * search, browse, lexicon
    */
   #search-panel {
-    display: inline-block;
+    bottom: 0;
+    left: 0;
     margin: 0;
-    max-width: 420px;
+    position: absolute;
+    top: 0;
     vertical-align: top;
-    width: 29%;
+    width: 25%;
+    
+    .panel-content {
+      border-radius: 0 .2em .2em 0;
+    }
 
     .search-works h1 {
       display: none;
@@ -26,10 +43,13 @@
   }
 
   #interactive-image-panel {
-    display: inline-block;
+    bottom: 0;
+    left: 26%;
     margin: 0;
-    min-width: 320px;
-    width: 34%;
+    position: absolute;
+    top: 0;
+    width: 38%;
+
   }
 
   /**
@@ -37,78 +57,68 @@
    * transcription, edition switcher, notes, reading list
    */
   #work-panel {
-    display: inline-block;
+    bottom: 0;
+    display: block;
     margin: 0;
-    min-width: 320px;
+    position: absolute;
+    right: 0;
+    top: 0;
     vertical-align: top;
-    width: 34%;
-    max-width: 420px;
+    width: 35%;
+
+    .panel-content {
+      border-radius: .2em 0 0 .2em;
+    }
+
   }
 
-  .drawer-handle {
-      display:none;
+  .work-notes-transitions {
+    -moz-transition: bottom 1s;
+    -webkit-transition: bottom 1s;
+    transition: bottom 1s;
+  }
+
+  .work-notes {
+    background: $tan;
+    border-radius: 2px 0 0 0;
+    bottom: 0;
+    color: $darkGray;
+    height: 12em;
+    left: 26%;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+
+    .drawer-handle {
       background-color: $tan;
       border-radius: 2px 2px 0 0;
-      cursor: pointer;
-  }
-
-  .visible.drawer-handle {
-      display: block;
-      position: fixed;
-  }
-
-  .left.drawer-handle {
-      width: 25px;
-      height: 55px;
-      left: 0;
-      top: 18%;
-  }
-
-  .bottom.drawer-handle {
-      width: 55px;
-      height: 25px;
-      bottom: 0px;
-      right: 20px;
-      text-align: center;
-      vertical-align: middle;
-      line-height: 25px;
       box-shadow: 0 0 10px $shadowGray;
-      h2 {
-          margin: 0;
+      color: $darkGray;
+      display: block;
+      height: 2em;
+      padding: .5em 1em 0 1em;
+      position: absolute;
+      right: 50%;
+      top: -2em;
+
+      &:hover {
+        color: $lightGray;
+        text-decoration: none;
       }
-  }
+    }
 
-  .drawer {
-      background-color: $tan;
-      padding: 2em;
-
-      &.left {
-          position: absolute;
-          left: 0;
-          top: 15%;
-
-          .drawer-handle {
-              right: -25px;
-              top: 3%;
-          }
-      }
-
-      &.bottom {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-
-          .drawer-handle {
-              top: -25px;
-              bottom: auto;
-              position: absolute;
-          }
-
-          #note_note {
-              width: 100%;
-              height: 10em;
-          }
-      }
+    &.collapsed {
+      bottom: -12em;
+    }
   }
 }
+
+.pages.show footer {
+  bottom: 0;
+  height: 4em;
+  left: 0;
+  position: fixed;
+  right: 0;
+}
+
+/* media break at columns=28em */
