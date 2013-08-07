@@ -72,77 +72,48 @@
 
   }
 
-  .drawer-handle {
-      display:none;
+  .work-notes {
+    background: $tan;
+    border-radius: 2px 0 0 0;
+    bottom: 0;
+    color: $darkGray;
+    height: 12em;
+    left: 31%;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+
+    -moz-transition: bottom 1s;
+    -webkit-transition: bottom 1s;
+    transition: bottom 1s;
+
+    .drawer-handle {
       background-color: $tan;
       border-radius: 2px 2px 0 0;
-      cursor: pointer;
-  }
-
-  .visible.drawer-handle {
-      display: block;
-      position: fixed;
-  }
-
-  .left.drawer-handle {
-      width: 25px;
-      height: 55px;
-      left: 0;
-      top: 18%;
-  }
-
-  .bottom.drawer-handle {
-      width: 55px;
-      height: 25px;
-      bottom: 0px;
-      right: 20px;
-      text-align: center;
-      vertical-align: middle;
-      line-height: 25px;
       box-shadow: 0 0 10px $shadowGray;
-      h2 {
-          margin: 0;
+      color: $darkGray;
+      display: block;
+      height: 2em;
+      padding: .5em 1em 0 1em;
+      position: absolute;
+      right: 50%;
+      top: -2em;
+
+      &:hover {
+        color: $lightGray;
+        text-decoration: none;
       }
-  }
+    }
 
-  .drawer {
-      background-color: $tan;
-      padding: 2em;
-
-      &.left {
-          position: absolute;
-          left: 0;
-          top: 15%;
-
-          .drawer-handle {
-              right: -25px;
-              top: 3%;
-          }
-      }
-
-      &.bottom {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-
-          .drawer-handle {
-              top: -25px;
-              bottom: auto;
-              position: absolute;
-          }
-
-          #note_note {
-              width: 100%;
-              height: 10em;
-          }
-      }
+    &.collapsed {
+      bottom: -12em;
+    }
   }
 }
 
 .pages.show footer {
   bottom: 0;
-  height: 5em;
+  height: 4em;
   left: 0;
   position: fixed;
   right: 0;
