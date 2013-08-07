@@ -110,6 +110,16 @@
     &.collapsed {
       bottom: -12em;
     }
+
+    #note_note {
+      height: 8em;
+      width: 95%;
+    }
+
+    .save-button {
+      display: block;
+      margin-top: .5em;
+    }
   }
 }
 

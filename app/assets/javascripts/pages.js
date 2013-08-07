@@ -58,4 +58,10 @@ $( function( ) {
         $(".stanza").toggleClass("linebreak-emily");
     });
 
+
+  $( '.new_note,.edit_note' ).on( 'ajax:success', function( ) {
+    var d = new Date();
+    $( '.notice' ).text( 'Notes saved successfully at ' + d.getHours() + ':' + d.getMinutes() + '.' );
+  } );
 } );
+

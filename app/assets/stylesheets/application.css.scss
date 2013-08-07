@@ -63,6 +63,17 @@ summary {
   width: 100%;
 }
 
+.eda-btn-light {
+  background: $tan;
+  border: solid 2px $darkGray;
+  color: $darkGray;
+
+  &:hover {
+    background: $lightTan;
+    cursor: pointer;
+  }
+}
+
 /**
  * General page layout structure:
  *
