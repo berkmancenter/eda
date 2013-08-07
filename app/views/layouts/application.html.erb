@@ -34,6 +34,9 @@
           object: params
         } ) %>
 
+        <span class="notice"><%= notice %></span>
+        <span class="alert"><%= alert %></span>
+
         <%= render( {
           partial: 'shared/user_nav',
           object: params
@@ -43,9 +46,6 @@
 
     <div class="hr"></div>
   </header>
-
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
 
 <%= yield %>
 
