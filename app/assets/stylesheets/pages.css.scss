@@ -72,6 +72,12 @@
 
   }
 
+  .work-notes-transitions {
+    -moz-transition: bottom 1s;
+    -webkit-transition: bottom 1s;
+    transition: bottom 1s;
+  }
+
   .work-notes {
     background: $tan;
     border-radius: 2px 0 0 0;
@@ -82,10 +88,6 @@
     padding: 1em;
     position: absolute;
     right: 0;
-
-    -moz-transition: bottom 1s;
-    -webkit-transition: bottom 1s;
-    transition: bottom 1s;
 
     .drawer-handle {
       background-color: $tan;

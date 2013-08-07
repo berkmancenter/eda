@@ -3,7 +3,8 @@ $( function( ) {
   var tabSelector = ".panel-menu a";
   var contentSelector = ".panel-content>section";
   var notesSelector = ".work-notes";
-  var drawerHandleSelector = '.drawer-handle';
+
+  var $drawerHandle = $( '.drawer-handle' );
 
   tabs.find( tabSelector ).click( function( ) {
     var state = { };
@@ -16,15 +17,25 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-  $( drawerHandleSelector ).click( function( ) {
+  $drawerHandle.click( function( ) {
     $( this ).closest( notesSelector ).toggleClass( 'collapsed' );
   } );
 
+  if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
+    $drawerHandle.closest( notesSelector ).addClass( 'collapsed' );
+  } else {
+    setTimeout( function( ) {
+      // show the notes for 2s to let the user know they exist
+      // then hide them
+      $drawerHandle.click( );
+      window.sessionStorage.setItem( 'seenDrawer', 'true' );
+    }, 2000 );
+  }
+
   setTimeout( function( ) {
-    // show the notes for 2s to let the user know they exist
-    // then hide them
-    $( drawerHandleSelector ).click( );
-  }, 2000 );
+    // enable drawer transitions only after initial setup
+    $( notesSelector ).addClass( 'work-notes-transitions' );
+  }, 33 );
 
 
   $( window ).on( "hashchange", function( e ) {
