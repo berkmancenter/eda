@@ -18,7 +18,6 @@
 
 class Work < ActiveRecord::Base
     belongs_to :edition
-    belongs_to :cross_edition_work_set
     belongs_to :revises_work, class_name: 'Work'
     belongs_to :image_set
 
@@ -36,6 +35,9 @@ class Work < ActiveRecord::Base
     after_initialize :setup_defaults
     default_scope order(:number, :variant)
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
+    scope :from_image, lambda { |image|
+        Work.joins{image_set.image}.where{image_set.image.id == my{image.id}}
+    }
 
     serialize :metadata
 

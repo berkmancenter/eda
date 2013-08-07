@@ -21,8 +21,8 @@
     <ul>
       <% @search.results.each do |work| %>
         <li>
-        <% if page = work.edition.pages.with_work(work).first %>
-          <%= link_to( render_work_result_link( work ), edition_page_path(work.edition, page)) %>
+        <% if pages = work.edition.pages.with_work(work) %>
+          <%= link_to( render_work_result_link( work ), edition_page_path(work.edition, pages.first)) %>
         <% else %>
           <%= link_to( render_work_result_link( work ), edition_work_path(work.edition, work)) %>
         <% end %>

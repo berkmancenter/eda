@@ -1,8 +1,8 @@
 class WorksController < ApplicationController
-    before_filter :authenticate_user!, only: [:edit, :update]
-    before_filter :load_work, only: [:edit, :update, :add_to_reading_list]
-    before_filter :load_edition, except: [:index, :search]
-    before_filter :check_edition_owner, only: [:edit, :update]
+    before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
+    before_filter :load_work, only: [:edit, :update, :add_to_reading_list, :choose_edition]
+    before_filter :load_edition, except: [:index, :search, :choose_edition]
+    before_filter :move_to_editable_edition, only: [:edit, :update]
 
     def index
         if params[:edition_id]
@@ -68,6 +68,10 @@ class WorksController < ApplicationController
         end
     end
 
+    def choose_edition
+        @edition = Edition.new
+    end
+
     def add_to_reading_list
         @reading_list = ReadingList.find(params[:reading_list_id])
         @reading_list.add_work(@work)
@@ -75,6 +79,14 @@ class WorksController < ApplicationController
     end
 
     private
+
+    def move_to_editable_edition
+        unless current_user == @edition.owner
+            flash[:alert] = t :cannot_edit_edition
+            #session[:edit_work] = { edition: @edition, page: , :work }
+            redirect_to choose_edition_work_path(@work)
+        end
+    end
 
     def load_work
         @work = Work.find(params[:id])

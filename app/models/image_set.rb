@@ -25,11 +25,10 @@ class ImageSet < Sett
     end
 
     def <<(image)
-        self.save!
-        is = ImageSet.new
+        save! if changed?
+        is = children.new(type: ImageSet)
         is.image = image
         is.save!
-        is.move_to_child_of self
     end
 
     def all_images

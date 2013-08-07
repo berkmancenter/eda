@@ -1,5 +1,5 @@
 <%= semantic_form_for @edition do |f| %>
-    <%= f.input :parent, include_blank: '[Empty Edition]' %>
+    <%= f.input :parent, include_blank: '[Empty Edition]', collection: Edition.for_user(current_user) %>
     <%= f.input :name %>
     <%= f.action :submit %>
 <% end %>

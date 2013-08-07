@@ -1,0 +1,8 @@
+<% unless current_user.editions.empty? %>
+    <h2><%= t :choose_own_edition %></h2>
+    <%= render partial: 'works/select_edition' %>
+    <h2><%= t :or %></h2>
+<% end %>
+
+<h2><%= t :create_new_edition %></h2>
+<%= render partial: 'editions/forms/new' %>

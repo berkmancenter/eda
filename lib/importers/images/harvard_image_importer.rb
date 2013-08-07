@@ -48,9 +48,7 @@ class HarvardImageImporter
             doc.remove_namespaces!
 
             # Create sheet group and add to edition
-            # Don't create a sheet group if this file doesn't contain poems
-            sheet_groups = editions.map{|e| new_sheet_group(e, doc) if doc_has_works?(e, doc, johnson_franklin_map)}
-            next if sheet_groups.compact.empty?
+            sheet_groups = editions.map{|e| new_sheet_group(e, doc)}
 
             doc.css('structMap div[TYPE=PAGE]').each do |page|
                 file_id = page.css('fptr')[1]['FILEID']
@@ -59,6 +57,7 @@ class HarvardImageImporter
                 image_url = image_url.match(/(ms_.*)\.jp2/)[1]
                 web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
                 width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
+
                 image = Image.new(
                     :url => image_url,
                     :metadata => {'Imported' => Time.now.to_s},
@@ -67,44 +66,22 @@ class HarvardImageImporter
                     :web_height => height
                 )
 
-                # Add same image to the collection group
-                is = ImageSet.new
-                is.image = image
-                is.save!
-                is.move_to_child_of collection
+                collection << image
 
                 editions.each_with_index do |edition, i|
-                    next if sheet_groups[i].nil?
-                    # Don't skip pages that don't have works because we'd like
-                    # to see the backs of pages when page turning, etc.
-
-                    # Create an image and add it to the sheet group
-                    image_for_sheet_set = ImageSet.new
-                    image_for_sheet_set.image = image
-                    image_for_sheet_set.save!
-                    image_for_sheet_set.move_to_child_of sheet_groups[i]
-
-                    # Find the works contained in this image
+                    sheet_groups[i] << image
                     works = works_from_page(edition, page, johnson_franklin_map)
-
                     next if works.empty?
-
-                    # Create a page for every work this image contains
-                    create_work_pages!(edition, works, image, image_for_sheet_set)
+                    works.each do |work|
+                        work.image_set << image
+                        work.save!
+                    end
                 end
             end
-            sheet_groups.compact.each(&:save!)
+            sheet_groups.each(&:save!)
             editions.each(&:save!)
             collection.save!
         end
-        pageless_works.each do |work|
-            puts "creating page for imageless work: #{work.number} #{work.variant}"
-            create_work_page_without_image(work)
-        end
-    end
-
-    def pageless_works
-        Work.find(Work.all.map(&:id) - Page.all.map{|p| p.work.id if p.work_set}.compact)
     end
 
     def page_has_works?(editions, page, johnson_franklin_map)
@@ -164,22 +141,5 @@ class HarvardImageImporter
         end
         works.compact!
         works
-    end
-
-    def create_work_page_without_image(work)
-        page = work.edition.pages.new
-        page.image_set = ImageSet.create
-        page.work_set = work.edition.work_set.leaf_containing(work)
-        page.save!
-    end
-
-    def create_work_pages!(edition, works, image, image_for_sheet)
-        works.each do |work|
-            work.image_set << image
-            page = edition.pages.new
-            page.image_set = image_for_sheet
-            page.work_set = edition.work_set.leaf_containing(work)
-            page.save!
-        end
     end
 end

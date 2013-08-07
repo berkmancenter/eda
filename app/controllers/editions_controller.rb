@@ -1,7 +1,11 @@
 class EditionsController < ApplicationController
     before_filter :authenticate_user!, only: [:new, :create]
     def index
-        @editions = Edition.all
+        if user_signed_in?
+            @editions = Edition.for_user(current_user)
+        else
+            @editions = Edition.is_public
+        end
     end
 
     def new

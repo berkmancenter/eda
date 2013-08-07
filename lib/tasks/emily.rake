@@ -40,9 +40,10 @@ namespace :emily do
             end
 
             desc 'Import Johnson works'
-            task :johnson, [:filename] => [:environment] do |task, args|
+            task :johnson, [:filename, :max_poems] => [:environment] do |task, args|
+                max_poems = args[:max_poems]
                 filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'johnson.txt')
-                JohnsonImporter.new.import(filename)
+                JohnsonImporter.new.import(filename, max_poems)
             end
 
             desc 'Import Project Gutenberg works'
@@ -81,6 +82,11 @@ namespace :emily do
             task :amherst => [:environment] do
             end
 
+            desc 'Create missing images'
+            task :missing => [:environment] do |task|
+                MissingImageCreator.new.create
+            end
+
             desc "Import images from BPL's Flickr"
             task :bpl, [:image_dir, :j_to_f_map_file] => [:environment] do |t, args|
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
@@ -108,8 +114,9 @@ namespace :emily do
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
             Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862, :error_check => false})
-            Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:transcriptions:johnson"].execute({:max_poems => 300})
             Rake::Task["emily:import:images:harvard"].execute
+            Rake::Task["emily:import:images:missing"].execute
         end
     end
 end

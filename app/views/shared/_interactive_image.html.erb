@@ -1,5 +1,5 @@
-<section class="interactive-image <%= 'missing-image' if @page.image.nil? || @page.image.url.empty? %>">
-  <% if @page.image.nil? || @page.image.url.empty? %>
+<section class="interactive-image <%= 'missing-image' if @image.nil? || @image.url.empty? %>">
+  <% if @image.nil? || @image.url.empty? %>
     <%= image_tag asset_path("missing_image.jpg") %>
   <% else %>
       <div id="page-image"></div>
@@ -8,24 +8,24 @@
             OpenSeadragon({
                 id:            "page-image",
                 prefixUrl: '/assets/',
-                tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{@page.image.url}.tif.dzi" %>'
+                tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{@image.url}.tif.dzi" %>'
             });
       </script>
   <% end %>
 
   <div class="page-controls">
-    <%= if previous_page = @page.previous
-            link_to( '', edition_page_url( {
+    <%= if previous_page = @image_set.left_sibling
+            link_to( '', edition_image_set_url( {
                 edition_id: previous_page.edition_id, id: previous_page.id
             } ), {
                 id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
             } );
     end %>
 
-    <%= link_to('', image_set_url(@edition, @page.image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @page.image %>
+    <%= link_to('', image_set_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
-    <%= if next_page = @page.next
-            link_to( '', edition_page_url( {
+    <%= if next_page = @image_set.right_sibling
+            link_to( '', edition_image_set_url( {
                 edition_id: next_page.edition_id, id: next_page.id
             } ), {
                 id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page'
@@ -33,10 +33,10 @@
     end %>
   </div>
 
-  <% if @page.image %>
+  <% if @image %>
   <dl class="credits">
-      <%= render :partial => 'shared/metadata', :object => @page.image %>
-      <dt>Credits</dt><dd><%= @page.image.credits %></dd>
+      <%= render :partial => 'shared/metadata', :object => @image %>
+      <dt>Credits</dt><dd><%= @image.credits %></dd>
   </dl>
   <% end %>
 </section>

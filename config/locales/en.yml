@@ -2,11 +2,15 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  create_own_edition: 'Please create your own edition before editing works.'
-  edit_work: 'Edit work'
-  new_transcription: 'Create new transcription'
-  sign_in: 'sign in'
+  choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
-  hide_edits: 'Hide Edits'
+  edit_work: 'Edit work'
   emily_line_breaks: "Emily's line breaks"
+  hide_edits: 'Hide Edits'
+  new_transcription: 'Create new transcription'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
+  sign_in: 'sign in'
+
+  create_new_edition: 'Create New Edition'
+  or: 'or'
+  cannot_edit_edition: 'You cannot edit the current edition.'
