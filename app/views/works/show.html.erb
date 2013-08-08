@@ -6,3 +6,7 @@
 } ) %>
 
 <%= render :partial => 'shared/metadata', :object => @work %>
+
+<ol class="sortable_tree" data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>">
+<%= build_server_tree(@work.image_set.self_and_descendants, type: :sortable, edition: @edition, title: :name, rebuild_url: rebuild_edition_image_sets_url(@edition)) %>
+</ol>

@@ -32,9 +32,9 @@ class ImageSetsController < ApplicationController
         end
 
         if @image_set.leaf?
-            @works = Work.in_image(@image_set.image)
-            @work = @works.first
-            @works.delete(@work)
+            all_works = Work.includes(:edition).in_image(@image_set.image).group_by{|w| w.edition == @edition}
+            @this_editions_works = all_works[true]
+            @works = all_works[false]
             @image = @image_set.image
             render "image_sets/works"
         else

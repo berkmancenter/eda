@@ -98,6 +98,10 @@ class Work < ActiveRecord::Base
         self.metadata['fascicle_position'] = position
     end
 
+    def has_image?
+        image_set.all_images.any?{|i| i.url && !i.url.empty?}
+    end
+
     def self.in_image(image)
         all.select{|w| w.image_set.all_images.include? image}
     end

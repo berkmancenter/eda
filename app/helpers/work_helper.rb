@@ -38,7 +38,7 @@ module WorkHelper
     end
 
     def work_link(work, edition)
-      page_with_work = work.edition.image_set.leaves_showing_work(work).first
+        page_with_work = work.edition.image_set.leaves_showing_work(work).first
 
         link_to(
             raw(

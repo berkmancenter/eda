@@ -7,10 +7,20 @@
     </div>
 -->
 
-<% if @work %>
+<% if @this_editions_works.empty? %>
+    <div>
+    <% if @edition.owner == current_user %>
+        <%= link_to t(:new_transcription), new_edition_work_path(@edition) %>
+    <% else %>
+        <p><em>No transcription of this image</em></p>
+    <% end %>
+    </div>
+<% else %>
+<% @this_editions_works.each do |work| %>
+    
     <div class="work-body">
-    <h3><%= @edition.work_number_prefix %><%= @work.number %> <%= @work.variant %></h3>
-    <% @work.stanzas.each do |stanza| %>
+    <h3><%= @edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
+    <% work.stanzas.each do |stanza| %>
         <p class="stanza" data-number="<%= stanza.position %>">
         <% stanza.lines.each do |line| %>
             <span class="line" data-line="<%= line.number %>">
@@ -26,7 +36,7 @@
 
     <div>
 <% if user_signed_in? %>
-    <%= link_to t(:edit_work), edit_edition_work_path(@edition, @work) %>
+    <%= link_to t(:edit_work), edit_edition_work_path(@edition, work) %>
 <% else %>
     <p>
     <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
@@ -48,18 +58,10 @@
     <div>
     <h3>Related Works in This Edition</h3>
     <ul>
-        <% @work.variants.each do |work| %>
-            <%= render partial: 'works/list_item', locals: {work: work, edition: @edition || work.edition} %>
+        <% work.variants.each do |variant_work| %>
+            <%= render partial: 'works/list_item', locals: {work: variant_work, edition: @edition || variant_work.edition} %>
         <% end %>
     </ul>
-    </div>
-<% else %>
-    <div>
-    <% if @edition.owner == current_user %>
-        <%= link_to t(:new_transcription), new_edition_work_path(@edition) %>
-    <% else %>
-        <p><em>No transcription of this image</em></p>
-    <% end %>
     </div>
 <% end %>
 
@@ -71,6 +73,7 @@
             <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
         <% end %>
     </ul>
+<% end %>
 <% end %>
 
 </section>

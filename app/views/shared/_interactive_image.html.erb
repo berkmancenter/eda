@@ -22,7 +22,7 @@
         %> 
     <% end %>
 
-    <%= link_to('', image_set_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
+    <%= link_to('', edition_image_set_url(@edition, @image_set.parent), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
     <%= if next_page = @image_set.root.leaf_after(@image_set)
             link_to( '', edition_image_set_url( {

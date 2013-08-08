@@ -11,7 +11,7 @@ $( function( ) {
   var tabs = $( ".tab-menu" );
   var tabSelector = ".panel-menu a";
   var contentSelector = ".panel-content>section";
-  var notesSelector = ".work-notes";
+  var notesSelector = ".set-notes";
 
   var $drawerHandle = $( '.drawer-handle' );
 
@@ -43,7 +43,7 @@ $( function( ) {
 
   setTimeout( function( ) {
     // enable drawer transitions only after initial setup
-    $( notesSelector ).addClass( 'work-notes-transitions' );
+    $( notesSelector ).addClass( 'set-notes-transitions' );
   }, 33 );
 
 
