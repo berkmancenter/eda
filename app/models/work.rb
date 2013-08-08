@@ -33,11 +33,9 @@ class Work < ActiveRecord::Base
 
     attr_accessible :date, :metadata, :number, :title, :variant, :text
     after_initialize :setup_defaults
+    before_create :setup_work
     default_scope order(:number, :variant)
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
-    scope :from_image, lambda { |image|
-        Work.joins{image_set.image}.where{image_set.image.id == my{image.id}}
-    }
 
     serialize :metadata
 
@@ -100,6 +98,11 @@ class Work < ActiveRecord::Base
         self.metadata['fascicle_position'] = position
     end
 
+    def self.in_image(image)
+        all.select{|w| w.image_set.all_images.include? image}
+    end
+
+
     def text=(text)
         line_modifiers.delete_all
         stanza = Stanza.new(position: 0)
@@ -133,6 +136,9 @@ class Work < ActiveRecord::Base
     
     def setup_defaults
         self.metadata ||= {}
-        self.image_set = ImageSet.new
+    end
+
+    def setup_work
+        self.image_set = ImageSet.create
     end
 end

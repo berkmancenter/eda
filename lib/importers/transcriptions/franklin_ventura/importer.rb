@@ -160,6 +160,7 @@ module FranklinVentura
         end
 
         def import(directory, from_year = 1850, to_year = 1886)
+            puts "Importing Franklin works"
             edition = create_edition
             @poems = []
 

@@ -20,6 +20,11 @@
 class ImageSet < Sett
     alias_attribute :image, :nestable
     has_many :editions, foreign_key: 'image_set_id'
+    has_many :works
+
+    def leaves_showing_work(work)
+        leaves.where(nestable_id: work.image_set.all_images.map(&:id), nestable_type: 'Image')
+    end
 
     def image=(image)
         self.nestable = image
@@ -31,6 +36,7 @@ class ImageSet < Sett
         is = ImageSet.find(id)
         is.image = image
         is.save!
+        save! if changed?
     end
 
     def all_images

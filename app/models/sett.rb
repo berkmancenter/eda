@@ -29,8 +29,32 @@ class Sett < ActiveRecord::Base
     }
     include TheSortableTree::Scopes
 
-    def leaf_containing(member)
-        leaves.where(nestable_id: member.id, nestable_type: member.class.name).first
+    def leaf_after(set)
+        after = nil
+        catch_next = false
+        Sett.each_with_level(leaves) do |child, level|
+            if catch_next
+                after = child
+                break
+            end
+            catch_next = child.id == set.id
+        end
+        after
+    end
+
+    def leaf_before(set)
+        previous = nil
+        Sett.each_with_level(leaves) do |child, level|
+            if child.id == set.id
+                break
+            end
+            previous = child
+        end
+        previous
+    end
+
+    def leaves_containing(member)
+        leaves.where(nestable_id: member.id, nestable_type: member.class.name)
     end
 
     def empty?

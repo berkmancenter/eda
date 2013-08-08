@@ -1,7 +1,7 @@
 class MissingImageCreator
     def create
         imageless_works.each do |work|
-            puts "creating page for imageless work: #{work.number} #{work.variant}"
+            puts "creating image for imageless work: #{work.edition.work_number_prefix}#{work.number} #{work.variant}"
             create_work_page_without_image(work)
         end
     end

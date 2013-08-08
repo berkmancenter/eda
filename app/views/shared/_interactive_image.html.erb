@@ -14,19 +14,19 @@
   <% end %>
 
   <div class="page-controls">
-    <%= if previous_page = @image_set.left_sibling
-            link_to( '', edition_image_set_url( {
-                edition_id: previous_page.edition_id, id: previous_page.id
-            } ), {
+    <% if previous_page = @image_set.root.leaf_before(@image_set) %>
+        <%=
+            link_to('', edition_image_set_url(@edition, previous_page), {
                 id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
-            } );
-    end %>
+            })
+        %> 
+    <% end %>
 
     <%= link_to('', image_set_url(@edition, @image), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if @image %>
 
-    <%= if next_page = @image_set.right_sibling
+    <%= if next_page = @image_set.root.leaf_after(@image_set)
             link_to( '', edition_image_set_url( {
-                edition_id: next_page.edition_id, id: next_page.id
+                edition_id: @edition, id: next_page.id
             } ), {
                 id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page'
             } );

@@ -1,6 +1,7 @@
 class JohnsonImporter
     REVISION_PATTERN = /(\d+)\.?([^\]]*)]([^0-9]*)(\s{2,}|$)/
     def import(filename, max_poems = nil)
+        puts "Importing Johnson works"
         edition = Edition.new(
             :name => 'The Poems of Emily Dickinson',
             :author => 'Thomas H. Johnson',
@@ -26,6 +27,7 @@ class JohnsonImporter
         max_poems = doc.css('poem').count unless max_poems
         doc.css('poem').each_with_index do |poem, i|
             next if i >= max_poems
+            puts "Poem #{i+1} of #{max_poems}"
             content = poem.css('body').map{|n| n.content}.join('').strip.gsub(REVISION_PATTERN, '')
             work = Work.new(:number => poem.css('number').text, :title => content.lines.first)
             stanza = Stanza.new(:position => 0)

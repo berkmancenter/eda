@@ -37,12 +37,15 @@
 
 require 'csv'
 class HarvardImageImporter
-    def import(directory, johnson_franklin_map, max_images = nil)
+    def import(directory, johnson_franklin_map, max_images = nil, test = false)
+        puts "Importing Harvard images"
         collection = Collection.create!(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         editions = Edition.where(:author => ['Thomas H. Johnson', 'R. W. Franklin'])
         image_count = 0
+        total_files = Dir.entries(directory).count
 
-        Dir.open(directory).each do |filename|
+        Dir.open(directory).each_with_index do |filename, i|
+            puts "File #{i} of #{total_files}"
             next if filename[0] == '.'
             next if max_images && image_count >= max_images
             file = File.open("#{directory}/#{filename}")
@@ -69,7 +72,7 @@ class HarvardImageImporter
                 )
                 image_count += 1
 
-                collection << image
+                collection << image unless test
 
                 editions.each_with_index do |edition, i|
                     sheet_groups[i] << image
@@ -77,13 +80,13 @@ class HarvardImageImporter
                     next if works.empty?
                     works.each do |work|
                         work.image_set << image
-                        work.save!
+                        work.save! if work.changed?
                     end
                 end
             end
             sheet_groups.each(&:save!)
             editions.each(&:save!)
-            collection.save!
+            collection.save! unless test
         end
     end
 

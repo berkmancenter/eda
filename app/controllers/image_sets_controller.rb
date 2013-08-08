@@ -7,12 +7,13 @@ class ImageSetsController < ApplicationController
     before_filter :set_users_current_edition
 
     include TheSortableTreeController::Rebuild
+    include TheSortableTreeController::ExpandNode
 
     def index
         if user_signed_in?
-            @image_sets = ImageSet.in_editions(Edition.for_user(current_user))
+            @image_sets = ImageSet.in_editions(Edition.for_user(current_user)).map(&:self_and_descendants).flatten
         else 
-            @image_sets = ImageSet.in_editions(Edition.is_public)
+            @image_sets = ImageSet.in_editions(Edition.is_public).map(&:self_and_descendants).flatten
         end
     end
 
@@ -30,16 +31,15 @@ class ImageSetsController < ApplicationController
             end
         end
 
-        if leaf?
-            @works = Work.from_image(@image_set.image)
+        if @image_set.leaf?
+            @works = Work.in_image(@image_set.image)
+            @work = @works.first
+            @works.delete(@work)
             @image = @image_set.image
             render "image_sets/works"
         else
             render
         end
-    end
-
-    def show
     end
 
     private

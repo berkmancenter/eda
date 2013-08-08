@@ -1,6 +1,0 @@
-<h1>Pages#index</h1>
-<ul>
-<% @pages.each do |page| %>
-    <li><%= link_to(page.id, edition_page_path(@edition, page)) %> <%= page.image.url if page.image %> (<%= !!page.work %> <%= !!page.image %>)</li>
-<% end %>
-    
