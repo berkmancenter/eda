@@ -37,12 +37,14 @@
 
 require 'csv'
 class HarvardImageImporter
-    def import(directory, johnson_franklin_map)
+    def import(directory, johnson_franklin_map, max_images = nil)
         collection = Collection.create!(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         editions = Edition.where(:author => ['Thomas H. Johnson', 'R. W. Franklin'])
+        image_count = 0
 
         Dir.open(directory).each do |filename|
             next if filename[0] == '.'
+            next if max_images && image_count >= max_images
             file = File.open("#{directory}/#{filename}")
             doc = Nokogiri::XML(file)
             doc.remove_namespaces!
@@ -65,6 +67,7 @@ class HarvardImageImporter
                     :web_width => width,
                     :web_height => height
                 )
+                image_count += 1
 
                 collection << image
 

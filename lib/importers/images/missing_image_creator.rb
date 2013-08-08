@@ -7,7 +7,7 @@ class MissingImageCreator
     end
 
     def imageless_works
-        Work.all.where{|w| w.image_set.empty?}
+        Work.all.select{|w| w.image_set.empty?}
     end
 
     def create_work_page_without_image(work)

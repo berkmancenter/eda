@@ -72,10 +72,11 @@ namespace :emily do
 
         namespace :images do 
             desc 'Import image instances from METS records'
-            task :harvard, [:directory, :j_to_f_map_file] => [:environment] do |task, args|
+            task :harvard, [:directory, :j_to_f_map_file, :max_images] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
-                HarvardImageImporter.new.import(directory, map_file)
+                max_images = args[:max_images]
+                HarvardImageImporter.new.import(directory, map_file, max_images)
             end
 
             desc 'Import Amherst images'
@@ -115,7 +116,7 @@ namespace :emily do
         task :test_data, [:data_directory] => [:environment] do |t, args|
             Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862, :error_check => false})
             Rake::Task["emily:import:transcriptions:johnson"].execute({:max_poems => 300})
-            Rake::Task["emily:import:images:harvard"].execute
+            Rake::Task["emily:import:images:harvard"].execute({:max_images => 500})
             Rake::Task["emily:import:images:missing"].execute
         end
     end

@@ -19,6 +19,7 @@
 
 class ImageSet < Sett
     alias_attribute :image, :nestable
+    has_many :editions, foreign_key: 'image_set_id'
 
     def image=(image)
         self.nestable = image
@@ -26,7 +27,8 @@ class ImageSet < Sett
 
     def <<(image)
         save! if changed?
-        is = children.new(type: ImageSet)
+        id = children.create(type: 'ImageSet').id
+        is = ImageSet.find(id)
         is.image = image
         is.save!
     end
