@@ -10,7 +10,23 @@
   position: absolute;
   right: 0;
   top: 8em;
-  bottom: 4em;
+  bottom: 3em;
+
+  & > h2 {
+      padding-left: 5%;
+      height: 6%;
+      margin: 0;
+  }
+
+  .panel {
+    bottom: 0;
+    top: 0;
+    margin: 0;
+    height: 94%;
+    position: relative;
+    float: left;
+    vertical-align: top;
+  }
 
   .panel-content {
     bottom: 1em;
@@ -24,14 +40,53 @@
    * search-panel has search menu & all search-related sections:
    * search, browse, lexicon
    */
+    
+  &.three-panel {
+      #search-panel {
+          width: 25%;
+      }
+      #interactive-image-panel {
+          width: 42%;
+      }
+      #work-panel {
+          width: 33%;
+      }
+
+      &.minus-work {
+          #interactive-image-panel {
+              width: 70%;
+          }
+          #work-panel {
+              display: none;
+          }
+          #search-panel {
+              width: 30%;
+          }
+      }
+
+      &.minus-search {
+          #search-panel {
+              display: none;
+          }
+          #interactive-image-panel {
+              width: 60%;
+          }
+          #work-panel {
+              width: 40%;
+          }
+
+          &.minus-work {
+              #interactive-image-panel {
+                  width: 100%;
+              }
+              #work-panel {
+                  display: none;
+              }
+          }
+      }
+  }
+
   #search-panel {
-    bottom: 0;
-    left: 0;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    vertical-align: top;
-    width: 25%;
     
     .panel-content {
       border-radius: 0 .2em .2em 0;
@@ -42,30 +97,12 @@
     }
   }
 
-  #interactive-image-panel {
-    bottom: 0;
-    left: 26%;
-    margin: 0;
-    position: absolute;
-    top: 0;
-    width: 38%;
-
-  }
 
   /**
    * work-panel has work menu & all work-related sections:
    * transcription, edition switcher, notes, reading list
    */
   #work-panel {
-    bottom: 0;
-    display: block;
-    margin: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    vertical-align: top;
-    width: 35%;
-
     .panel-content {
       border-radius: .2em 0 0 .2em;
     }
@@ -73,32 +110,31 @@
   }
 
   .set-notes-transitions {
-    -moz-transition: bottom 1s;
-    -webkit-transition: bottom 1s;
-    transition: bottom 1s;
+    -moz-transition: bottom 0.7s;
+    -webkit-transition: bottom 0.7s;
+    transition: bottom 0.7s;
   }
 
   .set-notes {
-    background: $tan;
-    border-radius: 2px 0 0 0;
+    background: $lightTan;
+    border-radius: 2px 2px 0 0;
     bottom: 0;
     color: $darkGray;
     height: 12em;
-    left: 26%;
     padding: 1em;
     position: absolute;
-    right: 0;
+    width: 94%;
+    margin: 0 3% 0;
 
     .drawer-handle {
-      background-color: $tan;
+      background-color: $lightTan;
       border-radius: 2px 2px 0 0;
-      box-shadow: 0 0 10px $shadowGray;
       color: $darkGray;
       display: block;
       height: 2em;
       padding: .5em 1em 0 1em;
       position: absolute;
-      right: 50%;
+      right: 5%;
       top: -2em;
 
       &:hover {
@@ -113,12 +149,5 @@
   }
 }
 
-.image-sets.show footer {
-  bottom: 0;
-  height: 4em;
-  left: 0;
-  position: fixed;
-  right: 0;
-}
 
 /* media break at columns=28em */

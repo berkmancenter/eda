@@ -7,7 +7,7 @@
     </div>
 -->
 
-<% if @this_editions_works.empty? %>
+<% if @this_editions_works.nil? %>
     <div>
     <% if @edition.owner == current_user %>
         <%= link_to t(:new_transcription), new_edition_work_path(@edition) %>

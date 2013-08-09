@@ -1,6 +1,6 @@
-<section class="view">
-
-  <div id="search-panel" class="tab-menu">
+<section class="view three-panel">
+  <h2><%= @edition.name %></h2>
+  <div id="search-panel" class="tab-menu panel">
     <ul class="panel-menu">
       <li><a href="#">Search</a></li>
       <li><a href="#">Browse</a></li>
@@ -21,11 +21,12 @@
     </div>
   </div>
 
-  <div id="interactive-image-panel">
+  <div id="interactive-image-panel" class="panel">
     <%= render partial: "shared/interactive_image" %>
+    <%= render partial: 'image_sets/notes' %>
   </div>
 
-  <div id="work-panel" class="tab-menu">
+  <div id="work-panel" class="tab-menu panel">
     <ul class="panel-menu">
       <li><a href="#">Manuscript</a></li>
       <li><a href="#">Reading List</a></li>
@@ -36,8 +37,5 @@
       <%= render partial: "shared/work_reading_list" %>
     </div>
   </div>
-
-  <%= render partial: 'image_sets/notes' %>
-  
 </section>
 

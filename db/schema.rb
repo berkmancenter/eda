@@ -177,13 +177,11 @@ ActiveRecord::Schema.define(:version => 20130807171147) do
     t.text     "metadata"
     t.integer  "edition_id"
     t.integer  "image_set_id"
-    t.integer  "cross_edition_work_set_id"
     t.integer  "revises_work_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
-  add_index "works", ["cross_edition_work_set_id"], :name => "index_works_on_cross_edition_work_set_id"
   add_index "works", ["edition_id"], :name => "index_works_on_edition_id"
   add_index "works", ["image_set_id"], :name => "index_works_on_image_set_id"
   add_index "works", ["revises_work_id"], :name => "index_works_on_revises_work_id"

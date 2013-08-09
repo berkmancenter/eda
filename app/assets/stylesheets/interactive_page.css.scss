@@ -14,11 +14,11 @@
 }
 
 #page-image {
-  bottom: 88px;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
+    position: absolute;
+    top: 0;
+    bottom: 100px;
+    width: 96%;
+    margin: 0 2%;
 }
 
 .page-controls {
@@ -64,4 +64,5 @@
   overflow: hidden;
   position: absolute;
   right: 0;
+  padding: 0 1em;
 }

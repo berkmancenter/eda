@@ -1,5 +1,5 @@
-<section class="interactive-image <%= 'missing-image' if @image.nil? || @image.url.empty? %>">
-  <% if @image.nil? || @image.url.empty? %>
+<section class="interactive-image <%= 'missing-image' if @image.url.nil? %>">
+  <% if @image.url.nil? %>
     <%= image_tag asset_path("missing_image.jpg") %>
   <% else %>
       <div id="page-image"></div>
@@ -33,7 +33,7 @@
     end %>
   </div>
 
-  <% if @image %>
+  <% unless @image.metadata.nil? %>
   <dl class="credits">
       <%= render :partial => 'shared/metadata', :object => @image %>
       <dt>Credits</dt><dd><%= @image.credits %></dd>
