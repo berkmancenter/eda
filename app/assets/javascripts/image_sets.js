@@ -3,15 +3,17 @@ $( function( ) {
   
   if ( sbsPages.length ) {
     sbsPages.turn( {
-      width: 1000,
-      height: 800,
+      width: 770,
+      height: 600,
     } );
   }
 
   var tabs = $( ".tab-menu" );
   var tabSelector = ".panel-menu a";
   var contentSelector = ".panel-content>section";
-  var notesSelector = ".set-notes";
+  var notesSelector = "#set-notes";
+  var viewSelector = 'section.view';
+  var bottomDrawerSelector = '.bottom.drawer';
 
   var $drawerHandle = $( '.drawer-handle' );
 
@@ -27,7 +29,9 @@ $( function( ) {
 
   /* Setup drawers */
   $drawerHandle.click( function( ) {
-    $( this ).closest( notesSelector ).toggleClass( 'collapsed' );
+    var drawerId = $(this).data('drawer');
+    $('#' + drawerId).toggleClass( 'collapsed' );
+    $(viewSelector).toggleClass( 'minus-' + drawerId );
   } );
 
   if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
@@ -36,14 +40,14 @@ $( function( ) {
     setTimeout( function( ) {
       // show the notes for 2s to let the user know they exist
       // then hide them
-      $drawerHandle.click( );
+      $drawerHandle.find('[data-drawer="' + notesSelector + '"]').click( );
       window.sessionStorage.setItem( 'seenDrawer', 'true' );
     }, 2000 );
   }
 
   setTimeout( function( ) {
     // enable drawer transitions only after initial setup
-    $( notesSelector ).addClass( 'set-notes-transitions' );
+    $( bottomDrawerSelector ).addClass( 'bottom-drawer-transitions' );
   }, 33 );
 
 

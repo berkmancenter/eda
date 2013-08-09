@@ -60,13 +60,14 @@
 
 .search-works-results {
   h2 {
-    background: $darkGray;
-    @include border-radius-top( .3em );
-    color: $lightGray;
-    font-style: italic;
+    font-size: 1.25em;
+    color: $darkGray;
     padding: .2em .2em;
-    margin: 0 -.4em;
     text-align: center;
+  }
+
+  .query {
+      font-style: italic;
   }
 
   ul {
@@ -82,10 +83,9 @@
 
   a, a:visited {
     background: $lightTan;
-    border-top: solid 1px $lightGray;
+    border-top: solid 1px $lessDarkTan;
     color: $darkGray;
     display: block;
-    margin: 0 -.4em;
     padding: .5em;
   }
 
@@ -95,7 +95,12 @@
     text-decoration: none;
   }
 
-  .work-title, .work-number {
+  .work-title {
+      max-width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: inline-block;
   }
 
   .work-number {

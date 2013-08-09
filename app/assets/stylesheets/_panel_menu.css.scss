@@ -6,14 +6,12 @@
 
   li {
     display: inline-block;
-    height: 2.2em;
     margin: 0 .5em;
   }
 
   a, a:visited {
-    font-family: Georgia, serif;
-    font-style: italic;
-    font-size: 1.2em;
+    font-family: 'Carrois Gothic SC';
+    text-shadow: 1px 1px 15px $shadowGray;
   }
 
   a:hover, a.selected {
@@ -27,6 +25,16 @@
   color: $darkGray;
   padding: .5em;
 
+  ul {
+      list-style-type: none;
+      padding-left: 5%;
+      margin-top: 0;
+  }
+
+  a:hover {
+      color: $darkGray;
+  }
+
   section {
     display: none;
   }
@@ -34,6 +42,11 @@
   h2 {
     font-size: 1em;
   }
+
+  h3 {
+      margin-bottom: 0.4em;
+  }
+
 }
 
 

@@ -5,10 +5,13 @@
 @import "colors";
 
 body.static-pages {
+    header, footer {
+    }
+
   .view {
     margin: 0 auto;
     max-width: 800px;
-    padding: 0 1em 8em 1em;
+    padding: 1em 1em 8em 1em;
 
     h1 {
       font-family: Georgia, serif;
@@ -29,12 +32,7 @@ body.static-pages {
   }
 
   .reference-list {
-    font-size: 1.2em;
     list-style-type: none;
-
-    li {
-      margin: .4em 0;
-    }
   }
 }
 
@@ -53,14 +51,18 @@ body.static-pages.home {
     font-weight: normal;
     height: 128px;
     margin: 0 auto;
-    padding-top: 96px;
+    padding-top: 89px;
     text-align: center;
     width: 530px;
   }
 
   h1 {
-    margin: 0 0 2em 0;
-    padding: 1em;
+    margin: 0 0 1em;
+    padding: 0;
+  }
+
+  .view .hr {
+      margin-top: 1em;
   }
 
   .view p {
@@ -68,16 +70,18 @@ body.static-pages.home {
   }
 
   .welcome {
-    border-right: 2px solid $lightGray;
+    border-right: 1px solid $gray;
     display: inline-block;
     max-width: 60%;
     padding: 2em 2em 2em 0;
+    font-size: 0.9em;
   }
 
   .icon-links {
     display: inline-block;
     vertical-align: top;
-    width: 20em;
+    width: 39%;
+    padding-top: 2em;
 
     ul {
       margin: 2em;
@@ -112,15 +116,17 @@ body.static-pages.home {
 
     .home-link-title {
       display: inline-block;
-      font-weight: bold;
       text-transform: uppercase;
       white-space: normal;
       width: 7em;
+      padding-left: 0.5em;
+      vertical-align: left;
     }
   }
 
   footer {
     margin: 0 auto;
+    box-shadow: none;
     max-width: 800px;
   }
 }

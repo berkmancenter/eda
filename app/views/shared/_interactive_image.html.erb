@@ -33,11 +33,5 @@
     end %>
   </div>
 
-  <% unless @image.metadata.nil? %>
-  <dl class="credits">
-      <%= render :partial => 'shared/metadata', :object => @image %>
-      <dt>Credits</dt><dd><%= @image.credits %></dd>
-  </dl>
-  <% end %>
 </section>
 

@@ -16,13 +16,13 @@
 #page-image {
     position: absolute;
     top: 0;
-    bottom: 100px;
+    bottom: 82px;
     width: 96%;
     margin: 0 2%;
 }
 
 .page-controls {
-  bottom: 48px;
+  bottom: 30px;
   height: 40px;
   left: 0;
   position: absolute;
@@ -56,13 +56,6 @@
 }
 
 .credits {
-  bottom: 0;
-  font-size: .9em;
-  left: 0;
-  height: 48px;
-  margin: 0;
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  padding: 0 1em;
+  font-size: 0.8em;
+  overflow: auto;
 }

@@ -5,11 +5,13 @@ en:
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
   edit_work: 'Edit work'
-  emily_line_breaks: "Emily's line breaks"
+  emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
   new_transcription: 'Create new transcription'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
   sign_in: 'sign in'
+  my_notes: 'My Notes'
+  image_info: 'Image Info'
 
   create_new_edition: 'Create New Edition'
   or: 'or'

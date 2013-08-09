@@ -16,64 +16,71 @@
     <% end %>
     </div>
 <% else %>
-<% @this_editions_works.each do |work| %>
-    
-    <div class="work-body">
-    <h3><%= @edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
-    <% work.stanzas.each do |stanza| %>
-        <p class="stanza" data-number="<%= stanza.position %>">
-        <% stanza.lines.each do |line| %>
-            <span class="line" data-line="<%= line.number %>">
-                <%= raw render_line(line) %>
-                <% unless line.just_author_break? %>
-                    <br class="emily author"/>
-                <% end %>
-            </span>
+    <% @this_editions_works.each do |work| %>
+        
+        <div class="work-body">
+        <h3><%= @edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
+        <% work.stanzas.each do |stanza| %>
+            <p class="stanza" data-number="<%= stanza.position %>">
+            <% stanza.lines.each do |line| %>
+                <span class="line" data-line="<%= line.number %>">
+                    <%= raw render_line(line) %>
+                    <% unless line.just_author_break? %>
+                        <br class="emily author"/>
+                    <% end %>
+                </span>
+            <% end %>
+            </p>
         <% end %>
+        </div>
+
+        <div>
+        <% if user_signed_in? %>
+            <%= link_to t(:edit_work), edit_edition_work_path(@edition, work) %>
+        <% end %>
+        </div>
+
+
+    <% end # End work loop %>
+
+    <div>
+        <label>
+            <input id="no-edits" type="checkbox" name="edits" value="no" />
+            <%= t :hide_edits %>
+        </label>
+        <label>
+            <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />
+            <%= t :emily_line_breaks %>
+        </label>
+    </div>
+
+    <% variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq %>
+    <% unless variants.empty? %>
+        <div>
+            <h3>Related Works in This Edition</h3>
+            <ul>
+                <% variants.each do |variant_work| %>
+                    <%= render partial: 'works/list_item', locals: {work: variant_work, edition: @edition || variant_work.edition} %>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+
+    <% unless @works.nil? || @works.empty? %>
+        <h3>Related Works in Other Editions</h3>
+        <ul>
+            <% @works.each do |other_work| %>
+                <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
+            <% end %>
+        </ul>
+    <% end %>
+
+
+    <% unless user_signed_in? %>
+        <p>
+        <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
         </p>
     <% end %>
-    </div>
-
-    <div>
-<% if user_signed_in? %>
-    <%= link_to t(:edit_work), edit_edition_work_path(@edition, work) %>
-<% else %>
-    <p>
-    <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
-    </p>
 <% end %>
-    </div>
-
-    <div>
-    <label>
-        <input id="no-edits" type="checkbox" name="edits" value="no" />
-        <%= t :hide_edits %>
-    </label>
-    <label>
-        <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />
-        <%= t :emily_line_breaks %>
-    </label>
-    </div>
-
-    <div>
-    <h3>Related Works in This Edition</h3>
-    <ul>
-        <% work.variants.each do |variant_work| %>
-            <%= render partial: 'works/list_item', locals: {work: variant_work, edition: @edition || variant_work.edition} %>
-        <% end %>
-    </ul>
-    </div>
-<% end %>
-
-
-<% unless @works.nil? || @works.empty? %>
-    <h3>Related Works in Other Editions</h3>
-    <ul>
-        <% @works.each do |other_work| %>
-            <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
-        <% end %>
-    </ul>
-<% end %>
-<% end %>
-
 </section>

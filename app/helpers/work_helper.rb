@@ -37,13 +37,13 @@ module WorkHelper
         with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
-    def work_link(work, edition)
+    def work_link(work, edition, full_title = true)
         page_with_work = work.edition.image_set.leaves_showing_work(work).first
 
         link_to(
             raw(
                 work.title ?
-                work.full_title :
+                (full_title ? work.full_title : work.title) :
                 (work.lines.first.text if work.lines.first)
         ),
             edition_image_set_path(edition, page_with_work)

@@ -38,17 +38,7 @@ class WorksController < ApplicationController
     end
 
     def update
-        setup_child_edition
-        if @work.edition == @edition.parent
-            parent_work = @work
-            @work = parent_work.dup
-            @work.edition = @edition
-            @work.revises_work = parent_work
-        end
-        @work.update_attributes(params[:work])
-        @work.save!
-        @edition.replace_work_in_pages!(parent_work, @work) if @work.edition == @edition.parent
-        redirect_to edition_work_path(@edition, @work)
+            @work.update_attributes(params[:work])
     end
 
     def search
@@ -69,7 +59,24 @@ class WorksController < ApplicationController
     end
 
     def choose_edition
-        @edition = Edition.new
+        if params[:work_edition]
+            @edition = current_user.editions.find(params[:work_edition])
+            parent_edition = session[:edit_work][:parent_edition]
+            parent_work = session[:edit_work][:parent_work]
+            setup_child_edition
+            @work = parent_work.dup
+            @work.edition = @edition
+            @work.revises_work = parent_work
+            text = (render_to_string partial: 'works/transcriptions/show.txt.erb', locals: { work: parent_work }).gsub(/(<i>|<\/i>)/,'')
+            logger.info('THINGS HAPPENING')
+            logger.info(text)
+            @work.text = text
+            @work.save!
+            redirect_to edit_edition_work_path(@edition, @work)
+        else
+            @parent_edition = session[:edit_work][:parent_edition]
+            @edition = Edition.new
+        end
     end
 
     def add_to_reading_list
@@ -83,7 +90,7 @@ class WorksController < ApplicationController
     def move_to_editable_edition
         unless current_user == @edition.owner
             flash[:alert] = t :cannot_edit_edition
-            #session[:edit_work] = { edition: @edition, page: , :work }
+            session[:edit_work] = { parent_edition: @edition, parent_work: @work }
             redirect_to choose_edition_work_path(@work)
         end
     end

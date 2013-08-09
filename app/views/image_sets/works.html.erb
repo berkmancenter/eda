@@ -1,6 +1,9 @@
-<section class="view three-panel">
-  <h2><%= @edition.name %></h2>
+<% provide :view_classes, 'three-panel' %>
+  <header>
+  <h2 class="edition-name"><%= @edition.name %></h2><span class="edition-creator"> &mdash; <%= @edition.owner == current_user ? 'Me' : @edition.author %></span>
+  </header>
   <div id="search-panel" class="tab-menu panel">
+      <div class="left drawer-handle" data-drawer="search-panel"><div>Search</div></div>
     <ul class="panel-menu">
       <li><a href="#">Search</a></li>
       <li><a href="#">Browse</a></li>
@@ -24,9 +27,11 @@
   <div id="interactive-image-panel" class="panel">
     <%= render partial: "shared/interactive_image" %>
     <%= render partial: 'image_sets/notes' %>
+    <%= render partial: 'image_sets/info' %>
   </div>
 
   <div id="work-panel" class="tab-menu panel">
+    <div class="right drawer-handle" data-drawer="work-panel"><div>Works</div></div>
     <ul class="panel-menu">
       <li><a href="#">Manuscript</a></li>
       <li><a href="#">Reading List</a></li>
@@ -37,5 +42,3 @@
       <%= render partial: "shared/work_reading_list" %>
     </div>
   </div>
-</section>
-

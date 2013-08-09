@@ -1,4 +1,4 @@
 <%= form_tag choose_edition_work_path(@work) do %>
-    <%= select_tag :work_edition, options_from_collection_for_select(current_user.editions, :id, :name) %>
+    <%= select_tag :work_edition, options_from_collection_for_select(current_user.editions.where(parent_id: @parent_edition.id), :id, :name) %>
     <%= submit_tag 'Select' %>
 <% end %>

@@ -13,7 +13,8 @@
   <meta name="viewport" content="width=device-width">
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
-  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Carrois+Gothic+SC|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  
   
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
@@ -46,7 +47,9 @@
   <p class="alert"><%= alert %></p>
   <% end %>
 
-<%= yield %>
+  <section class="view <%= yield :view_classes %>">
+  <%= yield %>
+  </section>
 
   <footer>
     <div class="hr"></div>
