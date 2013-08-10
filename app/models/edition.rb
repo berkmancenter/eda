@@ -30,7 +30,11 @@ class Edition < ActiveRecord::Base
 
     scope :is_public, where(public: true)
     scope :for_user, lambda { |user|
-        joins{owner.outer}.where{(owner.id == my{user.id}) | (public == true)}
+        if user.nil?
+            is_public
+        else
+            joins{owner.outer}.where{(owner.id == my{user.id}) | (public == true)}
+        end
     }
     default_scope order(:completeness)
 
