@@ -2,9 +2,7 @@
     <thead>
         <tr>
             <th>Number</th><th>Variant</th><th>Title</th>
-            <!--
             <th>Has Image</th>
-            -->
             <th>Date</th><th>Recipient</th>
         </tr>
     </thead>
@@ -14,9 +12,7 @@
         <td><%= work.number %></td>
         <td><%= strip_tags work.variant %></td>
         <td><%= work_link(work, @edition, false) %></td>
-            <!--
         <td><%= work.has_image? %></td>
-        -->
         <td><%= work.date.strftime('%Y') if work.date %></td>
         <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
     </tr>
