@@ -106,6 +106,16 @@ class Work < ActiveRecord::Base
         all.select{|w| w.image_set.all_images.include? image}
     end
 
+    def text
+        # Shut up, I know.
+        controller = ApplicationController.new
+        controller.with_format(:txt) do 
+            controller.render_to_string(
+                partial: 'works/transcriptions/show',
+                locals: { work: self }
+            )
+        end
+    end
 
     def text=(text)
         line_modifiers.delete_all

@@ -65,6 +65,10 @@ class Edition < ActiveRecord::Base
         image_map = copy_tree_from_parent(:image_set)
     end
 
+    def is_child?
+        !parent.nil?
+    end
+
     private
 
     def add_work_to_work_set(work)

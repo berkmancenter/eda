@@ -23,6 +23,23 @@ class ApplicationController < ActionController::Base
         session[:current_edition] = @edition.id
     end
 
+    def create_revision_from_session(in_edition)
+        revises_work = Work.find(session[:work_revision][:revises_work_id])
+        revision = revises_work.dup
+        text = revises_work.text
+
+        logger.info("LOOK HERE: #{text}")
+
+        revision.text = text
+        if in_edition.is_child? && in_edition.parent == revises_work.edition
+            revision.revises_work = revises_work
+        end
+        revision.edition = in_edition
+        revision.save!
+        session.delete(:work_revision)
+        revision
+    end
+
     def store_location
         if ![new_user_session_path, new_user_registration_path].include?(request.fullpath) && !request.xhr?
             session[:previous_url] = request.fullpath 
@@ -31,5 +48,15 @@ class ApplicationController < ActionController::Base
 
     def after_sign_in_path_for(resource)
         session[:previous_url] || root_path
+    end
+
+    def with_format(format, &block)
+        old_formats = formats
+        begin
+            self.formats = [format]
+            return block.call
+        ensure
+            self.formats = old_formats
+        end
     end
 end

@@ -1,8 +1,8 @@
 <% work.stanzas.each do |stanza| %>
 <% stanza.lines.each do |line| %>
-<%= raw render_line(line) %>
+<%= raw render_line(line).gsub(/(<i>|<\/i>)/,'') %>
 <% end -%>
-<% unless stanza == @work.stanzas.last -%>
+<% unless stanza == work.stanzas.last -%>
 
 <% end -%>
 <% end -%>

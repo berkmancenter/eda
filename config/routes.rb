@@ -27,7 +27,7 @@ Eda::Application.routes.draw do
     resources :reading_lists
     resources :works do
         member do 
-            match '/edit/edition' => 'works#choose_edition', :as => :choose_edition
+            get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
         end
         collection do
             match '/:first_letter' => 'works#index', :as => :by_letter, :first_letter => /[A-Za-z]/

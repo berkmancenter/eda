@@ -38,7 +38,13 @@
     </ul>
 
     <div class="panel-content">
-      <%= render partial: "works/transcriptions/show" %>
+      <%=
+          render partial: "works/transcriptions/show", locals: {
+              edition: @edition,
+              this_editions_works: @this_editions_works,
+              other_editions_works: @works
+          }
+      %>
       <%= render partial: "shared/work_reading_list" %>
     </div>
   </div>

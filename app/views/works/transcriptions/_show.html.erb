@@ -7,19 +7,19 @@
     </div>
 -->
 
-<% if @this_editions_works.nil? %>
+<% if this_editions_works.nil? %>
     <div>
-    <% if @edition.owner == current_user %>
-        <%= link_to t(:new_transcription), new_edition_work_path(@edition) %>
+    <% if edition.owner == current_user %>
+        <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
     <% else %>
         <p><em>No transcription of this image</em></p>
     <% end %>
     </div>
 <% else %>
-    <% @this_editions_works.each do |work| %>
+    <% this_editions_works.each do |work| %>
         
         <div class="work-body">
-        <h3><%= @edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
+        <h3><%= edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
         <% work.stanzas.each do |stanza| %>
             <p class="stanza" data-number="<%= stanza.position %>">
             <% stanza.lines.each do |line| %>
@@ -36,7 +36,7 @@
 
         <div>
         <% if user_signed_in? %>
-            <%= link_to t(:edit_work), edit_edition_work_path(@edition, work) %>
+            <%= link_to t(:edit_work), edit_edition_work_path(edition, work) %>
         <% end %>
         </div>
 
@@ -54,23 +54,23 @@
         </label>
     </div>
 
-    <% variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq %>
+    <% variants = this_editions_works.map{|w| w.variants}.flatten.compact.uniq %>
     <% unless variants.empty? %>
         <div>
             <h3>Related Works in This Edition</h3>
             <ul>
                 <% variants.each do |variant_work| %>
-                    <%= render partial: 'works/list_item', locals: {work: variant_work, edition: @edition || variant_work.edition} %>
+                    <%= render partial: 'works/list_item', locals: {work: variant_work, edition: edition || variant_work.edition} %>
                 <% end %>
             </ul>
         </div>
     <% end %>
 
 
-    <% unless @works.nil? || @works.empty? %>
+    <% unless other_editions_works.nil? || other_editions_works.empty? %>
         <h3>Related Works in Other Editions</h3>
         <ul>
-            <% @works.each do |other_work| %>
+            <% other_editions_works.each do |other_work| %>
                 <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
             <% end %>
         </ul>

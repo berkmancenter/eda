@@ -1,9 +1,12 @@
 <h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
 
-<%= render( {
-  partial: "works/transcriptions/show",
-  object: @work
-} ) %>
+<%= 
+    render partial: "works/transcriptions/show", locals: {
+        edition: @work.edition,
+        this_editions_works: [@work],
+        other_editions_works: []
+    }
+%>
 
 <%= render :partial => 'shared/metadata', :object => @work %>
 

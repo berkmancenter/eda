@@ -16,3 +16,5 @@ en:
   create_new_edition: 'Create New Edition'
   or: 'or'
   cannot_edit_edition: 'You cannot edit the current edition.'
+
+  revision_already_exists: "You've already begun editing this work in this edition."
