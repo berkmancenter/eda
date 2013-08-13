@@ -18,3 +18,6 @@ en:
   cannot_edit_edition: 'You cannot edit the current edition.'
 
   revision_already_exists: "You've already begun editing this work in this edition."
+
+  works_drawer_label: 'Text'
+  search_drawer_label: 'Search'

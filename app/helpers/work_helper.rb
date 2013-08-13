@@ -50,6 +50,23 @@ module WorkHelper
         ) if page_with_work
     end
 
+    def edition_selector(other_editions_works)
+        options = []
+        disabled = []
+        other_editions = Hash[other_editions_works.map{|w| [w.edition, w.id]}]
+        Edition.for_user(current_user).each do |edition|
+            link = edition.id
+            if other_editions[edition.id]
+                link = work_link(edition.id, other_editions[edition.id])
+            else
+                disabled << link
+            end
+            options << [edition.name, link]
+        end
+
+        select_tag 'edition[id]', options_for_select(options, disabled: disabled), class: 'edition-selector'
+    end
+
     def with_format(format, &block)
         old_formats = formats
         begin

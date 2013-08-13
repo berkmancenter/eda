@@ -32,12 +32,20 @@ class ImageSetsController < ApplicationController
         end
 
         if @image_set.leaf?
-            all_works = Work.includes(:edition).where(edition: { id: Edition.for_user(current_user)}).in_image(@image_set.image).group_by{|w| w.edition == @edition}
+            all_works = Work.includes(:edition).where(
+                edition: { id: Edition.for_user(current_user)}
+            ).in_image(@image_set.image).group_by{
+                |w| w.edition == @edition
+            }
             @this_editions_works = all_works[true]
-            if @this_editions_works.nil? && @edition.parent
-                @this_editions_works = Work.joins(:edition).where(edition: { id: @edition.parent.id}).in_image(@image_set.image)
+            # TODO: Do this better
+            if @this_editions_works.nil? && @edition.is_child?
+                @this_editions_works = Work.joins(:edition).where(
+                    edition: { id: @edition.parent.id}
+                ).in_image(@image_set.image)
             end
-            @works = all_works[false]
+            @other_editions_works = all_works[false]
+            @variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq
             @image = @image_set.image
             render "image_sets/works"
         else

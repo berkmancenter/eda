@@ -52,8 +52,12 @@ class Work < ActiveRecord::Base
         lines.find_by_number(number)
     end
 
+    def full_id
+        "#{edition.work_number_prefix}#{number}#{variant}"
+    end
+
     def full_title
-        "#{edition.work_number_prefix}#{number}#{variant} - #{title}"
+        "#{full_id} - #{title}"
     end
     
     def next

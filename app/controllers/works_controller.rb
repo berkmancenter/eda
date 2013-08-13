@@ -2,7 +2,7 @@ class WorksController < ApplicationController
     before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
     before_filter :load_work, only: [:edit, :update, :add_to_reading_list, :choose_edition]
     before_filter :load_edition, except: [:index, :search, :choose_edition]
-    before_filter :move_to_editable_edition, only: [:edit, :update]
+    before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def index
         if params[:edition_id]

@@ -9,29 +9,13 @@
 
 <% if this_editions_works.nil? %>
     <div>
-    <% if edition.owner == current_user %>
-        <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
-    <% else %>
         <p><em>No transcription of this image</em></p>
     <% end %>
     </div>
 <% else %>
     <% this_editions_works.each do |work| %>
-        
         <div class="work-body">
-        <h3><%= edition.work_number_prefix %><%= work.number %> <%= work.variant %></h3>
-        <% work.stanzas.each do |stanza| %>
-            <p class="stanza" data-number="<%= stanza.position %>">
-            <% stanza.lines.each do |line| %>
-                <span class="line" data-line="<%= line.number %>">
-                    <%= raw render_line(line) %>
-                    <% unless line.just_author_break? %>
-                        <br class="emily author"/>
-                    <% end %>
-                </span>
-            <% end %>
-            </p>
-        <% end %>
+            <%= render partial: 'works/transcriptions/work_body', locals: { work: work } %>
         </div>
 
         <div>
@@ -39,43 +23,36 @@
             <%= link_to t(:edit_work), edit_edition_work_path(edition, work) %>
         <% end %>
         </div>
-
-
     <% end # End work loop %>
 
-    <div>
-        <label>
-            <input id="no-edits" type="checkbox" name="edits" value="no" />
-            <%= t :hide_edits %>
-        </label>
-        <label>
-            <input id="linebreak-emily" type="checkbox" name="linebreak" value="emily" />
-            <%= t :emily_line_breaks %>
-        </label>
-    </div>
+    <%= render partial: 'works/transcriptions/tools' %>
 
-    <% variants = this_editions_works.map{|w| w.variants}.flatten.compact.uniq %>
     <% unless variants.empty? %>
         <div>
             <h3>Related Works in This Edition</h3>
             <ul>
                 <% variants.each do |variant_work| %>
-                    <%= render partial: 'works/list_item', locals: {work: variant_work, edition: edition || variant_work.edition} %>
+                    <%= render partial: 'works/list_item', locals: {
+                            work: variant_work,
+                            edition: edition || variant_work.edition
+                        }
+                    %>
                 <% end %>
             </ul>
         </div>
     <% end %>
 
-
     <% unless other_editions_works.nil? || other_editions_works.empty? %>
-        <h3>Related Works in Other Editions</h3>
-        <ul>
-            <% other_editions_works.each do |other_work| %>
-                <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
-            <% end %>
-        </ul>
+        <%= edition_selector(other_editions_works) %>
+        <noscript>
+            <h3>Related Works in Other Editions</h3>
+            <ul>
+                <% other_editions_works.each do |other_work| %>
+                    <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
+                <% end %>
+            </ul>
+        </noscript>
     <% end %>
-
 
     <% unless user_signed_in? %>
         <p>
@@ -83,4 +60,9 @@
         </p>
     <% end %>
 <% end %>
+
+<% if edition.owner == current_user %>
+    <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+<% else %>
+
 </section>
