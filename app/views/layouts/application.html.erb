@@ -10,7 +10,7 @@
   <% else %>
     <title><%= yield( :title ) %></title>
   <% end %>
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Carrois+Gothic+SC|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
@@ -41,9 +41,11 @@
     <div class="hr"></div>
   </header>
 
-  <% if notice || alert %>
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <% if notice %>
+  <div class="flash notice"><p><%= notice %></p></div>
+  <% end %>
+  <% if alert %>
+  <div class="flash alert"><p><%= alert %></p></div>
   <% end %>
 
   <section class="view <%= yield :view_classes %>">

@@ -54,6 +54,7 @@ module WorkHelper
     end
 
     def edition_selector(other_editions_works, selected_edition)
+        other_editions_works ||= []
         options = []
         disabled = []
         selected = selected_edition.id

@@ -45,7 +45,7 @@ class ImageSetsController < ApplicationController
                 ).in_image(@image_set.image)
             end
             @other_editions_works = all_works[false]
-            @variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq
+            @variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq if @this_editions_works
             @image = @image_set.image
             render "image_sets/works"
         else

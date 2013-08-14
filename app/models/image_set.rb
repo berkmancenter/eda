@@ -30,6 +30,10 @@ class ImageSet < Sett
         self.nestable = image
     end
 
+    def name
+        read_attribute(:name) || image.metadata['Label']
+    end
+
     def <<(image)
         save! if changed?
         id = children.create(type: 'ImageSet').id

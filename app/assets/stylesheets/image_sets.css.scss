@@ -19,20 +19,26 @@
     margin: 0;
     position: absolute;
     right: 0;
-    top: 7em;
+    top: 6.3em;
     bottom: 2.4em;
     padding: 0;
     white-space: nowrap;
 
     & > header {
         padding-left: 3%;
-        height: 6%;
+        height: 9%;
         margin: 0;
         .edition-name {
             display: inline-block;
             margin-top: 0;
+            margin-bottom: 0.2em;
         }
         .edition-creator {
+        }
+        .image-set-name {
+            margin: 0;
+            padding-left: 2%;
+            font-size: 1.1em;
         }
     }
 
@@ -40,7 +46,7 @@
         bottom: 0;
         top: 0;
         margin: 0;
-        height: 94%;
+        height: 91%;
         position: relative;
         vertical-align: top;
         display: inline-block;
@@ -54,6 +60,11 @@
         width: 100%;
     }
 
+    .alphabet-list {
+        font-size: 0.8em;
+        word-spacing: -1px;
+        text-align: center;
+    }
     /**
      * search-panel has search menu & all search-related sections:
      * search, browse, lexicon
@@ -61,11 +72,15 @@
 
     #search-panel {
         width: 25%;
+        .search-works-form #q {
+            width: 90%;
+        }
         /*
         -moz-transition: width, left 0.7s;
         -webkit-transition: width, left 0.7s;
         transition: width, left 0.7s;
          */
+
     }
     #interactive-image-panel {
         width: 42%;
@@ -126,6 +141,10 @@
 
         .panel-content {
             border-radius: 0 .2em .2em 0;
+            
+            h2 {
+                margin-top: 0;
+            }
         }
 
         .search-works h1 {

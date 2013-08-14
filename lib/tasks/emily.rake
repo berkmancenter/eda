@@ -115,9 +115,9 @@ namespace :emily do
 
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
-            Rake::Task["emily:import:transcriptions:franklin"].execute #({:start_year => 1862, :end_year => 1862, :error_check => false})
-            Rake::Task["emily:import:transcriptions:johnson"].execute #({:max_poems => 300})
-            Rake::Task["emily:import:images:harvard"].execute #({:max_images => 500, :test => true})
+           # Rake::Task["emily:import:transcriptions:franklin"].execute #({:start_year => 1862, :end_year => 1862, :error_check => false})
+           # Rake::Task["emily:import:transcriptions:johnson"].execute #({:max_poems => 300})
+            Rake::Task["emily:import:images:harvard"].execute#({:max_images => 500, :test => true})
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
         end

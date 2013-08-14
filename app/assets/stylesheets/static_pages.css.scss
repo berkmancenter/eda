@@ -43,17 +43,22 @@ body.static-pages.home {
     display: none;
   }
 
-  .home-logo {
+  .home-ornaments {
     background: url('ornament-med-tan.png') repeat-x 0 0;
     display: inline-block;
     font-family: Georgia, serif;
     font-size: 36px;
     font-weight: normal;
-    height: 128px;
+    height: 75px;
     margin: 0 auto;
-    padding-top: 89px;
     text-align: center;
     width: 530px;
+  }
+
+  .home-logo {
+      background: url('big_logo.png') no-repeat 50%;
+      width: 100%;
+      height: 40px;
   }
 
   h1 {

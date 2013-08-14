@@ -1,15 +1,17 @@
 <section class="work-transcription">
 
-<!--
-    <div>
-    <%= render partial: 'shared/forms/edition_selector' %>
-    <%= link_to "New", new_edition_path %>
-    </div>
--->
+<%= edition_selector(other_editions_works, edition) %>
 
 <% if this_editions_works.nil? %>
     <div>
         <p><em>No transcription of this image</em></p>
+    <% if user_signed_in? %>
+        <%= raw t :new_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
+    <% else %>
+        <p>
+        <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+        </p>
+    <% end %>
     </div>
 <% else %>
     <% this_editions_works.each do |work| %>
@@ -42,7 +44,6 @@
     <% end %>
 
     <% unless other_editions_works.nil? || other_editions_works.empty? %>
-        <%= edition_selector(other_editions_works, edition) %>
         <noscript>
             <h3>Related Works in Other Editions</h3>
             <ul>

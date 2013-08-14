@@ -4,6 +4,7 @@
 en:
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
+  new_transcription_link: 'Please %{sign_in_link} to create a new transcription'
   edit_work: 'Edit work'
   emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
