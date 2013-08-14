@@ -10,7 +10,6 @@
 <% if this_editions_works.nil? %>
     <div>
         <p><em>No transcription of this image</em></p>
-    <% end %>
     </div>
 <% else %>
     <% this_editions_works.each do |work| %>
@@ -43,7 +42,7 @@
     <% end %>
 
     <% unless other_editions_works.nil? || other_editions_works.empty? %>
-        <%= edition_selector(other_editions_works) %>
+        <%= edition_selector(other_editions_works, edition) %>
         <noscript>
             <h3>Related Works in Other Editions</h3>
             <ul>
@@ -61,8 +60,8 @@
     <% end %>
 <% end %>
 
-<% if edition.owner == current_user %>
+<% if user_signed_in? && edition.owner == current_user %>
     <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
-<% else %>
+<% end %>
 
 </section>

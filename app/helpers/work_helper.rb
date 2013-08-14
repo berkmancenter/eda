@@ -37,34 +37,39 @@ module WorkHelper
         with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
-    def work_link(work, edition, full_title = true)
+    def image_set_path_from_work(work, edition = nil)
         page_with_work = work.edition.image_set.leaves_showing_work(work).first
+        edition_image_set_path(edition.nil? ? work.edition : edition, page_with_work) if page_with_work
+    end
 
+    def work_link(work, edition, full_title = true)
         link_to(
             raw(
                 work.title ?
                 (full_title ? work.full_title : work.title) :
                 (work.lines.first.text if work.lines.first)
         ),
-            edition_image_set_path(edition, page_with_work)
-        ) if page_with_work
+            image_set_path_from_work(work, edition)
+        )
     end
 
-    def edition_selector(other_editions_works)
+    def edition_selector(other_editions_works, selected_edition)
         options = []
         disabled = []
-        other_editions = Hash[other_editions_works.map{|w| [w.edition, w.id]}]
+        selected = selected_edition.id
+        other_editions = Hash[other_editions_works.map{|w| [w.edition.id, w.id]}]
         Edition.for_user(current_user).each do |edition|
             link = edition.id
             if other_editions[edition.id]
-                link = work_link(edition.id, other_editions[edition.id])
+                link = image_set_path_from_work(Work.find(other_editions[edition.id]), edition)
             else
-                disabled << link
+                disabled << link unless link == selected_edition.id
             end
             options << [edition.name, link]
         end
+        options = options.sort_by{|o| o[1] == selected ? 1 : 2}
 
-        select_tag 'edition[id]', options_for_select(options, disabled: disabled), class: 'edition-selector'
+        select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector'
     end
 
     def with_format(format, &block)

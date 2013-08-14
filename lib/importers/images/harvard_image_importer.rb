@@ -65,10 +65,15 @@ class HarvardImageImporter
 
                 image = Image.new(
                     :url => image_url,
-                    :metadata => {'Imported' => Time.now.to_s},
                     :credits => 'Harvard credits',
                     :web_width => width,
-                    :web_height => height
+                    :web_height => height,
+                    :metadata => {
+                        'Imported' => Time.now.to_s,
+                        'Order' => page['ORDER'].to_i,
+                        'Order Label' => page['ORDERLABEL'],
+                        'Label' => page['LABEL']
+                    }
                 )
                 image_count += 1
 

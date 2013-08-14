@@ -1,17 +1,18 @@
 <table class="works">
     <thead>
         <tr>
-            <th>Number</th><th>Variant</th><th>Title</th>
+            <th>Number</th>
+            <th>Title</th>
             <th>Has Image</th>
-            <th>Date</th><th>Recipient</th>
+            <th>Date</th>
+            <th>Recipient</th>
         </tr>
     </thead>
     <tbody>
 <% @works.each do |work| %>
     <tr>
-        <td><%= work.number %></td>
-        <td><%= strip_tags work.variant %></td>
-        <td><%= work_link(work, @edition, false) %></td>
+        <td><%= @edition.nil? ? work.full_id : "#{work.number}#{strip_tags(work.variant)}" %></td>
+        <td><%= work_link(work, @edition.nil? ? work.edition : @edition, false) %></td>
         <td><%= work.has_image? %></td>
         <td><%= work.date.strftime('%Y') if work.date %></td>
         <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>

@@ -21,8 +21,7 @@
     <ul>
       <% @search.results.each do |work| %>
         <li>
-        <% page = work.edition.image_set.leaves_showing_work(work).first %>
-        <%= link_to( render_work_result_link( work ), edition_image_set_path(work.edition, page)) %>
+        <%= link_to( render_work_result_link( work ), image_set_path_from_work(work)) %>
         </li>
       <% end %>
     </ul>
