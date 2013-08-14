@@ -221,3 +221,19 @@ textarea, input:not([type]), input[type="color"], input[type="email"], input[typ
     padding: 3px 5px;
     font-family: 'Source Sans Pro';
 }
+
+.formtastic {
+    fieldset {
+        border: 0;
+    }
+    ol {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 0;
+    }
+    label {
+        margin-right: 1em;
+        display: inline-block;
+        width: 10%;
+    }
+}

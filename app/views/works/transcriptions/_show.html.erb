@@ -6,10 +6,12 @@
     <div>
         <p><em>No transcription of this image</em></p>
     <% if user_signed_in? %>
-        <%= raw t :new_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
-    <% else %>
         <p>
         <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+        </p>
+    <% else %>
+        <p>
+        <%= raw t :new_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
         </p>
     <% end %>
     </div>

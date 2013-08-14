@@ -1,11 +1,15 @@
 <%= semantic_form_for [edition, work] do |f| %>
+    <%= f.inputs do %>
     <%= f.input :number %>
     <%= f.input :variant %>
     <%= f.input :title %>
-    <% if work.new? %>
+    <% if work.new_record? %>
         <%= text_area_tag 'work[text]', size: "60x30" %>
     <% else %>
         <%= text_area_tag 'work[text]', flat_text(work), size: "60x#{lines_in_text_area(work)}" %>
     <% end %>
+<% end %>
+<%= f.actions do %>
     <%= f.action :submit %>
+    <% end %>
 <% end %>

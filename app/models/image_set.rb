@@ -31,7 +31,11 @@ class ImageSet < Sett
     end
 
     def name
-        read_attribute(:name) || image.metadata['Label']
+        if output = read_attribute(:name)
+            output
+        elsif image && image.metadata && image.metadata['Label']
+            image.metadata['Label']
+        end
     end
 
     def <<(image)

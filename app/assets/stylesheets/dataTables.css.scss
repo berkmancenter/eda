@@ -98,7 +98,7 @@ table.dataTable tr.even td.sorting_3 { background-color: $lessLightGray; }
 	float: left;
 	cursor: pointer;
 	*cursor: hand;
-	color: #111 !important;
+	color: $tan !important;
 }
 .paginate_disabled_previous:hover,
 .paginate_enabled_previous:hover,
