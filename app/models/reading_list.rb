@@ -37,7 +37,7 @@ class ReadingList < WorkSet
         end
 
         deleted.each do |id|
-            leaf_containing(existing_works.find{|w| w.id == id}).destroy
+            leaves_containing(existing_works.find{|w| w.id == id}).destroy_all
         end
     end
 
@@ -49,6 +49,6 @@ class ReadingList < WorkSet
     end
 
     def contains_work?(work)
-        !!leaf_containing(work)
+        !leaves_containing(work).empty?
     end
 end

@@ -40,9 +40,10 @@ namespace :emily do
             end
 
             desc 'Import Johnson works'
-            task :johnson, [:filename] => [:environment] do |task, args|
+            task :johnson, [:filename, :max_poems] => [:environment] do |task, args|
+                max_poems = args[:max_poems]
                 filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'johnson.txt')
-                JohnsonImporter.new.import(filename)
+                JohnsonImporter.new.import(filename, max_poems)
             end
 
             desc 'Import Project Gutenberg works'
@@ -71,14 +72,21 @@ namespace :emily do
 
         namespace :images do 
             desc 'Import image instances from METS records'
-            task :harvard, [:directory, :j_to_f_map_file] => [:environment] do |task, args|
+            task :harvard, [:directory, :j_to_f_map_file, :max_images, :test] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
-                HarvardImageImporter.new.import(directory, map_file)
+                max_images = args[:max_images]
+                test = !!args[:test]
+                HarvardImageImporter.new.import(directory, map_file, max_images, test)
             end
 
             desc 'Import Amherst images'
             task :amherst => [:environment] do
+            end
+
+            desc 'Create missing images'
+            task :missing => [:environment] do |task|
+                MissingImageCreator.new.create
             end
 
             desc "Import images from BPL's Flickr"
@@ -107,9 +115,11 @@ namespace :emily do
 
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
-            Rake::Task["emily:import:transcriptions:franklin"].execute({:start_year => 1862, :end_year => 1862, :error_check => false})
-            Rake::Task["emily:import:transcriptions:johnson"].execute
-            Rake::Task["emily:import:images:harvard"].execute
+           # Rake::Task["emily:import:transcriptions:franklin"].execute #({:start_year => 1862, :end_year => 1862, :error_check => false})
+           # Rake::Task["emily:import:transcriptions:johnson"].execute #({:max_poems => 300})
+            Rake::Task["emily:import:images:harvard"].execute#({:max_images => 500, :test => true})
+            Rake::Task["emily:import:images:missing"].execute
+            Rake::Task["emily:import:lexicon"].execute
         end
     end
 end

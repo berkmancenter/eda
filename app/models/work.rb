@@ -18,7 +18,6 @@
 
 class Work < ActiveRecord::Base
     belongs_to :edition
-    belongs_to :cross_edition_work_set
     belongs_to :revises_work, class_name: 'Work'
     belongs_to :image_set
 
@@ -34,6 +33,7 @@ class Work < ActiveRecord::Base
 
     attr_accessible :date, :metadata, :number, :title, :variant, :text
     after_initialize :setup_defaults
+    before_create :setup_work
     default_scope order(:number, :variant)
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
 
@@ -52,8 +52,12 @@ class Work < ActiveRecord::Base
         lines.find_by_number(number)
     end
 
+    def full_id
+        "#{edition.work_number_prefix}#{number}#{variant}"
+    end
+
     def full_title
-        "#{edition.work_number_prefix}#{number}#{variant} - #{title}"
+        "#{full_id} - #{title}"
     end
     
     def next
@@ -98,6 +102,25 @@ class Work < ActiveRecord::Base
         self.metadata['fascicle_position'] = position
     end
 
+    def has_image?
+        image_set.all_images.any?{|i| i.url && !i.url.empty?}
+    end
+
+    def self.in_image(image)
+        all.select{|w| w.image_set.all_images.include? image}
+    end
+
+    def text
+        # Shut up, I know.
+        controller = ApplicationController.new
+        controller.with_format(:txt) do 
+            controller.render_to_string(
+                partial: 'works/transcriptions/show',
+                locals: { work: self }
+            )
+        end
+    end
+
     def text=(text)
         line_modifiers.delete_all
         stanza = Stanza.new(position: 0)
@@ -131,6 +154,9 @@ class Work < ActiveRecord::Base
     
     def setup_defaults
         self.metadata ||= {}
-        self.image_set = ImageSet.new
+    end
+
+    def setup_work
+        self.image_set = ImageSet.create
     end
 end

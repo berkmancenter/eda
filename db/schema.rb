@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130724204511) do
+ActiveRecord::Schema.define(:version => 20130807171147) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130724204511) do
     t.integer  "parent_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+    t.boolean  "public"
   end
 
   add_index "editions", ["completeness"], :name => "index_editions_on_completeness"
@@ -95,18 +96,6 @@ ActiveRecord::Schema.define(:version => 20130724204511) do
   end
 
   add_index "notes", ["owner_id"], :name => "index_notes_on_owner_id"
-
-  create_table "pages", :force => true do |t|
-    t.integer  "edition_id"
-    t.integer  "work_set_id"
-    t.integer  "image_set_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  add_index "pages", ["edition_id"], :name => "index_pages_on_edition_id"
-  add_index "pages", ["image_set_id"], :name => "index_pages_on_image_set_id"
-  add_index "pages", ["work_set_id"], :name => "index_pages_on_work_set_id"
 
   create_table "setts", :force => true do |t|
     t.text     "name"
@@ -188,13 +177,11 @@ ActiveRecord::Schema.define(:version => 20130724204511) do
     t.text     "metadata"
     t.integer  "edition_id"
     t.integer  "image_set_id"
-    t.integer  "cross_edition_work_set_id"
     t.integer  "revises_work_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
-  add_index "works", ["cross_edition_work_set_id"], :name => "index_works_on_cross_edition_work_set_id"
   add_index "works", ["edition_id"], :name => "index_works_on_edition_id"
   add_index "works", ["image_set_id"], :name => "index_works_on_image_set_id"
   add_index "works", ["revises_work_id"], :name => "index_works_on_revises_work_id"

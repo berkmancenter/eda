@@ -25,7 +25,8 @@ module FranklinVentura
                 author: 'R. W. Franklin',
                 date: Date.new(1998, 1, 1),
                 work_number_prefix: 'F',
-                completeness: 1.0
+                completeness: 1.0,
+                :public => true
             )
             edition.create_image_set(
                 name: "Images for #{edition.name}",
@@ -159,6 +160,7 @@ module FranklinVentura
         end
 
         def import(directory, from_year = 1850, to_year = 1886)
+            puts "Importing Franklin works"
             edition = create_edition
             @poems = []
 
@@ -186,7 +188,6 @@ module FranklinVentura
 
         def close_poem(poem)
             assign_stanza_positions(poem)
-            create_cross_edition_work_group!(poem)
             poem.save!
             @poems << poem
         end
@@ -254,16 +255,6 @@ module FranklinVentura
                     false 
                 end
                 end
-        end
-
-        def create_cross_edition_work_group!(work)
-            cews = CrossEditionWorkSet.new(:name => "Works related to #{work.title} in other editions")
-            work.cross_edition_work_set = cews
-            ws = WorkSet.new
-            ws.work = work
-            ws.save!
-            ws.move_to_child_of cews
-            work.save!
         end
 
         def assign_stanza_positions(poem)

@@ -3,7 +3,8 @@
 nav.main, nav.user {
   display: inline-block;
   text-align: left;
-  text-transform: uppercase;
+  font-family: 'Carrois Gothic SC';
+  text-shadow: 1px 1px 15px $shadowGray;
 
   ul {
     margin: 0;

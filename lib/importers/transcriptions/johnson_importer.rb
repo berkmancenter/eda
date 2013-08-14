@@ -1,12 +1,14 @@
 class JohnsonImporter
     REVISION_PATTERN = /(\d+)\.?([^\]]*)]([^0-9]*)(\s{2,}|$)/
-    def import(filename)
+    def import(filename, max_poems = nil)
+        puts "Importing Johnson works"
         edition = Edition.new(
             :name => 'The Poems of Emily Dickinson',
             :author => 'Thomas H. Johnson',
             :date => Date.new(1951, 1, 1),
             :work_number_prefix => 'J',
-            :completeness => 0.95
+            :completeness => 0.95,
+            :public => true
         )
         edition.create_image_set(
             :name => "Images for #{edition.name}",
@@ -22,7 +24,10 @@ class JohnsonImporter
         poems = turn_into_xml(text.join)
         #File.write(Rails.root.join('tmp', 'johnson.xml'), poems)
         doc = Nokogiri::XML::Document.parse(poems, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-        doc.css('poem').each do |poem|
+        max_poems = doc.css('poem').count unless max_poems
+        doc.css('poem').each_with_index do |poem, i|
+            next if i >= max_poems
+            puts "Poem #{i+1} of #{max_poems}"
             content = poem.css('body').map{|n| n.content}.join('').strip.gsub(REVISION_PATTERN, '')
             work = Work.new(:number => poem.css('number').text, :title => content.lines.first)
             stanza = Stanza.new(:position => 0)

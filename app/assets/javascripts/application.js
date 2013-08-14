@@ -14,5 +14,7 @@
 //= require jquery.ui.all
 //= require jquery_ujs
 //= require jquery.ui.nestedSortable
+//= require jquery.dataTables
 //= require sortable_tree/initializer
+//= require turn
 //= require_tree .

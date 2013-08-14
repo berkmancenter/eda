@@ -26,3 +26,6 @@ config/database.yml
 
 # Ignore manuscript images
 /app/assets/images/previews
+
+# Don't include config file
+/config/emily.yml

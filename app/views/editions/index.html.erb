@@ -2,7 +2,7 @@
 <ul>
     <% @editions.each do |edition| %>
         <li>
-        <%= link_to("#{edition.name}", edition_works_path(edition)) %> by <%= edition.author %>
+        <%= link_to("#{edition.name}", edition_works_path(edition)) %> by <%= edition.author.nil? ? 'Me' : edition.author %>
         </li>
     <% end %>
 </ul>

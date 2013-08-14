@@ -8,7 +8,6 @@ Eda::Application.routes.draw do
                 post :add_to_reading_list
             end
         end
-        resources :pages
         resources :image_sets do
             collection do 
                 post :rebuild
@@ -27,6 +26,9 @@ Eda::Application.routes.draw do
 
     resources :reading_lists
     resources :works do
+        member do 
+            get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
+        end
         collection do
             match '/:first_letter' => 'works#index', :as => :by_letter, :first_letter => /[A-Za-z]/
         end

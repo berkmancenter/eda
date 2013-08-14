@@ -1,0 +1,265 @@
+@import "colors";
+
+.image-sets.show {
+    overflow: hidden;
+}
+
+.image-sets.show .view.side-by-side {
+    padding-top: 0;
+    h2 {
+        margin-top: 0.5em;
+    }
+    .sbs-pages {
+        margin: 0 auto;
+    }
+}
+
+.image-sets.show .view.three-panel {
+    left: 0;
+    margin: 0;
+    position: absolute;
+    right: 0;
+    top: 6.3em;
+    bottom: 2.4em;
+    padding: 0;
+    white-space: nowrap;
+
+    & > header {
+        padding-left: 3%;
+        height: 9%;
+        margin: 0;
+        .edition-name {
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0.2em;
+        }
+        .edition-creator {
+        }
+        .image-set-name {
+            margin: 0;
+            padding-left: 2%;
+            font-size: 1.1em;
+        }
+    }
+
+    .panel {
+        bottom: 0;
+        top: 0;
+        margin: 0;
+        height: 91%;
+        position: relative;
+        vertical-align: top;
+        display: inline-block;
+    }
+
+    .panel-content {
+        bottom: 1em;
+        overflow: auto;
+        position: absolute;
+        top: 2em;
+        width: 100%;
+    }
+
+    .alphabet-list {
+        font-size: 0.8em;
+        word-spacing: -1px;
+        text-align: center;
+    }
+    /**
+     * search-panel has search menu & all search-related sections:
+     * search, browse, lexicon
+     */
+
+    #search-panel {
+        width: 25%;
+        .search-works-form #q {
+            width: 90%;
+        }
+        /*
+        -moz-transition: width, left 0.7s;
+        -webkit-transition: width, left 0.7s;
+        transition: width, left 0.7s;
+         */
+
+    }
+    #interactive-image-panel {
+        width: 42%;
+        /*
+        -moz-transition: width, left 0.7s;
+        -webkit-transition: width, left 0.7s;
+        transition: width, left 0.7s;
+         */
+    }
+    #work-panel {
+        width: 33%;
+        /*
+        -moz-transition: width, left 0.7s;
+        -webkit-transition: width, left 0.7s;
+        transition: width, left 0.7s;
+         */
+    }
+
+    &.minus-work-panel {
+        #interactive-image-panel {
+            width: 70%;
+        }
+        #work-panel {
+        }
+        #search-panel {
+            width: 30%;
+        }
+    }
+
+    &.minus-search-panel {
+        #search-panel {
+            left: -25%;
+        }
+        #interactive-image-panel {
+            width: 60%;
+            left: -25%;
+        }
+        #work-panel {
+            width: 40%;
+            left: -25%;
+        }
+
+        &.minus-work-panel {
+            #search-panel {
+                left: -30%;
+            }
+            #interactive-image-panel {
+                width: 100%;
+                left: -30%;
+            }
+            #work-panel {
+                left: -30%;
+            }
+        }
+    }
+
+    #search-panel {
+
+        .panel-content {
+            border-radius: 0 .2em .2em 0;
+            
+            h2 {
+                margin-top: 0;
+            }
+        }
+
+        .search-works h1 {
+            display: none;
+        }
+    }
+
+
+    /**
+     * work-panel has work menu & all work-related sections:
+     * transcription, edition switcher, notes, reading list
+     */
+    #work-panel {
+        .panel-content {
+            border-radius: .2em 0 0 .2em;
+        }
+    }
+
+    .bottom-drawer-transitions {
+        -moz-transition: bottom 0.7s;
+        -webkit-transition: bottom 0.7s;
+        transition: bottom 0.7s;
+    }
+
+    .collapsed .right.drawer-handle {
+        left: -2.5em;
+    }
+
+    .drawer-handle {
+        font-size: 0.8em;
+        background-color: $lightTan;
+        color: $darkGray;
+        display: block;
+        position: absolute;
+        z-index: 1;
+
+        &.bottom {
+            border-radius: 2px 2px 0 0;
+            padding: 0.2em 1em 0 1em;
+            height: 2em;
+            right: 5%;
+            top: -2em;
+        }
+
+        &.bottom.one {
+            right: 7.5em;
+        }
+
+        &.bottom.two {
+            right: 1.5em;
+        }
+
+        &.left {
+            border-radius: 0px 2px 2px 0;
+            top: 4em;
+            right: -2em;
+            width: 2em;
+            height: 4.8em;
+            padding: 1em 0.2em 1em 0;
+            div {
+                -webkit-transform: rotate(90deg); 
+                -moz-transform: rotate(90deg);	
+            }
+        }
+
+        &.right {
+            border-radius: 2px 0px 0px 2px;
+            top: 4em;
+            left: -2em;
+            width: 2em;
+            height: 4.8em;
+            padding: 1em 0 1em 0;
+            div {
+                height: 100%;
+                padding-top: 0.6em;
+                -webkit-transform: rotate(-90deg); 
+                -moz-transform: rotate(-90deg);	
+            }
+        }
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    .bottom.drawer {
+        background: $lightTan;
+        border-radius: 2px 2px 0 0;
+        bottom: 0;
+        color: $darkGray;
+        height: 12em;
+        padding: 1em;
+        position: absolute;
+        width: 94%;
+        margin: 0 3% 0;
+        box-shadow: 0 0 10px $lightShadowGray;
+
+        &.collapsed {
+            bottom: -12em;
+        }
+    }
+
+    #set-notes {
+        form {
+            height: 90%;
+            textarea {
+                width: 100%;
+                height: 94%;
+            }
+            .note-save-result {
+                padding-left: 0.5em;
+            }
+        }
+    }
+}
+
+/* media break at columns=28em */

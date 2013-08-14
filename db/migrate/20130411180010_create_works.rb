@@ -8,14 +8,12 @@ class CreateWorks < ActiveRecord::Migration
       t.text :metadata
       t.references :edition
       t.references :image_set
-      t.references :cross_edition_work_set
       t.references :revises_work
 
       t.timestamps
     end
     add_index :works, :edition_id
     add_index :works, :image_set_id
-    add_index :works, :cross_edition_work_set_id
     add_index :works, :revises_work_id
   end
 end

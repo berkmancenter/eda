@@ -1,19 +1,16 @@
 <% provide :title, @image_set.name %>
+<% provide :view_classes, 'side-by-side' %>
 
-<section class="view">
   <h2><%= @image_set.name %></h2>
 
   <div class="sbs-pages">
     <% @image_set.all_images.each { |image| %>
         <div class="own-size" style="width: <%= image.web_width %>px; height: <%= image.web_height %>px;">
-        <% if page = @edition.pages.with_image(image).first %>
-            <%= link_to (image_tag( preview_url(image) )), edition_page_path(@edition, page) %>
+        <% if page = @edition.image_set.leaves_containing(image).first %>
+            <%= link_to image_tag(preview_url(image), height: 600), edition_image_set_path(@edition, page) %>
         <% else %>
-            <%= image_tag( preview_url(image) ) %>
+            <%= image_tag preview_url(image) %>
         <% end %>
         </div>
     <% } %>
   </div>
-</section>
-
-<%= javascript_include_tag 'turn.min' %>

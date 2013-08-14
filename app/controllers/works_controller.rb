@@ -1,8 +1,8 @@
 class WorksController < ApplicationController
-    before_filter :authenticate_user!, only: [:edit, :update]
-    before_filter :load_work, only: [:edit, :update, :add_to_reading_list]
-    before_filter :load_edition, except: [:index, :search]
-    before_filter :check_edition_owner, only: [:edit, :update]
+    before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
+    before_filter :load_work, only: [:edit, :update, :add_to_reading_list, :choose_edition]
+    before_filter :load_edition, except: [:index, :search, :choose_edition]
+    before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def index
         if params[:edition_id]
@@ -29,8 +29,20 @@ class WorksController < ApplicationController
     end
 
     def create
-        @work = @edition.works.create(params[:work])
-        # TODO: Create page
+        if @edition && session[:work_revision]
+            revises_work = Work.find(session[:work_revision][:revises_work_id])
+            if @edition.is_child? &&
+                @edition.parent == revises_work.edition &&
+                work = @edition.works.find_by_revises_work_id(revises_work.id)
+                flash[:alert] = t :revision_already_exists
+                redirect_to edit_edition_work_path(@edition, work)
+            else
+                revision = create_revision_from_session(@edition)
+                redirect_to edit_edition_work_path(@edition, revision)
+            end
+        else
+            @work = @edition.works.create(params[:work])
+        end
     end
 
     def edit
@@ -38,17 +50,9 @@ class WorksController < ApplicationController
     end
 
     def update
-        setup_child_edition
-        if @work.edition == @edition.parent
-            parent_work = @work
-            @work = parent_work.dup
-            @work.edition = @edition
-            @work.revises_work = parent_work
+        if @work.update_attributes(params[:work])
+            redirect_to edition_work_path(@edition, @work)
         end
-        @work.update_attributes(params[:work])
-        @work.save!
-        @edition.replace_work_in_pages!(parent_work, @work) if @work.edition == @edition.parent
-        redirect_to edition_work_path(@edition, @work)
     end
 
     def search
@@ -68,6 +72,10 @@ class WorksController < ApplicationController
         end
     end
 
+    def choose_edition
+        @edition = Edition.new
+    end
+
     def add_to_reading_list
         @reading_list = ReadingList.find(params[:reading_list_id])
         @reading_list.add_work(@work)
@@ -75,6 +83,15 @@ class WorksController < ApplicationController
     end
 
     private
+
+    def move_to_editable_edition
+        unless current_user == @edition.owner
+            flash[:alert] = t :cannot_edit_edition
+            session[:work_revision] = { revises_work_id: @work.id }
+            redirect_to choose_edition_work_path(@work)
+        end
+    end
+
 
     def load_work
         @work = Work.find(params[:id])

@@ -10,18 +10,15 @@
   <% else %>
     <title><%= yield( :title ) %></title>
   <% end %>
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
-  <link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
-
-  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-    
+  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Carrois+Gothic+SC|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  
   
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 </head>
 <body class="<%= body_class( params ) %>">
   <header>
@@ -34,9 +31,6 @@
           object: params
         } ) %>
 
-        <span class="notice"><%= notice %></span>
-        <span class="alert"><%= alert %></span>
-
         <%= render( {
           partial: 'shared/user_nav',
           object: params
@@ -44,10 +38,20 @@
       <% end %>
     </div>
 
+
     <div class="hr"></div>
   </header>
 
-<%= yield %>
+  <% if notice %>
+      <div class="flash notice"><p><%= notice %></p></div>
+  <% end %>
+  <% if alert %>
+      <div class="flash alert"><p><%= alert %></p></div>
+  <% end %>
+
+  <section class="view <%= yield :view_classes %>">
+  <%= yield %>
+  </section>
 
   <footer>
     <div class="hr"></div>

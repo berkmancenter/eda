@@ -16,16 +16,12 @@
 
   <% if @search %>
   <div class="search-works-results">
-    <h2><%= pluralize( @search.total, 'result' ) %></h2>
+      <h2><%= pluralize( @search.total, 'result' ) %> for &quot;<span class="query"><%= params[:q] %></span>&quot;</h2>
 
     <ul>
       <% @search.results.each do |work| %>
         <li>
-        <% if page = work.edition.pages.with_work(work).first %>
-          <%= link_to( render_work_result_link( work ), edition_page_path(work.edition, page)) %>
-        <% else %>
-          <%= link_to( render_work_result_link( work ), edition_work_path(work.edition, work)) %>
-        <% end %>
+        <%= link_to( render_work_result_link( work ), image_set_path_from_work(work)) %>
         </li>
       <% end %>
     </ul>
