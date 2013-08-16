@@ -1,3 +1,4 @@
+<% cache work do %>
 <h3><%= work.full_id %></h3>
 <% work.stanzas.each do |stanza| %>
     <p class="stanza" data-number="<%= stanza.position %>">
@@ -10,4 +11,5 @@
         </span>
     <% end %>
     </p>
+<% end %>
 <% end %>

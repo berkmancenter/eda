@@ -73,6 +73,12 @@ module WorkHelper
         select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector'
     end
 
+    def cache_key_for_works(works)
+        count          = works.count
+        max_updated_at = works.maximum(:updated_at).try(:utc).try(:to_s, :number)
+        "works/many-#{count}-#{max_updated_at}"
+    end
+
     def with_format(format, &block)
         old_formats = formats
         begin

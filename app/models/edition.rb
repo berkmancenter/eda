@@ -43,7 +43,7 @@ class Edition < ActiveRecord::Base
     end
 
     def all_works
-        if parent
+        if is_child?
             this_editions_works = works.all
             Work.where(id:
                parent.works.all.map(&:id) -

@@ -1,6 +1,7 @@
 <% provide :title, @image_set.name %>
 <% provide :view_classes, 'side-by-side' %>
 
+<% cache @image_set do %>
   <h2><%= @image_set.name %></h2>
 
   <div class="sbs-pages">
@@ -14,3 +15,4 @@
         </div>
     <% } %>
   </div>
+<% end %>

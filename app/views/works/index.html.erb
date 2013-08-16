@@ -1,11 +1,10 @@
+<% cache cache_key_for_works(@works) do %>
 <table class="works">
     <thead>
         <tr>
             <th>Number</th>
             <th>Title</th>
-            <!--
             <th>Has Image</th>
-            -->
             <th>Date</th>
             <th>Recipient</th>
         </tr>
@@ -15,12 +14,11 @@
     <tr>
         <td><%= @edition.nil? ? work.full_id : "#{work.number}#{strip_tags(work.variant)}" %></td>
         <td><%= work_link(work, @edition.nil? ? work.edition : @edition, false) %></td>
-        <!--
         <td><%= work.has_image? %></td>
-        -->
         <td><%= work.date.strftime('%Y') if work.date %></td>
         <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
     </tr>
 <% end %>
     </tbody>
 </table>
+<% end %>

@@ -15,6 +15,8 @@ gem 'squeel'
 gem 'awesome_nested_set'
 gem 'the_sortable_tree'
 gem 'formtastic'
+gem 'cache_digests'
+gem 'memcache-client'
 
 group :development, :test do
   gem 'rspec-rails'

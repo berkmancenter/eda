@@ -107,7 +107,11 @@ class Work < ActiveRecord::Base
     end
 
     def self.in_image(image)
-        all.select{|w| w.image_set.all_images.include? image}
+        # This assumes work image sets contain only one level
+        joins("INNER JOIN setts AS s1 ON s1.id = works.image_set_id AND s1.type = 'ImageSet'
+              INNER JOIN setts AS s2 ON s1.id = s2.parent_id
+              INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
+              where(images: { id: image.id })
     end
 
     def text
