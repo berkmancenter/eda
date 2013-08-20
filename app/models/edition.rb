@@ -38,6 +38,8 @@ class Edition < ActiveRecord::Base
     }
     default_scope order(:completeness)
 
+    before_create :setup_sets
+
     def images
         image_set.all_images
     end
@@ -56,13 +58,13 @@ class Edition < ActiveRecord::Base
     end
 
     def inherited_everything_yet?
-        !(work_set.nil? || image_set.nil?)
+        !(work_set.empty? || image_set.empty?)
     end
 
     def copy_everything_from_parent!
-        return unless work_set.nil? && image_set.nil?
-        work_map = copy_tree_from_parent(:work_set)
-        image_map = copy_tree_from_parent(:image_set)
+        return unless is_child?
+        copy_tree_from_parent!(:work_set) if work_set.empty?
+        copy_tree_from_parent!(:image_set) if image_set.empty?
     end
 
     def is_child?
@@ -78,7 +80,7 @@ class Edition < ActiveRecord::Base
         ws.move_to_child_of work_set
     end
 
-    def copy_tree_from_parent(relation)
+    def copy_tree_from_parent!(relation)
         root = parent.send(relation)
         root_clone = root.dup
         h = {root => root_clone}
@@ -88,13 +90,23 @@ class Edition < ActiveRecord::Base
             h[item] = item.dup
         end
         descendants.each do |item|
-            cloned = h[item]
-            cloned_parent = h[item.parent]
-            cloned_parent.children << cloned if cloned_parent
+            clone = h[item]
+            clone.parent = h[item.parent]
+            clone.lft = item.lft
+            clone.rgt = item.rgt
+            clone.save!
         end
 
         self.send("#{relation}=", root_clone)
         save!
-        h
+    end
+
+    def setup_sets
+        if is_child?
+            copy_tree_from_parent!(:image_set)
+        else
+            self.image_set = ImageSet.new
+        end
+        self.work_set = WorkSet.new
     end
 end

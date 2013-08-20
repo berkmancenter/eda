@@ -17,7 +17,7 @@ class WorksController < ApplicationController
     end
 
     def show
-        @work = @edition.all_works.includes(:line_modifiers, :stanzas => [:lines]).find(params[:id])
+        @work = @edition.includes(:line_modifiers, :stanzas => [:lines]).find(params[:id])
         respond_to do |format|
             format.html
             format.txt{ render layout: false }
@@ -51,9 +51,22 @@ class WorksController < ApplicationController
     end
 
     def update
+        if params[:continue_to_next_image]
+            @work.image_set << Image.find(params[:next_image])
+            params[:work][:text] << t(:page_break)
+        end
         if @work.update_attributes(params[:work])
             redirect_to edition_work_path(@edition, @work)
         end
+        if params[:continue_to_next_image]
+            redirect_to edit_edition_work_path(@edition, @work)
+        end
+    end
+
+    def destroy
+        @work.destroy
+        flash[:notice] = t :work_successfully_deleted
+        redirect_to edition_works_path(@edition)
     end
 
     def search
@@ -93,14 +106,7 @@ class WorksController < ApplicationController
         end
     end
 
-
     def load_work
         @work = Work.find(params[:id])
-    end
-
-    def setup_child_edition
-        if @edition.parent && !@edition.inherited_everything_yet?
-            @edition.copy_everything_from_parent!
-        end
     end
 end

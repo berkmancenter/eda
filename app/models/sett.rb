@@ -29,6 +29,15 @@ class Sett < ActiveRecord::Base
     }
     include TheSortableTree::Scopes
 
+    def to_offsets
+        root_node = root
+        offsets = {}
+        Sett.each_with_level(self_and_descendants) do |node, level|
+            offsets[node.id] = { lft_offset: node.lft - root.left, rgt_offset: node.rgt - root.lft, parent: node.parent_id }
+        end
+        offsets
+    end
+
     def leaf_after(set)
         after = nil
         catch_next = false

@@ -37,20 +37,9 @@ module WorkHelper
         with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
-    def image_set_path_from_work(work, edition = nil)
-        page_with_work = work.edition.image_set.leaves_showing_work(work).first
-        edition_image_set_path(edition.nil? ? work.edition : edition, page_with_work) if page_with_work
-    end
-
-    def work_link(work, edition, full_title = true)
-        link_to(
-            raw(
-                work.title ?
-                (full_title ? work.full_title : work.title) :
-                (work.lines.first.text if work.lines.first)
-        ),
-            image_set_path_from_work(work, edition)
-        )
+    def image_set_path_from_work(work)
+        image_set = work.edition.image_set.leaves_showing_work(work).first
+        edition_image_set_path(work.edition, image_set) if image_set
     end
 
     def edition_selector(other_editions_works, selected_edition)
@@ -62,7 +51,7 @@ module WorkHelper
         Edition.for_user(current_user).each do |edition|
             link = edition.id
             if other_editions[edition.id]
-                link = image_set_path_from_work(Work.find(other_editions[edition.id]), edition)
+                link = image_set_path_from_work(Work.find(other_editions[edition.id]))
             else
                 disabled << link unless link == selected_edition.id
             end

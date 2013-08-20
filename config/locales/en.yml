@@ -5,10 +5,13 @@ en:
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
   new_transcription_link: 'Please %{sign_in_link} to create a new transcription'
-  edit_work: 'Edit work'
+  edit_work: 'Edit transcription'
+  delete_work: 'Delete transcription'
+  new_transcription: 'Create new transcription'
+  delete_work_confirm: 'Are you sure you want to remove this transcription?'
+  work_successfully_deleted: 'The work has been successfully deleted'
   emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
-  new_transcription: 'Create new transcription'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
   sign_in: 'sign in'
   my_notes: 'My Notes'
@@ -22,3 +25,6 @@ en:
 
   works_drawer_label: 'Text'
   search_drawer_label: 'Search'
+
+  page_break: "-----------------------------"
+  continue_to_next_image: 'Continue transcription to next image'

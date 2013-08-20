@@ -3,7 +3,7 @@ class ImageSetsController < ApplicationController
     before_filter :load_edition
     before_filter :load_image_set, except: :index
     before_filter :check_edition_owner, only: :rebuild
-    before_filter :copy_tree_from_parent, only: :rebuild
+    before_filter :setup_child_edition, only: :rebuild
     before_filter :set_users_current_edition
 
     include TheSortableTreeController::Rebuild
@@ -50,12 +50,6 @@ class ImageSetsController < ApplicationController
     
     def load_image_set
         @image_set = ImageSet.find(params[:id])
-    end
-
-    def copy_tree_from_parent
-        if @edition.parent && !@edition.inherited_everything_yet?
-            @edition.copy_everything_from_parent!
-        end
     end
 end
 

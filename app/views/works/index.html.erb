@@ -12,8 +12,8 @@
     <tbody>
 <% @works.each do |work| %>
     <tr>
-        <td><%= @edition.nil? ? work.full_id : "#{work.number}#{strip_tags(work.variant)}" %></td>
-        <td><%= work_link(work, @edition.nil? ? work.edition : @edition, false) %></td>
+        <td><%= strip_tags work.full_id %></td>
+        <td><%= link_to work.title, image_set_path_from_work(work) %></td>
         <td><%= work.has_image? %></td>
         <td><%= work.date.strftime('%Y') if work.date %></td>
         <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>

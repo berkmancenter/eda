@@ -27,9 +27,6 @@ class ApplicationController < ActionController::Base
         revises_work = Work.find(session[:work_revision][:revises_work_id])
         revision = revises_work.dup
         text = revises_work.text
-
-        logger.info("LOOK HERE: #{text}")
-
         revision.text = text
         if in_edition.is_child? && in_edition.parent == revises_work.edition
             revision.revises_work = revises_work
@@ -57,6 +54,12 @@ class ApplicationController < ActionController::Base
             return block.call
         ensure
             self.formats = old_formats
+        end
+    end
+
+    def setup_child_edition
+        if @edition.is_child? && !@edition.inherited_everything_yet?
+            @edition.copy_everything_from_parent!
         end
     end
 end

@@ -25,6 +25,9 @@
         <% if user_signed_in? %>
             <%= link_to t(:edit_work), edit_edition_work_path(edition, work) %>
         <% end %>
+        <% if user_signed_in? && edition.owner == current_user %>
+            <%= link_to t(:delete_work), edition_work_path(edition, work), method: :delete, confirm: t(:delete_work_confirm) %>
+        <% end %>
         </div>
     <% end # End work loop %>
 
