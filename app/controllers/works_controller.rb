@@ -21,6 +21,7 @@ class WorksController < ApplicationController
         respond_to do |format|
             format.html
             format.txt{ render layout: false }
+            format.tei{ render layout: false }
         end
     end
 

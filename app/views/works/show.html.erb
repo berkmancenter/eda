@@ -1,12 +1,15 @@
-<h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
+<h2><%= raw("#{@work.number}#{@work.variant} - #{@work.title}") %></h2>
 
 <%= 
     render partial: "works/transcriptions/show", locals: {
         edition: @work.edition,
         this_editions_works: [@work],
-        other_editions_works: []
+        other_editions_works: [],
+        variants: @work.variants
     }
 %>
+
+<%= link_to "Download as TEI", edition_work_path(@work.edition, @work, format: :tei) %>
 
 <%= render :partial => 'shared/metadata', :object => @work %>
 

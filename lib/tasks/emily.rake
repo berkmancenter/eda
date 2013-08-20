@@ -8,6 +8,13 @@ namespace :emily do
             HarvardImageProcessor.new.process_directory(args[:input_dir], output_dir, web_image_output_dir)
         end
 
+        desc 'Process Amherst images to cut double images into singles'
+        task :amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            output_dir = args[:output_dir] || Eda::Application.config.emily['image_directory']
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            AmherstImageProcessor.new.process_directory(args[:input_dir], output_dir, web_image_output_dir)
+        end
+
         desc 'Create web-ready images for page turning'
         task :web_images, [:input_dir, :output_dir] => [:environment] do |t, args|
             output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')

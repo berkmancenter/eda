@@ -18,7 +18,7 @@
 <% else %>
     <% this_editions_works.each do |work| %>
         <div class="work-body">
-            <%= render partial: 'works/transcriptions/work_body', locals: { work: work } %>
+            <%= render partial: 'works/transcriptions/work_body', locals: { work: work, edition: edition } %>
         </div>
 
         <div>

@@ -10,11 +10,7 @@ class ImageSetsController < ApplicationController
     include TheSortableTreeController::ExpandNode
 
     def index
-        if user_signed_in?
-            @image_sets = ImageSet.in_editions(Edition.for_user(current_user)).map(&:self_and_descendants).flatten
-        else 
-            @image_sets = ImageSet.in_editions(Edition.is_public).map(&:self_and_descendants).flatten
-        end
+        @image_sets = @edition.image_set.self_and_descendants.includes(:nestable)
     end
 
     def show
@@ -32,13 +28,10 @@ class ImageSetsController < ApplicationController
         end
 
         if @image_set.leaf?
-            all_works = Work.includes(:edition).where(
-                edition: { id: Edition.for_user(current_user)}
-            ).in_image(@image_set.image).group_by{
-                |w| w.edition == @edition
-            }
+            # TODO: Do this all better
+            all_works = Work.in_editions(Edition.for_user(current_user)).
+                in_image(@image_set.image).group_by{ |w| w.edition == @edition }
             @this_editions_works = all_works[true]
-            # TODO: Do this better
             if @this_editions_works.nil? && @edition.is_child?
                 @this_editions_works = Work.joins(:edition).where(
                     edition: { id: @edition.parent.id}

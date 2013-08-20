@@ -48,6 +48,10 @@ class Work < ActiveRecord::Base
         end
     end
 
+    def title
+        read_attribute(:title) || lines.first.text
+    end
+
     def line(number)
         lines.find_by_number(number)
     end
@@ -112,6 +116,10 @@ class Work < ActiveRecord::Base
               INNER JOIN setts AS s2 ON s1.id = s2.parent_id
               INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
               where(images: { id: image.id })
+    end
+
+    def self.in_editions(editions)
+        includes(:edition).where(edition: { id: editions})
     end
 
     def text

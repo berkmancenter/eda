@@ -1,3 +1,5 @@
 <ol class="sortable_tree" data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>">
+    <% cache cache_key_for_image_sets(@image_sets) do %>
 <%= build_server_tree(@image_sets, type: :sortable, edition: @edition, title: :name, rebuild_url: rebuild_edition_image_sets_url(@edition)) %>
+    <% end %>
 </ol>
