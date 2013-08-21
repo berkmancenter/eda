@@ -10,6 +10,7 @@ en:
   new_transcription: 'Create new transcription'
   delete_work_confirm: 'Are you sure you want to remove this transcription?'
   work_successfully_deleted: 'The work has been successfully deleted'
+  work_successfully_updated: 'The work has been successfully updated'
   emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
+    before_filter :recreate_search_from_session
 
     def check_edition_owner
         unless current_user == @edition.owner
@@ -32,9 +33,16 @@ class ApplicationController < ActionController::Base
             revision.revises_work = revises_work
         end
         revision.edition = in_edition
+        revision.image_set = revises_work.image_set.duplicate
         revision.save!
         session.delete(:work_revision)
         revision
+    end
+
+    def recreate_search_from_session
+        return unless session[:search_results]
+        @search = session[:search_results]
+        session.delete(:search_results)
     end
 
     def store_location
@@ -57,9 +65,20 @@ class ApplicationController < ActionController::Base
         end
     end
 
-    def setup_child_edition
-        if @edition.is_child? && !@edition.inherited_everything_yet?
-            @edition.copy_everything_from_parent!
+    def load_image_set
+        @image_set = ImageSet.find(params[:image_set_id])
+    end
+
+    def pull_works_for_edition_image_set(edition, image_set)
+        all_works = Work.in_editions(Edition.for_user(current_user)).
+            in_image(image_set.image).group_by{ |w| w.edition == edition }
+        @this_editions_works = all_works[true]
+        if @this_editions_works.nil? && edition.is_child?
+            @this_editions_works = Work.joins(:edition).where(
+                edition: { id: edition.parent.id}
+            ).in_image(image_set.image)
         end
+        @other_editions_works = all_works[false]
+        @variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq if @this_editions_works
     end
 end

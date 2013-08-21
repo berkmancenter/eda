@@ -29,13 +29,11 @@ class Sett < ActiveRecord::Base
     }
     include TheSortableTree::Scopes
 
-    def to_offsets
-        root_node = root
-        offsets = {}
-        Sett.each_with_level(self_and_descendants) do |node, level|
-            offsets[node.id] = { lft_offset: node.lft - root.left, rgt_offset: node.rgt - root.lft, parent: node.parent_id }
-        end
-        offsets
+    def matching_node_in(set)
+        # Maybe do this by nestable?
+        return unless root.self_and_descendants.count == set.root.self_and_descendants.count
+        offset = set.root.lft - root.lft
+        set.descendants.where(lft: lft + offset, rgt: rgt + offset).first
     end
 
     def lft=(left)
@@ -47,27 +45,11 @@ class Sett < ActiveRecord::Base
     end
 
     def leaf_after(set)
-        after = nil
-        catch_next = false
-        Sett.each_with_level(leaves) do |child, level|
-            if catch_next
-                after = child
-                break
-            end
-            catch_next = child.id == set.id
-        end
-        after
+        leaves.where{lft > set.rgt}.order(:lft).first
     end
 
     def leaf_before(set)
-        previous = nil
-        Sett.each_with_level(leaves) do |child, level|
-            if child.id == set.id
-                break
-            end
-            previous = child
-        end
-        previous
+        leaves.where{rgt < set.lft}.order(:rgt).last
     end
 
     def leaves_containing(member)
@@ -76,5 +58,42 @@ class Sett < ActiveRecord::Base
 
     def empty?
         leaves.empty?
+    end
+
+    def duplicate
+        self.class.skip_callback :create, :before, :set_default_left_and_right
+        self.class.skip_callback :save, :before, :store_new_parent
+        self.class.skip_callback :save, :after, :move_to_new_parent, :set_depth!
+
+        offset = Sett.maximum('rgt') + 1 - lft
+
+        root_clone = dup
+        root_clone.lft += offset
+        root_clone.rgt += offset
+        root_clone.save!
+        map = {self => root_clone}
+
+        descendants = self.descendants.all
+
+        descendants.each do |original_item|
+            clone = original_item.dup
+            clone.lft += offset
+            clone.rgt += offset
+            map[original_item] = clone
+            clone.save!
+        end
+
+        descendants.each do |original_item|
+            next if original_item.root?
+            clone = map[original_item]
+            clone.parent_id = map[original_item.parent].id
+            clone.save!
+        end
+
+        self.class.set_callback :create, :before, :set_default_left_and_right
+        self.class.set_callback :save, :before, :store_new_parent
+        self.class.set_callback :save, :after, :move_to_new_parent, :set_depth!
+
+        root_clone
     end
 end

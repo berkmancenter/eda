@@ -1,0 +1,37 @@
+<section class="interactive-image <%= 'missing-image' if image_set.image.url.nil? %>">
+  <% if image_set.image.url.nil? %>
+    <%= image_tag asset_path("missing_image.jpg") %>
+  <% else %>
+      <div id="page-image"></div>
+      <%= javascript_include_tag "openseadragon" %>
+      <script>
+            OpenSeadragon({
+                id:            "page-image",
+                prefixUrl: '/assets/',
+                tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{image_set.image.url}.tif.dzi" %>'
+            });
+      </script>
+  <% end %>
+
+  <div class="page-controls">
+    <% if previous_image %>
+        <%=
+            link_to('', edition_image_set_url(edition, previous_image), {
+                id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
+            })
+        %> 
+    <% end %>
+
+    <%= link_to('', edition_image_set_url(edition, image_set.parent), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) if image_set.image %>
+
+    <% if next_image %>
+        <%=
+            link_to('', edition_image_set_url(edition, next_image),
+               { id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page' }
+            )
+        %>
+    <% end %>
+  </div>
+
+</section>
+

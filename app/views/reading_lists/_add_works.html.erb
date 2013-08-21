@@ -5,10 +5,10 @@
       <% current_user.reading_lists.each do |reading_list| %>
           <%= render partial: 'reading_lists/show', locals: { reading_list: reading_list } %>
       <% end %>
-      <% if @this_editions_works %>
-          <% @this_editions_works.each do |work| %>
+      <% if works %>
+          <% works.each do |work| %>
               <%= work.full_title %>
-              <%= form_tag add_to_reading_list_edition_work_path(@edition, work), remote: true do %>
+              <%= form_tag add_to_reading_list_edition_work_path(edition, work), remote: true do %>
                   <%= select_tag 'reading_list_id', options_from_collection_for_select(current_user.reading_lists, :id, :name) %>
                   <%= submit_tag 'Add' %>
               <% end %>

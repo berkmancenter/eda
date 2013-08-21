@@ -1,0 +1,14 @@
+<div id="search-panel" class="tab-menu panel">
+    <div class="left drawer-handle" data-drawer="search-panel">
+        <div><%= t :search_drawer_label %></div>
+    </div>
+    <ul class="panel-menu">
+        <li><a href="#">Search</a></li>
+        <li><a href="#">Browse</a></li>
+    </ul>
+
+    <div class="panel-content">
+        <%= render partial: "works/search" %>
+        <%= render partial: "works/browse" %>
+    </div>
+</div>

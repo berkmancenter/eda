@@ -1,0 +1,98 @@
+<div id="work-panel" class="tab-menu panel">
+    <div class="right drawer-handle" data-drawer="work-panel">
+        <div><%= t :works_drawer_label %></div>
+    </div>
+    <ul class="panel-menu">
+        <li><a href="#">Transcriptions</a></li>
+        <li><a href="#">Reading List</a></li>
+        <li><a href="#">Lexicon</a></li>
+    </ul>
+
+    <div class="panel-content">
+        <section class="work-transcription">
+
+        <%= edition_selector(other_editions_works, edition) %>
+
+        <% if this_editions_works.nil? %>
+            <div>
+                <p><em>No transcription of this image</em></p>
+            <% if user_signed_in? %>
+                <p>
+                <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+                </p>
+            <% else %>
+                <p>
+                <%= raw t :new_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
+                </p>
+            <% end %>
+            </div>
+        <% else %>
+            <% this_editions_works.each do |work| %>
+                <% if work_to_edit && work == work_to_edit %>
+                <div class="work-body">
+                    <%= render partial: 'works/form', locals: { edition: edition, work: work, next_image: next_image } %>
+                </div>
+                <% else %>
+                <div class="work-body">
+                    <%= render partial: 'works/transcriptions/show', locals: { work: work, edition: edition } %>
+                </div>
+
+                <div>
+                <% if user_signed_in? %>
+                    <%= link_to t(:edit_work), edit_edition_image_set_work_path(edition, image_set, work) %>
+                <% end %>
+                <% if user_signed_in? && edition.owner == current_user %>
+                    <%= link_to t(:delete_work), edition_work_path(edition, work), method: :delete, confirm: t(:delete_work_confirm) %>
+                <% end %>
+                </div>
+            <% end %>
+            <% end # End work loop %>
+
+            <%= render partial: 'works/transcriptions/tools' %>
+
+            <% unless variants.empty? %>
+                <div>
+                    <h3>Related Works in This Edition</h3>
+                    <ul>
+                        <% variants.each do |variant_work| %>
+                            <%= render partial: 'works/list_item', locals: {
+                                    work: variant_work,
+                                    edition: edition || variant_work.edition
+                                }
+                            %>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+
+            <% unless other_editions_works.nil? || other_editions_works.empty? %>
+                <noscript>
+                    <h3>Related Works in Other Editions</h3>
+                    <ul>
+                        <% other_editions_works.each do |other_work| %>
+                            <%= render partial: 'works/list_item', locals: { work: other_work, edition: other_work.edition } %>
+                        <% end %>
+                    </ul>
+                </noscript>
+            <% end %>
+
+            <% unless user_signed_in? %>
+                <p>
+                <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
+                </p>
+            <% end %>
+        <% end %>
+
+        <% if user_signed_in? && edition.owner == current_user %>
+            <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+        <% end %>
+
+        </section>
+        <%= render partial: "reading_lists/add_works", locals: {
+            edition: edition,
+            works: this_editions_works
+        }
+        %>
+        <%= render partial: "words/browse" %>
+    </div>
+</div>

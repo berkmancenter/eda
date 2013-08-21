@@ -1,55 +1,19 @@
 <% provide :view_classes, 'three-panel' %>
-  <header>
-      <h2 class="edition-name"><%= @edition.name %></h2>
-      <span class="edition-creator">
-          &mdash; <%= user_signed_in? && @edition.owner == current_user ? 'Me' : @edition.author %>
-      </span>
-      <h3 class="image-set-name"><%= @image_set.image.metadata['Label'] %></h3>
-  </header>
 
-  <div id="search-panel" class="tab-menu panel">
-      <div class="left drawer-handle" data-drawer="search-panel">
-          <div><%= t :search_drawer_label %></div>
-      </div>
-      <ul class="panel-menu">
-          <li><a href="#">Search</a></li>
-          <li><a href="#">Browse</a></li>
-      </ul>
-
-      <div class="panel-content">
-          <%= render partial: "shared/search_works", locals: {
-                  action_url: edition_image_set_path(@edition, @image_set)
-              }
-          %>
-          <%= render partial: "shared/browse_works" %>
-      </div>
-  </div>
-
-  <div id="interactive-image-panel" class="panel">
-      <%= render partial: "shared/interactive_image" %>
-      <%= render partial: 'image_sets/notes' %>
-      <%= render partial: 'image_sets/info' %>
-  </div>
-
-  <div id="work-panel" class="tab-menu panel">
-      <div class="right drawer-handle" data-drawer="work-panel">
-          <div><%= t :works_drawer_label %></div>
-      </div>
-      <ul class="panel-menu">
-          <li><a href="#">Transcriptions</a></li>
-          <li><a href="#">Reading List</a></li>
-          <li><a href="#">Lexicon</a></li>
-      </ul>
-
-      <div class="panel-content">
-          <%= render partial: "works/transcriptions/show", locals: {
-                  edition: @edition,
-                  this_editions_works: @this_editions_works,
-                  other_editions_works: @other_editions_works,
-                  variants: @variants
-              }
-          %>
-          <%= render partial: "shared/work_reading_list" %>
-          <%= render partial: "shared/browse_lexicon" %>
-      </div>
-  </div>
+<%= render partial: 'image_sets/header', locals: { edition: @edition, image_set: @image_set } %>
+<%= render partial: 'shared/search_panel' %>
+<%= render partial: 'shared/image_panel', locals: {
+    edition: @edition, image_set: @image_set, note: @note,
+    next_image: @next_image, previous_image: @previous_image
+    }
+%>
+<%= render partial: "shared/work_panel", locals: {
+        edition: @edition,
+        image_set: @image_set,
+        this_editions_works: @this_editions_works,
+        other_editions_works: @other_editions_works,
+        variants: @variants,
+        work_to_edit: @work,
+        next_image: @next_image
+    }
+%>

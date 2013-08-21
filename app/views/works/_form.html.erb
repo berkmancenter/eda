@@ -14,7 +14,7 @@
     <% end %>
 <% end %>
 <%= form_tag edition_work_path(edition, work) do %>
-    <%= hidden_field_tag :next_image, 1 %>
+    <%= hidden_field_tag :next_image, next_image.id %>
     <%= hidden_field_tag :continue_to_next_image %>
     <%= submit_tag t(:continue_to_next_image) %>
 <% end %>

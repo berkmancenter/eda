@@ -12,6 +12,7 @@ Eda::Application.routes.draw do
             collection do 
                 post :rebuild
             end
+            resources :works
         end
         resources :work_sets do
             collection do 
