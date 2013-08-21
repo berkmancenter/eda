@@ -81,32 +81,54 @@ class Edition < ActiveRecord::Base
     end
 
     def copy_tree_from_parent!(relation)
+        logger.info("look: starting here with #{relation}")
         root = parent.send(relation)
+
+        root.class.skip_callback :create, :before, :set_default_left_and_right
+        root.class.skip_callback :save, :before, :store_new_parent
+        root.class.skip_callback :save, :after, :move_to_new_parent, :set_depth!
+
         root_clone = root.dup
-        h = {root => root_clone}
+        root_clone.save!
+        map = {root => root_clone}
 
         descendants = root.descendants.all
-        descendants.each do |item|
-            h[item] = item.dup
-        end
-        descendants.each do |item|
-            clone = h[item]
-            clone.parent = h[item.parent]
-            clone.lft = item.lft
-            clone.rgt = item.rgt
+
+        descendants.each do |original_item|
+            clone = original_item.dup
+            map[original_item] = clone
             clone.save!
         end
 
+        logger.info("look: finished cloning")
+
+        descendants.each do |original_item|
+            next if original_item.root?
+            clone = map[original_item]
+            clone.parent_id = map[original_item.parent].id
+            clone.save!
+        end
+
+        logger.info("look: finished parentalizing")
+
         self.send("#{relation}=", root_clone)
         save!
+
+        root.class.set_callback :create, :before, :set_default_left_and_right
+        root.class.set_callback :save, :before, :store_new_parent
+        root.class.set_callback :save, :after, :move_to_new_parent, :set_depth!
     end
 
     def setup_sets
-        if is_child?
-            copy_tree_from_parent!(:image_set)
-        else
-            self.image_set = ImageSet.new
+        if image_set.nil?
+            if is_child?
+                copy_tree_from_parent!(:image_set)
+            else
+                self.image_set = ImageSet.create
+            end
         end
-        self.work_set = WorkSet.new
+        if work_set.nil?
+            self.work_set = WorkSet.create
+        end
     end
 end

@@ -38,6 +38,14 @@ class Sett < ActiveRecord::Base
         offsets
     end
 
+    def lft=(left)
+        write_attribute(:lft, left)
+    end
+
+    def rgt=(right)
+        write_attribute(:rgt, right)
+    end
+
     def leaf_after(set)
         after = nil
         catch_next = false
