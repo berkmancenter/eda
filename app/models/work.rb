@@ -19,17 +19,17 @@
 class Work < ActiveRecord::Base
     belongs_to :edition
     belongs_to :revises_work, class_name: 'Work'
-    belongs_to :image_set
+    belongs_to :image_set, dependent: :destroy
 
     has_many :sets, as: :nestable, class_name: 'WorkSet'
-    has_many :stanzas, order: :position
-    has_many :lines, through: :stanzas, order: :number
-    has_many :line_modifiers
-    has_many :divisions
-    has_many :emendations
-    has_many :alternates
-    has_many :revisions
-    has_many :appearances, class_name: 'WorkAppearance'
+    has_many :stanzas, order: :position, dependent: :destroy
+    has_many :lines, through: :stanzas, order: :number, dependent: :destroy
+    has_many :line_modifiers, dependent: :destroy
+    has_many :divisions, dependent: :destroy
+    has_many :emendations, dependent: :destroy
+    has_many :alternates, dependent: :destroy
+    has_many :revisions, dependent: :destroy
+    has_many :appearances, class_name: 'WorkAppearance', dependent: :destroy
 
     attr_accessible :date, :metadata, :number, :title, :variant, :text
     after_initialize :setup_defaults
@@ -49,7 +49,7 @@ class Work < ActiveRecord::Base
     end
 
     def title
-        read_attribute(:title) || lines.first.text
+        read_attribute(:title) || (lines.first.text unless lines.empty?)
     end
 
     def line(number)
@@ -84,6 +84,29 @@ class Work < ActiveRecord::Base
         (divisions + emendations + revisions + alternates).select do |apparatus|
             apparatus.line_num == line && apparatus.start_address == char_index
         end
+    end
+
+    def sync_text_and_image_set(edition_image_set)
+        on_work_page = image_set.leaves_containing(edition_image_set.image).first.position_in_level
+        num_work_images = divisions.page_breaks.count + 1
+        image_sets_before_current = edition_image_set.root.leaves_before(
+            edition_image_set, on_work_page
+        )
+        image_sets_after_current = edition_image_set.root.leaves_after(
+            edition_image_set, num_work_images - on_work_page - 1
+        )
+
+        image_set.destroy
+        image_set = ImageSet.create
+
+        image_sets_before_current.each do |i_image_set|
+            image_set << i_image_set.image
+        end
+        image_set << edition_image_set.image
+        image_sets_after_current.each do |i_image_set|
+            image_set << i_image_set.image
+        end
+        self.image_set = image_set
     end
 
     def holder_code=(code)
@@ -169,6 +192,6 @@ class Work < ActiveRecord::Base
     end
 
     def setup_work
-        self.image_set = ImageSet.create if image_set.nil?
+        self.image_set = ImageSet.create if self.image_set.nil?
     end
 end

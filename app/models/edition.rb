@@ -20,10 +20,10 @@
 class Edition < ActiveRecord::Base
     belongs_to :owner, :class_name => 'User'
     belongs_to :parent, :class_name => 'Edition'
-    belongs_to :image_set
-    belongs_to :work_set
+    belongs_to :image_set, dependent: :destroy
+    belongs_to :work_set, dependent: :destroy
 
-    has_many :works, after_add: :add_work_to_work_set
+    has_many :works, after_add: :add_work_to_work_set, dependent: :destroy
 
     attr_accessible :author, :completeness, :date, :description, :name,
         :work_number_prefix, :parent_id, :public

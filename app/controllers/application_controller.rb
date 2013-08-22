@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
     before_filter :recreate_search_from_session
+    helper_method :image_set_path_from_work
 
     def check_edition_owner
         unless current_user == @edition.owner
@@ -13,6 +14,11 @@ class ApplicationController < ActionController::Base
 
     def load_edition
         @edition = Edition.find(params[:edition_id])
+    end
+
+    def image_set_path_from_work(work)
+        image_set = work.edition.image_set.leaves_showing_work(work).first
+        edition_image_set_path(work.edition, image_set) if image_set
     end
 
     def set_users_current_edition

@@ -40,10 +40,10 @@ class ImageSet < Sett
 
     def <<(image)
         save! if changed?
-        id = children.create(type: 'ImageSet').id
-        is = ImageSet.find(id)
+        is = ImageSet.new
         is.image = image
         is.save!
+        is.move_to_child_of self
         save! if changed?
     end
 

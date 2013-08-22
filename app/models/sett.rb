@@ -44,12 +44,25 @@ class Sett < ActiveRecord::Base
         write_attribute(:rgt, right)
     end
 
+    def leaves_after(set, num = 1)
+        leaves.where{lft > set.rgt}.order(:lft).limit(num)
+    end
+
+    def leaves_before(set, num = 1)
+        leaves.where{rgt < set.lft}.reorder('rgt DESC').limit(num)
+    end
+
     def leaf_after(set)
-        leaves.where{lft > set.rgt}.order(:lft).first
+        leaves_after(set).first
     end
 
     def leaf_before(set)
-        leaves.where{rgt < set.lft}.order(:rgt).last
+        leaves_before(set).first
+    end
+
+    def position_in_level
+        # zero-indexed
+        siblings.where{rgt < my{lft}}.count
     end
 
     def leaves_containing(member)

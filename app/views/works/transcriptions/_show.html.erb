@@ -1,5 +1,5 @@
 <% cache work do %>
-<h3><%= link_to work.full_title, edition_work_path(edition, work) %></h3>
+<h3><%= work.full_title %></h3>
 <% work.stanzas.each do |stanza| %>
     <p class="stanza" data-number="<%= stanza.position %>">
     <% stanza.lines.each do |line| %>

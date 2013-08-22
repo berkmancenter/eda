@@ -11,14 +11,18 @@
     <div class="panel-content">
         <section class="work-transcription">
 
-        <%= edition_selector(other_editions_works, edition) %>
+        <%= edition_selector(other_editions_works, edition) unless work_to_edit %>
 
-        <% if this_editions_works.nil? %>
+        <% if work_to_edit && work_to_edit.new_record? %>
+            <div class="work-body">
+                <%= render partial: 'works/form', locals: { edition: edition, image_set: image_set, work: work_to_edit, next_image: next_image } %>
+            </div>
+        <% elsif this_editions_works.nil? || this_editions_works.empty? %>
             <div>
                 <p><em>No transcription of this image</em></p>
             <% if user_signed_in? %>
                 <p>
-                <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
+                <%= link_to t(:new_transcription), new_edition_image_set_work_path(edition, image_set) %>
                 </p>
             <% else %>
                 <p>
@@ -30,25 +34,31 @@
             <% this_editions_works.each do |work| %>
                 <% if work_to_edit && work == work_to_edit %>
                 <div class="work-body">
-                    <%= render partial: 'works/form', locals: { edition: edition, work: work, next_image: next_image } %>
+                    <%= render partial: 'works/form', locals: { edition: edition, image_set: image_set, work: work, next_image: next_image } %>
                 </div>
                 <% else %>
                 <div class="work-body">
                     <%= render partial: 'works/transcriptions/show', locals: { work: work, edition: edition } %>
                 </div>
 
+                <% if user_signed_in? && (work_to_edit.nil? || work != work_to_edit) %>
                 <div>
-                <% if user_signed_in? %>
                     <%= link_to t(:edit_work), edit_edition_image_set_work_path(edition, image_set, work) %>
+                </div>
                 <% end %>
                 <% if user_signed_in? && edition.owner == current_user %>
-                    <%= link_to t(:delete_work), edition_work_path(edition, work), method: :delete, confirm: t(:delete_work_confirm) %>
-                <% end %>
+                <div>
+                    <%= link_to t(:delete_work), edition_image_set_work_path(edition, image_set, work), method: :delete, confirm: t(:delete_work_confirm) %>
                 </div>
+                <% end %>
             <% end %>
             <% end # End work loop %>
 
-            <%= render partial: 'works/transcriptions/tools' %>
+            <% if user_signed_in? && edition.owner == current_user && work_to_edit.nil? %>
+                <%= link_to t(:new_transcription), new_edition_image_set_work_path(edition, image_set) %>
+            <% end %>
+
+            <%= render partial: 'works/transcriptions/tools' if work_to_edit.nil? %>
 
             <% unless variants.empty? %>
                 <div>
@@ -81,10 +91,6 @@
                 <%= raw t :edit_transcription_link, sign_in_link: link_to(t(:sign_in), new_user_session_path) %>
                 </p>
             <% end %>
-        <% end %>
-
-        <% if user_signed_in? && edition.owner == current_user %>
-            <%= link_to t(:new_transcription), new_edition_work_path(edition) %>
         <% end %>
 
         </section>

@@ -9,8 +9,9 @@ en:
   delete_work: 'Delete transcription'
   new_transcription: 'Create new transcription'
   delete_work_confirm: 'Are you sure you want to remove this transcription?'
-  work_successfully_deleted: 'The work has been successfully deleted'
-  work_successfully_updated: 'The work has been successfully updated'
+  work_successfully_deleted: 'The transcription has been successfully deleted.'
+  work_successfully_updated: 'The transcription has been successfully updated.'
+  work_successfully_created: 'The transcription has been successfully created.'
   emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
@@ -28,4 +29,12 @@ en:
   search_drawer_label: 'Search'
 
   page_break: "-----------------------------"
-  continue_to_next_image: 'Continue transcription to next image'
+  continue_to_next_image: 'Continue to Next Image'
+
+  en:
+    formtastic:
+      actions:
+        create: "Create %{model}"
+        update: "Update %{model}"
+        reset: "Reset"
+        cancel: "Cancel"
