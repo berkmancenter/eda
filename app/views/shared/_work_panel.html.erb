@@ -4,8 +4,8 @@
     </div>
     <ul class="panel-menu">
         <li><a href="#">Transcriptions</a></li>
-        <li><a href="#">Reading List</a></li>
         <li><a href="#">Lexicon</a></li>
+        <li><a href="#">Reading List</a></li>
     </ul>
 
     <div class="panel-content">
@@ -94,11 +94,11 @@
         <% end %>
 
         </section>
+        <%= render partial: "words/browse" %>
         <%= render partial: "reading_lists/add_works", locals: {
             edition: edition,
             works: this_editions_works
         }
         %>
-        <%= render partial: "words/browse" %>
     </div>
 </div>
