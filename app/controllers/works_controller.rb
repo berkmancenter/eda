@@ -53,6 +53,8 @@ class WorksController < ApplicationController
             @note = @image_set.notes.new
         end
         pull_works_for_edition_image_set(@edition, @image_set)
+        @next_image = @image_set.root.leaf_after(@image_set)
+        @previous_image = @image_set.root.leaf_before(@image_set)
         render 'image_sets/works', layout: !request.xhr?
     end
 

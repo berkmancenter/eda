@@ -169,6 +169,6 @@ class Work < ActiveRecord::Base
     end
 
     def setup_work
-        self.image_set = ImageSet.create
+        self.image_set = ImageSet.create if image_set.nil?
     end
 end
