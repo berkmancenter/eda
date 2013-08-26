@@ -57,4 +57,10 @@ $(document).ready(function() {
     { "sType": "natural", "aTargets": [ 0 ] }
     ]
     });
+
+    $('.flash.wait').insertAfter('header');
+    $('#edition_submit_action input').on('click', function() {
+        $('.flash').hide();
+        setTimeout(function() { $('.flash.wait').show(); }, 300);
+    });
 });

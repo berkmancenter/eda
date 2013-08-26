@@ -17,10 +17,13 @@ gem 'the_sortable_tree'
 gem 'formtastic'
 gem 'cache_digests'
 gem 'memcache-client'
+gem 'activerecord-import'
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'annotate'
+  gem 'ruby-prof'
+  gem 'test-unit'
 end
 
 group :test do

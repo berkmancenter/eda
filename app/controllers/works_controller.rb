@@ -127,6 +127,9 @@ class WorksController < ApplicationController
 
     def choose_edition
         @edition = Edition.new
+        if session[:work_revision]
+            @edition.parent = Work.find(session[:work_revision][:revises_work_id]).edition
+        end
     end
 
     def add_to_reading_list

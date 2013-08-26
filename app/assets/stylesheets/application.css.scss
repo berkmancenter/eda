@@ -202,6 +202,10 @@ body {
     background: $alertRed;
 }
 
+.wait p {
+    background: $waitYellow;
+}
+
 footer {
   font-size: 0.8em;
   bottom: 0;

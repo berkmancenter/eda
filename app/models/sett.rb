@@ -80,33 +80,34 @@ class Sett < ActiveRecord::Base
 
         offset = Sett.maximum('rgt') + 1 - lft
 
-        root_clone = dup
-        root_clone.lft += offset
-        root_clone.rgt += offset
-        root_clone.save!
-        map = {self => root_clone}
+        tree = self_and_descendants.all
+        clones = []
 
-        descendants = self.descendants.all
-
-        descendants.each do |original_item|
+        tree.each do |original_item|
             clone = original_item.dup
             clone.lft += offset
             clone.rgt += offset
-            map[original_item] = clone
-            clone.save!
+            clones << clone
         end
 
-        descendants.each do |original_item|
-            next if original_item.root?
-            clone = map[original_item]
-            clone.parent_id = map[original_item.parent].id
-            clone.save!
+        Sett.import clones, validate: false
+
+        cloned_tree = Sett.find_by_lft(offset + lft).self_and_descendants.all
+
+        map = Hash[tree.map(&:id).zip(cloned_tree.map(&:id))]
+
+        Sett.transaction do
+            cloned_tree.each do |clone|
+                next if clone.root?
+                clone.parent_id = map[clone.parent_id]
+                clone.save!
+            end
         end
 
         self.class.set_callback :create, :before, :set_default_left_and_right
         self.class.set_callback :save, :before, :store_new_parent
         self.class.set_callback :save, :after, :move_to_new_parent, :set_depth!
 
-        root_clone
+        cloned_tree.first
     end
 end

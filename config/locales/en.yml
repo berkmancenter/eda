@@ -30,6 +30,7 @@ en:
 
   page_break: "-----------------------------"
   continue_to_next_image: 'Continue to Next Image'
+  please_wait_edition_creation: 'Please wait a moment as we create your new edition.'
 
   en:
     formtastic:
