@@ -9,6 +9,7 @@
             <%= text_area_tag 'work[text]', flat_text(work), size: "60x#{lines_in_text_area(work)}" %>
         <% end %>
         <%= hidden_field_tag :next_image, next_image.id %>
+        <%= f.input :tei, as: :file %>
     <% end %>
     <%= f.actions do %>
         <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>

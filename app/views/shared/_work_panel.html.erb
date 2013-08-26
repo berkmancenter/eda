@@ -51,6 +51,7 @@
                     <%= link_to t(:delete_work), edition_image_set_work_path(edition, image_set, work), method: :delete, confirm: t(:delete_work_confirm) %>
                 </div>
                 <% end %>
+                <%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei) %>
             <% end %>
             <% end # End work loop %>
 

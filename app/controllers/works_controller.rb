@@ -72,17 +72,21 @@ class WorksController < ApplicationController
     end
 
     def update
-        num_work_images = @work.divisions.page_breaks.count + 1
-        if params[:commit] == t(:continue_to_next_image)
-            on_work_page = @work.image_set.leaves_containing(@image_set.image).first.position_in_level
-            params[:work][:text] << t(:page_break) unless (on_work_page + 1) < num_work_images
-        end
-        @work.update_attributes(params[:work])
+        if params[:work][:tei]
+            @work = TEIImporter.new.import(params[:work][:tei].read, @work)
+        else
+            num_work_images = @work.divisions.page_breaks.count + 1
+            if params[:commit] == t(:continue_to_next_image)
+                on_work_page = @work.image_set.leaves_containing(@image_set.image).first.position_in_level
+                params[:work][:text] << t(:page_break) unless (on_work_page + 1) < num_work_images
+            end
+            @work.update_attributes(params[:work])
 
-        new_num_work_images = @work.divisions.page_breaks.count + 1
+            new_num_work_images = @work.divisions.page_breaks.count + 1
 
-        unless new_num_work_images == num_work_images
-            @work.sync_text_and_image_set(@image_set)
+            unless new_num_work_images == num_work_images
+                @work.sync_text_and_image_set(@image_set)
+            end
         end
             
         if @work.save!

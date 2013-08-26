@@ -117,7 +117,7 @@ namespace :emily do
         desc 'Import TEI file'
         task :tei, [:edition, :number, :variant, :filename] => [:environment] do |task, args|
             edition = Edition.find_by_author(args[:edition])
-            TEIImporter.new.import(edition, args[:number], args[:variant], args[:filename])
+            TEIImporter.new.import_from_file(edition, args[:number], args[:variant], args[:filename])
         end
 
         desc 'Import minimum content necessary to test'
