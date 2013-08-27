@@ -8,12 +8,13 @@ class ApplicationController < ActionController::Base
         unless current_user == @edition.owner
             flash[:alert] = t :cannot_edit_edition
             session[:previous_url] = request.fullpath
-            redirect_to new_edition_path
+            redirect_to session[:two_urls_back] || new_edition_path
         end
     end
 
     def load_edition
-        @edition = Edition.find(params[:edition_id])
+        edition_id = params[:edition_id] || params[:id]
+        @edition = Edition.find(edition_id)
     end
 
     def image_set_path_from_work(work)
@@ -54,6 +55,7 @@ class ApplicationController < ActionController::Base
     def store_location
         if ![new_user_session_path, new_user_registration_path].include?(request.fullpath) && !request.xhr?
             session[:previous_url] = request.fullpath 
+            session[:two_urls_back] = session[:previous_url]
         end
     end
 

@@ -28,6 +28,12 @@ class Edition < ActiveRecord::Base
     attr_accessible :author, :completeness, :date, :description, :name,
         :work_number_prefix, :parent_id, :public
 
+    validates :name, presence: true, length: { maximum: 200 }
+    validates :description, length: { maximum: 2000 }
+    validates :author, length: { maximum: 200 }
+    validates :date, length: { maximum: 200 }
+    validates :work_number_prefix, length: { maximum: 2 }
+
     scope :is_public, where(public: true)
     scope :for_user, lambda { |user|
         if user.nil?

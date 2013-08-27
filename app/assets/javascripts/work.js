@@ -59,8 +59,8 @@ $(document).ready(function() {
     });
 
     $('.flash.wait').insertAfter('header');
-    $('#edition_submit_action input').on('click', function() {
+    $('#new_edition #edition_submit_action input').on('click', function() {
         $('.flash').hide();
-        setTimeout(function() { $('.flash.wait').show(); }, 300);
+        setTimeout(function() { $('.flash.wait').show(); }, 400);
     });
 });

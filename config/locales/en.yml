@@ -2,6 +2,12 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  errors:
+    messages:
+      blank: '%{attribute} is required'
+      too_long: '%{attribute} is too long. (The maximum is %{count} characters.)'
+      too_big: '%{attribute} is too large.'
+
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
   new_transcription_link: 'Please %{sign_in_link} to create a new transcription'
@@ -12,6 +18,9 @@ en:
   work_successfully_deleted: 'The transcription has been successfully deleted.'
   work_successfully_updated: 'The transcription has been successfully updated.'
   work_successfully_created: 'The transcription has been successfully created.'
+  edition_successfully_deleted: 'The edition has been successfully deleted.'
+  edition_successfully_updated: 'The edition has been successfully updated.'
+  edition_successfully_created: 'The edition has been successfully created.'
   emily_line_breaks: "Physical Line Breaks"
   hide_edits: 'Hide Edits'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
@@ -21,22 +30,32 @@ en:
 
   create_new_edition: 'Create New Edition'
   or: 'or'
-  cannot_edit_edition: 'You cannot edit the current edition.'
+  cannot_edit_edition: 'You do not have permissions to modify that edition.'
 
   revision_already_exists: "You've already begun editing this work in this edition."
 
   works_drawer_label: 'Text'
   search_drawer_label: 'Search'
+  work_not_unique: 'A work with number "%{number}" and variant "%{variant}" already exists in this edition.'
 
   page_break: "-----------------------------"
   continue_to_next_image: 'Continue to Next Image'
   please_wait_edition_creation: 'Please wait a moment as we create your new edition.'
   image_not_available: 'Image not available'
+  empty_edition_choice: '[None]'
 
-  en:
-    formtastic:
-      actions:
-        create: "Create %{model}"
-        update: "Update %{model}"
-        reset: "Reset"
-        cancel: "Cancel"
+  form_error:
+    one: 'An error occurred when saving. See below for details.'
+    other: '%{count} errors occurred when saving. See below for details.'
+
+  formtastic:
+    actions:
+      create: "Create %{model}"
+      update: "Update %{model}"
+      reset: "Reset"
+      cancel: "Cancel"
+    hints: 
+      edition:
+        parent: 'Start with images and works from an existing edition'
+        author: "The displayed name of the edition's creator"
+        work_number_prefix: 'Prefix every work number with an edition-specific code'

@@ -32,6 +32,11 @@ class Work < ActiveRecord::Base
     has_many :appearances, class_name: 'WorkAppearance', dependent: :destroy
 
     attr_accessible :date, :metadata, :number, :title, :variant, :text
+
+    validates :date, :number, :title, :variant, length: { maximum: 200 }
+    validates :number, numericality: { only_integer: true }
+    validate :metadata_size
+
     after_initialize :setup_defaults
     before_create :setup_work
     default_scope order(:number, :variant)
@@ -183,6 +188,19 @@ class Work < ActiveRecord::Base
         end
         new_stanzas << stanza
         self.stanzas = new_stanzas
+    end
+
+    def number_variant_is_unique
+        count = edition.works.where(number: number, variant: variant).count
+        (!new_record? && count == 1) || (new_record? && count == 0)
+    end
+
+    protected
+
+    def metadata_size
+        if metadata.to_yaml.size > 2000
+            errors.add(:metadata, I18n.t('errors.messages.too_big'))
+        end
     end
 
     private

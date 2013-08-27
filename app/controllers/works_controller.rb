@@ -56,13 +56,21 @@ class WorksController < ApplicationController
         else
             @work = @edition.works.new(params[:work])
             load_image_set
-            if @work.save!
-                @work.image_set << @image_set.image
-                @work.sync_text_and_image_set(@image_set)
-                @work.save!
-                flash[:notice] = t :work_successfully_created
+            if @work.number_variant_is_unique
+                if @work.save
+                    @work.image_set << @image_set.image
+                    @work.sync_text_and_image_set(@image_set)
+                    @work.save!
+                    flash[:notice] = t :work_successfully_created
+                    redirect_to edition_image_set_path(@edition, @image_set)
+                else
+                    flash[:alert] = t :form_error, count: @work.errors.count
+                    redirect_to new_edition_image_set_work_path(@edition, @image_set, @work)
+                end
+            else
+                flash[:alert] = I18n.t('work_not_unique', { number: @work.number, variant: @work.variant })
+                redirect_to new_edition_image_set_work_path(@edition, @image_set, @work)
             end
-            redirect_to edition_image_set_path(@edition, @image_set)
         end
     end
 
@@ -88,15 +96,24 @@ class WorksController < ApplicationController
                 @work.sync_text_and_image_set(@image_set)
             end
         end
-            
-        if @work.save!
-            flash[:notice] = t :work_successfully_updated
-        end
-        if params[:commit] == t(:continue_to_next_image)
-            @image_set = ImageSet.find(params[:next_image])
-            redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
+
+        if @work.number_variant_is_unique
+            if @work.save
+                flash[:notice] = t :work_successfully_updated
+                if params[:commit] == t(:continue_to_next_image)
+                    @image_set = ImageSet.find(params[:next_image])
+                    redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
+                else
+                    redirect_to edition_image_set_path(@edition, @image_set)
+                end
+            else
+                flash[:alert] = t :form_error, count: @work.errors.count
+                setup_image_set_view_variables
+                render 'image_sets/works', layout: !request.xhr?
+            end
         else
-            redirect_to edition_image_set_path(@edition, @image_set)
+            flash[:alert] = I18n.t('work_not_unique', { number: @work.number, variant: @work.variant })
+            redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
         end
     end
 
@@ -143,7 +160,6 @@ class WorksController < ApplicationController
     end
 
     private
-
     def move_to_editable_edition
         unless current_user == @edition.owner
             flash[:alert] = t :cannot_edit_edition

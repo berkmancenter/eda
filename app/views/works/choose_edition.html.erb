@@ -5,7 +5,7 @@
 <% end %>
 
 <h2><%= t :create_new_edition %></h2>
-<%= render partial: 'editions/forms/new' %>
+<%= render partial: 'editions/form', locals: { edition: @edition } %>
 
 <div class="flash wait" style="display:none">
     <p>
