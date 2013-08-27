@@ -3,6 +3,7 @@
         <%= f.input :number %>
         <%= f.input :variant %>
         <%= f.input :title %>
+        <label for="work_text">Text</label>
         <% if work.new_record? %>
             <%= text_area_tag 'work[text]', nil, size: "30x10" %>
         <% else %>
@@ -15,5 +16,6 @@
     <%= f.actions do %>
         <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>
         <%= f.action :submit, label: t(:continue_to_next_image), button_html: { class: 'eda-btn-light' } %>
+        <%= f.action :cancel %>
     <% end %>
 <% end %>

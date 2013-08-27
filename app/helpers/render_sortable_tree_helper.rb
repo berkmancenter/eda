@@ -47,9 +47,9 @@ module RenderSortableTreeHelper
         edit_path = h.url_for(:controller => options[:klass].pluralize, :action => :edit, :id => node)
         show_path = h.url_for(:controller => options[:klass].pluralize, :action => :show, :id => node)
 
-            #{ h.link_to '', edit_path, :class => :edit }
-            #{ h.link_to '', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
         "
+            #{ h.link_to 'edit', edit_path, :class => :edit }
+            #{ h.link_to 'delete', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           <div class='controls'>
           </div>
         "

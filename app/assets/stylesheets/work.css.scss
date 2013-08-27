@@ -12,7 +12,7 @@
 
 }
 
-body.works.edit {
+body.works.edit, body.works.new, body.works.create {
     overflow: hidden;
 }
 
@@ -76,46 +76,58 @@ body.works.edit {
     }
 }
 
-form.work {
-    .inputs {
-        li {
-            float: left;
-            input {
+.works.new, .works.create {
+    .work-body {
+        padding: 0;
+    }
+    #work_text {
+        padding: 0.1em;
+        width: 90%;
+    }
+}
+
+.works.edit {
+    form.work {
+        .inputs {
+            li {
+                float: left;
+                input {
+                    font-size: 14px;
+                    font-weight: bold;
+                    font-family: 'PT Serif';
+                    background: transparent;
+                    border: 0;
+                    padding: 0;
+                    color: $darkGray;
+                }
+            }
+            label {
+                position: absolute;
+                top: -200em;
+                left: -200em;
+            }
+            #work_number {
+                width: 3em;
+            }
+            #work_variant {
+                width: 2em;
+            }
+            #work_title {
+                width: 15em;
+            }
+            #work_title_input:before {
+                content: " - ";
                 font-size: 14px;
                 font-weight: bold;
                 font-family: 'PT Serif';
-                background: transparent;
-                border: 0;
-                padding: 0;
-                color: $darkGray;
             }
         }
-        label {
-            position: absolute;
-            top: -200em;
-            left: -200em;
+        #work_text {
+            padding: 0.8em 0 0;
+            border: 0;
+            display: block;
+            line-height: 1.75em;
+            width: 100%;
         }
-        #work_number {
-            width: 3em;
-        }
-        #work_variant {
-            width: 2em;
-        }
-        #work_title {
-            width: 15em;
-        }
-        #work_title_input:before {
-            content: " - ";
-            font-size: 14px;
-            font-weight: bold;
-            font-family: 'PT Serif';
-        }
-    }
-    #work_text {
-        padding: 0.8em 0 0;
-        border: 0;
-        display: block;
-        line-height: 1.75em;
-        width: 100%;
     }
 }

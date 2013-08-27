@@ -65,11 +65,12 @@ class WorksController < ApplicationController
                     redirect_to edition_image_set_path(@edition, @image_set)
                 else
                     flash[:alert] = t :form_error, count: @work.errors.count
-                    redirect_to new_edition_image_set_work_path(@edition, @image_set, @work)
+                    setup_image_set_view_variables
+                    render 'image_sets/works'
                 end
             else
                 flash[:alert] = I18n.t('work_not_unique', { number: @work.number, variant: @work.variant })
-                redirect_to new_edition_image_set_work_path(@edition, @image_set, @work)
+                redirect_to new_edition_image_set_work_path(@edition, @image_set)
             end
         end
     end

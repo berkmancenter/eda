@@ -1,7 +1,7 @@
 class ImageSetsController < ApplicationController
     before_filter :authenticate_user!, only: :rebuild
     before_filter :load_edition
-    before_filter :load_image_set, except: :index
+    before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
     before_filter :set_users_current_edition
 
@@ -25,6 +25,39 @@ class ImageSetsController < ApplicationController
         else
             render
         end
+    end
+
+    def new
+        @image_set = ImageSet.new
+    end
+
+    def create
+        @image_set = ImageSet.new(params[:image_set])
+        @image_set.move_to_child_of @edition.image_set
+        if @image_set.save
+            flash[:notice] = t :successful_creation
+            redirect_to edition_image_sets_path(@edition)
+        else
+            flash[:alert] = t :form_error, count: @image_set.errors.count
+            render :new
+        end
+    end
+
+    def edit
+    end
+
+    def update
+        @image_set.update_attributes(params[:image_set])
+        if @image_set.save
+            flash[:notice] = t :successful_update
+            redirect_to edition_image_sets_path(@edition)
+        else
+            flash[:alert] = t :form_error, count: @image_set.errors.count
+            redirect_to edit_edition_image_set_path(@edition, @image_set)
+        end
+    end
+
+    def destroy
     end
     
     private

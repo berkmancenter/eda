@@ -43,6 +43,8 @@ en:
   please_wait_edition_creation: 'Please wait a moment as we create your new edition.'
   image_not_available: 'Image not available'
   empty_edition_choice: '[None]'
+  successful_creation: '%{model} created successfully'
+  successful_update: '%{model} updated successfully'
 
   form_error:
     one: 'An error occurred when saving. See below for details.'
@@ -50,10 +52,11 @@ en:
 
   formtastic:
     actions:
-      create: "Create %{model}"
-      update: "Update %{model}"
-      reset: "Reset"
-      cancel: "Cancel"
+      work:
+        create: 'Create Transcription'
+    labels:
+      work:
+        tei: 'TEI'
     hints: 
       edition:
         parent: 'Start with images and works from an existing edition'

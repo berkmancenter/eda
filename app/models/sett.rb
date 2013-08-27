@@ -22,6 +22,9 @@ class Sett < ActiveRecord::Base
     belongs_to :owner, :class_name => 'User'
     has_many :notes, :as => :notable
     attr_accessible :name, :editable, :type, :metadata
+
+    validates :name, length: { maximum: 200 }
+
     serialize :metadata
     acts_as_nested_set
     scope :in_editions, lambda { |editions|
