@@ -23,7 +23,7 @@ class Sett < ActiveRecord::Base
     has_many :notes, :as => :notable
     attr_accessible :name, :editable, :type, :metadata
 
-    validates :name, length: { maximum: 200 }
+    validates :name, length: { maximum: 1000 }
 
     serialize :metadata
     acts_as_nested_set

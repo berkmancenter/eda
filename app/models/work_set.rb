@@ -29,6 +29,6 @@ class WorkSet < Sett
     end
 
     def name
-        read_attribute(:name) || work.full_title
+        read_attribute(:name) || (work.full_title if work)
     end
 end
