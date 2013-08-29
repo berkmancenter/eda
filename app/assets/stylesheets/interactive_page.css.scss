@@ -1,7 +1,4 @@
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
+@import "colors";
 
 .__seadragon {
   background: transparent !important;
@@ -12,8 +9,24 @@ $lightTan: #eeddb5;
   display: none;
 }
 
+.missing-image {
+    text-align: center;
+}
+
+#page-image {
+    position: absolute;
+    top: 0;
+    bottom: 82px;
+    width: 96%;
+    margin: 0 2%;
+}
+
 .page-controls {
-  margin-top: 1em;
+  bottom: 30px;
+  height: 40px;
+  left: 0;
+  position: absolute;
+  right: 0;
   text-align: center;
 
   a {
@@ -40,4 +53,14 @@ $lightTan: #eeddb5;
   #next-page {
     background-position: -64px 0;
   }
+}
+
+.credits {
+  font-size: 0.8em;
+  overflow: auto;
+}
+
+.bottom.drawer .credits {
+    height: 100%;
+    margin-top: 0;
 }

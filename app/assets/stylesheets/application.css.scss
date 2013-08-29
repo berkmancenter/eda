@@ -15,15 +15,15 @@
  *= require_tree .
  */
 
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
+@import "colors";
 
 /* apply a natural box layout model to all elements */
 /* http://paulirish.com/2012/box-sizing-border-box-ftw/ */
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
+@viewport{
+    width: device-width;
+}
 /* ==========================================================================
    HTML5 display definitions
    ========================================================================== */
@@ -48,6 +48,43 @@ summary {
 }
 
 /**
+ * some site-wide classes
+ */
+
+.hr {
+  border: solid 1px $gray;
+  border-width: 1px 0 0 0;
+  height: 0px;
+  margin: 0;
+  width: 100%;
+}
+
+.menu-container {
+  display: block;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.eda-btn-light {
+  font-family: 'Source Sans Pro';
+  background: $tan;
+  border: solid 1px $darkGray;
+  color: $darkGray;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7E8C6), to(#EEDCB3));
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 0 2px #8F7341;
+  padding: 0.2em 1em;
+
+  &:hover {
+    background: $lightTan;
+    cursor: pointer;
+  }
+}
+
+/**
  * General page layout structure:
  *
  * html
@@ -61,14 +98,17 @@ summary {
 
 html {
   color: $tan;
-  font-family: sans-serif;
-  font-size: .8em;
+  font-family: 'Source Sans Pro';
+  font-size: 16px;
+}
+
+h2, h3 {
+    font-weight: 400;
 }
 
 body {
   background: $darkGray;
   line-height: 1.33em;
-  letter-spacing: .1em;
   margin: 0;
   min-width: 512px;
 
@@ -85,25 +125,38 @@ body {
     text-decoration: underline;
   }
 
-  header {
-    background: url("ornament-small.png") repeat-x 0 16px;
+  > header {
+    background: url("ornament-small.png") repeat-x 0 10px;
     margin: 0;
-    padding: 0 0 1em 0;
-
+    padding: 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
     h1 {
       background: $darkGray;
       display: inline-block;
       font-family: Georgia, serif;
       font-weight: normal;
-      padding: 24px 27px;
+      padding: 18px 27px 20px;
       margin: 0 0 0 27px*2;
       white-space: nowrap;
       width: 27px * 14;
+      font-size: 0;
+      background-image: url('/assets/logo.png');
+    }
+
+    .hr {
+      margin-top: 0.7em;
     }
   }
 
+  .view {
+      padding: 1em 2em 4em;
+  }
+
   footer {
+    background: $darkGray;
+    text-align: center;
+
     p {
       font-family: Georgia, serif;
       font-size: .8em;
@@ -127,21 +180,85 @@ body {
   }
 }
 
-/**
- * some site-wide classes
- */
-
-.hr {
-  border: solid 1px $lightGray;
-  height: 0px;
-  margin: 1em 0;
-  width: 100%;
+.flash {
+    text-align: center;
+    height: 5.5em;
+    margin-top: -5.5em;
 }
 
-.menu-container {
-  display: block;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  width: 100%;
+.flash p {
+    padding: 0.8em 2em;
+    border-radius: 2px;
+    color: #000;
+    display: inline-block;
+    box-shadow: 0 0 20px $shadowGray;
+}
+
+.notice p {
+    background: $noticeGreen;
+}
+
+.alert p {
+    background: $alertRed;
+}
+
+.wait p {
+    background: $waitYellow;
+}
+
+footer {
+  font-size: 0.8em;
+  bottom: 0;
+  height: 3em;
+  left: 0;
+  position: fixed;
+  right: 0;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+  ul {
+      margin-top: 0.6em;
+  }
+}
+
+textarea, input:not([type]), input[type="color"], input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="url"], input[type="text"] {
+    border: 1px solid $gray;
+    padding: 3px 5px;
+    font-family: 'Source Sans Pro';
+}
+
+.formtastic {
+    fieldset {
+        border: 0;
+    }
+    ol {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 0;
+    }
+    li {
+        margin: 0.1em;
+    }
+    label {
+        display: inline-block;
+        width: 15%;
+        margin-right: 2%;
+        vertical-align: top;
+    }
+    textarea {
+        width: 50%;
+    }
+    .inline-hints, .inline-errors {
+        margin-left: 16%;
+        font-size: 0.8em;
+        margin-top: 0;
+        padding-left: 0.2em;
+    }
+    .inline-hints {
+    }
+    .inline-errors {
+        color: $alertRed;
+    }
+    abbr[title=required] {
+        color: $alertRed;
+    }
 }

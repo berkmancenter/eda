@@ -1,0 +1,113 @@
+@import "colors";
+
+@mixin border-radius-top( $r ) {
+  -moz-border-radius: 0px;
+  -webkit-border-radius: $r $r 0px 0px;
+  border-radius: $r $r 0px 0px; 
+}
+
+.search-works-form {
+  button {
+    background: none;
+    border: none;
+
+    span {
+      display: none;
+    }
+  }
+
+  label {
+    display: none;
+  }
+}
+
+.search-works-options {
+  a, a:visited {
+    color: $darkGray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $lightGray;
+    text-decoration: none;
+  }
+
+  h2 {
+    display: inline-block;
+  }
+
+  h2:before {
+    content: "▶ ";
+    display: inline-block;
+    font-size: .8em;
+    width: 1em;
+  }
+
+  input, select {
+    display: none;
+  }
+}
+
+.search-works-options.open {
+  h2:before {
+    content: "▼ ";
+  }
+
+  input, select {
+    display: block;
+  }
+}
+
+.search-works-results {
+  h2 {
+    font-size: 1.25em;
+    color: $darkGray;
+    padding: .2em .2em;
+    text-align: center;
+  }
+
+  .query {
+      font-style: italic;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  a, a:visited {
+    background: $lightTan;
+    border-top: solid 1px $lessDarkTan;
+    color: $darkGray;
+    display: block;
+    padding: .5em;
+  }
+
+  a:hover {
+    background: $tan;
+    color: $darkGray;
+    text-decoration: none;
+  }
+
+  .work-title {
+      max-width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: inline-block;
+  }
+
+  .work-number {
+    display: inline-block;
+    float: right;
+    text-align: right;
+    white-space: nowrap;
+    width: 4em;
+  }
+}

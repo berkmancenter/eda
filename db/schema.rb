@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130506184629) do
+ActiveRecord::Schema.define(:version => 20130821160430) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_id"
@@ -29,44 +29,21 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
     t.datetime "date"
     t.string   "work_number_prefix"
     t.float    "completeness"
-    t.integer  "owner_id"
-    t.integer  "root_image_group_id"
     t.text     "description"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-  end
-
-  add_index "editions", ["owner_id"], :name => "index_editions_on_owner_id"
-
-  create_table "image_group_images", :force => true do |t|
-    t.integer  "image_group_id"
-    t.integer  "image_id"
-    t.integer  "position"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "image_group_images", ["image_group_id"], :name => "index_image_group_images_on_image_group_id"
-  add_index "image_group_images", ["image_id"], :name => "index_image_group_images_on_image_id"
-
-  create_table "image_groups", :force => true do |t|
-    t.text     "name"
-    t.boolean  "editable"
-    t.text     "image_url"
-    t.text     "metadata"
-    t.integer  "edition_id"
-    t.string   "type"
+    t.integer  "owner_id"
+    t.integer  "work_set_id"
+    t.integer  "image_set_id"
     t.integer  "parent_id"
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.boolean  "public"
   end
 
-  add_index "image_groups", ["edition_id"], :name => "index_image_groups_on_edition_id"
-  add_index "image_groups", ["lft"], :name => "index_image_groups_on_lft"
-  add_index "image_groups", ["parent_id"], :name => "index_image_groups_on_parent_id"
-  add_index "image_groups", ["rgt"], :name => "index_image_groups_on_rgt"
+  add_index "editions", ["completeness"], :name => "index_editions_on_completeness"
+  add_index "editions", ["image_set_id"], :name => "index_editions_on_image_set_id"
+  add_index "editions", ["owner_id"], :name => "index_editions_on_owner_id"
+  add_index "editions", ["parent_id"], :name => "index_editions_on_parent_id"
+  add_index "editions", ["work_set_id"], :name => "index_editions_on_work_set_id"
 
   create_table "images", :force => true do |t|
     t.text     "url"
@@ -120,17 +97,39 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
 
   add_index "notes", ["owner_id"], :name => "index_notes_on_owner_id"
 
-  create_table "pages", :force => true do |t|
-    t.integer  "edition_id"
-    t.integer  "work_id"
-    t.integer  "image_group_image_id"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
-  add_index "pages", ["edition_id"], :name => "index_pages_on_edition_id"
-  add_index "pages", ["image_group_image_id"], :name => "index_pages_on_image_group_image_id"
-  add_index "pages", ["work_id"], :name => "index_pages_on_work_id"
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "setts", :force => true do |t|
+    t.text     "name"
+    t.text     "metadata"
+    t.string   "type"
+    t.boolean  "editable"
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "depth"
+    t.integer  "nestable_id"
+    t.string   "nestable_type"
+    t.integer  "owner_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "setts", ["lft"], :name => "index_setts_on_lft"
+  add_index "setts", ["nestable_id"], :name => "index_setts_on_nestable_id"
+  add_index "setts", ["nestable_type"], :name => "index_setts_on_nestable_type"
+  add_index "setts", ["owner_id"], :name => "index_setts_on_owner_id"
+  add_index "setts", ["parent_id"], :name => "index_setts_on_parent_id"
+  add_index "setts", ["rgt"], :name => "index_setts_on_rgt"
+  add_index "setts", ["type"], :name => "index_setts_on_type"
 
   create_table "stanzas", :force => true do |t|
     t.integer  "work_id"
@@ -171,6 +170,7 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
   create_table "work_appearances", :force => true do |t|
     t.integer  "work_id"
     t.string   "publication"
+    t.string   "pages"
     t.integer  "year"
     t.datetime "date"
     t.datetime "created_at",  :null => false
@@ -179,45 +179,21 @@ ActiveRecord::Schema.define(:version => 20130506184629) do
 
   add_index "work_appearances", ["work_id"], :name => "index_work_appearances_on_work_id"
 
-  create_table "work_group_works", :force => true do |t|
-    t.integer  "work_group_id"
-    t.integer  "work_id"
-    t.integer  "position"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "work_group_works", ["work_group_id"], :name => "index_work_group_works_on_work_group_id"
-  add_index "work_group_works", ["work_id"], :name => "index_work_group_works_on_work_id"
-
-  create_table "work_groups", :force => true do |t|
-    t.string   "name"
-    t.string   "type"
-    t.integer  "parent_group_id"
-    t.integer  "edition_id"
-    t.integer  "owner_id"
-    t.integer  "position"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "work_groups", ["edition_id"], :name => "index_work_groups_on_edition_id"
-  add_index "work_groups", ["owner_id"], :name => "index_work_groups_on_owner_id"
-  add_index "work_groups", ["parent_group_id"], :name => "index_work_groups_on_parent_group_id"
-
   create_table "works", :force => true do |t|
     t.string   "title"
     t.datetime "date"
     t.integer  "number"
     t.string   "variant"
-    t.integer  "edition_id"
-    t.integer  "image_group_id"
     t.text     "metadata"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.integer  "edition_id"
+    t.integer  "image_set_id"
+    t.integer  "revises_work_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   add_index "works", ["edition_id"], :name => "index_works_on_edition_id"
-  add_index "works", ["image_group_id"], :name => "index_works_on_image_group_id"
+  add_index "works", ["image_set_id"], :name => "index_works_on_image_set_id"
+  add_index "works", ["revises_work_id"], :name => "index_works_on_revises_work_id"
 
 end

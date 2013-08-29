@@ -31,7 +31,11 @@ module RenderSortableTreeHelper
       def show_link
         node = options[:node]
         ns   = options[:namespace]
-        url  = h.edition_image_group_url(options[:edition], node)
+        if node.is_a? ImageSet
+            url = h.edition_image_set_url(options[:edition], node)
+        elsif node.is_a? WorkSet
+            url = h.edition_work_set_url(options[:edition], node)
+        end
         title_field = options[:title]
 
         "<h4>#{ h.link_to(node.send(title_field), url) }</h4>"
@@ -44,9 +48,9 @@ module RenderSortableTreeHelper
         show_path = h.url_for(:controller => options[:klass].pluralize, :action => :show, :id => node)
 
         "
+            #{ h.link_to 'edit', edit_path, :class => :edit }
+            #{ h.link_to 'delete', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           <div class='controls'>
-            #{ h.link_to '', edit_path, :class => :edit }
-            #{ h.link_to '', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           </div>
         "
       end

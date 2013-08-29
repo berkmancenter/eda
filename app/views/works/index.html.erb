@@ -1,6 +1,24 @@
-<ul>
+<% cache cache_key_for_works(@works) do %>
+<table class="works">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Title</th>
+            <th>Has Image</th>
+            <th>Date</th>
+            <th>Recipient</th>
+        </tr>
+    </thead>
+    <tbody>
 <% @works.each do |work| %>
-    <li><%= link_to(raw(work.title ? "#{work.edition.work_number_prefix}#{work.number}#{work.variant}. #{work.title}" : (work.lines.first.text if work.lines.first)), edition_work_path(work.edition, work)) %></li>
+    <tr>
+        <td><%= strip_tags work.full_id %></td>
+        <td><%= link_to work.title, image_set_path_from_work(work) %></td>
+        <td><%= work.has_image? %></td>
+        <td><%= work.date.strftime('%Y') if work.date %></td>
+        <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
+    </tr>
 <% end %>
-</ul>
-
+    </tbody>
+</table>
+<% end %>

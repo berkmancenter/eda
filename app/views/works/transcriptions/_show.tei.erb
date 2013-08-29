@@ -1,0 +1,9 @@
+                <% cache work do %>
+                <% work.stanzas.each do |stanza| %>
+                <lg type="stanza">
+                <% stanza.lines.each do |line| %>
+                    <l><%= raw render_line(line) %></l>
+                <% end %>
+                </lg>
+                <% end %>
+                <% end %>

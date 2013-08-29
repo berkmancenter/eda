@@ -1,0 +1,7 @@
+<%= render partial: 'editions/form', locals: { edition: @edition } %>
+<div class="flash wait" style="display:none">
+    <p>
+    <%= t :please_wait_edition_creation %>
+    <%= image_tag 'ajax-loader.gif' %>
+    </p>
+</div>

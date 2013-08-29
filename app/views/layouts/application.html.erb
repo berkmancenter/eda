@@ -2,15 +2,20 @@
 <html>
 <head>
   <meta charset="utf-8" />
+
+  <%= raw( "<noscript>#{ yield( :noscript ) }</noscript>" ) if yield( :noscript ) %>
+
   <% if yield( :title ).empty? %>
     <title>Emily Dickinson Archive</title>
   <% else %>
     <title><%= yield( :title ) %></title>
   <% end %>
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
-
+  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Carrois+Gothic+SC|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  
+  
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -33,17 +38,23 @@
       <% end %>
     </div>
 
+
     <div class="hr"></div>
   </header>
 
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <% if notice %>
+      <div class="flash notice"><p><%= notice %></p></div>
+  <% end %>
+  <% if alert %>
+      <div class="flash alert"><p><%= alert %></p></div>
+  <% end %>
 
-<%= yield %>
+  <section class="view <%= yield :view_classes %>">
+  <%= yield %>
+  </section>
 
   <footer>
     <div class="hr"></div>
-    <p>&copy; 2013 The Emily Dickinson Archive &middot; President and Fellows of Harvard College &middot; Cambridge, Massachusetts 02138</p>
     <nav class="footer">
       <ul>
         <li><%= link_to( '', 'http://cyber.law.harvard.edu', { class: 'berkman-link', title: 'Berkman Center for Internet and Society' } ) %></li>
@@ -57,7 +68,7 @@
   </footer>
 
   <%=
-    if ( Rails.env.development? )
+    if (false && Rails.env.development? )
         debug( params )
     end
   %>

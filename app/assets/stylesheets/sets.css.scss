@@ -1,0 +1,41 @@
+@import "colors";
+.sortable_tree {
+    .item {
+        background-color: $lighterThanDarkGray;
+        box-shadow: 0 1px 2px 1px $lightShadowGray;
+        border-radius: 1px;
+
+        &:hover {
+            background-color: $gray;
+            box-shadow: 0 1px 3px $shadowGray;
+        }
+
+        h4 {
+            a {
+                font-size: inherit;
+                color: $tan;
+
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+
+    .placeholder {
+        background-color: $lessLightGray;
+        border: 1px dotted $darkTan;
+        border-radius: 1px;
+    }
+
+    .handle {
+        background: rgba(0, 0, 0, 0) url(/assets/handle_icon_hover.png);
+        &:hover {
+            background: rgba(0, 0, 0, 0) url(/assets/handle_icon_hover.png);
+        }
+    }
+
+    ol {
+        border-left: 1px dotted $darkTan;
+    }
+}

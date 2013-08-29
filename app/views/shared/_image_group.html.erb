@@ -1,6 +1,0 @@
-<%= link_to(image_group.name, edition_image_group_path(@edition, image_group)) %>
-<ul>
-    <% image_group.children.each do |child_group| %>
-        <li><%= render :partial => 'shared/image_group', :object => child_group %></li>
-    <% end %>
-</ul>

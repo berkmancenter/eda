@@ -2,7 +2,12 @@
 <ul>
     <% @editions.each do |edition| %>
         <li>
-        <%= link_to("#{edition.name}", edition_works_path(edition)) %> by <%= edition.author %>
+        <%= link_to("#{edition.name}", edition_works_path(edition)) %> by <%= (edition.author.nil? || edition.author.empty?) ? 'Me' : edition.author %>
+        <% if user_signed_in? && edition.owner == current_user %>
+            <%= link_to('edit', edit_edition_path(edition)) %>
+            <%= link_to('delete', edition_path(edition), confirm: 'Are you sure you want to delete this edition?', method: :delete) %>
+        <% end %>
         </li>
     <% end %>
 </ul>
+<%= link_to t(:create_new_edition), new_edition_path %>

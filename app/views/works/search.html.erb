@@ -1,21 +1,8 @@
-<h2>Search</h2>
-<%= form_tag search_works_path, :method => 'get' do %>
-    <%= label_tag(:q, 'Search for:') %>
-    <%= text_field_tag(:q, params[:q]) %>
-    <%= render 'shared/forms/edition_selector' %>
-    <%= submit_tag('Search') %>
-<% end %>
-<% if @search %>
-    <h3><%= @search.total %> Results</h3>
-    <ul>
-        <% @search.results.each do |work| %>
-            <li>
-            <% if page = Page.find_by_work_id(work.id) %>
-                <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_page_path(work.edition, page)) %>
-            <% else %>
-                <%= link_to("#{work.title} (#{work.number} #{work.variant})", edition_work_path(work.edition, work)) %>
-            <% end %>
-            </li>
-        <% end %>
-    </ul>
-<% end %>
+<section class="works-search view">
+  <%= render( {
+    partial: "shared/search_works",
+    locals: {
+      action_url: search_works_path
+    }
+  } ) %>
+</section>

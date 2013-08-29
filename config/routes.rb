@@ -3,15 +3,33 @@ Eda::Application.routes.draw do
     root :to => 'static_pages#home'
 
     resources :editions do
-        resources :works
-        resources :pages
-        resources :image_groups do
+        resources :works do
+            member do
+                post :add_to_reading_list
+            end
+        end
+        resources :image_sets do
+            collection do 
+                post :rebuild
+            end
+            resources :works
+        end
+        resources :work_sets do
             collection do 
                 post :rebuild
             end
         end
     end
+
+    resources :image_sets do
+        resources :notes
+    end
+
+    resources :reading_lists
     resources :works do
+        member do 
+            get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
+        end
         collection do
             match '/:first_letter' => 'works#index', :as => :by_letter, :first_letter => /[A-Za-z]/
         end
@@ -21,10 +39,6 @@ Eda::Application.routes.draw do
             match '/:first_letter' => 'words#index', :as => :by_letter, :first_letter => /[A-Za-z]/
         end
     end
-    resources :images do 
-        resources :notes
-    end
-
 
     match 'about' => 'static_pages#about'
     match 'faq' => 'static_pages#faq'
@@ -36,6 +50,7 @@ Eda::Application.routes.draw do
     match 'lexicon' => 'words#index'
 
     get 'search(/:q)' => 'works#search', :as => 'search_works'
+
     devise_for :users
   # The priority is based upon order of creation:
   # first created -> highest priority.

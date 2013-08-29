@@ -1,0 +1,9 @@
+<div id="image-set-info" class="bottom drawer collapsed">
+  <a href="#" class="one bottom drawer-handle" data-drawer="image-set-info"><%= t :image_info %></a>
+  <% unless image.metadata.nil? %>
+  <dl class="credits">
+      <%= render partial: 'shared/metadata', locals: { object: image } %>
+      <dt>Credits</dt><dd><%= image.credits %></dd>
+  </dl>
+  <% end %>
+</div>

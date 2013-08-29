@@ -1,0 +1,21 @@
+<%= semantic_form_for [edition, image_set, work] do |f| %>
+    <%= f.inputs do %>
+        <%= f.input :number %>
+        <%= f.input :variant %>
+        <%= f.input :title %>
+        <label for="work_text">Text</label>
+        <% if work.new_record? %>
+            <%= text_area_tag 'work[text]', nil, size: "30x10" %>
+        <% else %>
+            <%= text_area_tag 'work[text]', flat_text(work), size: "60x#{lines_in_text_area(work)}" %>
+        <% end %>
+        <%= f.input :date %>
+        <%= hidden_field_tag :next_image, next_image.id %>
+        <%= f.input :tei, as: :file %>
+    <% end %>
+    <%= f.actions do %>
+        <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>
+        <%= f.action :submit, label: t(:continue_to_next_image), button_html: { class: 'eda-btn-light' } %>
+        <%= f.action :cancel %>
+    <% end %>
+<% end %>

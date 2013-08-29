@@ -7,7 +7,7 @@ describe 'static pages requests' do
     before { visit root_url }
 
     it {
-      should have_selector( 'title', { text: 'Emily Dickinson Archive' } )
+      should have_title 'Emily Dickinson Archive'
     }
 
     it {
@@ -24,7 +24,7 @@ describe 'static pages requests' do
     before { visit about_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {
@@ -44,7 +44,7 @@ describe 'static pages requests' do
     before { visit faq_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {
@@ -56,7 +56,7 @@ describe 'static pages requests' do
     before { visit team_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {
@@ -68,7 +68,7 @@ describe 'static pages requests' do
     before { visit terms_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {
@@ -80,7 +80,7 @@ describe 'static pages requests' do
     before { visit privacy_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {
@@ -92,7 +92,7 @@ describe 'static pages requests' do
     before { visit contact_url }
 
     it {
-      should have_selector( 'title', { text: 'About Emily Dickinson Archive' } )
+      should have_title 'About Emily Dickinson Archive'
     }
 
     it {

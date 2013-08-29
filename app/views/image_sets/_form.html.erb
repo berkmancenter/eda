@@ -1,0 +1,8 @@
+<%= semantic_form_for [edition, image_set] do |f| %>
+    <%= f.inputs do %>
+        <%= f.input :name, as: :string %>
+    <% end %>
+    <%= f.actions do %>
+        <%= f.action :submit %>
+    <% end %>
+<% end %>

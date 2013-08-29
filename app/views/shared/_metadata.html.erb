@@ -1,5 +1,5 @@
-<% if ( metadata.metadata != nil ) %>
-  <% metadata.metadata.each do |key, value| %>
+<% unless object.metadata.nil? %>
+  <% object.metadata.each do |key, value| %>
       <dt><%= key %></dt><dd><%= value %></dd>
   <% end %>
 <% end %>

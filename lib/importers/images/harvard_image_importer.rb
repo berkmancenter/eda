@@ -37,20 +37,23 @@
 
 require 'csv'
 class HarvardImageImporter
-    def import(directory, johnson_franklin_map)
-        collection = Collection.new(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
+    def import(directory, johnson_franklin_map, max_images = nil, test = false)
+        puts "Importing Harvard images"
+        collection = Collection.create!(:name => 'Harvard Collection', :metadata => {'Library' => 'Houghton'})
         editions = Edition.where(:author => ['Thomas H. Johnson', 'R. W. Franklin'])
+        image_count = 0
+        total_files = Dir.entries(directory).count
 
-        Dir.open(directory).each do |filename|
+        Dir.open(directory).each_with_index do |filename, i|
+            puts "File #{i} of #{total_files}"
             next if filename[0] == '.'
+            next if max_images && image_count >= max_images
             file = File.open("#{directory}/#{filename}")
             doc = Nokogiri::XML(file)
             doc.remove_namespaces!
 
             # Create sheet group and add to edition
-            # Don't create a sheet group if this file doesn't contain poems
-            sheet_groups = editions.map{|e| new_sheet_group(e, doc) if doc_has_works?(e, doc, johnson_franklin_map)}
-            next if sheet_groups.compact.empty?
+            sheet_groups = editions.map{|e| new_sheet_group(e, doc)}
 
             doc.css('structMap div[TYPE=PAGE]').each do |page|
                 file_id = page.css('fptr')[1]['FILEID']
@@ -59,43 +62,36 @@ class HarvardImageImporter
                 image_url = image_url.match(/(ms_.*)\.jp2/)[1]
                 web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
                 width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
+
                 image = Image.new(
                     :url => image_url,
-                    :metadata => {'Imported' => Time.now.to_s},
                     :credits => 'Harvard credits',
                     :web_width => width,
-                    :web_height => height
+                    :web_height => height,
+                    :metadata => {
+                        'Imported' => Time.now.to_s,
+                        'Order' => page['ORDER'].to_i,
+                        'Order Label' => page['ORDERLABEL'],
+                        'Label' => page['LABEL']
+                    }
                 )
+                image_count += 1
 
-                # Add same image to the collection group
-                image_for_collection_group = collection.image_group_images.build(:position => collection.children.count)
-                image_for_collection_group.image = image
+                collection << image unless test
 
                 editions.each_with_index do |edition, i|
-                    next if sheet_groups[i].nil?
-                    # Don't skip pages that don't have works because we'd like
-                    # to see the backs of pages when page turning, etc.
-
-                    # Create an image and add it to the sheet group
-                    image_for_sheet_group = sheet_groups[i].image_group_images.build(:position => page['ORDER'].to_i)
-                    image_for_sheet_group.image = image
-
-                    # Find the works contained in this image
+                    sheet_groups[i] << image
                     works = works_from_page(edition, page, johnson_franklin_map)
-
                     next if works.empty?
-
-                    # Create a page for every work this image contains
-                    create_work_pages!(edition, works, image, image_for_sheet_group)
+                    works.each do |work|
+                        work.image_set << image
+                        work.save! if work.changed?
+                    end
                 end
             end
-            sheet_groups.compact.each(&:save!)
+            sheet_groups.each(&:save!)
             editions.each(&:save!)
-            collection.save!
-        end
-        Work.includes(:pages).where({:pages => {:work_id => nil}}).each do |work|
-            puts "creating page for work: #{work.number} #{work.variant}"
-            create_work_page_without_image(work)
+            collection.save! unless test
         end
     end
 
@@ -110,7 +106,7 @@ class HarvardImageImporter
     end
 
     def new_sheet_group(edition, doc)
-        edition.root_image_group.children.new(
+        is = ImageSet.create!(
             :name => doc.at('mets')['LABEL'],
             :editable => false,
             :metadata => {
@@ -118,6 +114,8 @@ class HarvardImageImporter
                 'URI' => doc.at_css('identifier[type="uri"]').text
             }
         )
+        is.move_to_child_of edition.image_set
+        is
     end
 
     def works_from_page(edition, page, johnson_franklin_map)
@@ -154,31 +152,5 @@ class HarvardImageImporter
         end
         works.compact!
         works
-    end
-
-    def create_work_page_without_image(work)
-        page = work.edition.pages.new
-        page.work = work
-        unless work.image_group
-            work.image_group = ImageGroup.new(:name => "Images for #{work.title}")
-        end
-        work.save!
-        page.save!
-    end
-
-    def create_work_pages!(edition, works, image, image_for_sheet)
-        works.each do |work|
-            page = edition.pages.new
-            page.image = image_for_sheet
-            page.work = work
-            unless work.image_group
-                work.image_group = ImageGroup.new(:name => "Images for #{work.title}")
-            end
-            work_group_image = work.image_group.image_group_images.new(:position => work.image_group.image_group_images.count)
-            work_group_image.image = image
-            work_group_image.save!
-            work.save!
-            page.save!
-        end
     end
 end

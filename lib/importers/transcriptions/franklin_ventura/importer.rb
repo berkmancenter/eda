@@ -4,12 +4,10 @@
 # Set numbers?
 # Variant collections
 
-require_relative 'error_checking.rb'
 require_relative 'field_parsing.rb'
 require_relative 'char_map.rb'
 require_relative 'patterns.rb'
 
-include ErrorChecking
 include FieldParsing
 include Patterns
 
@@ -21,21 +19,46 @@ end
 
 module FranklinVentura
     class Importer
+        include ActionView::Helpers::SanitizeHelper
         def create_edition
             edition = Edition.new(
-                :name => 'The Poems of Emily Dickinson: Variorum Edition',
-                :author => 'R. W. Franklin',
-                :date => Date.new(1998, 1, 1),
-                :work_number_prefix => 'F',
-                :completeness => 1.0
+                name: 'The Poems of Emily Dickinson: Variorum Edition',
+                author: 'R. W. Franklin',
+                date: Date.new(1998, 1, 1),
+                work_number_prefix: 'F',
+                completeness: 1.0,
+                :public => true
             )
-            edition.create_root_image_group(
-                :name => "Images for #{edition.name}",
-                :editable => false
+            edition.create_image_set(
+                name: "Images for #{edition.name}",
+                editable: true
             )
-            edition.root_image_group.edition = edition
-            edition.root_image_group.save!
+            edition.create_work_set(
+                name: "Works in #{edition.name}",
+                editable: true
+            )
             edition
+        end
+
+        def sub(pattern)
+            Regexp.new(pattern.to_s.gsub("<", '\|--').gsub('>', '--\|'))
+        end
+
+        def markup_file(file)
+            string = file.read
+            string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
+            string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
+            string.gsub!(Publication_extractor, "\n<publication>\n\\0\n</publication>\n")
+            string.gsub!(Manuscript_extractor, "\n<manuscript>\n\\0\n</manuscript>\n")
+            string.gsub!(Regexp.new("#{Title_pattern} #{Title_extractor}"), "\n<title>\n\\0\n</title>\n")
+            string.gsub!(Alternate_extractor, "\n<alternates>\n\\0\n</alternates>\n")
+            string.gsub!(Division_extractor, "\n<divisions>\n\\0\n</divisions>\n")
+            string.gsub!(Stanza_start_pattern, "\n<stanza>\n\\0")
+            string.gsub!(Stanza_boundary_pattern, "</stanza>\n<stanza>\n\\0")
+            #string.gsub!("<", "|--")
+            #string.gsub!(">", "--|")
+            #string.gsub!(/(<\/poem>[^<]*)<\/poem>/m, '\1')
+            sanitize(CharMap.replace(string), tags: %w(i poem stanza publication manuscript alternates divisions))
         end
 
         def process_file(file)
@@ -60,9 +83,9 @@ module FranklinVentura
                     if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
                         close_poem(poem) if poem
                         poem = Work.new(
-                            :number => match[:number].to_i,
-                            :title => CharMap::replace_no_itals(match[:title]).strip,
-                            :date => Date.new(File.basename(file.path).to_i)
+                            number: match[:number].to_i,
+                            title: CharMap::replace_no_itals(match[:title]).strip,
+                            date: Date.new(File.basename(file.path).to_i)
                         )
                     end
                 end
@@ -134,16 +157,16 @@ module FranklinVentura
                                 title = variant_titles.empty? ? poem.title : variant_titles.shift
                                 close_poem(poem)
                                 poem = Work.new(
-                                    :number => poem.number,
-                                    :title => CharMap::replace_no_itals(title).strip,
-                                    :variant => CharMap::replace(matches['variant']),
-                                    :date => Date.new(File.basename(file.path).to_i)
+                                    number: poem.number,
+                                    title: CharMap::replace_no_itals(title).strip,
+                                    variant: CharMap::replace(matches['variant']),
+                                    date: Date.new(File.basename(file.path).to_i)
                                 )
                                 puts "poem: #{poem.number} #{poem.variant}"
                             end
                         end
 
-                        stanza_line = Line.new(:text => CharMap::replace(matches['line']))
+                        stanza_line = Line.new(:text => CharMap::replace(matches['line']).strip)
                         stanza_line.number = line_number(poem, stanza, matches)
                         stanza.lines << stanza_line
                     end
@@ -158,18 +181,22 @@ module FranklinVentura
             close_poem(poem) if poem
         end
 
-        def import(directory, from_year = 1850, to_year = 1886, error_check = true)
+        def import(directory, from_year = 1850, to_year = 1886)
+            puts "Importing Franklin works"
             edition = create_edition
             @poems = []
+            string = ''
 
             Dir.open(directory).sort.each do |filename|
                 next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
-                process_file(File.open("#{directory}/#{filename}"))
+                #process_file(File.open("#{directory}/#{filename}"))
+                string << markup_file(File.open("#{directory}/#{filename}"))
             end
 
+            File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
             edition.works = @poems
             edition.save!
-            post_process!(edition, error_check)
+            post_process!(edition)
         end
 
         def add_modifiers!(poem, line)
@@ -206,13 +233,12 @@ module FranklinVentura
             line_num
         end
 
-        def post_process!(edition, error_check = false)
+        def post_process!(edition)
             locate_emendations!(edition)
             locate_divisions!(edition)
             locate_alternates!(edition)
             fix_exceptions!(edition)
             group_variants(edition)
-            check_for_errors(edition) if error_check
         end
 
         def fix_exceptions!(edition)
@@ -228,18 +254,19 @@ module FranklinVentura
                 if group.empty? || group.last.number == work.number
                     group << work
                 elsif group.count > 1 && group.last.number != work.number
-                    wg = WorkGroup.new(:name => "#{group.last.number} variants")
-                    group.each{ |w| wg.works << w }
+                    wg = WorkSet.create!(:name => "#{group.last.number} variants")
+                    group.each do |w|
+                        ws = WorkSet.create!
+                        ws.work = w
+                        ws.move_to_child_of wg
+                        ws.save!
+                    end
                     wg.save!
                     group = [work]
                 else
                     group = [work]
                 end
             end
-        end
-
-        def check_for_errors(edition)
-            find_errors(edition.works.all)
         end
 
         def prep_modifier(modifier, extractor, extracted)

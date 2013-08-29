@@ -1,0 +1,4 @@
+<%= form_tag works_path do %>
+    <%= select_tag :edition_id, options_from_collection_for_select(current_user.editions, :id, :name) %>
+    <%= submit_tag 'Select' %>
+<% end %>

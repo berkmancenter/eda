@@ -1,0 +1,18 @@
+defaults: &DEFAULTS
+    default_edition: "The Poems of Emily Dickinson: Variorum Edition"
+
+development:
+    <<: *DEFAULTS
+    image_host: "http://iipimage.dev.berkmancenter.org/iipsrv/iipsrv.fcgi"
+    image_directory: "/web/sid/eda_data/images"
+    web_image_directory: "previews/"
+    data_directory: "/home/jclark/projects/emily/eda_data"
+
+test:
+    <<: *DEFAULTS
+    image_host: "http://interop.lib.harvard.edu:9080/cgi-bin/iipsrv.fcgi"
+    image_directory: "/home/iip/dev/images/tiff"
+    web_image_directory: "previews_test"
+
+production:
+    <<: *DEFAULTS

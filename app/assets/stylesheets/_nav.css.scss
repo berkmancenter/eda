@@ -1,12 +1,10 @@
-$darkGray: #333;
-$lightGray: #888;
-$tan: #e7cf98;
-$lightTan: #eeddb5;
+@import "colors";
 
 nav.main, nav.user {
   display: inline-block;
   text-align: left;
-  text-transform: uppercase;
+  font-family: 'Carrois Gothic SC';
+  text-shadow: 1px 1px 15px $shadowGray;
 
   ul {
     margin: 0;
@@ -17,6 +15,10 @@ nav.main, nav.user {
     display: inline-block;
     margin: 0 1em;
   }
+}
+
+nav.main {
+  margin-right: 1em;
 }
 
 nav.user {

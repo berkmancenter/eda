@@ -28,7 +28,7 @@ module RenderTreeHelper
       def show_link
         node = options[:node]
         ns   = options[:namespace]
-        url  = h.edition_image_group_url(options[:edition], node)
+        url  = h.edition_image_set_url(options[:edition], node)
         title_field = options[:title]
 
         "<h4>#{ h.link_to(node.send(title_field), url) }</h4>"

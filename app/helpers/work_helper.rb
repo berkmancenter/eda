@@ -3,11 +3,11 @@ module WorkHelper
         return unless mod
         case mod.type
         when 'Emendation', 'Revision'
-            render :partial => "shared/#{mod.type.downcase}", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.type.downcase}", :locals => { :mod => mod }
         when 'Division'
-            render :partial => "shared/#{mod.subtype}_division", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.subtype}_division", :locals => { :mod => mod }
         when 'Alternate'
-            render :partial => "shared/#{mod.subtype}", :locals => { :mod => mod }
+            render :partial => "works/transcriptions/mods/#{mod.subtype}", :locals => { :mod => mod }
         end
     end
 
@@ -23,5 +23,53 @@ module WorkHelper
             output += render_mod(mod)
         end
         output
+    end
+
+    def render_work_result_link(  work )
+      raw( "<span class='work-number'>#{work.edition.work_number_prefix}#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
+    end
+
+    def lines_in_text_area(work)
+        work.lines.count + work.stanzas.count + work.divisions.page_breaks.count
+    end
+
+    def flat_text(work)
+        with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
+    end
+
+    def edition_selector(other_editions_works, selected_edition)
+        other_editions_works ||= []
+        options = []
+        disabled = []
+        selected = selected_edition.id
+        other_editions = Hash[other_editions_works.map{|w| [w.edition.id, w.id]}]
+        Edition.for_user(current_user).each do |edition|
+            link = edition.id
+            if other_editions[edition.id]
+                link = image_set_path_from_work(Work.find(other_editions[edition.id]))
+            else
+                disabled << link unless link == selected_edition.id
+            end
+            options << [edition.name, link]
+        end
+        options = options.sort_by{|o| o[1] == selected ? 1 : 2}
+
+        select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector'
+    end
+
+    def cache_key_for_works(works)
+        count          = works.count
+        max_updated_at = works.maximum(:updated_at).try(:utc).try(:to_s, :number)
+        "works/many-#{count}-#{max_updated_at}"
+    end
+
+    def with_format(format, &block)
+        old_formats = formats
+        begin
+            self.formats = [format]
+            return block.call
+        ensure
+            self.formats = old_formats
+        end
     end
 end

@@ -5,13 +5,15 @@ class CreateWorks < ActiveRecord::Migration
       t.datetime :date
       t.integer :number
       t.string :variant
-      t.references :edition
-      t.references :image_group
       t.text :metadata
+      t.references :edition
+      t.references :image_set
+      t.references :revises_work
 
       t.timestamps
     end
     add_index :works, :edition_id
-    add_index :works, :image_group_id
+    add_index :works, :image_set_id
+    add_index :works, :revises_work_id
   end
 end

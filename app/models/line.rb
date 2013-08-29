@@ -1,8 +1,22 @@
+# == Schema Information
+#
+# Table name: lines
+#
+#  id         :integer          not null, primary key
+#  stanza_id  :integer
+#  text       :text
+#  number     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Line < ActiveRecord::Base
   belongs_to :stanza
   has_one :work, :through => :stanza
   has_many :line_modifiers, :through => :work, :conditions => proc{ "start_line_number <= #{number} AND end_line_number >= #{number}" }
   attr_accessible :number, :text
+
+  before_destroy :destroy_mods
 
   def chars
       text.chars.to_a
@@ -19,5 +33,11 @@ class Line < ActiveRecord::Base
 
   def just_author_break?
       line_modifiers.exists?(:subtype => 'author')
+  end
+
+  private
+
+  def destroy_mods
+      work.line_modifiers.where("start_line_number <= #{number} AND end_line_number >= #{number}").destroy_all
   end
 end

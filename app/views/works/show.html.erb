@@ -1,14 +1,18 @@
-<h2><%= @work.title ? raw("#{@work.number}#{@work.variant} - #{@work.title}") : @work.lines.first.text %></h2>
+<h2><%= raw("#{@work.number}#{@work.variant} - #{@work.title}") %></h2>
 
-<%= render( {
-  partial: "shared/work_transcription",
-  object: @work
-} ) %>
+<%= 
+    render partial: "works/transcriptions/show", locals: {
+        edition: @work.edition,
+        this_editions_works: [@work],
+        other_editions_works: [],
+        variants: @work.variants
+    }
+%>
+
+<%= link_to "Download as TEI", edition_work_path(@work.edition, @work, format: :tei) %>
 
 <%= render :partial => 'shared/metadata', :object => @work %>
 
-<% if @work.image_group %>
-    <% @work.image_group.images.each do |image| %>
-        <%= image_tag( preview_url(image), { "data-image-id" => image.id }) %>
-    <% end %>
-<% end %>
+<ol class="sortable_tree" data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>">
+<%= build_server_tree(@work.image_set.self_and_descendants, type: :sortable, edition: @edition, title: :name, rebuild_url: rebuild_edition_image_sets_url(@edition)) %>
+</ol>
