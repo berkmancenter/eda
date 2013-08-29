@@ -6,6 +6,7 @@ FactoryGirl.define do
       date "1951-01-01"
       work_number_prefix "J"
       completeness 0.95
+      public true
     end
 
     factory :franklin do
@@ -14,6 +15,7 @@ FactoryGirl.define do
       date "1998-01-01"
       work_number_prefix "F"
       completeness 1
+      public true
     end
 
     factory :tested do
@@ -22,6 +24,7 @@ FactoryGirl.define do
       date '2013-06-06'
       work_number_prefix 'T'
       completeness 0.1
+      public true
     end
   end
 
@@ -51,6 +54,7 @@ FactoryGirl.define do
       title 'Awake ye muses nine, sing me a strain divine'
       number 1
       variant 'A'
+      date '1850-01-01'
     end
 
     factory :work_f2a do
@@ -243,55 +247,6 @@ FactoryGirl.define do
       #parent :iset_franklin
       metadata nil
     end
-  end
-
-  # visually, the following pages (work/image combo) look like this, where the numbers are work numbers and the blocks are scanned images
-  #
-  # 11111 11111 11111 22222 33333
-  # 11111 11111       22222 33333
-  # 11111 11111 22222       33333
-  # 11111 11111 22222
-  #
-
-  factory :page do
-    # edition :franklin
-
-    factory :page_one do
-      #work_set :work_f1a
-      #image_set :iset_one#1
-    end
-
-    factory :page_two do
-      #work_set :work_f1a
-      #image_set :iset_one#2
-    end
-
-    factory :page_three do
-      #work_set :work_f1a
-      #image_set :iset_one#3
-    end
-
-    factory :page_four do
-      #work_set :work_f2a
-      #image_set :iset_two#1
-    end
-
-    factory :page_five do
-      #work_set :work_f2a
-      #image_set :iset_two#2
-    end
-
-    factory :page_six do
-      #work_set :work_f3a
-      #image_set :iset_three#1
-    end
-
-    # edition :tested
-    factory :tp_work_no_stanzas_no_image do
-      #work_set :tw_no_stanzas
-      #image_set nil
-    end
-
   end
 end
 

@@ -24,6 +24,7 @@ namespace :db do
       franklin.save
 
       # image sets
+
       image_one = FactoryGirl.create( :image_one )
       image_two = FactoryGirl.create( :image_two )
       image_three = FactoryGirl.create( :image_three )
@@ -165,43 +166,6 @@ namespace :db do
 
       work_f131a.index!
 
-      # finally, some pages
-      page_one = FactoryGirl.create( :page_one )
-      page_one.edition = franklin
-      page_one.work_set = wset_f1a
-      page_one.image_set = iset_one_i1
-      page_one.save
-
-      page_two = FactoryGirl.create( :page_two )
-      page_two.edition = franklin
-      page_two.work_set = wset_f1a
-      page_two.image_set = iset_one_i2
-      page_two.save
-
-      page_three = FactoryGirl.create( :page_three )
-      page_three.edition = franklin
-      page_three.work_set = wset_f1a
-      page_three.image_set = iset_one_i3
-      page_three.save
-
-      page_four = FactoryGirl.create( :page_four )
-      page_four.edition = franklin
-      page_four.work_set = wset_f2a
-      page_four.image_set = iset_two_i1
-      page_four.save
-
-      page_five = FactoryGirl.create( :page_five )
-      page_five.edition = franklin
-      page_five.work_set = wset_f2a
-      page_five.image_set = iset_two_i1
-      page_five.save
-
-      page_six = FactoryGirl.create( :page_six )
-      page_six.edition = franklin
-      page_six.work_set = wset_f3a
-      page_six.image_set = iset_three_i1
-      page_six.save
-
       #
       # tested
       # 
@@ -219,13 +183,6 @@ namespace :db do
       wset_tw_no_stanzas.work = tw_no_stanzas
       wset_tw_no_stanzas.save
       tested.work_set.children << wset_tw_no_stanzas
-
-      # finally, some pages
-      tp_work_no_stanzas_no_image = FactoryGirl.create :tp_work_no_stanzas_no_image
-      tp_work_no_stanzas_no_image.edition = tested
-      tp_work_no_stanzas_no_image.work_set = wset_tw_no_stanzas
-      tp_work_no_stanzas_no_image.image_set = nil
-      tp_work_no_stanzas_no_image.save
 
       Sunspot.commit
     end
