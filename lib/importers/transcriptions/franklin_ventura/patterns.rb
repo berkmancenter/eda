@@ -15,6 +15,9 @@ module Patterns
     Emendation_pattern = /@N(_3PTS)? = <MI>Emendation<D>/
     Emendation_extractor = /@N(_3PTS)? = <MI>Emendation<D>(?<emendations>.*)/
 
+    Manuscript_pattern = /<F53621?(%14)?>manuscript/
+    Manuscript_extractor = /<F53621?(%14)?>manuscripts?(<%0>)?:<F255>(?<manuscript>.*)/
+
     Publication_pattern = /^@1 = <F53621M?(%14)?>publication(<D?%0>)?:<F255>/
     Publication_extractor = /^@1 = <F53621M?(%14)?>publication(<D?%0>)?:<F255>(?<publications>.*)/
     Published_extractor = /<MI>(?<publication>[^<]*)<D> \(((?<day>\d{1,2}) (?<month>\w*) )?(?<year>\d{4})\), (?<pages>[-\d]+)( \(<MI>(?<source_variant>[A-Z])<D>\))?/

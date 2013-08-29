@@ -19,6 +19,7 @@ end
 
 module FranklinVentura
     class Importer
+        include ActionView::Helpers::SanitizeHelper
         def create_edition
             edition = Edition.new(
                 name: 'The Poems of Emily Dickinson: Variorum Edition',
@@ -37,6 +38,27 @@ module FranklinVentura
                 editable: true
             )
             edition
+        end
+
+        def sub(pattern)
+            Regexp.new(pattern.to_s.gsub("<", '\|--').gsub('>', '--\|'))
+        end
+
+        def markup_file(file)
+            string = file.read
+            string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
+            string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
+            string.gsub!(Publication_extractor, "\n<publication>\n\\0\n</publication>\n")
+            string.gsub!(Manuscript_extractor, "\n<manuscript>\n\\0\n</manuscript>\n")
+            string.gsub!(Regexp.new("#{Title_pattern} #{Title_extractor}"), "\n<title>\n\\0\n</title>\n")
+            string.gsub!(Alternate_extractor, "\n<alternates>\n\\0\n</alternates>\n")
+            string.gsub!(Division_extractor, "\n<divisions>\n\\0\n</divisions>\n")
+            string.gsub!(Stanza_start_pattern, "\n<stanza>\n\\0")
+            string.gsub!(Stanza_boundary_pattern, "</stanza>\n<stanza>\n\\0")
+            #string.gsub!("<", "|--")
+            #string.gsub!(">", "--|")
+            #string.gsub!(/(<\/poem>[^<]*)<\/poem>/m, '\1')
+            sanitize(CharMap.replace(string), tags: %w(i poem stanza publication manuscript alternates divisions))
         end
 
         def process_file(file)
@@ -163,12 +185,15 @@ module FranklinVentura
             puts "Importing Franklin works"
             edition = create_edition
             @poems = []
+            string = ''
 
             Dir.open(directory).sort.each do |filename|
                 next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
-                process_file(File.open("#{directory}/#{filename}"))
+                #process_file(File.open("#{directory}/#{filename}"))
+                string << markup_file(File.open("#{directory}/#{filename}"))
             end
 
+            File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
             edition.works = @poems
             edition.save!
             post_process!(edition)
