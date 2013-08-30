@@ -13,15 +13,15 @@
         <% end %>
     </div>
 
-    <% if @search %>
+    <% if @search.present? %>
         <div class="search-works-results">
             <h2>
-                <%= pluralize @search[:total], 'result' %>
-                for &quot;<span class="query"><%= @search[:q] %></span>&quot;
+                <%= pluralize @search.hits.count, 'result' %>
+                for &quot;<span class="query"><%= params[ :q ] %></span>&quot;
             </h2>
             <ul>
-            <% @search[:results].each do |work| %>
-                <li><%= link_to render_work_result_link(work), image_set_path_from_work(work) %></li>
+            <% @search.hits.each do |work| %>
+              <li><%= link_to render_work_result_link(Work.find( work.primary_key )), image_set_path_from_work(Work.find( work.primary_key ) ) %></li>
             <% end %>
             </ul>
         </div>

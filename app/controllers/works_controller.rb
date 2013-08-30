@@ -144,7 +144,9 @@ class WorksController < ApplicationController
                 results: @search.results
             }
        end
-        redirect_to request.referrer if request.referrer
+        # causes infinite loop in /search, is this needed for
+        # search on /editions/:edition_id/image_sets/:id
+        #redirect_to request.referrer if request.referrer
     end
 
     def choose_edition
