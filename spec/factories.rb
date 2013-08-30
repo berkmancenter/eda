@@ -158,7 +158,30 @@ FactoryGirl.define do
       text 'Besides the Autumn poets sing'
       number 1
     end
+  end
 
+  factory :division do
+    factory :d_f1a03 do
+      type 'Division'
+      subtype 'page_or_column'
+      #work :work_f1a
+      start_line_number 3
+      start_address 19
+      end_line_number 3
+      end_address 19
+      original_characters '---'
+    end
+
+    factory :d_f1a06 do
+      type 'Division'
+      subtype 'page_or_column'
+      #work :work_f1a
+      start_line_number 6
+      start_address 54
+      end_line_number 6
+      end_address 54
+      original_characters 'air,'
+    end
   end
 
   # metadata is not designed enough to test
@@ -229,23 +252,34 @@ FactoryGirl.define do
       editable true
     end
 
+    # visually, the following image_sets look like this, where the numbers are work numbers and the blocks are scanned images
+    #
+    # 11111 11111 11111 22222 33333
+    # 11111 11111       22222 33333
+    # 11111 11111 22222       33333
+    # 11111 11111 22222
+    #
+      
     # an image set contains all the images for a poem and their order
     factory :iset_one do
       name 'Awake ye muses nine, sing me a strain divine'
       #parent :iset_franklin
       metadata nil
+      editable false
     end
 
     factory :iset_two do
       name 'Sic transit gloria mundi'
       #parent :iset_franklin
       metadata nil
+      editable false
     end
 
     factory :iset_three do
       name 'On this wondrous sea'
       #parent :iset_franklin
       metadata nil
+      editable false
     end
   end
 end

@@ -85,6 +85,7 @@ namespace :db do
       # work_f1a
       work_f1a = FactoryGirl.create( :work_f1a )
       work_f1a.edition = franklin
+      work_f1a.image_set = iset_one
       work_f1a.save
 
       wset_f1a = WorkSet.new
@@ -124,11 +125,20 @@ namespace :db do
       l_f1a07.stanza = z_f1a0
       l_f1a07.save
 
+      d_f1a03 = FactoryGirl.create( :d_f1a03 )
+      d_f1a03.work = work_f1a
+      d_f1a03.save
+
+      d_f1a06 = FactoryGirl.create( :d_f1a06 )
+      d_f1a06.work = work_f1a
+      d_f1a06.save
+
       work_f1a.index!
 
       # work_f2a
       work_f2a = FactoryGirl.create( :work_f2a )
       work_f2a.edition = franklin
+      work_f2a.image_set = iset_two
       work_f2a.save
 
       wset_f2a = WorkSet.new
@@ -139,6 +149,7 @@ namespace :db do
       # work_f3a
       work_f3a = FactoryGirl.create( :work_f3a )
       work_f3a.edition = franklin
+      work_f3a.image_set = iset_three
       work_f3a.save
 
       wset_f3a = WorkSet.new
