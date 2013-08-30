@@ -16,10 +16,11 @@ describe ( 'works requests' ) {
     context 'with no stanzas' do
       let ( :work ) { Work.find_by_title 'no_stanzas' }
 
-      before { visit edition_work_path( { edition_id: work.edition_id, id: work.id } ) }
+      before { visit edition_work_path( work.edition, work ) }
 
       it ( 'should render empty work and not throw exception' ) { 
-        should have_selector( 'h2', { text: "#{work.number}#{work.variant} - #{work.title}" } );
+        # redirect to edition_image_set_path
+        should have_selector( 'h3', text: "#{work.number}#{work.variant} - #{work.title}" );
       }
     end
   end
