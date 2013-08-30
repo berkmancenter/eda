@@ -17,14 +17,11 @@ namespace :db do
       # franklin
       #
       franklin = FactoryGirl.create :franklin
-
       franklin.create_image_set( FactoryGirl.attributes_for :iset_franklin )
       franklin.create_work_set( FactoryGirl.attributes_for :wset_franklin )
-
       franklin.save
 
       # image sets
-
       image_one = FactoryGirl.create( :image_one )
       image_two = FactoryGirl.create( :image_two )
       image_three = FactoryGirl.create( :image_three )
@@ -34,41 +31,25 @@ namespace :db do
       iset_one = FactoryGirl.create :iset_one
       franklin.image_set.children << iset_one
 
-      iset_one_i1 = ImageSet.new
-      iset_one_i1.image = image_one
-      iset_one_i1.save
-      iset_one.children << iset_one_i1
-
-      iset_one_i2 = ImageSet.new
-      iset_one_i2.image = image_two
-      iset_one_i2.save
-      iset_one.children << iset_one_i2
-
-      iset_one_i3 = ImageSet.new
-      iset_one_i3.image = image_three
-      iset_one_i3.save
-      iset_one.children << iset_one_i3
+      iset_one << image_one
+      iset_one << image_two
+      iset_one << image_three
 
       iset_two = FactoryGirl.create :iset_two
       franklin.image_set.children << iset_two
 
-      iset_two_i1 = ImageSet.new
-      iset_two_i1.image = image_three
-      iset_two_i1.save
-      iset_two.children << iset_two_i1
-
-      iset_two_i2 = ImageSet.new
-      iset_two_i2.image = image_four
-      iset_two_i2.save
-      iset_two.children << iset_two_i2
+      iset_two << image_three
+      iset_two << image_four
 
       iset_three = FactoryGirl.create :iset_three
       franklin.image_set.children << iset_three
 
-      iset_three_i1 = ImageSet.new
-      iset_three_i1.image = image_five
-      iset_three_i1.save
-      iset_three.children << iset_three_i1
+      iset_three << image_five
+
+      iset_four = FactoryGirl.create :iset_four
+      franklin.image_set.children << iset_four
+
+      iset_four << Image.new
 
       # harvard collection root
       # (image set for franklin)
@@ -95,43 +76,18 @@ namespace :db do
 
       z_f1a0 = FactoryGirl.create( :z_f1a0 )
       z_f1a0.work = work_f1a
+      z_f1a0.lines << FactoryGirl.create( :l_f1a01 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a02 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a03 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a04 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a05 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a06 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a07 )
       z_f1a0.save
 
-      l_f1a01 = FactoryGirl.create( :l_f1a01 )
-      l_f1a01.stanza = z_f1a0
-      l_f1a01.save
-
-      l_f1a02 = FactoryGirl.create( :l_f1a02 )
-      l_f1a02.stanza = z_f1a0
-      l_f1a02.save
-
-      l_f1a03 = FactoryGirl.create( :l_f1a03 )
-      l_f1a03.stanza = z_f1a0
-      l_f1a03.save
-
-      l_f1a04 = FactoryGirl.create( :l_f1a04 )
-      l_f1a04.stanza = z_f1a0
-      l_f1a04.save
-
-      l_f1a05 = FactoryGirl.create( :l_f1a05 )
-      l_f1a05.stanza = z_f1a0
-      l_f1a05.save
-
-      l_f1a06 = FactoryGirl.create( :l_f1a06 )
-      l_f1a06.stanza = z_f1a0
-      l_f1a06.save
-
-      l_f1a07 = FactoryGirl.create( :l_f1a07 )
-      l_f1a07.stanza = z_f1a0
-      l_f1a07.save
-
-      d_f1a03 = FactoryGirl.create( :d_f1a03 )
-      d_f1a03.work = work_f1a
-      d_f1a03.save
-
-      d_f1a06 = FactoryGirl.create( :d_f1a06 )
-      d_f1a06.work = work_f1a
-      d_f1a06.save
+      work_f1a.divisions << FactoryGirl.create( :d_f1a03 )
+      work_f1a.divisions << FactoryGirl.create( :d_f1a06 )
+      work_f1a.save
 
       work_f1a.index!
 
@@ -160,6 +116,7 @@ namespace :db do
       # work_f131a
       work_f131a = FactoryGirl.create( :work_f131a )
       work_f131a.edition = franklin
+      work_f131a.image_set = iset_four
       work_f131a.save
 
       wset_f131a = WorkSet.new
@@ -169,11 +126,8 @@ namespace :db do
 
       z_f131a0 = FactoryGirl.create( :z_f131a0 )
       z_f131a0.work = work_f131a
+      z_f131a0.lines << FactoryGirl.create( :l_f131a01 )
       z_f131a0.save
-
-      l_f131a01 = FactoryGirl.create( :l_f131a01 )
-      l_f131a01.stanza = z_f131a0
-      l_f131a01.save
 
       work_f131a.index!
 
@@ -185,15 +139,23 @@ namespace :db do
       tested.create_work_set( FactoryGirl.attributes_for :wset_tested )
       tested.save
 
+      # image sets
+      iset_no_stanzas = FactoryGirl.create( :iset_no_stanzas )
+      tested.image_set.children << iset_no_stanzas
+
+      iset_no_stanzas << Image.new
+
       # some works
       tw_no_stanzas = FactoryGirl.create :tw_no_stanzas
       tw_no_stanzas.edition = tested
+      tw_no_stanzas.image_set = iset_no_stanzas
       tw_no_stanzas.save
 
       wset_tw_no_stanzas = WorkSet.new
       wset_tw_no_stanzas.work = tw_no_stanzas
       wset_tw_no_stanzas.save
       tested.work_set.children << wset_tw_no_stanzas
+      tested.save
 
       Sunspot.commit
     end

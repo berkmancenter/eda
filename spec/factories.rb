@@ -247,11 +247,6 @@ FactoryGirl.define do
       editable true
     end
 
-    factory :iset_tested do
-      name 'Images for Test Edition'
-      editable true
-    end
-
     # visually, the following image_sets look like this, where the numbers are work numbers and the blocks are scanned images
     #
     # 11111 11111 11111 22222 33333
@@ -278,6 +273,25 @@ FactoryGirl.define do
     factory :iset_three do
       name 'On this wondrous sea'
       #parent :iset_franklin
+      metadata nil
+      editable false
+    end
+
+    factory :iset_four do
+      name 'Besides the Autumn poets sing'
+      #parent :iset_franklin
+      metadata nil
+      editable false
+    end
+
+    factory :iset_tested do
+      name 'Images for Test Edition'
+      editable true
+    end
+
+    factory :iset_no_stanzas do
+      name 'no_stanzas'
+      #parent :iset_tested
       metadata nil
       editable false
     end

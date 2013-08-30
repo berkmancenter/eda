@@ -3,14 +3,13 @@ require 'spec_helper'
 describe( "Edition model" ) {
   subject { edition }
 
-  context 'with pages, works, and images' do
+  context 'with works, and images' do
     let ( :edition ) { Edition.find_by_work_number_prefix 'F' }
 
     it {
       should be_valid
       should respond_to :work_set
       should respond_to :image_set
-      should respond_to :pages
     }
   end
 
