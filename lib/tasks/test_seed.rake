@@ -157,6 +157,13 @@ namespace :db do
       tested.work_set.children << wset_tw_no_stanzas
       tested.save
 
+      # words
+      
+      awake = FactoryGirl.create :awake
+      awake.definitions << FactoryGirl.create( :awake_one )
+      awake.definitions << FactoryGirl.create( :awake_two )
+      awake.save
+
       Sunspot.commit
     end
   end

@@ -70,16 +70,16 @@ describe ( 'image_sets requests' ) {
 
         context 'with search submit' do
           before {
-            fill_in( 'Search for:', { with: 'awake' } );
-            click_button( 'Search' );
+            fill_in 'Search for:', with: 'awake'
+            click_button 'Search'
           }
 
           it ( 'should have performed a search' ) {
-            should have_selector( '.search-works form input[name="q"][value="awake"]' );
+            should have_selector '.search-works form input[name="q"][value="awake"]'
 
-            should have_selector( '.search-works-results' );
+            should have_selector '.search-works-results'
 
-            should have_css( '.search-works-results a', { count: 1 } );
+            should have_css '.search-works-results a', count: 1
           }
         end
       end
@@ -88,14 +88,59 @@ describe ( 'image_sets requests' ) {
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         it { 
-          should have_selector( '.browse-works' );
+          should have_selector '.browse-works'
         }
       }
 
+      describe ( 'lexicon panel' ) {
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+        it { 
+          should have_selector '.browse-lexicon'
+          should have_selector '.browse-lexicon a[data-letter="A"]'
+          should have_selector '.browse-lexicon .alphabet-results'
+        }
+      }
+
+      describe 'lexicon panel w/ js', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
+        }
+
+        it {
+          should have_css '.browse-lexicon'
+          should have_css '.alphabet-list'
+          should have_css '.alphabet-list a[data-letter="A"]'
+          should have_css '.alphabet-results'
+          should_not have_css '.alphabet-results a'
+          should have_css '.alphabet-word'
+          should_not have_css '.alphabet-word section.word'
+        }
+      end
+
+      describe 'click lexicon letter', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
+        }
+
+        it {
+          click_link 'A'
+          should have_css '.alphabet-results a'
+        }
+      end
+
+      describe 'click lexicon letter', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
+        }
+
+        it {
+          click_link 'A'
+          click_link 'awake'
+          should have_css '.alphabet-word section.word'
+        }
+      end
     }
-
-
-
 
     context ( 'non-leaf/sbs view' ) {
       describe ( 'get /editions/:edition_id/image_sets/:id' ) {

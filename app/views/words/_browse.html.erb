@@ -2,8 +2,9 @@
     <h2>Lexicon</h2>
     <div class="alphabet-list">
         <% ('A'..'Z').to_a.each do |first_letter| %>
-            <%= link_to first_letter, by_letter_words_path(first_letter) %>
+          <%= link_to first_letter, by_letter_words_path(first_letter), :'data-letter' => first_letter %>
         <% end %>
     </div>
     <div class="alphabet-results"></div>
+    <div class="alphabet-word"></div>
 </section>

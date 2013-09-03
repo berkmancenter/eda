@@ -296,6 +296,25 @@ FactoryGirl.define do
       editable false
     end
   end
+
+  factory :word do
+    factory :awake do
+      word 'awake'
+      attributes {{ endings: '', part_of_speech: 'adj' }}
+    end
+  end
+
+  factory :definition do
+    factory :awake_one do
+      number 1
+      definition 'Fully conscious; totally aware; not dreaming; [fig.] fixed in a permanent state; not in a temporary state.'
+    end
+
+    factory :awake_two do
+      number 2
+      definition 'Living; physically functioning.'
+    end
+  end
 end
 
 
