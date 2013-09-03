@@ -7,12 +7,10 @@ describe ( 'image_sets requests' ) {
 
   subject { page }
 
-  context ( 'leaf/page view' ) {
+  describe ( 'get /editions/:edition_id/image_sets/:id' ) {
 
 
-
-
-    describe ( 'get /editions/:edition_id/pages/:id' ) {
+    context ( 'leaf/page view' ) {
       # require test:seed
       let ( :w ) { Work.find_by_title( awake ) }
 
@@ -29,41 +27,41 @@ describe ( 'image_sets requests' ) {
       end
 
       context 'with valid next image' do
-        before { visit edition_page_path( test_page.edition, test_page ) }
+        let ( :image_set ) { w.image_set.children.first }
+
+        before { visit edition_image_set_path( w.edition, image_set ) }
 
         it ( 'should have a valid next page' ) {
-          next_page = test_page.next;
-          next_page.should_not == nil;
+          next_image_set  = image_set.root.leaf_after( image_set )
 
-          page.should have_selector( 'a[title="Next Page"][href*="' + edition_page_path( { edition_id: next_page.edition_id, id: next_page.id } ) + '"]' );
+          next_image_set.should_not == nil;
+
+          page.should have_selector( "a[title='Next Page'][href*='#{edition_image_set_path( w.edition, next_image_set )}']" )
         }
       end
 
-      context 'with work no stanzas, no image' do
+      context ( 'with work no stanzas, no image' ) {
         let ( :w ) { Work.find_by_title 'no_stanzas' }
 
-        before {
-          p = Page.with_imageless_work w
-          visit edition_page_path p.edition, p
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+        it {
+          should have_title 'Emily Dickinson Archive'
         }
 
-        it do
-          should have_title 'Emily Dickinson Archive'
-        end
-
-        it 'should have missing image' do
+        it ( 'should have missing image' ) {
           should have_selector 'img[src*="missing_image.jpg"]'
-        end
+        }
 
-        it 'should have work title' do
+        it ( 'should have work title' ) {
           should have_text "#{w.number}#{w.variant}"
-        end
-      end
+        }
+      }
 
       describe ( 'search panel' ) do
-        context 'without search q' do
-          before { visit edition_page_path( test_page.edition, test_page ) }
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
+        context 'without search q' do
           it ( 'should have search works form' ) {
             should have_selector( '.search-works' );
             should have_selector( '.search-works form input[name="q"]' );
@@ -72,7 +70,6 @@ describe ( 'image_sets requests' ) {
 
         context 'with search submit' do
           before {
-            visit edition_page_path( test_page.edition, test_page );
             fill_in( 'Search for:', { with: 'awake' } );
             click_button( 'Search' );
           }
@@ -88,7 +85,7 @@ describe ( 'image_sets requests' ) {
       end
 
       describe ( 'browse panel' ) {
-        before { visit edition_page_path( test_page.edition, test_page ) }
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         it { 
           should have_selector( '.browse-works' );
@@ -100,33 +97,23 @@ describe ( 'image_sets requests' ) {
 
 
 
+    context ( 'non-leaf/sbs view' ) {
+      describe ( 'get /editions/:edition_id/image_sets/:id' ) {
 
+        describe ( 'with valid image set having multiple images' ) {
+          let ( :w ) { Work.find_by_title( awake ) }
 
+          before { visit edition_image_set_path( w.edition, w.image_set ) }
 
+          it { 
+            should have_title w.image_set.name
+          }
 
-
-  }
-
-  context ( 'non-leaf/sbs view' ) {
-    describe ( 'get /editions/:edition_id/image_sets/:id' ) {
-
-      describe ( 'with valid image set having multiple images' ) {
-        let ( :w ) { Work.find_by_title( awake ) }
-
-        before { visit edition_image_set_path( w.edition, w.image_set ) }
-
-        it { 
-          should have_title w.image_set.name
-        }
-
-        it ( 'should have img tags for all ImageSet images' ) {
-          should have_selector( "img[src*='#{preview_url( w.image_set.children[0].image )}']" );
-          should have_selector( "img[src*='#{preview_url( w.image_set.children[1].image )}']" );
-          should have_selector( "img[src*='#{preview_url( w.image_set.children[2].image )}']" );
-        }
-
-        it ( 'should include turn.js' ) {
-          should have_css( 'script[src*="turn.min.js"]', { visible: false } )
+          it ( 'should have img tags for all ImageSet images' ) {
+            should have_selector( "img[src*='#{preview_url( w.image_set.children[0].image )}']" );
+            should have_selector( "img[src*='#{preview_url( w.image_set.children[1].image )}']" );
+            should have_selector( "img[src*='#{preview_url( w.image_set.children[2].image )}']" );
+          }
         }
       }
     }
