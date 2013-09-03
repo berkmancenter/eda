@@ -46,19 +46,96 @@ module FranklinVentura
 
         def markup_file(file)
             string = file.read
+            string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\n\\k<title>\n</title>\n")
             string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
             string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
-            string.gsub!(Publication_extractor, "\n<publication>\n\\0\n</publication>\n")
-            string.gsub!(Manuscript_extractor, "\n<manuscript>\n\\0\n</manuscript>\n")
-            string.gsub!(Regexp.new("#{Title_pattern} #{Title_extractor}"), "\n<title>\n\\0\n</title>\n")
-            string.gsub!(Alternate_extractor, "\n<alternates>\n\\0\n</alternates>\n")
-            string.gsub!(Division_extractor, "\n<divisions>\n\\0\n</divisions>\n")
+            string.gsub!(Publication_extractor, "\n<publication>\\k<publications></publication>\n")
+            string.gsub!(Manuscript_extractor, "\n<manuscript>\\k<manuscript></manuscript>\n")
+            string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
+            string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
+            string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
+            string.gsub!(Division_extractor, "\n<divisions>\\k<divisions></divisions>\n")
             string.gsub!(Stanza_start_pattern, "\n<stanza>\n\\0")
             string.gsub!(Stanza_boundary_pattern, "</stanza>\n<stanza>\n\\0")
-            #string.gsub!("<", "|--")
-            #string.gsub!(">", "--|")
-            #string.gsub!(/(<\/poem>[^<]*)<\/poem>/m, '\1')
-            sanitize(CharMap.replace(string), tags: %w(i poem stanza publication manuscript alternates divisions))
+            string.gsub!(Paragraph_extractor, "\n<p>\\k<paragraph></p>\n")
+            string.gsub!(Publication_deviation_extrator, "\n<deviations>\n<variant>\\k<variant></variant>\\k<deviations>\n</deviations>\n")
+            string.gsub!(Year_extractor, "\n<year>\\k<year></year>\n")
+            string = markup_poem_lines(string)
+            string = fix_poem_closures(string)
+            string = CharMap.replace(string)
+            string = fix_font_changes(string)
+            string.gsub!('<<', '&laquo;')
+            string.gsub!('>>', '&raquo;')
+            string = sanitize(string, tags: %w(em b u p deviations fascicle line variant line_num year work title poem stanza publication manuscript number alternates emendations divisions revisions))
+            string.sub!('</work>', '')
+            string << "\n</work>\n"
+            string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
+            string.gsub!(/^\s*$\n/, '')
+            string
+        end
+
+        def markup_poem_lines(string)
+            new_string = ''
+            string.each_line do |line|
+                new_line = ''
+                Poem_line_extractors.each do |pattern|
+                    if match = line.match(pattern)
+                        hash = Hash[match.names.zip(match.captures)]
+                        hash.each do |name, match|
+                            new_line << "<#{name}>#{match}</#{name}>"
+                        end
+                        break
+                    end
+                end
+                if new_line.empty?
+                    new_string << line
+                else
+                    new_string << new_line + "\n"
+                end
+            end
+            new_string
+        end
+
+        def previous_open_tag(offset, line)
+            tags = ['em', 'u', 'b']
+            pattern = '('
+            tags.each do |tag|
+                open_tag = "<#{tag}>".reverse
+                close_tag = "</#{tag}>".reverse
+                pattern << "#{open_tag}|#{close_tag}|"
+            end
+            pattern << "#{Normal_font_reversed.to_s})"
+            if match = line.reverse.match(pattern, line.length - offset - 1)
+                tag = match[0].reverse
+                return tag if tag.match('<[a-z]+>')
+            end
+        end
+
+        def fix_font_changes(string)
+            new_string = ''
+            string.each_line do |line, i|
+                closings = line.scan(Normal_font).map(&:first)
+                closings.each do |closing|
+                    match = line.match(closing)
+                    replacement = previous_open_tag(match.offset(0)[0], line) || ''
+                    line.sub!(closing, replacement.sub('<', '</'))
+                end
+                new_string << line
+            end
+            new_string
+        end
+
+        def fix_poem_closures(string)
+            in_poem = false
+            new_string = ""
+            string.each_line do |line|
+                unless in_poem == false && (line.match(/<\/stanza>/) || line.match(/<\/poem>/) || line.match(/<stanza>/))
+                    new_string << line
+                end
+                in_poem = true if line.match(/<poem>/)
+                in_poem = false if line.match(/<\/poem>/)
+            end
+            new_string
         end
 
         def process_file(file)
@@ -192,6 +269,7 @@ module FranklinVentura
                 #process_file(File.open("#{directory}/#{filename}"))
                 string << markup_file(File.open("#{directory}/#{filename}"))
             end
+            string = "<works>#{string}</works>"
 
             File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
             edition.works = @poems
