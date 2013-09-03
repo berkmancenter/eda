@@ -13,7 +13,7 @@ describe 'ImageSet model' do
     end
 
     it do
-      fis.children.count.should eq( 3 )
+      fis.children.count.should eq( 4 )
     end
   end
 
