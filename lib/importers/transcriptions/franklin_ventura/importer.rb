@@ -46,11 +46,14 @@ module FranklinVentura
 
         def markup_file(file)
             string = file.read
-            string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\n\\k<title>\n</title>\n")
+            string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\\k<title></title>\n")
+            string.gsub!(Variant_title_extractor, "\n<title>\\k<title></title>\n")
             string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
             string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
-            string.gsub!(Publication_extractor, "\n<publication>\\k<publications></publication>\n")
+            string.gsub!(Published_extractor, "<published><publication>\\k<publication></publication><date>\\k<year>-\\k<month>-\\k<day></date><pages>\\k<pages></pages><variant>\\k<source_variant></variant></published>")
+            string.gsub!(Publication_extractor, "\n<publications>\\k<publications></publications>\n")
             string.gsub!(Manuscript_extractor, "\n<manuscript>\\k<manuscript></manuscript>\n")
+            string.gsub!(Holder_extractor, "<holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>")
             string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
             string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
             string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
@@ -67,7 +70,7 @@ module FranklinVentura
             string.gsub!('<<', '&laquo;')
             string.gsub!('>>', '&raquo;')
             string.gsub!('<~>', '<br/>')
-            string = sanitize(string, tags: %w(br em b u p deviations fascicle line variant linenum year work title poem stanza publication manuscript number alternates emendations divisions revisions))
+            string = sanitize(string, tags: %w(br em b u p holder loccode subloccode id deviations fascicle line variant linenum year work title poem stanza publications published publication date pages manuscript number alternates emendations divisions revisions))
             string.sub!('</work>', '')
             string << "\n</work>\n"
             string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
@@ -80,18 +83,16 @@ module FranklinVentura
             new_string = ''
             have_poem_end = false
             hold_pattern = /^(<divisions|<emendations|<revisions|<alternates)/
-            in_hold_pattern = false
             poem_end_pattern = /<\/poem>/
             string.each_line do |line|
                 if line.match(poem_end_pattern)
                     have_poem_end = true
-                elsif in_hold_pattern && !line.match(hold_pattern) && have_poem_end
+                elsif !line.match(hold_pattern) && have_poem_end
                     new_string << "</poem>\n#{line}"
                     have_poem_end = false
                 else
                     new_string << line
                 end
-                in_hold_pattern = !!line.match(hold_pattern)
             end
             new_string
         end
@@ -162,11 +163,6 @@ module FranklinVentura
         end
 
         def process_file(file)
-
-            poem.holder_code = held_holder_code
-            poem.holder_subcode = held_holder_subcode
-            poem.holder_id = held_holder_id
-
             if holder_match = line.match(Holder_extractor)
                 held_holder_code = holder_match[:loc_code].upcase.strip if holder_match[:loc_code]
                 held_holder_subcode = holder_match[:subloc_code].upcase.strip if holder_match[:subloc_code]
@@ -175,10 +171,6 @@ module FranklinVentura
                 end
                 held_holder_id = holder_match[:id].strip if holder_match[:id]
             end
-
-            # Is this a second or third title?
-            match = Variant_title_extractor.match(line)
-            variant_titles << match[:title] if match && match[:title]
 
             if line.match(Publication_pattern)
                 publications = line.match(Publication_extractor)['publications']
@@ -193,7 +185,6 @@ module FranklinVentura
                 end
             end
 
-            title = variant_titles.empty? ? poem.title : variant_titles.shift
             close_poem(poem) if poem
         end
 
@@ -205,64 +196,100 @@ module FranklinVentura
 
             Dir.open(directory).sort.each do |filename|
                 next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
-                #process_file(File.open("#{directory}/#{filename}"))
                 string << markup_file(File.open("#{directory}/#{filename}"))
             end
             string = "<works>#{string}</works>"
 
             File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
-            #works = parse_franklin(string)
-            #edition.works = works
-            #edition.save!
-            #post_process!(edition)
+            works = parse_xml(string)
+            edition.works = works
+            edition.save!
+            post_process!(edition)
         end
 
-        def parse_franklin(string)
+        def parse_xml(string)
             works = []
             doc = Nokogiri::XML::Document.parse(string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
             doc.css('work').each do |work|
                 year = work.xpath('preceding-sibling::year').first.text.to_i
                 number = work.at('number').text.to_i
-                title = work.at('title').text
-                work.css('poem').each do |poem|
+                puts number
+                titles = work.css('title').map(&:text)
+                work.css('poem').each_with_index do |poem, i|
                     variant = poem.at('variant')
                     next unless variant
                     w = Work.create(
                         number: number,
-                        title: title,
+                        title: titles[i] || titles.first,
                         date: Date.new(year, 1, 1),
                         variant: variant.inner_html
                     )
-                    poem.css('stanza').each_with_index do |stanza, i|
-                        s = w.stanzas.build(position: i)
-                        stanza.css('line').each do |line|
-                            if line.at('linenum')
-                                line_number = line.at('linenum').text.to_i
-                                line.at('linenum').remove
-                            else
-                                line_number = line_number(w, s, {'line_num' => ''})
-                            end
-                            s.lines.build(
-                                text: line.inner_html,
-                                number: line_number
-                            )
-                        end
-                    end
+                    add_stanzas(w, poem)
+                    add_manuscript(w, work)
+                    add_publication(w, work)
                     w.save!
-                    add_modifiers!(w, work)
+                    add_modifiers!(w, poem)
                     works << w
                 end
             end
             works
         end
 
+        def add_publication(work, work_xml)
+            if node = work_xml.at('publication')
+                node.css('published').each do |published|
+                    if variant = published.at('variant')
+                        next unless work.variant == variant.text.strip
+                    end
+                    year, month, day = published.at('date').split('-')
+                    month ||= 1
+                    day ||= 1
+                    work.appearances.create(
+                        publication: published.at('publication'),
+                        date: Date.new(year, month, day),
+                        pages: published.at('pages')
+                    )
+                    work.save!
+                end
+            end
+        end
+
+        def add_manuscript(work, work_xml)
+            if node = work_xml.at('manuscript')
+                work.metadata['manuscript'] = sanitize(node.inner_html.gsub('subloccode', 'b').gsub('loccode', 'b'), tags: ['b', 'em', 'u'])
+                node.css('holder').each do |holder|
+                    work.holder_code = holder.at('loccode')
+                    work.holder_subcode = holder.at('subloccode')
+                    work.holder_id = holder.at('id')
+                end
+            end
+        end
+
+        def add_stanzas(work, poem_xml)
+            poem_xml.css('stanza').each_with_index do |stanza, i|
+                s = work.stanzas.build(position: i)
+                stanza.css('line').each do |line|
+                    if line.at('linenum')
+                        line_number = line.at('linenum').text.to_i
+                        line.at('linenum').remove
+                    else
+                        line_number = line_number(work, s, {'line_num' => ''})
+                    end
+                    s.lines.build(
+                        text: line.inner_html,
+                        number: line_number
+                    )
+                end
+            end
+            work
+        end
+
         def add_modifiers!(poem, poem_xml)
             ['division', 'emendation', 'revision', 'alternate'].each do |var|
                 capped = var.camelize
-                inner_xml = poem_xml.at(var.pluralize).inner_html
+                next unless node = poem_xml.at(var.pluralize)
+                inner_xml = node.inner_html 
                 instances = prep_modifier(inner_xml)
-                puts instances.inspect
-                exit
                 instances.each do |instance|
                     i = self.send("get_#{var}", instance)
                     poem.line_modifiers.push(*i) if i 
@@ -293,9 +320,9 @@ module FranklinVentura
         end
 
         def prep_modifier(inner_xml)
-            mods = inner_xml.split(/<br\s?\/>/).drop(1).delete_if do |d|
+            mods = inner_xml.split(/<br\s?\/?>/).drop(1).map(&:strip).delete_if do |d|
                 if d.include?('<em>') 
-                    puts "mod: #{d}"
+                    #puts "mod: #{d}"
                     true
                 else
                     false 
@@ -316,6 +343,11 @@ module FranklinVentura
                     line = work.line(e.start_line_number)
                     mods = line.line_modifiers if line
                     if mods && mods.count > 1
+                        mods.each do |mod|
+                            if mod.original_characters.nil?
+                                puts mod.inspect
+                            end
+                        end
                         mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
                         mods.each do |mod|
                             pull_emendation(line, mod)

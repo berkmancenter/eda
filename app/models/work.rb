@@ -115,15 +115,27 @@ class Work < ActiveRecord::Base
     end
 
     def holder_code=(code)
-        self.metadata['holder_code'] = code
+        if metadata['holder_code']
+            self.metadata['holder_code'] << code
+        else
+            self.metadata['holder_code'] = [code]
+        end
     end
 
     def holder_subcode=(subcode)
-        self.metadata['holder_subcode'] = subcode
+        if metadata['holder_subcode']
+            self.metadata['holder_subcode'] << subcode
+        else
+            self.metadata['holder_subcode'] = [subcode]
+        end
     end
 
     def holder_id=(id)
-        self.metadata['holder_id'] = id
+        if metadata['holder_id']
+            self.metadata['holder_id'] << id
+        else
+            self.metadata['holder_id'] = [id]
+        end
     end
 
     def fascicle=(fascicle)
