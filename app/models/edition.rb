@@ -71,6 +71,7 @@ class Edition < ActiveRecord::Base
 
     def add_work_to_work_set(work)
         ws = WorkSet.new
+        work.edition = self
         ws.work = work
         ws.save!
         ws.move_to_child_of work_set

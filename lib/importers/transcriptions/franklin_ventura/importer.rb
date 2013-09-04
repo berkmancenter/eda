@@ -66,7 +66,7 @@ module FranklinVentura
             string = fix_font_changes(string)
             string.gsub!('<<', '&laquo;')
             string.gsub!('>>', '&raquo;')
-            string = sanitize(string, tags: %w(em b u p deviations fascicle line variant line_num year work title poem stanza publication manuscript number alternates emendations divisions revisions))
+            string = sanitize(string, tags: %w(em b u p deviations fascicle line variant linenum year work title poem stanza publication manuscript number alternates emendations divisions revisions))
             string.sub!('</work>', '')
             string << "\n</work>\n"
             string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
@@ -87,6 +87,7 @@ module FranklinVentura
                         break
                     end
                 end
+                new_line.sub!(/<\/line><line_num>(.*)<\/line_num>/, '<linenum>\1</linenum></line>')
                 if new_line.empty?
                     new_string << line
                 else
@@ -272,9 +273,47 @@ module FranklinVentura
             string = "<works>#{string}</works>"
 
             File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
-            edition.works = @poems
+            works = parse_franklin(string)
+            edition.works = works
             edition.save!
             post_process!(edition)
+        end
+
+        def parse_franklin(string)
+            works = []
+            doc = Nokogiri::XML::Document.parse(string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            doc.css('work').each do |work|
+                year = work.xpath('preceding-sibling::year').first.text.to_i
+                number = work.at('number').text.to_i
+                title = work.at('title').text
+                work.css('poem').each do |poem|
+                    variant = poem.at('variant')
+                    next unless variant
+                    work = Work.new(
+                        number: number,
+                        title: title,
+                        date: Date.new(year, 1, 1),
+                        variant: variant.inner_html
+                    )
+                    poem.css('stanza').each_with_index do |stanza, i|
+                        s = work.stanzas.build(position: i)
+                        stanza.css('line').each do |line|
+                            if line.at('linenum')
+                                number = line.at('linenum').text.to_i
+                                line.at('linenum').remove
+                            else
+                                number = line_number(work, s, {'line_num' => ''})
+                            end
+                            s.lines.build(
+                                text: line.inner_html,
+                                number: number
+                            )
+                        end
+                    end
+                    works << work
+                end
+            end
+            works
         end
 
         def add_modifiers!(poem, line)
@@ -298,7 +337,7 @@ module FranklinVentura
         def line_number(poem, stanza, matches)
             line_num = nil
             # Get line number
-            if stanza.lines.empty? && (poem.stanzas.empty? || poem.stanzas.count == 1)
+            if stanza.lines.empty? && (poem.stanzas.empty? || poem.stanzas.size == 1)
                 line_num = 1
             elsif stanza.lines.last && stanza.lines.last.number
                 line_num = stanza.lines.last.number + 1

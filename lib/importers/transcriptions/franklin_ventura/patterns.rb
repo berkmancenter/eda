@@ -7,7 +7,7 @@ module Patterns
 
     Variant_title_extractor = /@PNT2_2(_M)? = \t(?<title>.*$)/
 
-    Poem_start_pattern = /(@PS|@POEM1S)/
+    Poem_start_pattern = /(@PS|@POEM1S|@PS_NO-RT-IND)/
     Poem_end_pattern = /^(@N|@1|@VAR|@PARA|@EXT2)/
 
     Division_pattern = /@N = <MI>Division<D>/
@@ -45,10 +45,10 @@ module Patterns
     Normal_font_reversed = /(>(M|D)*(552|68585)*(F|P)*)</
 
     Poem_line_extractors = [
-        /(@PS|@PM|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
-        /(@PS|@PM|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)/,
         /@PS = (<F58586P9M>)?\[<MI>(?<variant>.*)<(D|M)>\](<F255P255D>)?\t(?<line>[^\t]*)\t?(?<line_num>\d*)/,
-        /(@PS|@PM|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\t]*)\t(?<line_num>\d*)/,
-        /(@PS|@PM|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\r\n]*)/
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\t]*)\t(?<line_num>\d*)/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\r\n]*)/
     ]
 end
