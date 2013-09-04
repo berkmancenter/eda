@@ -289,28 +289,29 @@ module FranklinVentura
                 work.css('poem').each do |poem|
                     variant = poem.at('variant')
                     next unless variant
-                    work = Work.new(
+                    w = Work.create(
                         number: number,
                         title: title,
                         date: Date.new(year, 1, 1),
                         variant: variant.inner_html
                     )
                     poem.css('stanza').each_with_index do |stanza, i|
-                        s = work.stanzas.build(position: i)
+                        s = w.stanzas.build(position: i)
                         stanza.css('line').each do |line|
                             if line.at('linenum')
-                                number = line.at('linenum').text.to_i
+                                line_number = line.at('linenum').text.to_i
                                 line.at('linenum').remove
                             else
-                                number = line_number(work, s, {'line_num' => ''})
+                                line_number = line_number(w, s, {'line_num' => ''})
                             end
                             s.lines.build(
                                 text: line.inner_html,
-                                number: number
+                                number: line_number
                             )
                         end
                     end
-                    works << work
+                    w.save!
+                    works << w
                 end
             end
             works
