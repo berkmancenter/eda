@@ -2,8 +2,8 @@ require_relative 'char_map.rb'
 module FieldParsing
     def get_division(text)
         division_pattern = /^(?<line_num>\d*) (?<division>.*)$/
-        break_pattern = / <F38376(MI|M)?>(i|u)<F(255|58586)(D)?>/
-        type_map = { 'i' => 'page_or_column', 'u' => 'line'}
+        break_pattern = / (\|){1,2}/
+        type_map = { '&#124;&#124;' => 'page_or_column', '&#124;' => 'line'}
         matches = text.match(division_pattern)
         divs = []
         if matches && matches['line_num'] && matches['division']
@@ -23,18 +23,20 @@ module FieldParsing
             # We can have multiple new breaks per line, so build an array of
             # all the last characters in a line and their following line break
             all_lines = chars.split(break_pattern)
-            all_lines.delete_if{|l| ['MI', 'M', '255', '58586', 'D'].include? l}
-            all_lines.delete_at(all_lines.length - 1) unless ['i', 'u'].include?(all_lines.last)
+            #all_lines.delete_if{|l| ['MI', 'M', '255', '58586', 'D'].include? l}
+            all_lines.delete_at(all_lines.length - 1) unless all_lines.last == '|'
             if all_lines.count % 2 != 0
                 puts e.inspect
                 puts "ALL Lines: #{all_lines}"
                 exit
             end
             all_lines.each_slice(2) { |line_end| 
+                puts line_end.inspect
+                exit
                 divs << Division.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
-                    :original_characters => CharMap::replace(line_end[0]),
+                    :original_characters => line_end[0],
                     :subtype => type_map[line_end[1]]
                 )
             }
@@ -52,12 +54,13 @@ module FieldParsing
         emendation_pattern = /(?<line_num>\d*) (?<alternates>.*)/
             matches = text.match(emendation_pattern)
         if matches && matches['line_num'] && matches['alternates']
-            alts = matches['alternates'].split('] ')
+            alts = matches['alternates'].split(']')
+            return unless alts.size == 2
             e = Emendation.new(
                 :start_line_number => matches['line_num'].to_i,
                 :end_line_number => matches['line_num'].to_i,
-                :original_characters => CharMap::replace(alts[1]),
-                :new_characters => CharMap::replace(alts[0])
+                :original_characters => CharMap::replace(alts[1].strip),
+                :new_characters => CharMap::replace(alts[0].strip)
             )
             e
         else

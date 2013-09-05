@@ -163,15 +163,6 @@ module FranklinVentura
         end
 
         def process_file(file)
-            if holder_match = line.match(Holder_extractor)
-                held_holder_code = holder_match[:loc_code].upcase.strip if holder_match[:loc_code]
-                held_holder_subcode = holder_match[:subloc_code].upcase.strip if holder_match[:subloc_code]
-                if holder_match[:subloc_code] == 'PC'
-                    held_holder_subcode = '1896PC'
-                end
-                held_holder_id = holder_match[:id].strip if holder_match[:id]
-            end
-
             if line.match(Publication_pattern)
                 publications = line.match(Publication_extractor)['publications']
                 publications.scan(Published_extractor) do |match|
@@ -236,18 +227,18 @@ module FranklinVentura
         end
 
         def add_publication(work, work_xml)
-            if node = work_xml.at('publication')
+            if node = work_xml.at('publications')
                 node.css('published').each do |published|
                     if variant = published.at('variant')
                         next unless work.variant == variant.text.strip
                     end
-                    year, month, day = published.at('date').split('-')
+                    year, month, day = published.at('date').text.split('-').compact
                     month ||= 1
                     day ||= 1
                     work.appearances.create(
-                        publication: published.at('publication'),
-                        date: Date.new(year, month, day),
-                        pages: published.at('pages')
+                        publication: published.at('publication').inner_html,
+                        date: Date.parse("#{year}-#{month}-#{day}"),
+                        pages: published.at('pages').text
                     )
                     work.save!
                 end
