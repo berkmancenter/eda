@@ -3,7 +3,7 @@
 
 class CharMap
     CHARMAP = {
-        /(\b|\s)&(\b|\s)/ => '&amp;',
+        /(^|\b|\s|\w)&(\b|\s|$|\W)/ => '\1&amp;\2',
         '<137>' => '&euml;',
         '<138>' => '&egrave;',
         '<161>' => '&iacute;',

@@ -44,6 +44,8 @@ module Patterns
     Normal_font = /(<(F|P)*(255|58586)*(M|D)*>)/
     Normal_font_reversed = /(>(M|D)*(552|68585)*(F|P)*)</
 
+    Secondary_source_pattern = /\[<em>(?<variant>.{1,3})<\/em>\]/
+
     Poem_line_extractors = [
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)/,

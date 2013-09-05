@@ -1,5 +1,9 @@
 <% unless object.metadata.nil? %>
   <% object.metadata.each do |key, value| %>
-      <dt><%= key %></dt><dd><%= value %></dd>
+      <% if value.is_a?(Array) %>
+          <dt><%= key %></dt><dd><ul><li><%= value.join('</li><li>') %></li></ul></dd>
+      <% else %>
+          <dt><%= key %></dt><dd><%= raw value %></dd>
+      <% end %>
   <% end %>
 <% end %>

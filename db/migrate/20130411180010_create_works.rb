@@ -5,6 +5,7 @@ class CreateWorks < ActiveRecord::Migration
       t.datetime :date
       t.integer :number
       t.string :variant
+      t.boolean :secondary_source
       t.text :metadata
       t.references :edition
       t.references :image_set

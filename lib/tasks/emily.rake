@@ -42,8 +42,8 @@ namespace :emily do
     namespace :import do
         namespace :transcriptions do
             desc 'Import transcription corrections'
-            task :corrections, [:filename] => [:environment] do |task, args|
-                CorrectionsImporter.new.import(args[:filename])
+            task :revisions, [:filename] => [:environment] do |task, args|
+                RevisionsImporter.new.import(args[:filename])
             end
 
             desc 'Import Johnson works'

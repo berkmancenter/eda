@@ -2,8 +2,8 @@ require_relative 'char_map.rb'
 module FieldParsing
     def get_division(text)
         division_pattern = /^(?<line_num>\d*) (?<division>.*)$/
-        break_pattern = / (\|){1,2}/
-        type_map = { '&#124;&#124;' => 'page_or_column', '&#124;' => 'line'}
+        break_pattern = / (\|\|?)/
+        type_map = { '||' => 'page_or_column', '|' => 'line'}
         matches = text.match(division_pattern)
         divs = []
         if matches && matches['line_num'] && matches['division']
@@ -24,19 +24,16 @@ module FieldParsing
             # all the last characters in a line and their following line break
             all_lines = chars.split(break_pattern)
             #all_lines.delete_if{|l| ['MI', 'M', '255', '58586', 'D'].include? l}
-            all_lines.delete_at(all_lines.length - 1) unless all_lines.last == '|'
+            all_lines.delete_at(all_lines.length - 1) unless all_lines.last.last == '|'
             if all_lines.count % 2 != 0
-                puts e.inspect
                 puts "ALL Lines: #{all_lines}"
                 exit
             end
             all_lines.each_slice(2) { |line_end| 
-                puts line_end.inspect
-                exit
                 divs << Division.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
-                    :original_characters => line_end[0],
+                    :original_characters => line_end[0].strip,
                     :subtype => type_map[line_end[1]]
                 )
             }
@@ -46,45 +43,60 @@ module FieldParsing
             end
             return divs
         else
-            puts "mod: " + text
+            puts "div mod: " + text
         end
     end
 
     def get_emendation(text)
         emendation_pattern = /(?<line_num>\d*) (?<alternates>.*)/
-            matches = text.match(emendation_pattern)
+        matches = text.match(emendation_pattern)
         if matches && matches['line_num'] && matches['alternates']
             alts = matches['alternates'].split(']')
             return unless alts.size == 2
             e = Emendation.new(
                 :start_line_number => matches['line_num'].to_i,
                 :end_line_number => matches['line_num'].to_i,
-                :original_characters => CharMap::replace(alts[1].strip),
-                :new_characters => CharMap::replace(alts[0].strip)
+                :original_characters => alts[1].strip,
+                :new_characters => alts[0].strip
             )
             e
         else
-            puts "mod: " + text
+            puts "emend mod: " + text
         end
     end
 
     def get_alternate(text)
-        alternate_pattern = /(?<line_num>\d*) (?<alternates>.*)/
-            matches = text.match(alternate_pattern)
+        alternate_pattern = /(?<line_num>\d+) (?<alternates>.*)/
+        full_line_alternate_pattern = /(?<line_num>\d+)\] (?<alternates>.*)/
+        matches = text.match(alternate_pattern)
+        full_line_matches = text.match(full_line_alternate_pattern)
         if matches && matches['line_num'] && matches['alternates']
             alts = matches['alternates'].split('] ')
             if alts[0] && alts[1]
                 a = Alternate.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
-                    :original_characters => CharMap::replace(alts[0]),
-                    :new_characters => CharMap::replace(alts[1]),
+                    :original_characters => alts[0].strip,
+                    :new_characters => alts[1].strip,
                     :subtype => 'alternate'
                 )
-                a
+                return a
             else
-                puts "mod: " + text
+                puts matches.inspect
+                puts alts.inspect
+                puts "alt mod: " + text
             end
+        elsif full_line_matches && full_line_matches['line_num'] && full_line_matches['alternates']
+                a = Alternate.new(
+                    :start_line_number => full_line_matches['line_num'].to_i,
+                    :end_line_number => full_line_matches['line_num'].to_i,
+                    :start_address => 0,
+                    :end_address => 9999,
+                    :original_characters => '',
+                    :new_characters => full_line_matches['alternates'].strip,
+                    :subtype => 'alternate'
+                )
+                return a
         end
     end
 
@@ -97,13 +109,13 @@ module FieldParsing
                 r = Revision.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
-                    :original_characters => CharMap::replace(alts[0]),
-                    :new_characters => CharMap::replace(alts[1])
+                    :original_characters => alts[0].strip,
+                    :new_characters => alts[1].strip
                 )
                 r.start_line_number = matches['line_num'].to_i
                 r
             else
-                puts "mod: " + text
+                puts "revise mod: " + text
             end
         end
     end

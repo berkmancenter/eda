@@ -40,10 +40,6 @@ module FranklinVentura
             edition
         end
 
-        def sub(pattern)
-            Regexp.new(pattern.to_s.gsub("<", '\|--').gsub('>', '--\|'))
-        end
-
         def markup_file(file)
             string = file.read
             string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\\k<title></title>\n")
@@ -162,23 +158,6 @@ module FranklinVentura
             new_string
         end
 
-        def process_file(file)
-            if line.match(Publication_pattern)
-                publications = line.match(Publication_extractor)['publications']
-                publications.scan(Published_extractor) do |match|
-                    args = Hash[Published_extractor.names.zip(match)]
-                    begin
-                        date = Date.parse([args['year'], args['month'], args['day']].join('-').gsub(/-*$/, ''))
-                    rescue
-                        date = nil
-                    end
-                    poem.appearances << WorkAppearance.new(:year => args['year'].to_i, :date => date)
-                end
-            end
-
-            close_poem(poem) if poem
-        end
-
         def import(directory, from_year = 1850, to_year = 1886)
             puts "Importing Franklin works"
             edition = create_edition
@@ -186,7 +165,7 @@ module FranklinVentura
             string = ''
 
             Dir.open(directory).sort.each do |filename|
-                next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
+                next unless File.extname(filename) == '.TXT' && ((from_year..to_year).include?(filename.to_i) || filename == 'UNDATED.TXT')
                 string << markup_file(File.open("#{directory}/#{filename}"))
             end
             string = "<works>#{string}</works>"
@@ -209,12 +188,20 @@ module FranklinVentura
                 work.css('poem').each_with_index do |poem, i|
                     variant = poem.at('variant')
                     next unless variant
+                    secondary = false
+                    if secondary = variant.inner_html.match(Secondary_source_pattern)
+                        variant = secondary[:variant]
+                    else
+                        variant = variant.inner_html
+                    end
                     w = Work.create(
                         number: number,
                         title: titles[i] || titles.first,
                         date: Date.new(year, 1, 1),
-                        variant: variant.inner_html
+                        variant: variant,
+                        secondary_source: !!secondary
                     )
+
                     add_stanzas(w, poem)
                     add_manuscript(w, work)
                     add_publication(w, work)
@@ -249,9 +236,9 @@ module FranklinVentura
             if node = work_xml.at('manuscript')
                 work.metadata['manuscript'] = sanitize(node.inner_html.gsub('subloccode', 'b').gsub('loccode', 'b'), tags: ['b', 'em', 'u'])
                 node.css('holder').each do |holder|
-                    work.holder_code = holder.at('loccode')
-                    work.holder_subcode = holder.at('subloccode')
-                    work.holder_id = holder.at('id')
+                    work.holder_code = holder.at('loccode').text
+                    work.holder_subcode = holder.at('subloccode').text
+                    work.holder_id = holder.at('id').text
                 end
             end
         end
@@ -290,13 +277,20 @@ module FranklinVentura
 
         def line_number(poem, stanza, matches)
             line_num = nil
-            # Get line number
+            # First line of work
             if stanza.lines.empty? && (poem.stanzas.empty? || poem.stanzas.size == 1)
                 line_num = 1
+            # Next line in current stanza 
             elsif stanza.lines.last && stanza.lines.last.number
                 line_num = stanza.lines.last.number + 1
-            elsif poem.stanzas.last.lines.last && poem.stanzas.last.lines.last.number
-                line_num = poem.stanzas.last.lines.last.number + 1
+            # Next line in new stanza
+            elsif stanza.position > 0 && poem.stanzas[-2].lines.last.number
+                line_num = poem.stanzas[-2].lines.last.number + 1
+            else
+                puts poem.stanzas.inspect
+                puts stanza.lines.inspect
+                puts matches.inspect
+                exit
             end
             if matches['line_num'].to_i > 0
                 line_num = matches['line_num'].to_i
@@ -339,7 +333,7 @@ module FranklinVentura
                                 puts mod.inspect
                             end
                         end
-                        mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
+                        mods.sort_by!{|mod| sanitize(line.text).index(pattern(mod.original_characters)) || 0 }.reverse!
                         mods.each do |mod|
                             pull_emendation(line, mod)
                         end
@@ -351,11 +345,13 @@ module FranklinVentura
         end
 
         def pull_emendation(line, e)
-            return unless line && e.new_characters && match = line.text.match(pattern(e.new_characters))
+            return unless line && e.new_characters && match = sanitize(line.text).match(pattern(e.new_characters))
             e.start_address = match.offset(0)[0]
             e.start_address += 1 if match[0][0] == ' '
             e.end_address = e.start_address + e.new_characters.length if e.start_address
             e.save!
+            # TODO: This isn't going to pull out the emendation correctly if
+            # the emendation contains tags
             line.text = line.text.sub(e.new_characters, '')
             line.save!
         end
@@ -364,12 +360,12 @@ module FranklinVentura
             edition.works.each do |work|
                 work.divisions.each do |e|
                     if e.parent
-                        line = e.parent.chars.join
+                        line = sanitize(e.parent.chars.join)
                     elsif work.line(e.start_line_number)
-                        line = work.line(e.start_line_number).text
+                        line = sanitize(work.line(e.start_line_number).text)
                     end
-                    if line && line.index(e.original_characters)
-                        e.start_address = line.index(e.original_characters) + e.original_characters.length
+                    if line && line.index(pattern(e.original_characters))
+                        e.start_address = line.index(pattern(e.original_characters)) + e.original_characters.length
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
@@ -381,8 +377,11 @@ module FranklinVentura
             edition.works.each do |work|
                 work.alternates.each do |e|
                     line = work.line(e.start_line_number)
-                    if line && line.text.index(e.original_characters)
-                        e.start_address = line.text.index(e.original_characters)
+                    if line && e.start_address == 0 && e.end_address == 9999
+                        e.end_address = line.text.length - 1
+                        e.save!
+                    elsif line && sanitize(line.text).index(pattern(e.original_characters))
+                        e.start_address = sanitize(line.text).index(pattern(e.original_characters))
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end

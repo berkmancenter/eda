@@ -31,7 +31,7 @@ class Work < ActiveRecord::Base
     has_many :revisions, dependent: :destroy
     has_many :appearances, class_name: 'WorkAppearance', dependent: :destroy
 
-    attr_accessible :date, :metadata, :number, :title, :variant, :text
+    attr_accessible :date, :metadata, :number, :title, :variant, :text, :secondary_source
 
     validates :date, :number, :title, :variant, length: { maximum: 200 }
     validates :number, numericality: { only_integer: true }
@@ -141,6 +141,15 @@ class Work < ActiveRecord::Base
     def fascicle=(fascicle)
         self.metadata['fascicle'] = fascicle
     end
+
+    def note=(note)
+        if metadata['notes']
+            self.metadata['notes'] << note
+        else
+            self.metadata['notes'] = [note]
+        end
+    end
+
 
     def fascicle_position=(position)
         self.metadata['fascicle_position'] = position
