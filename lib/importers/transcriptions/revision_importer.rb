@@ -1,6 +1,6 @@
 class RevisionImporter
     def get_work_from_xml(revision_xml)
-        match = revision_xml[:id].match(/(?<prefix>[A-Z]{1,2})(?<number>[0-9]{1,4})(?<variant>[A-Z])/)
+        match = revision_xml['xml:id'].match(/(?<prefix>[A-Z]{1,2})(?<number>[0-9]{1,4})(?<variant>[A-Z])/)
         if match
             work = Edition.find_by_work_number_prefix('F').works.find_by_number_and_variant(match[:number], match[:variant])
             return work
@@ -11,6 +11,7 @@ class RevisionImporter
     end
 
     def import(filename)
+        puts 'Importing revisions'
         tei_importer = TEIImporter.new
         string = File.read(filename)
         doc = Nokogiri::XML(string)
@@ -18,6 +19,8 @@ class RevisionImporter
             work = get_work_from_xml(revision)
             revision.css('l').each do |line|
                 new_line, modifiers = tei_importer.parse_line(line).values
+                puts work.inspect
+                puts new_line.number
                 old_line = work.line(new_line.number)
                 stanza = old_line.stanza
                 old_line.destroy
@@ -25,6 +28,7 @@ class RevisionImporter
                 work.line_modifiers << modifiers
             end
             add_notes(work, revision)
+            work.save!
         end
     end
         

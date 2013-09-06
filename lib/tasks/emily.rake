@@ -43,7 +43,8 @@ namespace :emily do
         namespace :transcriptions do
             desc 'Import transcription corrections'
             task :revisions, [:filename] => [:environment] do |task, args|
-                RevisionsImporter.new.import(args[:filename])
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'tei_corrections', 'EDA-linereading-FranklinV1.xml')
+                RevisionImporter.new.import(filename)
             end
 
             desc 'Import Johnson works'

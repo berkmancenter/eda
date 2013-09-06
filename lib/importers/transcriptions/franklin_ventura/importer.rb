@@ -365,7 +365,7 @@ module FranklinVentura
                         line = sanitize(work.line(e.start_line_number).text)
                     end
                     if line && line.index(pattern(e.original_characters))
-                        e.start_address = line.index(pattern(e.original_characters)) + e.original_characters.length
+                        e.start_address = line.index(pattern(e.original_characters)) + e.original_characters.length + 1
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
