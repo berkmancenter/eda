@@ -24,9 +24,10 @@ namespace :emily do
 
     namespace :connect do
         desc 'Connect all existing transcriptions together'
-        task :transcriptions, [:j_to_f_map_file] => [:environment] do |task, args|
-            map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
-            TranscriptionConnecter.new.connect(map_file)
+        task :transcriptions, [:map_file, :publication_history_file] => [:environment] do |task, args|
+            map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
+            publication_history_file = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
+            TranscriptionConnecter.new.connect(map_file, publication_history_file)
         end
     end
 
@@ -40,6 +41,20 @@ namespace :emily do
     end
 
     namespace :import do
+        desc 'Import work metadata CSV'
+        task :metadata, [:filename, :edition_prefix] => [:environment] do |task, args|
+            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_metadata.csv')
+            edition_prefix = args[:edition_prefix] || 'F'
+            WorkMetadataImporter.new.import(filename, edition_prefix)
+        end
+
+        desc 'Import work publication history CSV'
+        task :publication_history, [:filename, :edition_prefix] => [:environment] do |task, args|
+            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
+            edition_prefix = args[:edition_prefix] || 'F'
+            PublicationHistoryImporter.new.import(filename, edition_prefix)
+        end
+
         namespace :transcriptions do
             desc 'Import transcription corrections'
             task :revisions, [:filename] => [:environment] do |task, args|

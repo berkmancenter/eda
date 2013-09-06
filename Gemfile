@@ -18,6 +18,7 @@ gem 'formtastic'
 gem 'cache_digests'
 gem 'memcache-client'
 gem 'activerecord-import'
+gem 'amatch'
 
 group :development, :test do
   gem 'rspec-rails'

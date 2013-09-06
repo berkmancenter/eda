@@ -42,6 +42,7 @@
                 </div>
 
                 <dl class="work-metadata"><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                <div class="work-appearances"><%= render partial: 'works/appearances', locals: { work: work } %></div>
                 <div><%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei) %></div>
                 <% if user_signed_in? && (work_to_edit.nil? || work != work_to_edit) %>
                 <div>

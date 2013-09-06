@@ -67,6 +67,21 @@ class TranscriptionErrorFinder
         end
     end
 
+    def find_missing_variants(poems)
+        # Make the first variant is A and that there aren't any missing between
+        # A and last letter
+        #  number | variant 
+        # --------+---------
+        #      49 | A.2
+        #     181 | B
+        #     311 | B
+        #     569 | B
+        #     755 | B
+        #     890 | B
+        #    1382 | B
+        # 
+    end
+
     def find_errors(poems)
         puts_missing_numbers(poems)
         puts_without_numbers(poems)

@@ -1,0 +1,9 @@
+<% work.appearances.each do |appearance| %>
+    <dl>
+        <dt>Publication</dt><dd><em><%= appearance.publication %></em></dd>
+        <dt>Date</dt><dd><%= appearance.date || appearance.year %></dd>
+        <% if appearance.pages %>
+        <dt>Pages</dt><dd><%= appearance.pages %></dd>
+        <% end %>
+    </dl>
+<% end %>

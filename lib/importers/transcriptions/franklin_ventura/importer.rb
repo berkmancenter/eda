@@ -40,16 +40,16 @@ module FranklinVentura
             edition
         end
 
-        def markup_file(file)
+        def markup_file(file, simple = false)
             string = file.read
             string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\\k<title></title>\n")
             string.gsub!(Variant_title_extractor, "\n<title>\\k<title></title>\n")
             string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
             string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
-            string.gsub!(Published_extractor, "<published><publication>\\k<publication></publication><date>\\k<year>-\\k<month>-\\k<day></date><pages>\\k<pages></pages><variant>\\k<source_variant></variant></published>")
+            string.gsub!(Published_extractor, "<published><publication>\\k<publication></publication><date>\\k<year>-\\k<month>-\\k<day></date><pages>\\k<pages></pages><variant>\\k<source_variant></variant></published>") unless simple
             string.gsub!(Publication_extractor, "\n<publications>\\k<publications></publications>\n")
             string.gsub!(Manuscript_extractor, "\n<manuscript>\\k<manuscript></manuscript>\n")
-            string.gsub!(Holder_extractor, "<holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>")
+            string.gsub!(Holder_extractor, "<holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>") unless simple
             string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
             string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
             string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
@@ -162,15 +162,19 @@ module FranklinVentura
             puts "Importing Franklin works"
             edition = create_edition
             @poems = []
-            string = ''
+            simple_string = ''
+            complex_string = ''
 
             Dir.open(directory).sort.each do |filename|
                 next unless File.extname(filename) == '.TXT' && ((from_year..to_year).include?(filename.to_i) || filename == 'UNDATED.TXT')
-                string << markup_file(File.open("#{directory}/#{filename}"))
+                simple_string << markup_file(File.open("#{directory}/#{filename}"), true)
+                complex_string << markup_file(File.open("#{directory}/#{filename}"))
             end
-            string = "<works>#{string}</works>"
+            simple_string = "<works>#{simple_string}</works>"
+            complex_string = "<works>#{complex_string}</works>"
 
-            File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
+            File.write(Rails.root.join('tmp', 'franklin_test.xml'), simple_string)
+            exit
             works = parse_xml(string)
             edition.works = works
             edition.save!
