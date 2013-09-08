@@ -173,18 +173,24 @@ module FranklinVentura
             simple_string = "<works>#{simple_string}</works>"
             complex_string = "<works>#{complex_string}</works>"
 
-            File.write(Rails.root.join('tmp', 'franklin_test.xml'), simple_string)
-            exit
-            works = parse_xml(string)
+            File.write(Rails.root.join('tmp', 'franklin_test_complex.xml'), complex_string)
+            File.write(Rails.root.join('tmp', 'franklin_test_simple.xml'), simple_string)
+            works = parse_xml(simple_string, complex_string)
             edition.works = works
             edition.save!
             post_process!(edition)
         end
 
-        def parse_xml(string)
+        def breakup_publications(work)
+            work.metadata['Publications'] = work.metadata['Publication'].split(/(\.|;)/).select{|s| !['.',';'].include?(s)}
+        end
+
+        def parse_xml(simple_string, complex_string)
             works = []
-            doc = Nokogiri::XML::Document.parse(string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-            doc.css('work').each do |work|
+            doc = Nokogiri::XML::Document.parse(complex_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            simple_doc = Nokogiri::XML::Document.parse(simple_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            doc.css('work').each_with_index do |work, i|
+                simple_work = simple_doc.css('work')[i]
                 year = work.xpath('preceding-sibling::year').first.text.to_i
                 number = work.at('number').text.to_i
                 puts number
@@ -207,8 +213,9 @@ module FranklinVentura
                     )
 
                     add_stanzas(w, poem)
-                    add_manuscript(w, work)
-                    add_publication(w, work)
+                    add_manuscript(w, work, simple_work)
+                    add_publication(w, work, simple_work)
+                    breakup_publications(w)
                     w.save!
                     add_modifiers!(w, poem)
                     works << w
@@ -217,7 +224,10 @@ module FranklinVentura
             works
         end
 
-        def add_publication(work, work_xml)
+        def add_publication(work, work_xml, simple_work_xml)
+            if node = simple_work_xml.at('publications')
+                work.metadata['Publication'] = node.inner_html
+            end
             if node = work_xml.at('publications')
                 node.css('published').each do |published|
                     if variant = published.at('variant')
@@ -231,14 +241,15 @@ module FranklinVentura
                         date: Date.parse("#{year}-#{month}-#{day}"),
                         pages: published.at('pages').text
                     )
-                    work.save!
                 end
             end
         end
 
-        def add_manuscript(work, work_xml)
+        def add_manuscript(work, work_xml, simple_work_xml)
+            if node = simple_work_xml.at('manuscript')
+                work.metadata['Manuscript'] = node.inner_html
+            end
             if node = work_xml.at('manuscript')
-                work.metadata['manuscript'] = sanitize(node.inner_html.gsub('subloccode', 'b').gsub('loccode', 'b'), tags: ['b', 'em', 'u'])
                 node.css('holder').each do |holder|
                     work.holder_code = holder.at('loccode').text
                     work.holder_subcode = holder.at('subloccode').text

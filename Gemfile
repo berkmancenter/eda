@@ -19,6 +19,7 @@ gem 'cache_digests'
 gem 'memcache-client'
 gem 'activerecord-import'
 gem 'amatch'
+gem 'htmlentities'
 
 group :development, :test do
   gem 'rspec-rails'

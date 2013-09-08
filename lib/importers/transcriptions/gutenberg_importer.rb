@@ -10,6 +10,14 @@ class GutenbergImporter
             :work_number_prefix => 'G',
             :completeness => 0.8
         )
+        edition.create_image_set(
+            name: "Images for #{edition.name}",
+            editable: true
+        )
+        edition.create_work_set(
+            name: "Works in #{edition.name}",
+            editable: true
+        )
         start_pattern = /<a name=/
         end_pattern = /<hr /
         metadata_pattern = /^<br>\r\n(?<number>[IXVL]*)\.<br>\r\n(<br>\r\n(?<title>[ A-ZË']*)(\.|!)<br>)?/m
@@ -23,7 +31,7 @@ class GutenbergImporter
                 matches = poem_body.match(metadata_pattern)
                 poem_body = poem_body.gsub(matches[0], '').strip
                 stanzas = poem_body.split(/\r\n<br>/)
-                p = Work.new(:title => matches[:title])
+                p = Work.new(:title => matches[:title], :number => edition.works.length + 1)
                 line_num = 1
                 stanzas.each_with_index do |stanza, i|
                     s = Stanza.new(:position => i)

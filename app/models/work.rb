@@ -219,7 +219,7 @@ class Work < ActiveRecord::Base
     protected
 
     def metadata_size
-        if metadata.to_yaml.size > 2000
+        if metadata.to_yaml.size > 10000
             errors.add(:metadata, I18n.t('errors.messages.too_big'))
         end
     end
