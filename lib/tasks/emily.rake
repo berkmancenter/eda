@@ -193,6 +193,20 @@ namespace :emily do
         end
     end
 
+    namespace :dump do
+        desc 'Dump work metadata'
+        task :work_metadata, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_metadata.csv')
+            WorkMetadataDumper.new.dump(output_file)
+        end
+
+        desc 'Dump image metadata'
+        task :image_metadata, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_image_metadata.csv')
+            ImageMetadataDumper.new.dump(output_file)
+        end
+    end
+
     desc 'Request everything now so the caches are warm'
     task :warm_cache => [:environment] do |t|
         app = ActionDispatch::Integration::Session.new(Rails.application)
