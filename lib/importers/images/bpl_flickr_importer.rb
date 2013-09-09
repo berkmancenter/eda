@@ -10,6 +10,7 @@ class BPLFlickrImporter
     BPL_PHOTOSET_ID = '72157604466722178'
     PER_PAGE = 500
     def import(image_dir)
+        puts 'Importing BPL images from Flickr'
         collection = Collection.create(:name => 'Boston Public Library', :metadata => {'Library' => 'BPL'})
         FlickRaw.api_key="1a639ffd8be5ff472f5aa4889f447082"
         FlickRaw.shared_secret="95eb6034f3da44c3"
@@ -28,6 +29,7 @@ class BPLFlickrImporter
             puts "Page #{current_page} of #{total_pages}"
             photos = response.photo
             photos.each_with_index do |photo, i|
+                sleep 1
                 puts "#{i + 1 + (current_page - 1) * PER_PAGE} / #{response.total}"
                 metadata = {}
                 photoInfo = flickr.photos.getInfo(:photo_id => photo.id)
