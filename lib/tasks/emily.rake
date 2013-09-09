@@ -160,7 +160,12 @@ namespace :emily do
         end
 
         desc 'Import everything'
-        task :everything => [:environment] do |task|
+        task :everything, [:use_existing_maps] => [:environment] do |task, args|
+            if args[:use_existing_maps].nil?
+                use_existing_maps = true
+            else
+                !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
+            end
             Rake::Task["emily:import:transcriptions:franklin"].execute
             Rake::Task["emily:import:transcriptions:johnson"].execute
             Rake::Task["emily:import:transcriptions:gutenberg"].execute
@@ -171,8 +176,8 @@ namespace :emily do
             Rake::Task["emily:import:images:amherst"].execute
             Rake::Task["emily:import:images:bpl"].execute
             Rake::Task["emily:connect:images_to_editions"].execute
-            Rake::Task["emily:connect:transcriptions"].execute
-            Rake::Task["emily:connect:images_to_transcriptions_map"].execute
+            Rake::Task["emily:connect:transcriptions"].execute unless use_existing_maps
+            Rake::Task["emily:connect:images_to_transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:connect:images_to_transcriptions_from_map"].execute
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
