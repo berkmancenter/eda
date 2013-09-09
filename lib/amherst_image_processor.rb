@@ -55,14 +55,22 @@ class AmherstImageProcessor
         base = File.basename(output_file, extension)
 
         if height > 4000 && width > height
-            `convert "#{input_file}" -crop 2x1@ +adjoin +repage "#{output_dir}/#{base}.tmp.jpg"`
-            [0,1].each do |i|
-                `convert "#{output_dir}/#{base}.tmp-#{i}.jpg" +repage -define tiff:tile-geometry=256x256 -compress jpeg "ptif:#{output_dir}/#{base}-#{i}.tif"`
-                #web_version(output_file, "#{web_image_output_dir}/#{base}-#{i}.jpg")
+            if File.exists?("#{output_dir}/#{base}-0.tif") || File.exists?("#{output_dir}/#{base}-1.tif")
+                puts %Q|"#{output_dir}/#{base}-01.tif" exists|
+            else
+                `convert "#{input_file}" -crop 2x1@ +adjoin +repage "#{output_dir}/#{base}.tmp.jpg"`
+                [0,1].each do |i|
+                    `convert "#{output_dir}/#{base}.tmp-#{i}.jpg" +repage -define tiff:tile-geometry=256x256 -compress jpeg "ptif:#{output_dir}/#{base}-#{i}.tif"`
+                    #web_version(output_file, "#{web_image_output_dir}/#{base}-#{i}.jpg")
+                end
+                `rm #{output_dir}/#{base}.tmp*`
             end
-            `rm #{output_dir}/#{base}.tmp*`
         else
-            `convert "#{input_file}" +repage -define tiff:tile-geometry=256x256 -compress jpeg "ptif:#{output_file}"`
+            if File.exists?(output_file)
+                puts "#{output_file} exists"
+            else
+                `convert "#{input_file}" +repage -define tiff:tile-geometry=256x256 -compress jpeg "ptif:#{output_file}"` 
+            end
             #web_version(output_file, "#{web_image_output_dir}/#{base}.jpg")
         end
 

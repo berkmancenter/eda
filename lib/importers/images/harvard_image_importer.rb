@@ -1,40 +1,3 @@
-# Collection
-# Fascicle
-# Work Images
-# Sheets
-# Don't forget positions
-#
-# For each page, one image gets created, then assigned to various image groups:
-#   The group for the collection
-#   The group for a sheet
-#   The group for each work
-#
-#
-# What does the hierarchy look like for image groups?
-#
-# Edition Group   Edition Group     Collection          Work
-#       |               |               |                |
-#    Fascicle          Set          Page Image   Work's Image Group
-#       |               |                                |
-#     Sheet          (Sheet?)                        Page Image
-#       |               |
-#   Page Image      Page Image
-#
-# Work groups are a thing unto themselves, and don't fall into the hierarchy.
-#
-# Sheets will get the edition root as the parent for right now.  When we import
-# fascicles, they'll become the sheet parent, and the fascicle parent will
-# become the edition root.
-#
-# Collections are objective, so don't mix those with anything else.  This isn't
-# exactly true, because collections as assigning order, which is subjective,
-# and part of editions.  Maybe collections should be factored into editions.
-#
-# Typically, every image gets added to at least three groups: the edition group, and
-# collection group, and the work group(s).
-#
-# Pages traverse the leafs of the edition image tree and the work list
-
 require 'csv'
 class HarvardImageImporter
     def import(directory, johnson_franklin_map, max_images = nil, test = false)
@@ -43,6 +6,8 @@ class HarvardImageImporter
         editions = Edition.where(:author => ['Thomas H. Johnson', 'R. W. Franklin'])
         image_count = 0
         total_files = Dir.entries(directory).count
+        map = CSV.open(Eda::Application.config.emily['data_directory'] + '/image_work_map.csv', 'wb')
+        map << ['Image URL', 'Work ID']
 
         Dir.open(directory).each_with_index do |filename, i|
             puts "File #{i} of #{total_files}"
@@ -53,15 +18,19 @@ class HarvardImageImporter
             doc.remove_namespaces!
 
             # Create sheet group and add to edition
-            sheet_groups = editions.map{|e| new_sheet_group(e, doc)}
+            sheet_groups = editions.map{|e| new_sheet_group(e, doc)} unless test
 
             doc.css('structMap div[TYPE=PAGE]').each do |page|
                 file_id = page.css('fptr')[1]['FILEID']
                 image_url = doc.at(%Q|file[ID="#{file_id}"]|).at('FLocat')['href']
                 next unless image_url && page['LABEL']
-                image_url = image_url.match(/(ms_.*)\.jp2/)[1]
+                if match = image_url.match(/(ms_.*)\.jp2/)
+                    image_url = match[1]
+                else
+                    next
+                end
                 web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
-                width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
+                width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i) unless test
 
                 image = Image.new(
                     :url => image_url,
@@ -74,23 +43,27 @@ class HarvardImageImporter
                         'Order Label' => page['ORDERLABEL'],
                         'Label' => page['LABEL']
                     }
-                )
+                ) unless test
                 image_count += 1
 
                 collection << image unless test
 
                 editions.each_with_index do |edition, i|
-                    sheet_groups[i] << image
+                    sheet_groups[i] << image unless test
                     works = works_from_page(edition, page, johnson_franklin_map)
-                    next if works.empty?
+                    if works.empty?
+                        map << [image_url, nil]
+                        next
+                    end
                     works.each do |work|
-                        work.image_set << image
-                        work.save! if work.changed?
+                        map << [image_url, work.full_id]
+                        work.image_set << image unless test
+                        work.save! if work.changed? && !test
                     end
                 end
             end
-            sheet_groups.each(&:save!)
-            editions.each(&:save!)
+            sheet_groups.each(&:save!) unless test
+            editions.each(&:save!) unless test
             collection.save! unless test
         end
     end

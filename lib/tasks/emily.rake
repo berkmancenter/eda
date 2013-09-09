@@ -99,12 +99,15 @@ namespace :emily do
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
                 max_images = args[:max_images]
-                test = !!args[:test]
+                test = true
                 HarvardImageImporter.new.import(directory, map_file, max_images, test)
             end
 
             desc 'Import Amherst images'
-            task :amherst => [:environment] do
+            task :amherst, [:image_directory, :mods_directory] => [:environment] do |t, args|
+                image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_output')
+                mods_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
+                AmherstImageImporter.new.import(image_directory, mods_directory)
             end
 
             desc 'Create missing images'

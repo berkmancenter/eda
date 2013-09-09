@@ -6,20 +6,54 @@ class TranscriptionConnecter
     }
 
     def update_map
+        map_filename = Eda::Application.config.emily['data_directory'] + '/work_map.csv'
+        score_threshold = 0.7714
         top_scores = []
-        CSV.foreach(Rails.root.join('tmp', 'gutenberg_similarities.csv'), headers: true, converters: :numeric) do |row|
+        matched_johnson_numbers = []
+        map = CSV.read(map_filename, headers: true)
+        temp_map = CSV.open(map_filename + '.tmp', 'wb')
+        temp_map << (map.headers + [:gutenberg])
+        CSV.foreach(Eda::Application.config.emily['data_directory'] + '/gutenberg_similarities_pair_distance.csv', headers: true, converters: :numeric) do |row|
             g_work = Work.find(row[0])
             scores = row.values_at(1..-1)
             top_score = scores.sort.last
             f_work = Work.find(row.headers[scores.index(top_score) + 1])
+            associated_row = find_row_by_f(map, f_work)
+            if associated_row && top_score > score_threshold
+                associated_row[3] = g_work.number
+                temp_map << associated_row
+                matched_johnson_numbers << associated_row[0]
+            elsif top_score > score_threshold
+                temp_map << [nil, f_work.number, f_work.variant, g_work.number]
+            else
+                temp_map << [nil, nil, nil, g_work.number]
+            end
             top_scores << [g_work.id, f_work.id, top_score]
             puts "#{g_work.lines.first.text}\n#{f_work.lines.first.text}\n#{top_score}\n\n"
+        end
+        map.each do |map_row|
+            unless matched_johnson_numbers.include?(map_row[0])
+                map_row[3] = nil
+                temp_map << map_row
+            end
         end
         puts top_scores.inspect
     end
 
+    def find_row_by_j(map, johnson_work_number)
+        map.to_a.find do |row|
+            row[0] && row[0] == johnson_work_number
+        end
+    end
+
+    def find_row_by_f(map, franklin_work)
+        map.to_a.find do |row|
+            row[1] && row[1].to_i == franklin_work.number && row[2] && row[2] == franklin_work.variant
+        end
+    end
+
     def match_by_text
-        output_file = CSV.open(Rails.root.join('tmp', 'gutenberg_similarities.csv'), 'wb')
+        output_file = CSV.open(Rails.root.join('tmp', 'gutenberg_similarities_pair_distance.csv'), 'wb')
         gutenberg = Edition.find_by_work_number_prefix('G')
         franklin = Edition.find_by_work_number_prefix('F')
         franklin_texts = {}
@@ -33,7 +67,7 @@ class TranscriptionConnecter
             puts g_work.id
             output[g_work.id] = {}
             franklin_texts.each do |f_id, f_text|
-                score = g_work.text.downcase.jarowinkler_similar(f_text.downcase)
+                score = g_work.text.downcase.pair_distance_similar(f_text.downcase)
                 #g.metadata['Similar Franklin Works'] << "#{f_id}: #{score}"
                 output[g_work.id][f_id] = score
             end
@@ -46,6 +80,8 @@ class TranscriptionConnecter
     end
 
     def connect(work_map, publication_history_file)
+        update_map
+        exit
         match_by_text
         exit
         Work.all.each do |work|
