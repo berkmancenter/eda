@@ -200,6 +200,18 @@ namespace :emily do
             WorkMetadataDumper.new.dump(output_file)
         end
 
+        desc 'Dump work text'
+        task :work_text, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_text.csv')
+            WorkTextDumper.new.dump(output_file)
+        end
+
+        desc 'Dump work TEI'
+        task :work_tei, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_tei.csv')
+            WorkTEIDumper.new.dump(output_file)
+        end
+
         desc 'Dump image metadata'
         task :image_metadata, [:output_file] => [:environment] do |t, args|
             output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_image_metadata.csv')

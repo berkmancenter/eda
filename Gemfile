@@ -20,6 +20,7 @@ gem 'memcache-client'
 gem 'activerecord-import'
 gem 'amatch'
 gem 'htmlentities'
+gem 'progressbar'
 
 group :development, :test do
   gem 'rspec-rails'

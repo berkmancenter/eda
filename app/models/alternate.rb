@@ -24,7 +24,7 @@ class Alternate < LineModifier
     def chars
         case subtype
         when 'cancellation'
-            original_characters.chars.to_a
+            original_characters ? original_characters.chars.to_a : []
         else
             new_characters.chars.to_a
         end
