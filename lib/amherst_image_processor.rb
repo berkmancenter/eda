@@ -39,9 +39,10 @@ class AmherstImageProcessor
             extension = File.extname(filename)
             base = File.basename(filename, extension)
             full_path = "#{input_dir}/#{filename}"
+            puts full_path
             if File.directory?(full_path) && filename[0] != '.'
                 process_directory_for_web(full_path, output_dir)
-            elsif File.file?(full_path) && extension == '.jpg'
+            elsif File.file?(full_path) && extension == '.tif'
                 queue << lambda { web_version(full_path, "#{output_dir}/#{base}.jpg") }
             end
         end
@@ -77,6 +78,6 @@ class AmherstImageProcessor
     end
 
     def web_version(input_file, output_file)
-        `convert "#{input_file}[1]" -resize 500x800 #{output_file}`
+        `convert "#{input_file}[1]" -resize 500x800 #{output_file}` unless File.exists?(output_file)
     end
 end

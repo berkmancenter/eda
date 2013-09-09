@@ -1,20 +1,24 @@
 class AmherstImageImporter
     def import(image_directory, mods_directory)
         puts 'Importing Amherst Images'
-        franklin_pattern = /Franklin # (?<number>\d+)/
-        johnson_pattern = /Johnson Poems # (?<number>\d+)/
-        amherst_pattern = /Amherst Manuscript # (?<number>\d+)/
-        location_pattern = /Box (?<box>\d+) Folder (?<folder>\d+)/
-        Dir.entries(image_directory).each do |image_filename|
+        collection = Collection.create(name: 'Amherst Image Collection', metadata: { 'Credits' => 'Amherst Credits' })
+        last_call_number = ''
+        sheet_group = collection
+        Dir.entries(image_directory).each_with_index do |image_filename, i|
+            puts i + 1
             next if image_filename[0] == '.'
             call_number = image_filename.match(/asc-\d+/)[0].sub('-', ':')
+            last_call_number = call_number
             mods_filename = mods_directory + '/' + call_number + '/MODS.xml'
             doc = Nokogiri::XML(File.open(mods_filename))
             doc.remove_namespaces!
+            if call_number != last_call_number
+                sheet_group = new_sheet_group(collection, doc)
+            end
             image_url = image_filename.match(/(.*).tif/)[1]
             web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
             width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
-            image = Image.new(
+            image = Image.create(
                 url: image_url,
                 credits: 'Amherst credits',
                 web_width: width,
@@ -26,7 +30,18 @@ class AmherstImageImporter
                     'Title' => doc.at('title').text
                 }
             )
-            puts image.inspect
+            sheet_group << image
         end
+        collection.save!
+    end
+
+    def new_sheet_group(collection, doc)
+        is = ImageSet.create!(
+            :name => doc.at('identifier[type=local]').text,
+            :editable => false,
+            :metadata => { 'Shelf Location' => doc.at('shelfLocator').text }
+        )
+        is.move_to_child_of collection
+        is
     end
 end

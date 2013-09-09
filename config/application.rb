@@ -19,6 +19,7 @@ module Eda
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/lib/importers)
+    config.autoload_paths += %W(#{config.root}/lib/connectors)
     config.autoload_paths += %W(#{config.root}/lib/importers/images)
     config.autoload_paths += %W(#{config.root}/lib/importers/transcriptions)
 

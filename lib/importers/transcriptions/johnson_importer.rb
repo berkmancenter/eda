@@ -50,6 +50,8 @@ class JohnsonImporter
                 work.date = Date.new(manuscript_metadata['Year'], 1, 1) if manuscript_metadata['Year']
                 work.metadata = manuscript_metadata
             end
+            work.metadata['Manuscript'] = poem.at('manuscript').text if poem.at('manuscript')
+            work.metadata['Publication'] = poem.at('publication').text if poem.at('publication')
             work.appearances = appearances unless appearances.nil?
             work.revisions = modifiers_from_body(poem)
             work.save!
