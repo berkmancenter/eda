@@ -2,9 +2,11 @@ require 'csv'
 
 class PublicationHistoryImporter
     def import(filename, edition_prefix)
+        puts 'Importing publication histories'
         edition = Edition.find_by_work_number_prefix(edition_prefix)
         headers = ['Publication','Day','Month','Year','Pages','Source Variant']
         CSV.foreach(filename, headers: true) do |row|
+            puts 'thing'
             works = get_works(edition, row)
             row['Month'] ||= 1
             row['Day'] ||= 1
@@ -24,10 +26,12 @@ class PublicationHistoryImporter
     end
 
     def get_works(edition, row)
-        if match = row['Source Variant'].match(/^[A-Z]*$/)
+        works = []
+        if row['Source Variant'] && match = row['Source Variant'].match(/^[A-Z]*$/)
             variant = match.to_s.chars.to_a
         end
         works = edition.works.where(number: row['Franklin Number'].to_i)
         works = works.where(variant: variant) if variant
+        works
     end
 end

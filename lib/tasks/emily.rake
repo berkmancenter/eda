@@ -166,11 +166,11 @@ namespace :emily do
             else
                 !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
             end
-            Rake::Task["emily:import:transcriptions:franklin"].execute
-            Rake::Task["emily:import:transcriptions:johnson"].execute
-            Rake::Task["emily:import:transcriptions:gutenberg"].execute
-            Rake::Task["emily:import:transcriptions:revisions"].execute
-            Rake::Task["emily:import:metadata"].execute
+            #Rake::Task["emily:import:transcriptions:franklin"].execute
+            #Rake::Task["emily:import:transcriptions:johnson"].execute
+            #Rake::Task["emily:import:transcriptions:gutenberg"].execute
+            #Rake::Task["emily:import:transcriptions:revisions"].execute
+            #Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
             Rake::Task["emily:import:images:harvard"].execute
             Rake::Task["emily:import:images:amherst"].execute

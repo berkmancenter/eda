@@ -35,7 +35,7 @@ class Work < ActiveRecord::Base
 
     validates :date, :number, :title, :variant, length: { maximum: 200 }
     validates :number, numericality: { only_integer: true }
-    validate :metadata_size
+    #validate :metadata_size
 
     after_initialize :setup_defaults
     before_create :setup_work
