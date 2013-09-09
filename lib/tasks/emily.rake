@@ -11,10 +11,19 @@ namespace :emily do
         desc 'Process Amherst images to cut double images into singles'
         task :amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
             input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst'
-            output_dir = args[:output_dir] || Eda::Application.config.emily['image_directory']
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             AmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
             #AmherstImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process BPL images to create tifs'
+        task :bpl_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            BPLImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            #BPLImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
         desc 'Create web-ready images for page turning'

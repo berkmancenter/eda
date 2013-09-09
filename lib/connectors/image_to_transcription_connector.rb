@@ -10,6 +10,7 @@ class ImageToTranscriptionConnector
                 puts image.metadata['Label'].inspect
             elsif image.metadata['Identifier (Johnson Poem #)']
                 puts image.metdata['Identifier (Johnson Poem #)']
+                exit
             end
         end
     end
