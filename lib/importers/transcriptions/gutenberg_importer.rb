@@ -8,7 +8,8 @@ class GutenbergImporter
             :author => 'Emily Dickinson',
             :date => Date.new(2004, 5, 3),
             :work_number_prefix => 'G',
-            :completeness => 0.8
+            :completeness => 0.8,
+            :public => true
         )
         edition.create_image_set(
             name: "Images for #{edition.name}",

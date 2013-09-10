@@ -1,16 +1,18 @@
 class MissingImageCreator
     def create
+        pbar = ProgressBar.new("Missing Images", imageless_works.count)
         iw_edition_groups = imageless_works.group_by{|w| w.edition.id}
         iw_edition_groups.each do |edition_id, works|
             images = []
             edition = Edition.find(edition_id)
             works.each do |work|
-                puts "Creating image for imageless work: #{work.edition.work_number_prefix}#{work.number} #{work.variant}"
+                #puts "Creating image for imageless work: #{work.edition.work_number_prefix}#{work.number} #{work.variant}"
                 image = Image.new
                 work.image_set = ImageSet.create
                 work.image_set << image
                 images << image
                 work.save!
+                pbar.inc
             end
             edition.image_set = edition.image_set.duplicate
             edition.save!
