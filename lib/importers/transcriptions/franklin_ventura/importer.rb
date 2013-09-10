@@ -189,11 +189,12 @@ module FranklinVentura
             works = []
             doc = Nokogiri::XML::Document.parse(complex_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
             simple_doc = Nokogiri::XML::Document.parse(simple_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            pbar = ProgressBar.new('Parsing Franklin', doc.css('work').count)
             doc.css('work').each_with_index do |work, i|
                 simple_work = simple_doc.css('work')[i]
                 year = work.xpath('preceding-sibling::year').first.text.to_i
                 number = work.at('number').text.to_i
-                puts number
+                #puts number
                 titles = work.css('title').map(&:text)
                 work.css('poem').each_with_index do |poem, i|
                     variant = poem.at('variant')
@@ -214,14 +215,33 @@ module FranklinVentura
 
                     add_stanzas(w, poem)
                     add_manuscript(w, work, simple_work)
+                    add_holder_info(w, poem)
                     add_publication(w, work, simple_work)
                     breakup_publications(w)
                     w.save!
                     add_modifiers!(w, poem)
                     works << w
+                    pbar.inc
                 end
             end
             works
+        end
+
+        def add_holder_info(work, poem_xml)
+            if work.variant == 'A'
+                previous_sibling = poem_xml.parent.at('manuscript')
+            else
+                previous_sibling = poem_xml.previous_element if poem_xml.previous_element.matches?('p')
+            end
+            if previous_sibling && previous_sibling.css('holder').count > 0
+                work.clear_holder_info
+                # Work gets last holder in paragraph
+                previous_sibling.css('holder').each do |holder|
+                    work.holder_code = holder.at('loccode').text.strip
+                    work.holder_subcode = holder.at('subloccode').text.strip
+                    work.holder_id = holder.at('id').text.strip
+                end
+            end
         end
 
         def add_publication(work, work_xml, simple_work_xml)
@@ -248,13 +268,6 @@ module FranklinVentura
         def add_manuscript(work, work_xml, simple_work_xml)
             if node = simple_work_xml.at('manuscript')
                 work.metadata['Manuscript'] = node.inner_html
-            end
-            if node = work_xml.at('manuscript')
-                node.css('holder').each do |holder|
-                    work.holder_code = holder.at('loccode').text
-                    work.holder_subcode = holder.at('subloccode').text
-                    work.holder_id = holder.at('id').text
-                end
             end
         end
 
@@ -336,8 +349,10 @@ module FranklinVentura
         end
 
         def locate_emendations!(edition)
+            pbar = ProgressBar.new("Locating Emendations", edition.works.reduce(0){|c, w| w.emendations.count + c})
             edition.works.each do |work|
                 work.emendations.each do |e|
+                    pbar.inc
                     next unless e.start_address == nil && e.new_characters
                     pattern = pattern(e.new_characters)
                     line = work.line(e.start_line_number)
@@ -372,6 +387,7 @@ module FranklinVentura
         end
 
         def locate_divisions!(edition)
+            pbar = ProgressBar.new("Locating Divisions", edition.works.reduce(0){|c, w| w.divisions.count + c})
             edition.works.each do |work|
                 work.divisions.each do |e|
                     if e.parent
@@ -384,11 +400,13 @@ module FranklinVentura
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
+                    pbar.inc
                 end
             end
         end
 
         def locate_alternates!(edition)
+            pbar = ProgressBar.new("Locating Alternates", edition.works.reduce(0){|c, w| w.alternates.count + c})
             edition.works.each do |work|
                 work.alternates.each do |e|
                     line = work.line(e.start_line_number)
@@ -400,6 +418,7 @@ module FranklinVentura
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
+                    pbar.inc
                 end
             end
         end

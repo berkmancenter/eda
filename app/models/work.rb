@@ -114,6 +114,12 @@ class Work < ActiveRecord::Base
         self.image_set = image_set
     end
 
+    def clear_holder_info
+        metadata['holder_code'] = nil
+        metadata['holder_subcode'] = nil
+        metadata['holder_id'] = nil
+    end
+
     def holder_code=(code)
         if metadata['holder_code']
             self.metadata['holder_code'] << code

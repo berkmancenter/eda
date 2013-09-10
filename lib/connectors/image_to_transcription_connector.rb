@@ -1,18 +1,54 @@
 require 'csv'
 class ImageToTranscriptionConnector
-    map = CSV.open(Eda::Application.config.emily['data_directory'] + '/image_work_map.csv', 'wb')
-    map << ['image_url', 'johnson', 'franklin', 'franklin_variant', 'gutenberg']
     def create_map(output_map_file)
+        franklin = Edition.find_by_work_number_prefix('F')
+        johnson = Edition.find_by_work_number_prefix('J')
+        gutenberg = Edition.find_by_work_number_prefix('G')
+        map = CSV.open(output_map_file, 'wb')
+        map << ['image_url', 'johnson', 'franklin', 'franklin_variant', 'gutenberg']
         Image.all.each do |image|
             if image.metadata['Identifiers']
-                puts image.metadata['Identifiers'].inspect
+                works = works_for_amherst(image, franklin, johnson)
             elsif image.metadata['Label']
-                puts image.metadata['Label'].inspect
+                works = works_for_harvard(image.metadata['Label'], franklin, johnson)
             elsif image.metadata['Identifier (Johnson Poem #)']
-                puts image.metdata['Identifier (Johnson Poem #)']
-                exit
+                works = works_for_bpl(image.metdata['Identifier (Johnson Poem #)'], johnson)
             end
         end
+    end
+
+    def works_for_amherst(image, id, franklin, johnson)
+        works = []
+        franklin_pattern = /Franklin # ?(\d+[; 0-9]*)/
+        johnson_pattern = /Johnson Poems # ?(\d+[; 0-9]*)/
+        amherst_pattern = /Amherst Manuscript # ?(?<part>(set |fascicle ))?(?<number>[0-9; ]*)/
+        location_pattern = /Box (?<box>\d+) Folder (?<folder>\d+)/
+        # To match Amherst images, find all with same sheet number and order by
+        # franklin number, then guess
+        match = images.metadata['Identifiers'].first.match(amherst_pattern)
+        return unless match && match[:number]
+        manuscript_numbers = match[:number].split(';').map(&:to_i)
+        images.metadata['Identifiers'].each do |ident|
+            if match = ident.match(franklin_pattern)
+                numbers = match[1].split(';').map(&:strip)
+                numbers.each do |number|
+                    franklin.where(number: number).each do |w|
+                        w.metadata['holder_code'].include?('a')
+                    end
+                end
+            elsif match = ident.match(johnson_pattern)
+            end
+        end
+    end
+
+    def works_for_harvard(id, franklin, johnson)
+        franklin_numbers = label.scan(/Fr(\d{1,4})(\D|$)/)
+        johnson_numbers = label.scan(/J(\d{1,4})(\D|$)/)
+    end
+
+    def works_for_bpl(id, johnson)
+        johnson_key = 'Identifier (Johnson Poem #)'
+        pattern = /\d+/
     end
 
     def connect(image_to_work_map_file, work_map_file)
@@ -63,13 +99,6 @@ class ImageToTranscriptionConnector
         selected_row
     end
 
-    # From Amherst
-    def amherst
-        franklin_pattern = /Franklin # (?<number>\d+)/
-            johnson_pattern = /Johnson Poems # (?<number>\d+)/
-            amherst_pattern = /Amherst Manuscript # (?<number>\d+)/
-            location_pattern = /Box (?<box>\d+) Folder (?<folder>\d+)/
-    end
 
     # From BPL
     def get_work(edition, johnson_number, johnson_franklin_map)
@@ -124,8 +153,6 @@ class ImageToTranscriptionConnector
         call_number_pattern = /ms_am_1118_3_(\d{1,3})_\d{4}/
             call_number = page.css('fptr').first['FILEID']
         call_number_matches = call_number.match(call_number_pattern)
-        franklin_numbers = label.scan(/Fr(\d{1,4})(\D|$)/)
-        johnson_numbers = label.scan(/J(\d{1,4})(\D|$)/)
         work_numbers = johnson ? johnson_numbers : franklin_numbers
         work_numbers.each do |work_number|
             work_number = work_number[0].to_i

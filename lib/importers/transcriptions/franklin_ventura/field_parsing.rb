@@ -11,6 +11,10 @@ module FieldParsing
             emendation = matches['division'].split('] ')
             if emendation.count > 1
                 chars = emendation[1]
+                if chars.gsub(break_pattern, '').nil?
+                    puts emendation.inspect
+                    #exit
+                end
                 e = Emendation.new(
                     :start_line_number => matches['line_num'].to_i,
                     :end_line_number => matches['line_num'].to_i,
@@ -43,7 +47,7 @@ module FieldParsing
             end
             return divs
         else
-            puts "div mod: " + text
+            #puts "div mod: " + text
         end
     end
 
@@ -61,7 +65,7 @@ module FieldParsing
             )
             e
         else
-            puts "emend mod: " + text
+            #puts "emend mod: " + text
         end
     end
 
@@ -82,9 +86,9 @@ module FieldParsing
                 )
                 return a
             else
-                puts matches.inspect
-                puts alts.inspect
-                puts "alt mod: " + text
+                #puts matches.inspect
+                #puts alts.inspect
+                #puts "alt mod: " + text
             end
         elsif full_line_matches && full_line_matches['line_num'] && full_line_matches['alternates']
                 a = Alternate.new(
@@ -115,7 +119,7 @@ module FieldParsing
                 r.start_line_number = matches['line_num'].to_i
                 r
             else
-                puts "revise mod: " + text
+                #puts "revise mod: " + text
             end
         end
     end
