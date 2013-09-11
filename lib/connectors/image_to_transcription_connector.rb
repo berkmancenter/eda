@@ -118,8 +118,10 @@ class ImageToTranscriptionConnector
                 exit
             end
             works.each do |work|
+                work.image_set = work.image_set.duplicate
                 work.image_set << Image.find_by_url(row['image_url'])
             end
+            work_map.rewind
             pbar.inc
         end
     end
@@ -142,16 +144,20 @@ class ImageToTranscriptionConnector
         if work_row['gutenberg']
             works += gutenberg.works.where(number: work_row['gutenberg'].to_i).all
         end
-        puts work_row.inspect
         works
     end
 
     def find_row(table, select_hash)
         selected_row = nil
         table.each do |row|
-            if select_hash.keys.all?{ |header| row[header].to_i == select_hash[header].to_i && row[header].to_i != 0 }
+            if select_hash.keys.all? do |header|
+                #puts "#{row[header]} == #{select_hash[header]}"
+                #puts "#{row[header] == select_hash[header]}"
+                #puts row.inspect
+                #puts select_hash.inspect
+                row[header] == select_hash[header]
+            end
                 selected_row = row
-                puts 'found'
                 break
             end
         end
