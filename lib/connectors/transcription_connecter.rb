@@ -79,17 +79,24 @@ class TranscriptionConnecter
         end
     end
 
-    def connect(work_map, publication_history_file)
-        update_map
-        exit
-        match_by_text
-        exit
-        Work.all.each do |work|
-            parse_publication_field(work)
-        end
-        exit
-        map = CSV.read(work_map, {:headers => true, :converters => :integer}).to_a[1..-1]
+    def connect(work_map)
+        map = CSV.open(work_map, 'wb')
+        headers = []
+        Edition.all.each{|e| headers << e.work_number_prefix }
+        map << headers
         franklin = Edition.find_by_work_number_prefix('F')
+        franklin.works.each do |work|
+            if work.metadata && work.metadata['Publications']
+                work.metadata['Publications'].each do |pub|
+                    matches = pub.scan(/<em>[A-Z]<\/em>([^<]*(principal))/)
+                    if matches
+                        puts matches.inspect
+                        exit
+                    end
+                end
+            end
+        end
+
         CSV.foreach(publication_history_file, headers: true) do |row|
             next unless row['Publication'] == 'Poems' && row['Year'] == '1955' && row['Source Variant'] && row['Source Variant'].match(/[A-Z]*/)
             if row['Source Variant'].length > 1 && row['Notes'] && match = row['Notes'].match(/\[?(?<variant>[A-Z](\.[0-9])?)\]? principal/)

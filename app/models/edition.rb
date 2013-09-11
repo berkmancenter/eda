@@ -32,7 +32,7 @@ class Edition < ActiveRecord::Base
     validates :description, length: { maximum: 2000 }
     validates :author, length: { maximum: 200 }
     validates :date, length: { maximum: 200 }
-    validates :work_number_prefix, length: { maximum: 2 }
+    validates :work_number_prefix, length: { maximum: 6 }
 
     scope :is_public, where(public: true)
     scope :for_user, lambda { |user|
