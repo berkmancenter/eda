@@ -85,13 +85,26 @@ class TranscriptionConnecter
         Edition.all.each{|e| headers << e.work_number_prefix }
         map << headers
         franklin = Edition.find_by_work_number_prefix('F')
+        edition_publication_map = {
+            'J' => /<em>Poems<\/em> \(1955\)/,
+            'P90-' => /<em>Poems<\/em> \(1890\)/,
+            'P91-' => /<em>Poems<\/em> \(1891\)/,
+            'P96-' => /<em>Poems<\/em> \(1896\)/,
+        }
+
         franklin.works.each do |work|
             if work.metadata && work.metadata['Publications']
                 work.metadata['Publications'].each do |pub|
-                    matches = pub.scan(/<em>[A-Z]<\/em>([^<]*(principal))/)
-                    if matches
-                        puts matches.inspect
-                        exit
+                    edition_publication_map.each do |e, pattern|
+                        if pub.match(pattern)
+                            puts e
+                            puts pub
+                        end
+                        matches = pub.scan(/<em>[A-Z]<\/em>([^<]*(principal))/)
+                        if matches
+                            puts matches.inspect
+                            exit
+                        end
                     end
                 end
             end

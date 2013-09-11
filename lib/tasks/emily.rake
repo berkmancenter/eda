@@ -42,8 +42,7 @@ namespace :emily do
         desc 'Connect all existing transcriptions together'
         task :transcriptions, [:map_file, :publication_history_file] => [:environment] do |task, args|
             map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
-            publication_history_file = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
-            TranscriptionConnecter.new.connect(map_file, publication_history_file)
+            TranscriptionConnecter.new.connect(map_file)
         end
 
         desc 'Create images to works map'
