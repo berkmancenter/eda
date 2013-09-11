@@ -7,33 +7,50 @@ class ImageToTranscriptionConnector
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'johnson', 'franklin', 'franklin_variant', 'gutenberg']
         Image.all.each do |image|
+            next unless image.metadata
             if image.metadata['Identifiers']
                 works = works_for_amherst(image, franklin, johnson)
             elsif image.metadata['Label']
                 works = works_for_harvard(image.metadata['Label'], franklin, johnson)
             elsif image.metadata['Identifier (Johnson Poem #)']
-                works = works_for_bpl(image.metdata['Identifier (Johnson Poem #)'], johnson)
+                works = works_for_bpl(image.metadata['Identifier (Johnson Poem #)'], johnson)
             end
         end
     end
 
-    def works_for_amherst(image, id, franklin, johnson)
+    def works_for_amherst(image, franklin, johnson)
         works = []
         franklin_pattern = /Franklin # ?(\d+[; 0-9]*)/
         johnson_pattern = /Johnson Poems # ?(\d+[; 0-9]*)/
         amherst_pattern = /Amherst Manuscript # ?(?<part>(set |fascicle ))?(?<number>[0-9; ]*)/
         location_pattern = /Box (?<box>\d+) Folder (?<folder>\d+)/
+        holder_id_pattern = /(\d+)(-(\d+)(\/(\d+))?)?/
+        image_url_pattern = /asc-\d+-(\d+)-(0|1)/
         # To match Amherst images, find all with same sheet number and order by
         # franklin number, then guess
-        match = images.metadata['Identifiers'].first.match(amherst_pattern)
+        match = image.metadata['Identifiers'].first.match(amherst_pattern)
         return unless match && match[:number]
         manuscript_numbers = match[:number].split(';').map(&:to_i)
-        images.metadata['Identifiers'].each do |ident|
+        image.metadata['Identifiers'].each do |ident|
             if match = ident.match(franklin_pattern)
                 numbers = match[1].split(';').map(&:strip)
                 numbers.each do |number|
-                    franklin.where(number: number).each do |w|
-                        w.metadata['holder_code'].include?('a')
+                    franklin.works.where(number: number).each do |w|
+                        if w.metadata && w.metadata['holder_code'] && w.metadata['holder_code'].include?('a')
+                            matches = w.metadata['holder_id'].first.match(holder_id_pattern)
+                            if matches[1] && matches[3] && matches[5]
+                                puts "#{matches[1]} #{matches[3]} #{matches[5]}"
+                                image_url_match = image.url.match(image_url_pattern)
+                                if image_url_match[1] == matches[3] || image_url_match[1] == matches[5]
+                                    puts matches.inspect
+                                    puts image_url_match.inspect
+                                    exit
+                                end
+
+                            elsif matches[1]
+                                puts matches[1]
+                            end
+                        end
                     end
                 end
             elsif match = ident.match(johnson_pattern)
@@ -42,8 +59,8 @@ class ImageToTranscriptionConnector
     end
 
     def works_for_harvard(id, franklin, johnson)
-        franklin_numbers = label.scan(/Fr(\d{1,4})(\D|$)/)
-        johnson_numbers = label.scan(/J(\d{1,4})(\D|$)/)
+        franklin_numbers = id.scan(/Fr(\d{1,4})(\D|$)/)
+        johnson_numbers = id.scan(/J(\d{1,4})(\D|$)/)
     end
 
     def works_for_bpl(id, johnson)
@@ -60,9 +77,9 @@ class ImageToTranscriptionConnector
                     franklin_variant: row[:franklin_variant]
                 })
             elsif row[:johnson]
-                works = all_works(work_map, { johnson: row[:johnson] }
+                works = all_works(work_map, { johnson: row[:johnson] })
             elsif row[:gutenberg]
-                works = all_works(work_map, { gutenberg: row[:gutenberg] }
+                works = all_works(work_map, { gutenberg: row[:gutenberg] })
             end
             works.each do |work|
                 work.image_set << Image.find_by_url(row[:image_url])
