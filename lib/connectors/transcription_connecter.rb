@@ -12,7 +12,6 @@ class TranscriptionConnecter
         output_file = CSV.open(filename, 'wb')
 
         if edition_1.works.count > edition_2.works.count
-            puts "swapping #{edition_1.works.count} - #{edition_2.works.count}"
             tmp = edition_1
             edition_1 = edition_2
             edition_2 = tmp
@@ -68,13 +67,12 @@ class TranscriptionConnecter
         end
     end
 
-    def matching_work_by_text(work, match_edition)
-        similarity_map = similarity_map(work.edition, match_edition)
+    def matching_work_by_text(similarity_map, work, match_edition)
         score_threshold = 0.7714
         matched_work = nil
-        similarity_map.each do |row|
-            next unless row[0] == work.full_id
-            scores = row.values_at(1..-1)
+        similarity_map.each_with_index do |row, i|
+            next if i == 0 || row[0] != work.full_id
+            scores = row[1..-1]
             top_score = scores.sort.last
             f_work = Work.find_by_full_id(similarity_map[0][scores.index(top_score) + 1])
             if f_work && top_score > score_threshold
@@ -82,13 +80,13 @@ class TranscriptionConnecter
                 break
             end
         end
-        unless work
-            similarity_map.by_col!
-            similarity_map.each do |col|
-                next unless col[0] == work.full_id
-                scores = col.values_at(1..-1)
+        unless matched_work
+            similarity_map_by_col = similarity_map.transpose
+            similarity_map_by_col.each_with_index do |col, i|
+                next if i == 0 || col[0] != work.full_id
+                scores = col[1..-1]
                 top_score = scores.sort.last
-                f_work = Work.find_by_full_id(similarity_map[0][scores.index(top_score) + 1])
+                f_work = Work.find_by_full_id(similarity_map_by_col[0][scores.index(top_score) + 1])
                 if f_work && top_score > score_threshold
                     matched_work = f_work
                     break
@@ -132,6 +130,12 @@ class TranscriptionConnecter
             'P91-' => /<em>Poems<\/em> \(1891\)/,
             'P96-' => /<em>Poems<\/em> \(1896\)/,
         }
+        similarity_maps = {
+            'P90-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P90-')).read,
+            'P91-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P91-')).read,
+            'P96-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P96-')).read
+        }
+
         pbar = ProgressBar.new("Connecting", franklin.works.count)
         franklin.works.each do |work|
             pbar.inc
@@ -148,11 +152,12 @@ class TranscriptionConnecter
                     case e
                     when 'J'
                         variant = pull_variant_from_johnson(work.metadata['Publications'])
+                        variant = work.variant if work.variants.count == 0
                         johnson_number = match[1]
                         row['J'] = johnson_number if variant == work.variant
                     when 'P90-', 'P91-', 'P96-'
                         edition = Edition.find_by_work_number_prefix(e)
-                        matching_work = matching_work_by_text(work, edition) if edition
+                        matching_work = matching_work_by_text(similarity_maps[e], work, edition) if edition
                         row[e] = matching_work.full_id if matching_work
                     end
                 end
