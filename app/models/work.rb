@@ -222,6 +222,16 @@ class Work < ActiveRecord::Base
         (!new_record? && count == 1) || (new_record? && count == 0)
     end
 
+    def self.find_by_full_id(id)
+        match = id.match(/^(?<prefix>[A-Z]+([0-9]*-)?)(?<number>\d+)(?<variant>[A-Z])?/)
+        edition = Edition.find_by_work_number_prefix(match[:prefix])
+        return unless edition
+        works = edition.works
+        works = works.where(number: match[:number])
+        works = works.where(variant: match[:variant]) if match[:variant]
+        works.first
+    end
+
     protected
 
     def metadata_size

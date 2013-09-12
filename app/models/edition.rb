@@ -23,7 +23,7 @@ class Edition < ActiveRecord::Base
     belongs_to :image_set, dependent: :destroy
     belongs_to :work_set, dependent: :destroy
 
-    has_many :works #, after_add: :add_work_to_work_set, dependent: :destroy
+    has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
 
     attr_accessible :author, :completeness, :date, :description, :name,
         :work_number_prefix, :parent_id, :public
