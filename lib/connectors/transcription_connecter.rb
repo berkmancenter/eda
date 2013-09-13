@@ -154,7 +154,7 @@ class TranscriptionConnecter
                         variant = pull_variant_from_johnson(work.metadata['Publications'])
                         variant = work.variant if work.variants.count == 0
                         johnson_number = match[1]
-                        row['J'] = johnson_number if variant == work.variant
+                        row['J'] = e + johnson_number if variant == work.variant
                     when 'P90-', 'P91-', 'P96-'
                         edition = Edition.find_by_work_number_prefix(e)
                         matching_work = matching_work_by_text(similarity_maps[e], work, edition) if edition

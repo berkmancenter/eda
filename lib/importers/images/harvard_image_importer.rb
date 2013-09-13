@@ -5,9 +5,10 @@ class HarvardImageImporter
         collection = Collection.create!(:name => 'Harvard Image Collection', :metadata => {'Library' => 'Houghton'})
         image_count = 0
         total_files = Dir.entries(directory).count
+        pbar = ProgressBar.new("Harvard Img", total_files)
 
         Dir.open(directory).each_with_index do |filename, i|
-            puts "File #{i} of #{total_files}"
+            pbar.inc
             next if filename[0] == '.'
             next if max_images && image_count >= max_images
             file = File.open("#{directory}/#{filename}")

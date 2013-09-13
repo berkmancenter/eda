@@ -31,6 +31,18 @@ namespace :emily do
             output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             HarvardImageProcessor.new.process_directory_for_web(args[:input_dir], output_dir)
         end
+
+        desc 'Create images to works map'
+        task :images_to_transcriptions_map, [:output_map_file] => [:environment] do |task, args|
+            output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
+            ImageToTranscriptionConnector.new.create_map(output_map_file)
+        end
+
+        desc 'Connect all existing transcriptions together'
+        task :transcriptions_map, [:map_file, :publication_history_file] => [:environment] do |task, args|
+            map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
+            TranscriptionConnecter.new.connect(map_file)
+        end
     end
 
     namespace :connect do
@@ -39,20 +51,8 @@ namespace :emily do
             ImageToEditionConnector.new.connect
         end
 
-        desc 'Connect all existing transcriptions together'
-        task :transcriptions, [:map_file, :publication_history_file] => [:environment] do |task, args|
-            map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
-            TranscriptionConnecter.new.connect(map_file)
-        end
-
-        desc 'Create images to works map'
-        task :images_to_transcriptions_map, [:output_map_file] => [:environment] do |task, args|
-            output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
-            ImageToTranscriptionConnector.new.create_map(output_map_file)
-        end
-
         desc 'Connect images to works using the map'
-        task :images_to_transcriptions_from_map, [:image_to_work_map_file, :work_map_file] => [:environment] do |task, args|
+        task :images_to_transcriptions, [:image_to_work_map_file, :work_map_file] => [:environment] do |task, args|
             image_to_work_map_file = args[:image_to_work_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
             work_map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
             ImageToTranscriptionConnector.new.connect(image_to_work_map_file, work_map_file)
@@ -165,19 +165,19 @@ namespace :emily do
             else
                 !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
             end
-            #Rake::Task["emily:import:transcriptions:franklin"].execute
-            #Rake::Task["emily:import:transcriptions:johnson"].execute
-            #Rake::Task["emily:import:transcriptions:gutenberg"].execute
-            #Rake::Task["emily:import:transcriptions:revisions"].execute
-            #Rake::Task["emily:import:metadata"].execute
-            #Rake::Task["emily:import:publication_history"].execute
-            #Rake::Task["emily:import:images:harvard"].execute
-            #Rake::Task["emily:import:images:amherst"].execute
-            #Rake::Task["emily:import:images:bpl"].execute
-            Rake::Task["emily:connect:images_to_editions"].execute
-            #Rake::Task["emily:connect:transcriptions"].execute unless use_existing_maps
-            #Rake::Task["emily:connect:images_to_transcriptions_map"].execute unless use_existing_maps
-            #Rake::Task["emily:connect:images_to_transcriptions_from_map"].execute
+            Rake::Task["emily:import:transcriptions:franklin"].execute
+            Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:transcriptions:gutenberg"].execute
+            Rake::Task["emily:import:transcriptions:revisions"].execute
+            Rake::Task["emily:import:metadata"].execute
+            Rake::Task["emily:import:publication_history"].execute
+            Rake::Task["emily:import:images:harvard"].execute
+            Rake::Task["emily:import:images:amherst"].execute
+            Rake::Task["emily:import:images:bpl"].execute
+            #Rake::Task["emily:connect:images_to_editions"].execute
+            #Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
+            #Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
+            #Rake::Task["emily:connect:images_to_transcriptions"].execute
             #Rake::Task["emily:import:images:missing"].execute
             #Rake::Task["emily:import:lexicon"].execute
         end

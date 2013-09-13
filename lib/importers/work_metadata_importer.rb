@@ -4,10 +4,12 @@ class WorkMetadataImporter
     def import(filename, edition_prefix)
         edition = Edition.find_by_work_number_prefix(edition_prefix)
         headers = ['Time Frame','Year','Source Person','Source Type','Source Notes','Recipient']
+        pbar = ProgressBar.new("Metadata", CSV.readlines(filename).count - 1)
         CSV.foreach(filename, headers: true) do |row|
+            pbar.inc
             work = get_work(row)
             if work.nil?
-                puts "#{row['Franklin Number']} #{row['Variant']}"
+                puts "Not found: #{row['Franklin Number']} #{row['Variant']}"
                 next
             end
             headers.each do |header|

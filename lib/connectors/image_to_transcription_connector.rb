@@ -6,7 +6,7 @@ class ImageToTranscriptionConnector
         johnson = Edition.find_by_work_number_prefix('J')
         gutenberg = Edition.find_by_work_number_prefix('G')
         map = CSV.open(output_map_file, 'wb')
-        map << ['image_url', 'johnson', 'franklin', 'franklin_variant', 'gutenberg']
+        map << ['image_url', 'J', 'F']
         Image.all.each do |image|
             pbar.inc
             next unless image.metadata
@@ -21,9 +21,9 @@ class ImageToTranscriptionConnector
             works.each do |w|
                 case w.edition
                     when franklin
-                        map << [image.url, nil, w.number, w.variant, nil]
+                        map << [image.url, nil, w.full_id]
                     when johnson
-                        map << [image.url, w.number, nil, nil]
+                        map << [image.url, w.full_id, nil]
                 end
             end
         end
@@ -58,20 +58,17 @@ class ImageToTranscriptionConnector
         image.metadata['Identifiers'].each do |ident|
             next unless match = ident.match(franklin_pattern)
             numbers = match[1].split(';').map(&:strip)
-            numbers.each do |number|
-                franklin.works.where(number: number).each do |w|
-                    if w.metadata && w.metadata['holder_code'] && w.metadata['holder_code'].include?('a')
-                        matches = w.metadata['holder_id'].first.match(holder_id_pattern)
-                        if matches[1] && matches[3] && matches[5]
-                            #puts "#{matches[1]} #{matches[3]} #{matches[5]}"
-                            image_url_match = image.url.match(image_url_pattern)
-                            if image_url_match && (image_url_match[1] == matches[3] || image_url_match[1] == matches[5])
-                                works << w
-                            end
-                        elsif matches[1]
-                            works << w
-                        end
+            franklin.works.where(number: numbers).each do |w|
+                next unless w.metadata && w.metadata['holder_code'] && w.metadata['holder_code'].include?('a')
+                matches = w.metadata['holder_id'].first.match(holder_id_pattern)
+                if matches[1] && matches[3] && matches[5]
+                    #puts "#{matches[1]} #{matches[3]} #{matches[5]}"
+                    image_url_match = image.url.match(image_url_pattern)
+                    if image_url_match && (image_url_match[1] == matches[3] || image_url_match[1] == matches[5])
+                        works << w
                     end
+                elsif matches[1]
+                    works << w
                 end
             end
         end

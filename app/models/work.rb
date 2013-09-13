@@ -223,7 +223,7 @@ class Work < ActiveRecord::Base
     end
 
     def self.find_by_full_id(id)
-        match = id.match(/^(?<prefix>[A-Z]+([0-9]*-)?)(?<number>\d+)(?<variant>[A-Z])?/)
+        match = id.match(/^(?<prefix>[A-Z]+([0-9]*-)?)(?<number>\d+)(?<variant>[A-Z](\.[0-9])?)?/)
         edition = Edition.find_by_work_number_prefix(match[:prefix])
         return unless edition
         works = edition.works

@@ -10,7 +10,9 @@ class RevisionImporter
         @tei_importer = TEIImporter.new
         string = File.read(filename)
         doc = Nokogiri::XML(string)
+        pbar = ProgressBar.new("Revisions", doc.css('div[type=franklin]').count)
         doc.css('div[type=franklin]').each do |revision|
+            pbar.inc
             work = get_work_from_xml(revision)
             (revision > 'lg[type=altstanza]').each do |new_stanza|
                 replace_stanza(work, new_stanza)
@@ -18,7 +20,6 @@ class RevisionImporter
             (revision > 'l').each do |line|
                 new_line, modifiers = @tei_importer.parse_line(line).values
                 old_line = work.line(new_line.number)
-                puts %Q|Replacing "#{old_line.text}" with "#{new_line.text}"|
                 stanza = old_line.stanza
                 old_line.destroy
                 stanza.lines << new_line
@@ -44,10 +45,10 @@ class RevisionImporter
             work.line_modifiers << modifiers
         end
         if old_stanza
-            puts %Q|Replacing stanza with first line "#{old_stanza.lines.first.text}" with stanza with first line "#{new_stanza.lines.first.text}"|
+            #puts %Q|Replacing stanza with first line "#{old_stanza.lines.first.text}" with stanza with first line "#{new_stanza.lines.first.text}"|
             old_stanza.destroy
         else
-            puts %Q|Adding new stanza with first line "#{new_stanza.lines.first.text}"|
+            #puts %Q|Adding new stanza with first line "#{new_stanza.lines.first.text}"|
         end
         work
     end

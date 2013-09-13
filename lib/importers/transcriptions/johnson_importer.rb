@@ -24,10 +24,11 @@ class JohnsonImporter
         poems = turn_into_xml(text.join)
         #File.write(Rails.root.join('tmp', 'johnson.xml'), poems)
         doc = Nokogiri::XML::Document.parse(poems, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+        pbar = ProgressBar.new("Johnson", doc.css('poem').count)
         max_poems = doc.css('poem').count unless max_poems
         doc.css('poem').each_with_index do |poem, i|
+            pbar.inc
             next if i >= max_poems
-            puts "Poem #{i+1} of #{max_poems}"
             content = poem.css('body').map{|n| n.content}.join('').strip.gsub(REVISION_PATTERN, '')
             work = Work.new(:number => poem.css('number').text, :title => content.lines.first)
             stanza = Stanza.new(:position => 0)

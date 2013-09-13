@@ -17,6 +17,7 @@ class BPLFlickrImporter
         pattern = /<b>(?<key>.*):<\/b> (?<value>.*)$/
         total_pages = 0
         current_page = 1
+        pbar = nil
 
         loop do 
             response = flickr.photosets.getPhotos(
@@ -25,26 +26,26 @@ class BPLFlickrImporter
                 :per_page => PER_PAGE,
                 :page => current_page
             )
+            pbar = ProgressBar.new("BPL-Flickr", response.total.to_i) unless pbar
             total_pages = response.pages
-            puts "Page #{current_page} of #{total_pages}"
             photos = response.photo
             photos.each_with_index do |photo, i|
                 sleep 1
-                puts "#{i + 1 + (current_page - 1) * PER_PAGE} / #{response.total}"
+                pbar.inc
                 metadata = {}
                 photoInfo = flickr.photos.getInfo(:photo_id => photo.id)
-                next if File.exists?("#{image_dir}/#{photoInfo.id}_#{photoInfo.originalsecret}_o.jpg")
                 photoInfo.description.split(/\n\n/).each do |unruly_metadata|
                     if matches = unruly_metadata.match(pattern)
                         metadata[matches[:key]] = matches[:value]
                     end
                 end
-                url = photo.url_o
-                output = `wget -nv -P "#{image_dir}" #{url} 2>&1`
-                file = output.match(/-> "(.*\.jpg)/)[1]
-                filename = File.basename(file, '.jpg')
+                filename = "#{photoInfo.id}_#{photoInfo.originalsecret}_o.jpg"
+                unless File.exists?(File.join(image_dir, filename))
+                    url = photo.url_o
+                    output = `wget -nv -P "#{image_dir}" #{url} 2>&1`
+                end
                 image = Image.create(
-                    :url => filename,
+                    :url => File.basename(filename, '.jpg'),
                     :credits => 'Boston Public Library',
                     :metadata => metadata
                 )

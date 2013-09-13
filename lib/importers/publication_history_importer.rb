@@ -5,8 +5,9 @@ class PublicationHistoryImporter
         puts 'Importing publication histories'
         edition = Edition.find_by_work_number_prefix(edition_prefix)
         headers = ['Publication','Day','Month','Year','Pages','Source Variant']
+        pbar = ProgressBar.new("Pub History", CSV.readlines(filename).count - 1)
         CSV.foreach(filename, headers: true) do |row|
-            puts 'thing'
+            pbar.inc
             works = get_works(edition, row)
             row['Month'] ||= 1
             row['Day'] ||= 1
