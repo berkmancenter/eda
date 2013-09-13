@@ -107,7 +107,28 @@ describe ( 'image_sets requests' ) {
           }
         }
 
-        context ( 'click browse letter' ) {
+        context ( 'click browse letter for work sharing image' ) {
+          before {
+            click_link 'S'
+          }
+
+          it {
+            should have_css '.browse-works-results a', text: sic
+          }
+
+          it ( 'should have work-result-items' ) {
+            should_not have_css '.browse-works-results table'
+            should have_css '.browse-works-results ul.work-list'
+            should have_css 'li.work-list-item', count: 1
+          }
+
+          it ( 'should have header for next work' ) {
+            pending 'should have_css h1, text: sic'
+            should have_css 'h1', text: sic
+          }
+        }
+
+        context ( 'click browse letter for disparate work' ) {
           before {
             click_link 'O'
           }
@@ -119,7 +140,6 @@ describe ( 'image_sets requests' ) {
           context ( 'click result' ) {
             before {
               click_link wonder
-              snap
             }
 
             it {

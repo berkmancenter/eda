@@ -1,0 +1,6 @@
+<ul class="work-list">
+  <% @works.each do |work| %>
+    <%= render partial: 'works/list_item', locals: { work: work } %>
+  <% end %>
+</ul>
+

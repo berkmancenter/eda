@@ -1,16 +1,19 @@
 class WorksController < ApplicationController
     before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
-    before_filter :load_edition, except: [:index, :search, :choose_edition]
+    before_filter :load_edition, except: [:index, :browse, :search, :choose_edition]
     before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
     before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :choose_edition]
     before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
+
+    def browse
+        @works = Work.starts_with(params[:first_letter])
+        render :layout => !request.xhr?
+    end
 
     def index
         if params[:edition_id]
             load_edition
             @works = @edition.all_works
-        elsif params[:first_letter]
-            @works = Work.starts_with(params[:first_letter])
         else
             @works = Work.all
         end
