@@ -5,6 +5,10 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/poltergeist'
 
+def snap
+  save_screenshot("tmp/screenshots/#{(Time.now.to_f * 1000).floor}.png")
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}

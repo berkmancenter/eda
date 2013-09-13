@@ -150,7 +150,13 @@ body {
   }
 
   .view {
-      padding: 1em 2em 4em;
+    padding: 1em 2em 4em;
+
+    header h1 {
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+    }
   }
 
   footer {

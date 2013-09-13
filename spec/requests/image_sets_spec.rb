@@ -4,6 +4,12 @@ include ImagesHelper;
 
 describe ( 'image_sets requests' ) {
   let ( :awake ) { 'Awake ye muses nine, sing me a strain divine' }
+  let ( :sic ) { 'Sic transit gloria mundi' }
+  let ( :wonder ) { 'On this wondrous sea' }
+
+  let ( :awake_work ) { Work.find_by_title( awake ) }
+  let ( :sic_work ) { Work.find_by_title( sic ) }
+  let ( :wonder_work ) { Work.find_by_title( wonder ) }
 
   subject { page }
 
@@ -12,12 +18,14 @@ describe ( 'image_sets requests' ) {
 
     context ( 'leaf/page view' ) {
       # require test:seed
-      let ( :w ) { Work.find_by_title( awake ) }
+      let ( :w ) { awake_work }
 
       context 'with valid work, stanzas, image', :js => true do
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         it ( 'should have three main sections' ){ 
+          should have_selector 'h1', text: awake
+
           should have_selector( '#search-panel' );
 
           should have_selector( '#interactive-image-panel' );
@@ -93,15 +101,29 @@ describe ( 'image_sets requests' ) {
           it { 
             should have_css '.browse-works'
             should have_css '.browse-works .alphabet-list'
-            should have_css '.alphabet-list a', text: 'A'
+            should have_css '.alphabet-list a', text: 'O'
             should have_css '.browse-works .alphabet-results'
           }
         }
 
         context ( 'click browse letter' ) {
+          before {
+            click_link 'O'
+          }
+
           it {
-            click_link 'A'
-            should have_css '.alphabet-results a'
+            should have_css '.alphabet-results a', text: wonder
+          }
+
+          context ( 'click result' ) {
+            before {
+              click_link wonder
+              snap
+            }
+
+            it {
+              should have_css 'h1', text: wonder
+            }
           }
         }
       end
@@ -159,9 +181,9 @@ describe ( 'image_sets requests' ) {
           }
 
           it ( 'should have img tags for all ImageSet images' ) {
-            should have_selector( "img[src*='#{preview_url( w.image_set.children[0].image )}']" );
-            should have_selector( "img[src*='#{preview_url( w.image_set.children[1].image )}']" );
-            should have_selector( "img[src*='#{preview_url( w.image_set.children[2].image )}']" );
+            should have_css( "img[src*='#{preview_url( w.image_set.children[0].image )}']" );
+            should have_css( "img[src*='#{preview_url( w.image_set.children[1].image )}']", visible: false );
+            should have_css( "img[src*='#{preview_url( w.image_set.children[2].image )}']", visible: false );
           }
         }
       }
