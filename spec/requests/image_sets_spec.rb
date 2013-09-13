@@ -84,25 +84,29 @@ describe ( 'image_sets requests' ) {
         end
       end
 
-      describe ( 'browse panel' ) {
-        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
-
-        it { 
-          should have_selector '.browse-works'
+      describe 'browse panel', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#search-panel=1"
         }
-      }
 
-      describe ( 'lexicon panel' ) {
-        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
-
-        it { 
-          should have_selector '.browse-lexicon'
-          should have_selector '.browse-lexicon a[data-letter="A"]'
-          should have_selector '.browse-lexicon .alphabet-results'
+        context ( 'default view' ) {
+          it { 
+            should have_css '.browse-works'
+            should have_css '.browse-works .alphabet-list'
+            should have_css '.alphabet-list a', text: 'A'
+            should have_css '.browse-works .alphabet-results'
+          }
         }
-      }
 
-      describe 'lexicon panel w/ js', :js => true do
+        context ( 'click browse letter' ) {
+          it {
+            click_link 'A'
+            should have_css '.alphabet-results a'
+          }
+        }
+      end
+
+      describe 'lexicon panel', :js => true do
         before {
           visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
         }
@@ -110,7 +114,7 @@ describe ( 'image_sets requests' ) {
         it {
           should have_css '.browse-lexicon'
           should have_css '.alphabet-list'
-          should have_css '.alphabet-list a[data-letter="A"]'
+          should have_css '.alphabet-list a', text: 'A'
           should have_css '.alphabet-results'
           should_not have_css '.alphabet-results a'
           should have_css '.alphabet-word'
