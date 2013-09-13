@@ -11,11 +11,11 @@ $( function( ) {
     });
   });
 
-  $('.alphabet-results').on( 'click', 'a', function(e) {
+  $('.lexicon-results').on( 'click', 'a', function(e) {
     e.preventDefault();
 
     $.get($(this).attr('href'), function(data) {
-      $(e.target).closest('section').find('.alphabet-word').html(data);
+      $(e.target).closest('section').find('.lexicon-word').html(data);
     });
 
     return false;

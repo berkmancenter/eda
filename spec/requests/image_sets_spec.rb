@@ -103,6 +103,7 @@ describe ( 'image_sets requests' ) {
             should have_css '.browse-works .alphabet-list'
             should have_css '.alphabet-list a', text: 'O'
             should have_css '.browse-works .alphabet-results'
+            should have_css '.browse-works .alphabet-results.browse-works-results'
           }
         }
 
@@ -112,7 +113,7 @@ describe ( 'image_sets requests' ) {
           }
 
           it {
-            should have_css '.alphabet-results a', text: wonder
+            should have_css '.browse-works-results a', text: wonder
           }
 
           context ( 'click result' ) {
@@ -138,9 +139,10 @@ describe ( 'image_sets requests' ) {
           should have_css '.alphabet-list'
           should have_css '.alphabet-list a', text: 'A'
           should have_css '.alphabet-results'
-          should_not have_css '.alphabet-results a'
-          should have_css '.alphabet-word'
-          should_not have_css '.alphabet-word section.word'
+          should have_css '.alphabet-results.lexicon-results'
+          should_not have_css '.lexicon-results a'
+          should have_css '.lexicon-word'
+          should_not have_css '.lexicon-word section.word'
         }
       end
 
@@ -151,7 +153,7 @@ describe ( 'image_sets requests' ) {
 
         it {
           click_link 'A'
-          should have_css '.alphabet-results a'
+          should have_css '.lexicon-results a'
         }
       end
 
@@ -163,7 +165,7 @@ describe ( 'image_sets requests' ) {
         it {
           click_link 'A'
           click_link 'awake'
-          should have_css '.alphabet-word section.word'
+          should have_css '.lexicon-word section.word'
         }
       end
     }
