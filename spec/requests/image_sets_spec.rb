@@ -122,9 +122,16 @@ describe ( 'image_sets requests' ) {
             should have_css 'li.work-list-item', count: 1
           }
 
-          it ( 'should have header for next work' ) {
-            pending 'should have_css h1, text: sic'
-            should have_css 'h1', text: sic
+          context ( 'click result' ) {
+            before {
+              #click_link sic
+            }
+
+            it ( 'should have header for next work' ) {
+              # todo: work with first image sharing this work's last image
+              pending 'should have_css h1, text: sic'
+              should have_css 'h1', text: sic
+            }
           }
         }
 
