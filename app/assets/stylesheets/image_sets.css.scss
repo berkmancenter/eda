@@ -207,6 +207,7 @@
             div {
                 -webkit-transform: rotate(90deg); 
                 -moz-transform: rotate(90deg);	
+                transform: rotate(90deg);
             }
         }
 
@@ -222,6 +223,7 @@
                 padding-top: 0.6em;
                 -webkit-transform: rotate(-90deg); 
                 -moz-transform: rotate(-90deg);	
+                transform: rotate(-90deg);	
             }
         }
 
