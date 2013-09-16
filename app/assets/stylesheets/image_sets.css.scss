@@ -62,8 +62,10 @@
 
     .alphabet-list {
         font-size: 0.8em;
-        word-spacing: -1px;
+        overflow: hidden;
         text-align: center;
+        text-overflow: ellipsis; /* mostly to keep search from having horizontal scrollbar */
+        word-spacing: -1px;
     }
     /**
      * search-panel has search menu & all search-related sections:

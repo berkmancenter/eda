@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include WorkHelper
+
 describe ( 'works requests' ) {
   subject { page }
 
@@ -19,8 +21,7 @@ describe ( 'works requests' ) {
       before { visit edition_work_path( work.edition, work ) }
 
       it ( 'should render empty work and not throw exception' ) { 
-        # redirect to edition_image_set_path
-        should have_selector( 'h3', text: "#{work.number}#{work.variant} - #{work.title}" );
+        should have_selector( 'h1', text: work.title );
       }
     end
   end

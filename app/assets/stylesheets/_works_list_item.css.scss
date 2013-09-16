@@ -1,0 +1,48 @@
+@import "colors";
+
+ul.work-list {
+  margin: 0 -.5em;
+  padding: 0;
+}
+
+li.work-list-item:nth-child(2n+1) {
+  background: $tan;
+}
+
+li.work-list-item {
+  display: block;
+  height: 4.5em;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+
+  a.work-link {
+    color: $darkGray;
+    display: block;
+    height: 100%;
+    left: 0;
+    padding: .25em;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    &:hover {
+      background: $lessDarkTan;
+      color: $darkGray;
+      text-decoration: none;
+    }
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    div.work-title {
+      font-size: 1em;
+    }
+
+    div.work-edition-name {
+      font-size: .8em;
+    }
+  }
+}
