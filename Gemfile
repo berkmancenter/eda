@@ -5,7 +5,7 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'pg', '0.16.0'
 gem 'nokogiri'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
