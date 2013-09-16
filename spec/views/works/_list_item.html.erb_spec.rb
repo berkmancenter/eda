@@ -8,12 +8,10 @@ describe ( 'list_item' ) {
 
   context ( 'normal work' ) {
     before {
-      # todo: pending because I don't know how to alert the spec to the ApplicationController helper_method
-      #render partial: 'works/list_item', locals: { work: awake_work }
+      render partial: 'works/list_item', locals: { work: awake_work }
     }
 
     it {
-      pending 'should have work-list-item'
       should have_selector 'li.work-list-item'
     }
   }

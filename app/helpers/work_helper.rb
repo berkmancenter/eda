@@ -37,6 +37,11 @@ module WorkHelper
         with_format(:txt){ render partial: 'works/transcriptions/show', locals: { work: work } }.gsub(/(<i>|<\/i>)/,'')
     end
 
+    def image_set_path_from_work(work)
+        image_set = work.edition.image_set.leaves_showing_work(work).first
+        edition_image_set_path(work.edition, image_set) if image_set
+    end
+
     def edition_selector(other_editions_works, selected_edition)
         other_editions_works ||= []
         options = []
