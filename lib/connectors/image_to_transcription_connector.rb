@@ -4,9 +4,8 @@ class ImageToTranscriptionConnector
         pbar = ProgressBar.new('Images', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
-        gutenberg = Edition.find_by_work_number_prefix('G')
         map = CSV.open(output_map_file, 'wb')
-        map << ['image_url', 'J', 'F']
+        map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
         Image.all.each do |image|
             pbar.inc
             next unless image.metadata
@@ -21,9 +20,21 @@ class ImageToTranscriptionConnector
             works.each do |w|
                 case w.edition
                     when franklin
-                        map << [image.url, nil, w.full_id]
+                        map << [
+                            image.url,
+                            nil,
+                            w.full_id,
+                            nil,
+                            franklin.image_set.leaves_containing(image).first.position_in_level
+                        ]
                     when johnson
-                        map << [image.url, w.full_id, nil]
+                        map << [
+                            image.url,
+                            w.full_id,
+                            nil,
+                            nil,
+                            johnson.image_set.leaves_containing(image).first.position_in_level
+                        ]
                 end
             end
         end

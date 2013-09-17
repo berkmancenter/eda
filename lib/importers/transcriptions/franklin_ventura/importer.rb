@@ -204,7 +204,7 @@ module FranklinVentura
                 titles = work.css('title').map(&:text)
                 work.css('poem').each_with_index do |poem, i|
                     poem.css('variant').each do |variant|
-                        variant = variant.text
+                        variant = variant.inner_html
                         next unless variant
                         secondary = false
                         if secondary = variant.match(Secondary_source_pattern)
