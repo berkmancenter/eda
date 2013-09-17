@@ -47,8 +47,8 @@ module Patterns
     Secondary_source_pattern = /\[<em>(?<variant>.{1,3})<\/em>\]/
 
     Poem_line_extractors = [
-        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
-        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <(P9)?(MI)?>(?<variant>.*)<(P255)?(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <(P9)?(MI)?>(?<variant>.*)<(P255)?(D)?> ?\t(?<line>[^\t\r\n]*)/,
         /@PS = (<F58586P9M>)?\[<MI>(?<variant>.*)<(D|M)>\](<F255P255D>)?\t(?<line>[^\t]*)\t?(?<line_num>\d*)/,
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\t]*)\t(?<line_num>\d*)/,
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\r\n]*)/

@@ -71,6 +71,7 @@ module FranklinVentura
             string << "\n</work>\n"
             string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
             string.gsub!(/^\s*$\n/, '')
+            string = split_variants(string)
             string = stick_modifiers_in_poems(string)
             string
         end
@@ -181,6 +182,11 @@ module FranklinVentura
             post_process!(edition)
         end
 
+        # For poems like 1356
+        def split_variants(string)
+            string.gsub(/<variant>([^<]+), ([^<]+)<\/variant>/, '<variant>\1</variant><variant>\2</variant>')
+        end
+
         def breakup_publications(work)
             work.metadata['Publications'] = work.metadata['Publication'].split(/(\.|;)/).select{|s| !['.',';'].include?(s)}
         end
@@ -197,30 +203,30 @@ module FranklinVentura
                 #puts number
                 titles = work.css('title').map(&:text)
                 work.css('poem').each_with_index do |poem, i|
-                    variant = poem.at('variant')
-                    next unless variant
-                    secondary = false
-                    if secondary = variant.inner_html.match(Secondary_source_pattern)
-                        variant = secondary[:variant]
-                    else
-                        variant = variant.inner_html
-                    end
-                    w = Work.create(
-                        number: number,
-                        title: titles[i] || titles.first,
-                        date: Date.new(year, 1, 1),
-                        variant: variant,
-                        secondary_source: !!secondary
-                    )
+                    poem.css('variant').each do |variant|
+                        variant = variant.text
+                        next unless variant
+                        secondary = false
+                        if secondary = variant.match(Secondary_source_pattern)
+                            variant = secondary[:variant]
+                        end
+                        w = Work.create(
+                            number: number,
+                            title: titles[i] || titles.first,
+                            date: Date.new(year, 1, 1),
+                            variant: variant,
+                            secondary_source: !!secondary
+                        )
 
-                    add_stanzas(w, poem)
-                    add_manuscript(w, work, simple_work)
-                    add_holder_info(w, poem)
-                    add_publication(w, work, simple_work)
-                    breakup_publications(w)
-                    w.save!
-                    add_modifiers!(w, poem)
-                    works << w
+                        add_stanzas(w, poem)
+                        add_manuscript(w, work, simple_work)
+                        add_holder_info(w, poem)
+                        add_publication(w, work, simple_work)
+                        breakup_publications(w)
+                        w.save!
+                        add_modifiers!(w, poem)
+                        works << w
+                    end
                     pbar.inc
                 end
             end

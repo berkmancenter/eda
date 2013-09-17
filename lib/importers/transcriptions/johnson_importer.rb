@@ -92,7 +92,7 @@ class JohnsonImporter
             a
         end
         suspicious = mods.select{|a| a.any?{|v| v.to_s =~ /(\s{2,}|\n|-+\s?\d|\[|\])/}}
-        puts poem.at('number').text + ":\n" + suspicious.map{|a| a.inspect + "\n"}.join + "\n" unless suspicious.empty?
+        #puts poem.at('number').text + ":\n" + suspicious.map{|a| a.inspect + "\n"}.join + "\n" unless suspicious.empty?
         (mods - suspicious).each do |modifier|
             start_address = modifier[1] == '' ? 0 : nil
             new_chars = modifier[2].split('/').map(&:strip)
