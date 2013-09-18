@@ -12,9 +12,9 @@ class ImageToTranscriptionConnector
             if image.metadata['Identifiers']
                 works = works_for_amherst(image, franklin, johnson)
             elsif image.metadata['Label']
-                works = works_for_harvard(image, franklin, johnson)
+                #works = works_for_harvard(image, franklin, johnson)
             elsif image.metadata['Identifier (Johnson Poem #)']
-                works = works_for_bpl(image, johnson)
+                #works = works_for_bpl(image, johnson)
             end
             next unless works
             works.each do |w|
@@ -25,7 +25,7 @@ class ImageToTranscriptionConnector
                             nil,
                             w.full_id,
                             nil,
-                            franklin.image_set.leaves_containing(image).first.position_in_level
+                            franklin.image_set.leaves_containing(image).first.position_in_level + 1
                         ]
                     when johnson
                         map << [
@@ -33,7 +33,7 @@ class ImageToTranscriptionConnector
                             w.full_id,
                             nil,
                             nil,
-                            johnson.image_set.leaves_containing(image).first.position_in_level
+                            johnson.image_set.leaves_containing(image).first.position_in_level + 1
                         ]
                 end
             end
@@ -42,23 +42,14 @@ class ImageToTranscriptionConnector
 
     def works_for_amherst(image, franklin, johnson)
         works = []
-        franklin_pattern = /Franklin # ?(\d+[; 0-9]*)/
         johnson_pattern = /Johnson Poems # ?([; 0-9]+)$/
-        amherst_pattern = /Amherst Manuscript # ?(?<part>(set |fascicle ))?(?<number>[0-9; ]*)/
         location_pattern = /Box (?<box>\d+) Folder (?<folder>\d+)/
-        holder_id_pattern = /(\d+)(-(\d+)(\/(\d+))?)?/
-        image_url_pattern = /asc-\d+-(\d+)-(0|1)/
-        # To match Amherst images, find all with same sheet number and order by
-        # franklin number, then guess
-        match = image.metadata['Identifiers'].first.match(amherst_pattern)
-        return unless match && match[:number]
-        manuscript_numbers = match[:number].split(';').map(&:to_i)
+        works += franklin_works_for_amherst(image, franklin)
         image.metadata['Identifiers'].each do |ident|
-            if match = ident.match(franklin_pattern)
-            elsif match = ident.match(johnson_pattern)
+            if (match = ident.match(johnson_pattern)) && works.empty?
                 if match[1]
                     numbers = match[1].split(';').map(&:to_i)
-                    #johnson.works.where(number: numbers).each do |w| end
+                    works += johnson.works.where(number: numbers).all
                 end
             end
         end
@@ -66,23 +57,56 @@ class ImageToTranscriptionConnector
     end
 
     def franklin_works_for_amherst(image, franklin)
+        # To match Amherst images, find all with same sheet number and order by
+        # franklin number, then guess
+        works = []
+        holder_id_pattern = /(\d+)(-(\d+)(\/(\d+))?)?/
+        image_url_pattern = /asc-\d+-((\d+)-(0|1))/
+        franklin_pattern = /Franklin # ?(\d+[; 0-9]*)/
+        amherst_pattern = /Amherst Manuscript # ?(?<part>(set |fascicle ))?(?<number>[0-9; ]*)/
+        match = image.metadata['Identifiers'].first.match(amherst_pattern)
+        return unless match && match[:number]
+        image_am_manuscript_nums = match[:number].split(';').map(&:to_i)
         image.metadata['Identifiers'].each do |ident|
             next unless match = ident.match(franklin_pattern)
-            numbers = match[1].split(';').map(&:strip)
-            franklin.works.where(number: numbers).each do |w|
-                next unless w.metadata && w.metadata['holder_code'] && w.metadata['holder_code'].include?('a')
-                matches = w.metadata['holder_id'].first.match(holder_id_pattern)
-                if matches[1] && matches[3] && matches[5]
-                    #puts "#{matches[1]} #{matches[3]} #{matches[5]}"
-                    image_url_match = image.url.match(image_url_pattern)
-                    if image_url_match && (image_url_match[1] == matches[3] || image_url_match[1] == matches[5])
-                        works << w
-                    end
-                elsif matches[1]
+            work_numbers = match[1].split(';').map(&:strip)
+            franklin.works.where(number: work_numbers).each do |w|
+                next unless w.metadata && w.metadata['holder_code']
+                indices = w.metadata['holder_code'].each_index.select{|i| w.metadata['holder_code'][i] == 'a'}
+                next if indices.empty?
+                work_am_manuscript_nums = [w.metadata['holder_id'][*indices]].flatten
+                puts work_am_manuscript_nums.inspect
+                puts image_am_manuscript_nums.inspect
+                next if (work_am_manuscript_nums & image_am_manuscript_nums).empty?
+                url_match = image.url.match(image_url_pattern)
+                work_am_manuscript_nums.each do |w_man_num|
+                    holder_id_match = w_man_num.match(holder_id_pattern)
+                    if holder_id_match && holder_id_match[3] && holder_id_match[5]
+                        url_suffixes = sheet_id_to_image_url("#{holder_id_match[3]}/#{holder_id_match[5]}")
+                        puts url_match.inspect
+                    else
+                        puts holder_id_match.inspect
                     works << w
+                    end
                 end
             end
         end
+        works
+    end
+
+    def sheet_id_to_image_url(sheet_id)
+        map = {
+            '1/2' => ['1', '2-0', '2-1', '3-0'],
+            '3/4' => ['3-1', '4-0', '4-1', '5-0'],
+            '5/6' => ['5-1', '6-0', '6-1', '7-0'],
+            '7/8' => ['7-1', '8-0', '8-1', '9-0'],
+            '9/10' => ['9-1', '10-0', '10-1', '11-0'],
+            '11/12' => ['11-1', '12-0', '12-1', '13-0'],
+            '13/14' => ['13-1', '14-0', '14-1', '15-0'],
+            '15/16' => ['15-1', '16-0', '16-1', '17-0'],
+            '17/18' => ['17-1', '18-0', '18-1', '19']
+        }
+        map[sheet_id]
     end
 
     def works_for_harvard(image, franklin, johnson)
