@@ -245,7 +245,7 @@ module FranklinVentura
                 work.clear_holder_info
                 # Work gets last holder in paragraph
                 previous_sibling.css('holder').each do |holder|
-                    holder_ids = holder.at('id').text.strip.split(/(^\d+\/|,)/).reject{|i| i.to_i == 0}.map{|id| id.strip.gsub('/', '')}
+                    holder_ids = holder.at('id').text.strip.split(/(^\d+\/|,)/).reject{|i| i.to_i == 0}.map{|id| id.strip.sub(/\/$/, '')}
                     holder_ids.each do |id|
                         work.holder_code = holder.at('loccode').text.strip
                         work.holder_subcode = holder.at('subloccode').text.strip

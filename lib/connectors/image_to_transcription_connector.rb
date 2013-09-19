@@ -75,9 +75,10 @@ class ImageToTranscriptionConnector
                 indices = w.metadata['holder_code'].each_index.select{|i| w.metadata['holder_code'][i] == 'a'}
                 next if indices.empty?
                 work_am_manuscript_nums = [w.metadata['holder_id'][*indices]].flatten
+                puts 'start'
                 puts work_am_manuscript_nums.inspect
                 puts image_am_manuscript_nums.inspect
-                next if (work_am_manuscript_nums & image_am_manuscript_nums).empty?
+                next if (work_am_manuscript_nums.map(&:to_i) & image_am_manuscript_nums.map(&:to_i)).empty?
                 url_match = image.url.match(image_url_pattern)
                 puts url_match.inspect
                 work_am_manuscript_nums.each do |w_man_num|
