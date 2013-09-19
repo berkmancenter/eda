@@ -30,7 +30,7 @@ class BPLFlickrImporter
             total_pages = response.pages
             photos = response.photo
             photos.each_with_index do |photo, i|
-                sleep 1
+                sleep 1.5 + Random.rand
                 pbar.inc
                 metadata = {}
                 photoInfo = flickr.photos.getInfo(:photo_id => photo.id)

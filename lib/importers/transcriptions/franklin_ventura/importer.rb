@@ -49,7 +49,9 @@ module FranklinVentura
             string.gsub!(Published_extractor, "<published><publication>\\k<publication></publication><date>\\k<year>-\\k<month>-\\k<day></date><pages>\\k<pages></pages><variant>\\k<source_variant></variant></published>") unless simple
             string.gsub!(Publication_extractor, "\n<publications>\\k<publications></publications>\n")
             string.gsub!(Manuscript_extractor, "\n<manuscript>\\k<manuscript></manuscript>\n")
-            string.gsub!(Holder_extractor, "<holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>") unless simple
+            # Twice on purpose for when patterns overlap
+            string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
+            string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
             string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
             string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
             string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
@@ -179,7 +181,7 @@ module FranklinVentura
             works = parse_xml(simple_string, complex_string)
             edition.works = works
             edition.save!
-            post_process!(edition)
+            #post_process!(edition)
         end
 
         # For poems like 1356

@@ -66,7 +66,7 @@ class ImageToTranscriptionConnector
         amherst_pattern = /Amherst Manuscript # ?(?<part>(set |fascicle ))?(?<number>[0-9; ]*)/
         match = image.metadata['Identifiers'].first.match(amherst_pattern)
         return unless match && match[:number]
-        image_am_manuscript_nums = match[:number].split(';').map(&:to_i)
+        image_am_manuscript_nums = match[:number].split(';')
         image.metadata['Identifiers'].each do |ident|
             next unless match = ident.match(franklin_pattern)
             work_numbers = match[1].split(';').map(&:strip)
@@ -79,6 +79,7 @@ class ImageToTranscriptionConnector
                 puts image_am_manuscript_nums.inspect
                 next if (work_am_manuscript_nums & image_am_manuscript_nums).empty?
                 url_match = image.url.match(image_url_pattern)
+                puts url_match.inspect
                 work_am_manuscript_nums.each do |w_man_num|
                     holder_id_match = w_man_num.match(holder_id_pattern)
                     if holder_id_match && holder_id_match[3] && holder_id_match[5]

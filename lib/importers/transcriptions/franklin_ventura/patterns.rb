@@ -1,5 +1,5 @@
 module Patterns
-    Holder_extractor = /\(<F53621>(?<loc_code>(a|h|bpl|y-brbl|y-mssa))<F255>( (1896)?<F53621>(?<subloc_code>(b|h|l|st|mlt|mtb|pc|to|tr))<F255>(, )?)?(?<id>[^\)]*)\)/
+    Holder_extractor = /(?<before>\(|; |and )<F53621>(?<loc_code>(a|h|bpl|y-brbl|y-mssa))<F255>( (1896)?<F53621>(?<subloc_code>(b|h|l|st|mlt|mtb|pc|to|tr))<F255>(, )?)? ?(?<id>[^\)<;]+)(?<after>\)|;| and)/
 
     Title_pattern = /(Y_PNT_PNT|@PNT[^\d]|@PNT2_1|Y_PNT2_PNT2)/ 
     Title_extractor = /= (?<number>\d*)\t(?<title>[^\r\n]*)/
