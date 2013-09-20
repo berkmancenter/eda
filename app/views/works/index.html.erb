@@ -1,4 +1,5 @@
 <% cache cache_key_for_works(@works) do %>
+<div id="work-table-wrapper">
 <table class="works">
     <thead>
         <tr>
@@ -26,5 +27,25 @@
     </tr>
 <% end %>
     </tbody>
+    <tfoot>
+        <tr>
+            <% unless @edition %>
+                <th class="edition-footer"></th>
+            <% end %>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="date-footer"></th>
+            <th class="recipient-footer"></th>
+        </tr>
+    </tfoot>
 </table>
+</div>
+<noscript>
+    <style>
+        #work-table-wrapper {
+            display: block;
+        }
+    </style>
+</noscript>
 <% end %>
