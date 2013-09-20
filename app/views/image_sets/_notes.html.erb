@@ -1,5 +1,4 @@
-<div id="set-notes" class="bottom drawer">
-  <a href="#" class="two bottom drawer-handle" data-drawer="set-notes"><%= t :my_notes %></a>
+<div id="set-notes">
   <% if user_signed_in? %>
       <%= render partial: 'shared/forms/note', locals:{ notable: image_set, note: note} %>
   <% else %>
