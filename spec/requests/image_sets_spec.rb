@@ -67,7 +67,7 @@ describe ( 'image_sets requests' ) {
         }
       }
 
-      describe ( 'search panel' ) do
+      describe ( 'search panel' ) {
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         context 'without search q' do
@@ -91,7 +91,7 @@ describe ( 'image_sets requests' ) {
             should have_css '.search-works-results a', count: 1
           }
         end
-      end
+      }
 
       describe 'browse panel', :js => true do
         before {
@@ -157,15 +157,26 @@ describe ( 'image_sets requests' ) {
         }
       end
 
-      describe 'info panel', :js => true do
+      describe 'image drawer', :js => true do
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         it ( 'should have one' ) {
-          should have_css '#image-set-info'
+          should have_css '#interactive-image-panel .image-drawer'
         }
 
-        it ( 'should be open by default' ) {
-          should_not have_css '#image-set-info.collapsed'
+        it ( 'should be open by default (via image-panel parent)' ) {
+          should_not have_css '#interactive-image-panel.collapsed'
+        }
+
+        context ( 'click image info tab' ) {
+          before {
+            click_link I18n.t( :image_info )
+            #page.execute_script( %q[$('.toggle-weight-sliders').click( )] );
+          }
+
+          it {
+            should have_css '#interactive-image-panel.collapsed'
+          }
         }
 
       end

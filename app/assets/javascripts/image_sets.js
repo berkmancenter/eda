@@ -41,10 +41,8 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-  $drawerHandle.click( function( ) {
-    var drawerId = $(this).data('drawer');
-    $('#' + drawerId).toggleClass( 'collapsed' );
-    $(viewSelector).toggleClass( 'minus-' + drawerId );
+  $drawerHandle.click(function () {
+    $('#interactive-image-panel').toggleClass('collapsed');
   } );
 
   if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
