@@ -21,6 +21,12 @@ Eda::Application.routes.draw do
         end
     end
 
+    resources :images do
+        member do
+            get '/download' => 'images#download', :as => :download
+        end
+    end
+
     resources :image_sets do
         resources :notes
     end
