@@ -4,7 +4,7 @@ describe 'static pages requests' do
   subject { page }
 
   describe 'get /' do
-    before { visit root_url }
+    before { visit root_path }
 
     it {
       should have_title 'Emily Dickinson Archive'
@@ -20,10 +20,11 @@ describe 'static pages requests' do
 
   end
 
-  describe 'get /about' do
-    before { visit about_url }
+  describe 'get /about', :js => true do
+    before { visit about_path }
 
     it {
+      snap
       should have_title 'About Emily Dickinson Archive'
     }
 
@@ -31,17 +32,17 @@ describe 'static pages requests' do
       should have_selector( '.about-panel-menu' )
 
       # full test of about-panel-menu links
-      should have_selector( '.about-panel-menu a[href="' + about_url + '"]' )
-      should have_selector( '.about-panel-menu a[href="' + faq_url + '"]' )
-      should have_selector( '.about-panel-menu a[href="' + team_url + '"]' )
-      should have_selector( '.about-panel-menu a[href="' + terms_url + '"]' )
-      should have_selector( '.about-panel-menu a[href="' + privacy_url + '"]' )
-      should have_selector( '.about-panel-menu a[href="' + contact_url + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + about_path + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + faq_path + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + team_path + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + terms_path + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + privacy_path + '"]' )
+      should have_selector( '.about-panel-menu a[href*="' + contact_path + '"]' )
     }
   end
 
   describe 'get /faq' do
-    before { visit faq_url }
+    before { visit faq_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'
@@ -53,7 +54,7 @@ describe 'static pages requests' do
   end
 
   describe 'get /team' do
-    before { visit team_url }
+    before { visit team_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'
@@ -65,7 +66,7 @@ describe 'static pages requests' do
   end
 
   describe 'get /terms' do
-    before { visit terms_url }
+    before { visit terms_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'
@@ -77,7 +78,7 @@ describe 'static pages requests' do
   end
 
   describe 'get /privacy' do
-    before { visit privacy_url }
+    before { visit privacy_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'
@@ -89,7 +90,7 @@ describe 'static pages requests' do
   end
 
   describe 'get /contact' do
-    before { visit contact_url }
+    before { visit contact_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'

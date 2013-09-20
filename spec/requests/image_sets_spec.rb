@@ -32,6 +32,7 @@ describe ( 'image_sets requests' ) {
 
           should have_selector( '#work-panel' );
         }
+
       end
 
       context 'with valid next image' do
@@ -154,6 +155,19 @@ describe ( 'image_sets requests' ) {
             }
           }
         }
+      end
+
+      describe 'info panel', :js => true do
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+        it ( 'should have one' ) {
+          should have_css '#image-set-info'
+        }
+
+        it ( 'should be open by default' ) {
+          should_not have_css '#image-set-info.collapsed'
+        }
+
       end
 
       describe 'lexicon panel', :js => true do

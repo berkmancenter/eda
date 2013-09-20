@@ -187,9 +187,14 @@ FactoryGirl.define do
   # metadata is not designed enough to test
   factory :image do
     factory :image_one do
-      url "ms_am_1118_10_10_0001"
-      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
-      credits "Provided by Harvard University"
+      url 'ms_am_1118_10_10_0001'
+      metadata {{
+        'Imported' => '2013-07-11 12:00:00 -0400',
+        'Order' => '2',
+        'Order Label' => '',
+        'Label' => 'p. 2, Your - Riches - taught me - poverty! , L258, J299, Fr418'
+      }}
+      credits 'This material is owned, held, or licensed by the President and Fellows of Harvard College. It is being provided solely for the purpose of teaching or individual research. Any other use, including commercial reuse, mounting on other systems, or other forms of redistribution requires permission of the appropriate office of Harvard University.'
       web_width 500
       web_height 750
     end
