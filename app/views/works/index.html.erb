@@ -2,6 +2,9 @@
 <table class="works">
     <thead>
         <tr>
+            <% unless @edition %>
+                <th>Edition</th>
+            <% end %>
             <th>Number</th>
             <th>Title</th>
             <th>Has Image</th>
@@ -12,6 +15,9 @@
     <tbody>
 <% @works.each do |work| %>
     <tr>
+        <% unless @edition %>
+            <td><%= work.edition.name %></td>
+        <% end %>
         <td><%= strip_tags work.full_id %></td>
         <td><%= link_to work.title, image_set_path_from_work(work) %></td>
         <td><%= work.has_image? %></td>
