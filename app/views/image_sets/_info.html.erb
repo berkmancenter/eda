@@ -1,4 +1,5 @@
 <div id="image-set-info">
+  <%= link_to t(:download_image), download_image_path(image) %>
   <% unless image.metadata.nil? %>
   <dl class="credits">
       <dt class="image-credits">Credits</dt><dd><%= image.credits %></dd>
