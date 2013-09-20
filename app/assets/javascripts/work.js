@@ -54,8 +54,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 $(document).ready(function() {
     $('table.works').dataTable({
         "aoColumnDefs": [
-    { "sType": "natural", "aTargets": [ 0 ] }
-    ]
+            { "sType": "natural", "aTargets": [ 0 ] }
+        ],
     });
 
     $('.flash.wait').insertAfter('header');

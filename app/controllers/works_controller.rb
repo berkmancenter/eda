@@ -15,7 +15,7 @@ class WorksController < ApplicationController
             load_edition
             @works = @edition.all_works
         else
-            @works = Work.all
+            @works = Work.scoped
         end
         render :layout => !request.xhr?
     end
