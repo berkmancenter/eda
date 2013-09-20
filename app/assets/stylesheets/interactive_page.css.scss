@@ -15,19 +15,22 @@
 
 #page-image {
     position: absolute;
-    top: 0;
-    bottom: 82px;
+    /* match .view .panel top */
+    top: 2em;
+    /* .bottom.drawer + .page-controls */
+    bottom: 12em + 5em;
     width: 96%;
     margin: 0 2%;
 }
 
 .page-controls {
-  bottom: 30px;
-  height: 40px;
+  background: $darkGray;
+  height: 4.5em;
   left: 0;
   position: absolute;
   right: 0;
   text-align: center;
+  top: -4.5em;
 
   a {
     background: url("sbs-icon.png") no-repeat;
