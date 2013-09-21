@@ -1,13 +1,15 @@
 require 'csv'
 class ImageToTranscriptionConnector
-    def create_map(output_map_file)
+    def create_map(output_map_file, blank_images_file)
         pbar = ProgressBar.new('Images', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
+        blank_images = File.readlines(blank_images_file).map(&:strip)
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
         Image.all.each do |image|
             pbar.inc
+            next if blank_images.include? image.url
             next unless image.metadata
             if image.metadata['Identifiers']
                 works = works_for_amherst(image, franklin, johnson)
@@ -74,21 +76,28 @@ class ImageToTranscriptionConnector
                 next unless w.metadata && w.metadata['holder_code']
                 indices = w.metadata['holder_code'].each_index.select{|i| w.metadata['holder_code'][i] == 'a'}
                 next if indices.empty?
-                work_am_manuscript_nums = [w.metadata['holder_id'][*indices]].flatten
-                puts 'start'
-                puts work_am_manuscript_nums.inspect
-                puts image_am_manuscript_nums.inspect
+                work_am_manuscript_nums = [w.metadata['holder_id'].values_at(*indices)].flatten
                 next if (work_am_manuscript_nums.map(&:to_i) & image_am_manuscript_nums.map(&:to_i)).empty?
                 url_match = image.url.match(image_url_pattern)
-                puts url_match.inspect
                 work_am_manuscript_nums.each do |w_man_num|
                     holder_id_match = w_man_num.match(holder_id_pattern)
                     if holder_id_match && holder_id_match[3] && holder_id_match[5]
                         url_suffixes = sheet_id_to_image_url("#{holder_id_match[3]}/#{holder_id_match[5]}")
-                        puts url_match.inspect
+                        if url_suffixes.nil?
+                            #puts "holder is weird: #{holder_id_match.inspect} - #{image.url} - #{w.full_id} - #{w.title}"
+                        elsif url_match && url_match[1] && url_suffixes.include?(url_match[1])
+                            works << w
+                        end
+                    elsif holder_id_match && holder_id_match[3]
+                        url_suffixes = sheet_id_to_image_url(holder_id_match[3])
+                        if url_suffixes.nil?
+                            puts "holder is weird: #{holder_id_match.inspect} - #{image.url} - #{w.full_id} - #{w.title}"
+                        elsif url_match && url_match[1] && url_suffixes.include?(url_match[1])
+                            works << w
+                        end
                     else
-                        puts holder_id_match.inspect
-                    works << w
+                        #puts "holder is weird: #{w_man_num} - #{image.url} - #{w.full_id} - #{w.metadata['holder_id']} - #{w.title}"
+                        works << w
                     end
                 end
             end
@@ -106,7 +115,29 @@ class ImageToTranscriptionConnector
             '11/12' => ['11-1', '12-0', '12-1', '13-0'],
             '13/14' => ['13-1', '14-0', '14-1', '15-0'],
             '15/16' => ['15-1', '16-0', '16-1', '17-0'],
-            '17/18' => ['17-1', '18-0', '18-1', '19']
+            '17/18' => ['17-1', '18-0', '18-1', '19'],
+            '2/3' => ['2-1', '3-0', '3-1', '4-0'],
+            '4/5' => ['4-1', '5-0', '5-1', '6-0'],
+            '6/7' => ['6-1', '7-0', '7-1', '8-0'],
+            '8/9' => ['8-1', '9-0', '9-1', '10-0'],
+            '10/11' => ['10-1', '11-0', '11-1', '12-0'],
+            '12/13' => ['12-1', '13-0', '13-1', '14-0'],
+            '14/15' => ['14-1', '15-0', '15-1', '16-0'],
+            '16/17' => ['16-1', '17-0', '17-1', '18-0'],
+            '1' => ['1', '2-0'],
+            '2' => ['2-1', '3-0'],
+            '3' => ['3-1', '4-0'],
+            '4' => ['4-1', '5-0'],
+            '5' => ['5-1', '6-0'],
+            '6' => ['6-1', '7-0'],
+            '7' => ['7-1', '8-0'],
+            '8' => ['8-1', '9-0'],
+            '9' => ['9-1', '10-0'],
+            '10' => ['10-1', '11-0'],
+            '11' => ['11-1', '12-0'],
+            '12' => ['12-1', '13-0'],
+            '13' => ['13-1', '14-0'],
+            '14' => ['14-1', '15-0'],
         }
         map[sheet_id]
     end
@@ -143,23 +174,13 @@ class ImageToTranscriptionConnector
         work_map = CSV.open(work_map_file, headers: true)
         pbar = ProgressBar.new("Connecting", CSV.open(image_to_work_map_file).readlines.count)
         CSV.foreach(image_to_work_map_file, headers: true) do |row|
+            select_hash = Hash[row.headers.zip(row.fields)].delete_if{|k, v| v.nil? || ['image_url', 'position_in_work_set', 'position_in_image_set'].include?(k)}
             works = []
-            if row['franklin'] && row['franklin_variant']
-                works = all_works(work_map, {
-                    'franklin' => row['franklin'],
-                    'franklin_variant' => row['franklin_variant']
-                })
-            elsif row['johnson']
-                works = all_works(work_map, { 'johnson' => row['johnson'] })
-            elsif row['gutenberg']
-                works = all_works(work_map, { 'gutenberg' => row['gutenberg'] })
-            else
-                puts 'stuff' + row.inspect
-                exit
-            end
+            works = all_works(work_map, select_hash)
             works.each do |work|
                 work.image_set = work.image_set.duplicate
                 work.image_set << Image.find_by_url(row['image_url'])
+                work.save!
             end
             work_map.rewind
             pbar.inc
@@ -169,20 +190,15 @@ class ImageToTranscriptionConnector
     def all_works(map, select_hash)
         works = []
         work_row = find_row(map, select_hash)
-        return works unless work_row
-        franklin = Edition.find_by_work_number_prefix('F')
-        johnson = Edition.find_by_work_number_prefix('J')
-        gutenberg = Edition.find_by_work_number_prefix('G')
-        if work_row['franklin'] && work_row['franklin_variant']
-            works += franklin.works.where(number: work_row['franklin'].to_i, variant: work_row['franklin_variant']).all
-        elsif work_row['franklin']
-            works += franklin.works.where(number: work_row['franklin'].to_i).all
-        end
-        if work_row['johnson']
-            works += johnson.works.where(number: work_row['johnson'].to_i).all
-        end
-        if work_row['gutenberg']
-            works += gutenberg.works.where(number: work_row['gutenberg'].to_i).all
+        if work_row.nil?
+            select_hash.each do |edition_prefix, work_full_id|
+                works << Work.find_by_full_id(work_full_id)
+            end
+        else
+            works_hash = Hash[work_row.headers.zip(work_row.fields)].delete_if{|k, v| v.nil?}
+            works_hash.each do |edition_prefix, work_full_id|
+                works << Work.find_by_full_id(work_full_id)
+            end
         end
         works
     end
@@ -191,10 +207,6 @@ class ImageToTranscriptionConnector
         selected_row = nil
         table.each do |row|
             if select_hash.keys.all? do |header|
-                #puts "#{row[header]} == #{select_hash[header]}"
-                #puts "#{row[header] == select_hash[header]}"
-                #puts row.inspect
-                #puts select_hash.inspect
                 row[header] == select_hash[header]
             end
                 selected_row = row

@@ -14,7 +14,7 @@ namespace :emily do
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             AmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
-            #AmherstImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+            AmherstImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
         desc 'Process BPL images to create tifs'
@@ -33,9 +33,10 @@ namespace :emily do
         end
 
         desc 'Create images to works map'
-        task :images_to_transcriptions_map, [:output_map_file] => [:environment] do |task, args|
+        task :images_to_transcriptions_map, [:output_map_file, :blank_images_file] => [:environment] do |task, args|
             output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
-            ImageToTranscriptionConnector.new.create_map(output_map_file)
+            blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
+            ImageToTranscriptionConnector.new.create_map(output_map_file, blank_images_file)
         end
 
         desc 'Connect all existing transcriptions together'

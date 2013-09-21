@@ -1,5 +1,5 @@
 <header>
-    <h2 class="edition-name"><%= edition.name %></h2>
+    <h2 class="edition-name"><%= image_set.image.url %><%# edition.name %></h2>
     <span class="edition-creator">
         &mdash; <%= user_signed_in? && edition.owner == current_user ? 'Me' : edition.author %>
     </span>

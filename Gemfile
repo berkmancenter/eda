@@ -21,6 +21,7 @@ gem 'activerecord-import'
 gem 'amatch'
 gem 'htmlentities'
 gem 'progressbar'
+gem 'naturally'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -16,7 +16,7 @@
   <div class="page-controls">
     <% if previous_image %>
         <%=
-            link_to('', edition_image_set_url(edition, previous_image), {
+            link_to('prev', edition_image_set_url(edition, previous_image), {
                 id: 'prev-page', title: 'Previous Page', alt: 'Previous Page', class: 'change-page'
             })
         %> 
@@ -26,7 +26,7 @@
 
     <% if next_image %>
         <%=
-            link_to('', edition_image_set_url(edition, next_image),
+            link_to('next', edition_image_set_url(edition, next_image),
                { id: 'next-page', title: 'Next Page', alt: 'Next Page', class: 'change-page' }
             )
         %>

@@ -55,7 +55,13 @@ class AmherstImageProcessor
         extension = File.extname(output_file)
         base = File.basename(output_file, extension)
 
-        if height > 4000 && width > height
+        #3763
+        #3859
+        tiny_double_images = [
+            'asc-13602-1',
+            'asc-15834-2',
+        ]
+        if (height > 3750 && width > height) || tiny_double_images.include?(base)
             if File.exists?("#{output_dir}/#{base}-0.tif") || File.exists?("#{output_dir}/#{base}-1.tif")
                 puts %Q|"#{output_dir}/#{base}-01.tif" exists|
             else

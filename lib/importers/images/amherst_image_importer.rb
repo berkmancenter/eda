@@ -5,7 +5,7 @@ class AmherstImageImporter
         last_call_number = ''
         sheet_group = collection
         pbar = ProgressBar.new('Amherst', Dir.entries(image_directory).count)
-        Dir.entries(image_directory).sort.each_with_index do |image_filename, i|
+        Naturally.sort(Dir.entries(image_directory)).each_with_index do |image_filename, i|
             pbar.inc
             next if image_filename[0] == '.'
             call_number = image_filename.match(/asc-\d+/)[0].sub('-', ':')
