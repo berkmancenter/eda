@@ -246,10 +246,12 @@
         width: 94%;
         margin: 0 3% 0;
         box-shadow: 0 0 10px $lightShadowGray;
+    }
 
-        &.collapsed {
-            bottom: -12em;
-        }
+    #interactive-image-panel.collapsed {
+      .bottom.drawer {
+        bottom: -12em;
+      }
     }
 
     #set-notes {

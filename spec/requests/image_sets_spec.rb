@@ -171,7 +171,6 @@ describe ( 'image_sets requests' ) {
         context ( 'click image info tab' ) {
           before {
             click_link I18n.t( :image_info )
-            #page.execute_script( %q[$('.toggle-weight-sliders').click( )] );
           }
 
           it {
