@@ -21,6 +21,7 @@ $( function( ) {
     } );
   }
 
+  var interactiveImagePanel = $( '#interactive-image-panel' );
   var tabs = $( ".tab-menu" );
   var tabSelector = ".panel-menu a";
   var contentSelector = ".panel-content>section";
@@ -42,7 +43,20 @@ $( function( ) {
 
   /* Setup drawers */
   $drawerHandle.click(function () {
-    $('#interactive-image-panel').toggleClass('collapsed');
+    var drawerContentSelector = '#' + $( this ).data( 'drawer' );
+
+    var changeDrawerContent = !$( drawerContentSelector ).is( ':visible' );
+    var drawerOpen = !interactiveImagePanel.hasClass( 'collapsed' );
+    var toggleDrawer = !drawerOpen || !changeDrawerContent;
+
+    if ( toggleDrawer ) {
+      interactiveImagePanel.toggleClass( 'collapsed' );
+    }
+
+    if ( changeDrawerContent ) {
+      $( '.image-drawer-tabs a' ).removeClass( 'hidden' ).not( this ).addClass( 'hidden' );
+      $( '.image-drawer-content>div' ).removeClass( 'hidden' ).not( drawerContentSelector ).addClass( 'hidden' );
+    }
   } );
 
   if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {

@@ -1,4 +1,4 @@
-<div id="set-notes">
+<div id="set-notes" class="hidden">
   <% if user_signed_in? %>
       <%= render partial: 'shared/forms/note', locals:{ notable: image_set, note: note} %>
   <% else %>

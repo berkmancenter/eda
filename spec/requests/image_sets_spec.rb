@@ -168,6 +168,14 @@ describe ( 'image_sets requests' ) {
           should_not have_css '#interactive-image-panel.collapsed'
         }
 
+        it ( 'should only have image info visible by default' ) {
+          should_not have_css 'a[data-drawer="image-set-info"].hidden'
+          should_not have_css '#image-set-info.hidden'
+
+          should have_css 'a[data-drawer="set-notes"].hidden'
+          should have_css '#set-notes.hidden', visible: false
+        }
+
         context ( 'click image info tab' ) {
           before {
             click_link I18n.t( :image_info )
@@ -176,6 +184,51 @@ describe ( 'image_sets requests' ) {
           it {
             should have_css '#interactive-image-panel.collapsed'
           }
+
+          context ( 'click image info tab again' ) {
+            before {
+              click_link I18n.t( :image_info )
+            }
+
+            it {
+              should_not have_css '#interactive-image-panel.collapsed'
+            }
+          }
+
+          context ( 'click notes tab' ) {
+            before {
+              click_link I18n.t( :my_notes )
+            }
+
+            it {
+              should_not have_css '#interactive-image-panel.collapsed'
+            }
+
+            it ( 'should switch to notes tab' ) {
+              should have_css '#image-set-info.hidden', visible: false
+
+              should_not have_css '#set-notes.hidden'
+            }
+          }
+        }
+
+        context ( 'click notes tab' ) {
+          before {
+            click_link I18n.t( :my_notes )
+          }
+
+          it {
+            should_not have_css '#interactive-image-panel.collapsed'
+          }
+
+          it ( 'should switch to notes tab' ) {
+            should have_css 'a[data-drawer="image-set-info"].hidden'
+            should have_css '#image-set-info.hidden', visible: false
+
+            should_not have_css 'a[data-drawer="set-notes"].hidden'
+            should_not have_css '#set-notes.hidden'
+          }
+
         }
 
       end
