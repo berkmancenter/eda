@@ -267,8 +267,9 @@ describe ( 'image_sets requests' ) {
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         it {
-          should have_css '#work-panel'
-          should_not have_css '#work-panel.collapsed'
+          # 5754 default to closed
+          should have_css '.view.minus-work-panel'
+          should have_css '#work-panel.collapsed'
         }
 
         describe ( 'click text drawer handle' ) {
@@ -276,9 +277,9 @@ describe ( 'image_sets requests' ) {
             page.execute_script( %q[$('.right.drawer-handle').click( )] );
           }
 
-          it ( 'should hide work panel' ) {
-            should have_css '.view.minus-work-panel'
-            should have_css '#work-panel.collapsed'
+          it ( 'should show work panel' ) {
+            should_not have_css '.view.minus-work-panel'
+            should_not have_css '#work-panel.collapsed'
           }
         }
       end
