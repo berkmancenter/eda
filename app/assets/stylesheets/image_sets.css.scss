@@ -206,7 +206,8 @@
             width: 2em;
             height: 4.8em;
             padding: 1em 0.2em 1em 0;
-            div {
+            span {
+              display: block;
                 -webkit-transform: rotate(90deg); 
                 -moz-transform: rotate(90deg);	
                 transform: rotate(90deg);
@@ -220,7 +221,8 @@
             width: 2em;
             height: 4.8em;
             padding: 1em 0 1em 0;
-            div {
+            span {
+              display: block;
                 height: 100%;
                 padding-top: 0.6em;
                 -webkit-transform: rotate(-90deg); 
