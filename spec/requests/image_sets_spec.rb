@@ -176,6 +176,17 @@ describe ( 'image_sets requests' ) {
           should have_css '#set-notes.hidden', visible: false
         }
 
+        context ( 'click text panel' ) {
+          before {
+            page.execute_script( %q[$('.right.drawer-handle').click( )] );
+            #click_link I18n.t( :works_drawer_label )
+          }
+
+          it ( 'should not affect the bottom drawer' ) {
+            should_not have_css '#interactive-image-panel.collapsed'
+          }
+        }
+
         context ( 'click image info tab' ) {
           before {
             click_link I18n.t( :image_info )

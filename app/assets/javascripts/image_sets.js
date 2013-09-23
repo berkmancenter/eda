@@ -42,7 +42,9 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-  $drawerHandle.click(function () {
+
+  /* Setup bottom drawer */
+  $( bottomDrawerSelector + ' ' + '.drawer-handle' ).click(function () {
     var drawerContentSelector = '#' + $( this ).data( 'drawer' );
 
     var changeDrawerContent = !$( drawerContentSelector ).is( ':visible' );
