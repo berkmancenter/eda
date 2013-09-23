@@ -29,7 +29,7 @@ $( function( ) {
   var viewSelector = 'section.view';
   var bottomDrawerSelector = '.bottom.drawer';
 
-  var $drawerHandle = $( '.drawer-handle' );
+  var $drawerHandle = $( '.left.drawer-handle,.right.drawer-handle' );
 
   tabs.find( tabSelector ).click( function( ) {
     var state = { };
@@ -42,7 +42,12 @@ $( function( ) {
   } );
 
   /* Setup drawers */
-
+  $drawerHandle.click( function( ) {
+    var drawerId = $(this).data('drawer');
+    $('#' + drawerId).toggleClass( 'collapsed' );
+    $(viewSelector).toggleClass( 'minus-' + drawerId );
+  } );
+  
   /* Setup bottom drawer */
   $( bottomDrawerSelector + ' ' + '.drawer-handle' ).click(function () {
     var drawerContentSelector = '#' + $( this ).data( 'drawer' );
