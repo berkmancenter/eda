@@ -1,0 +1,9 @@
+<%= form_tag search_works_path, remote: defined?(remote) ? remote : false, id: 'search-works' do %>
+    <%= label_tag(:q, 'Search for:') %>
+    <%= text_field_tag(:q, params[:q]) %>
+    <%= button_tag raw("#{image_tag('search.png')} <span>Search</span>"), name: nil %>
+    <div class="search-works-options">
+        <a href="javascript:void(0);"><h2>Search options</h2></a>
+        <%= render 'shared/forms/edition_selector' %>
+    </div>
+<% end %>

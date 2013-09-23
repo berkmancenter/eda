@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
-    before_filter :recreate_search_from_session
+    before_filter :do_search
     #helper_method :image_set_path_from_work
 
     def check_edition_owner
@@ -41,10 +41,19 @@ class ApplicationController < ActionController::Base
         revision
     end
 
-    def recreate_search_from_session
-        return unless session[:search_results]
-        @search = session[:search_results]
-        session.delete(:search_results)
+    def do_search
+        return unless params[:q] || session[:q]
+        session[:q] = params[:q] if params[:q]
+        session[:current_edition] = params[:current_edition] if params[:current_edition]
+        params[:q] = session[:q] if session[:q]
+        params[:current_edition] = session[:current_edition] if session[:current_edition]
+
+        @search = Work.search do
+            with(:edition_id, params[:current_edition]) if params[:current_edition]
+            fulltext params[:q] do
+                fields(:lines, :title => 2.0)
+            end
+        end
     end
 
     def store_location

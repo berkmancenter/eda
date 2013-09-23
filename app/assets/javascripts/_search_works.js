@@ -1,4 +1,7 @@
 $( function( ) {
+  $('form#search-works').on('ajax:success', function(e, data) {
+      $('.search-works-results').replaceWith(data);
+  });
   $( '.search-works-options a' ).click( function( e ) {
     $( '.search-works-options' ).toggleClass( 'open' );
     return false;
