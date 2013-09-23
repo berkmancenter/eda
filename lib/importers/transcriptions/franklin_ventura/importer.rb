@@ -181,7 +181,7 @@ module FranklinVentura
             works = parse_xml(simple_string, complex_string)
             edition.works = works
             edition.save!
-            #post_process!(edition)
+            post_process!(edition)
         end
 
         # For poems like 1356
