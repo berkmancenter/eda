@@ -18,6 +18,12 @@ class BPLFlickrImporter
         total_pages = 0
         current_page = 1
         pbar = nil
+        info_file_path = File.join(Eda::Application.config.emily['data_directory'], 'bpl_photo_info.bin')
+        if File.size? info_file_path
+            photo_infos = Marshal.load(File.open(info_file_path)) 
+        else
+            photo_infos = {}
+        end
 
         loop do 
             response = flickr.photosets.getPhotos(
@@ -33,7 +39,15 @@ class BPLFlickrImporter
                 sleep 1.5 + Random.rand
                 pbar.inc
                 metadata = {}
-                photoInfo = flickr.photos.getInfo(:photo_id => photo.id)
+                if photo_infos[photo.id]
+                    photoInfo = photo_infos[photo.id]
+                else
+                    photoInfo = flickr.photos.getInfo(:photo_id => photo.id)
+                    photo_infos[photo.id] = photoInfo
+                    info_file = File.open(info_file_path, 'wb')
+                    Marshal.dump(photo_infos, info_file)
+                    info_file.close
+                end
                 photoInfo.description.split(/\n\n/).each do |unruly_metadata|
                     if matches = unruly_metadata.match(pattern)
                         metadata[matches[:key]] = matches[:value]

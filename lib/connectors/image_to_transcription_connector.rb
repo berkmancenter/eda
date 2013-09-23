@@ -14,9 +14,9 @@ class ImageToTranscriptionConnector
             if image.metadata['Identifiers']
                 works = works_for_amherst(image, franklin, johnson)
             elsif image.metadata['Label']
-                #works = works_for_harvard(image, franklin, johnson)
+                works = works_for_harvard(image, franklin, johnson)
             elsif image.metadata['Identifier (Johnson Poem #)']
-                #works = works_for_bpl(image, johnson)
+                works = works_for_bpl(image, johnson)
             end
             next unless works
             works.each do |w|
@@ -200,7 +200,7 @@ class ImageToTranscriptionConnector
                 works << Work.find_by_full_id(work_full_id)
             end
         end
-        works
+        works.compact
     end
 
     def find_row(table, select_hash)
