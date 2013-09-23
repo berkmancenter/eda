@@ -97,6 +97,24 @@ body.static-pages.home {
     width: 39%;
     padding-top: 2em;
 
+    .search-works-form {
+      button {
+        span.icon {
+          background: url( 'search.png' ) -14px 0;
+        }
+
+        &:hover {
+          span.icon {
+            background: url( 'search.png' ) -28px 0;
+          }
+        }
+      }
+
+      .search-works-options {
+        display: none;
+      }
+    }
+
     ul {
       margin: 2em;
       padding: 0;
@@ -105,37 +123,38 @@ body.static-pages.home {
     li {
       list-style-type: none;
       margin: 1em 0;
-    }
-
-    img {
-      border: 2px solid $lightGray;
-      display: inline-block;
-      height: 96px;
-      width: 96px;
-      vertical-align: middle;
-    }
-
-    a {
-      display: block;
-      text-align: left;
-    }
-
-    a:hover {
-      text-decoration: none;
 
       img {
-        border: 2px solid $tan;
+        border: 2px solid $lightGray;
+        display: inline-block;
+        height: 96px;
+        width: 96px;
+        vertical-align: middle;
+      }
+
+      a {
+        display: block;
+        text-align: left;
+      }
+
+      a:hover {
+        text-decoration: none;
+
+        img {
+          border: 2px solid $tan;
+        }
+      }
+
+      .home-link-title {
+        display: inline-block;
+        text-transform: uppercase;
+        white-space: normal;
+        width: 7em;
+        padding-left: 0.5em;
+        vertical-align: left;
       }
     }
 
-    .home-link-title {
-      display: inline-block;
-      text-transform: uppercase;
-      white-space: normal;
-      width: 7em;
-      padding-left: 0.5em;
-      vertical-align: left;
-    }
   }
 
   footer {

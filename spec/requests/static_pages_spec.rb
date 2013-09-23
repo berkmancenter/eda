@@ -18,6 +18,13 @@ describe 'static pages requests' do
       should have_selector( 'a', { text: 'Home' } )
     }
 
+    it {
+      should have_css 'h1', text: I18n.t( 'works_search_h1' )
+    }
+
+    it {
+      should have_css "form[action='#{search_works_path}']"
+    }
   end
 
   describe 'get /about', :js => true do

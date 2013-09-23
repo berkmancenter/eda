@@ -1,11 +1,11 @@
 <section class="search-works">
     <div class="search-works-form">
-        <h1>Search Works</h1>
+      <h1><%= t 'works_search_h1' %></h1>
 
         <%= form_tag search_works_path, method: :get do %>
             <%= label_tag(:q, 'Search for:') %>
             <%= text_field_tag(:q, params[:q]) %>
-            <%= button_tag raw("#{image_tag('search.png')} <span>Search</span>"), name: nil %>
+            <%= button_tag raw('<span class="icon"></span> <span>Search</span>'), name: nil %>
                 <div class="search-works-options">
                     <a href="javascript:void(0);"><h2>Search options</h2></a>
                     <%= render 'shared/forms/edition_selector' %>

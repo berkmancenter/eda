@@ -8,6 +8,8 @@ en:
       too_long: '%{attribute} is too long. (The maximum is %{count} characters.)'
       too_big: '%{attribute} is too large.'
 
+  works_search_h1: 'Search Manuscripts'
+
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
   new_transcription_link: 'Please %{sign_in_link} to create a new transcription'

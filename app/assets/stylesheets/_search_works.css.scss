@@ -14,6 +14,19 @@
     span {
       display: none;
     }
+
+    span.icon {
+      background: url( 'search.png' );
+      display: inline-block;
+      height: 14px;
+      width: 14px;
+    }
+
+    &:hover {
+      span.icon {
+        background: url( 'search.png' ) -14px 0;
+      }
+    }
   }
 
   label {
