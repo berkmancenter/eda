@@ -2,7 +2,8 @@
   <% if image_set.image.url.nil? %>
     <%= image_tag asset_path("missing_image.jpg") %>
   <% else %>
-      <div id="page-image"><noscript><%= raw image_tag preview_url(image_set.image) %></noscript></div>
+      <div id="page-image"><%= raw image_tag preview_url(image_set.image), height: '600px' %></div>
+      <!--
       <%= javascript_include_tag "openseadragon" %>
       <script>
             OpenSeadragon({
@@ -11,6 +12,7 @@
                 tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{image_set.image.url}.tif.dzi" %>'
             });
       </script>
+      -->
   <% end %>
 
   <div class="page-controls">
