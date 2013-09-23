@@ -67,17 +67,37 @@ describe ( 'image_sets requests' ) {
         }
       }
 
+      describe 'search drawer', :js => true do
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+        it {
+          should have_css '#search-panel'
+          should_not have_css '#search-panel.collapsed'
+        }
+
+        describe ( 'click search drawer handle' ) {
+          before {
+            page.execute_script( %q[$('.left.drawer-handle').click( )] );
+          }
+
+          it ( 'should hide search panel' ) {
+            should have_css '.view.minus-search-panel'
+            should have_css '#search-panel.collapsed'
+          }
+        }
+      end
+
       describe ( 'search panel' ) {
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
-        context 'without search q' do
+        context ( 'without search q' ) {
           it ( 'should have search works form' ) {
             should have_selector( '.search-works' );
             should have_selector( '.search-works form input[name="q"]' );
           }
-        end
+        }
 
-        context 'with search submit' do
+        context ( 'with search submit' ) {
           before {
             fill_in 'Search for:', with: 'awake'
             click_button 'Search'
@@ -90,7 +110,7 @@ describe ( 'image_sets requests' ) {
 
             should have_css '.search-works-results a', count: 1
           }
-        end
+        }
       }
 
       describe 'browse panel', :js => true do
@@ -179,7 +199,6 @@ describe ( 'image_sets requests' ) {
         context ( 'click text panel' ) {
           before {
             page.execute_script( %q[$('.right.drawer-handle').click( )] );
-            #click_link I18n.t( :works_drawer_label )
           }
 
           it ( 'should not affect the bottom drawer' ) {
@@ -242,6 +261,26 @@ describe ( 'image_sets requests' ) {
 
         }
 
+      end
+
+      describe 'text drawer', :js => true do
+        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+        it {
+          should have_css '#work-panel'
+          should_not have_css '#work-panel.collapsed'
+        }
+
+        describe ( 'click text drawer handle' ) {
+          before {
+            page.execute_script( %q[$('.right.drawer-handle').click( )] );
+          }
+
+          it ( 'should hide work panel' ) {
+            should have_css '.view.minus-work-panel'
+            should have_css '#work-panel.collapsed'
+          }
+        }
       end
 
       describe 'lexicon panel', :js => true do
