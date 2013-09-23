@@ -22,8 +22,8 @@
 <%= render partial: 'works/search' %>
 
 <ul>
-  <li><%= home_link 'works-browse.jpg', 'Browse Manuscripts', works_path %></li>
-  <li><%= home_link 'words-index.jpg', 'Lexicon', words_url %></li>
+  <li><%= home_link 'works-browse.jpg', t( 'home_browse_title' ), 'Browse poems by first word', works_path %></li>
+  <li><%= home_link 'words-index.jpg', t( 'home_lex_title' ), 'Look up word definitions as Emily Dickinson knew them', words_url %></li>
 </ul>
 </nav>
 <% end %>

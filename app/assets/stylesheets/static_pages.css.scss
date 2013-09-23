@@ -10,7 +10,7 @@ body.static-pages {
 
   .view {
     margin: 0 auto;
-    max-width: 800px;
+    width: 52em;
     padding: 1em 1em 8em 1em;
 
     h1 {
@@ -85,18 +85,22 @@ body.static-pages.home {
   .welcome {
     border-right: 1px solid $gray;
     display: inline-block;
-    max-width: 60%;
     padding: 2em 2em 2em 0;
     font-size: 0.9em;
+    width: 28em;
   }
 
   .icon-links {
     display: inline-block;
     vertical-align: top;
-    width: 39%;
     padding-top: 2em;
+    width: 20em;
 
     .search-works-form {
+      h1 {
+        font-size: 1.2em;
+      }
+
       button {
         span.icon {
           background: url( 'search.png' ) -14px 0;
@@ -123,17 +127,19 @@ body.static-pages.home {
       list-style-type: none;
       margin: 1em 0;
 
-      img {
-        border: 2px solid $lightGray;
-        display: inline-block;
-        height: 96px;
-        width: 96px;
-        vertical-align: middle;
-      }
-
       a {
         display: block;
+        height: 96px;
+        position: relative;
         text-align: left;
+      }
+
+      img {
+        border: 2px solid $lightGray;
+        float: left;
+        height: 96px;
+        margin-right: .4em;
+        width: 96px;
       }
 
       a:hover {
@@ -145,12 +151,14 @@ body.static-pages.home {
       }
 
       .home-link-title {
-        display: inline-block;
+        display: block;
         text-transform: uppercase;
-        white-space: normal;
-        width: 7em;
-        padding-left: 0.5em;
+        white-space: nowrap;
         vertical-align: left;
+      }
+
+      p {
+        margin: 0;
       }
     }
 
@@ -159,7 +167,7 @@ body.static-pages.home {
   footer {
     margin: 0 auto;
     box-shadow: none;
-    max-width: 800px;
+    width: 52em * 1.0 / 0.8;
   }
 }
 
