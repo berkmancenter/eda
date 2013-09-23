@@ -14,7 +14,7 @@ body.static-pages {
     padding: 1em 1em 8em 1em;
 
     h1 {
-      font-family: Georgia, serif;
+      font-family: 'Source Sans Pro';
       font-size: 1.1em;
       font-variant: small-caps; 
       font-weight: normal;
@@ -55,7 +55,6 @@ body.static-pages.home {
   .home-ornaments {
     background: url('ornament-med-tan.png') repeat-x 0 0;
     display: inline-block;
-    font-family: Georgia, serif;
     font-size: 36px;
     font-weight: normal;
     height: 75px;
