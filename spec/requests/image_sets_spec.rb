@@ -20,19 +20,22 @@ describe ( 'image_sets requests' ) {
       # require test:seed
       let ( :w ) { awake_work }
 
-      context 'with valid work, stanzas, image', :js => true do
+      # valid work, stanzas, image
+      context 'with normal work', :js => true do
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
-        it ( 'should have three main sections' ){ 
-          should have_selector 'h1', text: awake
+        it { 
+          # header is no longer visible at top of page
+          should_not have_selector 'h1', text: awake
+        }
 
+        it ( 'should have three main sections' ){ 
           should have_selector( '#search-panel' );
 
           should have_selector( '#interactive-image-panel' );
 
           should have_selector( '#work-panel' );
         }
-
       end
 
       context 'with valid next image' do
@@ -175,6 +178,17 @@ describe ( 'image_sets requests' ) {
             }
           }
         }
+      end
+
+      describe 'interactive image panel', :js => true do
+        let ( :image_set ) { w.image_set.children.first }
+
+        before { visit edition_image_set_path( w.edition, image_set ) }
+
+        it ( 'should have header' ) {
+          should have_css '#interactive-image-panel h1', text: image_set.image.metadata['Label']
+        }
+        
       end
 
       describe 'image drawer', :js => true do

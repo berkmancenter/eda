@@ -1,4 +1,5 @@
 <div id="interactive-image-panel" class="panel">
+  <h1><%= image_set.image && image_set.image.metadata ? image_set.image.metadata['Label'] : t(:image_not_available) %></h1>
     <%= render partial: "image_sets/interactive_image", locals: { image_set: image_set } %>
 
     <div class="image-drawer bottom drawer">

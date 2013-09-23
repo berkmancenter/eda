@@ -25,28 +25,14 @@
     white-space: nowrap;
 
     & > header {
-        padding-left: 3%;
-        height: 9%;
-        margin: 0;
-        .edition-name {
-            display: inline-block;
-            margin-top: 0;
-            margin-bottom: 0.2em;
-        }
-        .edition-creator {
-        }
-        .image-set-name {
-            margin: 0;
-            padding-left: 2%;
-            font-size: 1.1em;
-        }
+      display: none;
     }
 
     .panel {
         bottom: 0;
         top: 0;
         margin: 0;
-        height: 91%;
+        height: 100%;
         position: relative;
         vertical-align: top;
         display: inline-block;
@@ -84,14 +70,24 @@
          */
 
     }
+
     #interactive-image-panel {
         width: 42%;
+
         /*
         -moz-transition: width, left 0.7s;
         -webkit-transition: width, left 0.7s;
         transition: width, left 0.7s;
          */
+
+      &>h1 {
+        font-size: .8em;
+        position: relative;
+        text-align: center;
+        top: -1.5em;
+      }
     }
+
     #work-panel {
         width: 33%;
         /*
