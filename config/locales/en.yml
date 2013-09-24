@@ -68,5 +68,6 @@ en:
     hints: 
       edition:
         parent: 'Start with images and works from an existing edition'
+        short_name: 'A shorter name for the edition'
         author: "The displayed name of the edition's creator"
         work_number_prefix: 'Prefix every work number with an edition-specific code'

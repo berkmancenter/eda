@@ -1,8 +1,9 @@
 <div id="work-table-wrapper">
+    <h2><%= edition.inspect %></h2>
 <table class="works">
     <thead>
         <tr>
-            <% unless defined? edition %>
+            <% if !defined?(edition) || edition.nil? %>
                 <th>Edition</th>
             <% end %>
             <th>Number</th>
@@ -15,7 +16,7 @@
     <tbody>
 <% works.each do |work| %>
     <tr>
-        <% unless defined? edition %>
+        <% if !defined?(edition) || edition.nil? %>
             <td><%= work.edition.short_name %></td>
         <% end %>
         <td><%= strip_tags work.full_id %></td>
@@ -28,7 +29,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <% unless defined? edition %>
+            <% if !defined?(edition) || edition.nil? %>
                 <th class="edition-footer"></th>
             <% end %>
             <th></th>

@@ -166,21 +166,21 @@ namespace :emily do
             else
                 !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
             end
-            Rake::Task["emily:import:transcriptions:franklin"].execute
-            Rake::Task["emily:import:transcriptions:johnson"].execute
-            Rake::Task["emily:import:transcriptions:gutenberg"].execute
-            Rake::Task["emily:import:transcriptions:revisions"].execute
-            Rake::Task["emily:import:metadata"].execute
-            Rake::Task["emily:import:publication_history"].execute
-            Rake::Task["emily:import:images:harvard"].execute
-            Rake::Task["emily:import:images:amherst"].execute
-            Rake::Task["emily:import:images:bpl"].execute
-            #Rake::Task["emily:connect:images_to_editions"].execute
-            #Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
-            #Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
-            #Rake::Task["emily:connect:images_to_transcriptions"].execute
-            #Rake::Task["emily:import:images:missing"].execute
-            #Rake::Task["emily:import:lexicon"].execute
+            #Rake::Task["emily:import:transcriptions:franklin"].execute
+            #Rake::Task["emily:import:transcriptions:johnson"].execute
+            #Rake::Task["emily:import:transcriptions:gutenberg"].execute
+            #Rake::Task["emily:import:transcriptions:revisions"].execute
+            #Rake::Task["emily:import:metadata"].execute
+            #Rake::Task["emily:import:publication_history"].execute
+            #Rake::Task["emily:import:images:harvard"].execute
+            #Rake::Task["emily:import:images:amherst"].execute
+            #Rake::Task["emily:import:images:bpl"].execute
+            Rake::Task["emily:connect:images_to_editions"].execute
+            Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
+            Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
+            Rake::Task["emily:connect:images_to_transcriptions"].execute
+            Rake::Task["emily:import:images:missing"].execute
+            Rake::Task["emily:import:lexicon"].execute
         end
 
         desc 'Import minimum content necessary to test'

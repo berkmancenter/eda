@@ -21,12 +21,7 @@ class ImageSetsController < ApplicationController
             pull_works_for_edition_image_set(@edition, @image_set)
             @next_image = @image_set.root.leaf_after(@image_set)
             @previous_image = @image_set.root.leaf_before(@image_set)
-
-            if @this_editions_works.nil? || @this_editions_works.empty?
-                redirect_to edition_image_set_url(@edition, @next_image)
-            else
             render "image_sets/works"
-            end
         else
             render
         end

@@ -55,7 +55,7 @@ module WorkHelper
             else
                 disabled << link unless link == selected_edition.id
             end
-            options << [edition.name, link]
+            options << [edition.short_name, link]
         end
         options = options.sort_by{|o| o[1] == selected ? 1 : 2}
 

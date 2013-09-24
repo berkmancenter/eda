@@ -4,6 +4,7 @@
             <%= f.input :parent, include_blank: t(:empty_edition_choice), collection: Edition.is_public %>
         <% end %>
         <%= f.input :name %>
+        <%= f.input :short_name %>
         <%= f.input :author %>
         <%= f.input :description, input_html: { rows: 10 } %>
         <%= f.input :work_number_prefix %>

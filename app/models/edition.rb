@@ -44,7 +44,7 @@ class Edition < ActiveRecord::Base
     }
     default_scope order(:completeness)
 
-    before_create :setup_sets
+    before_create :setup_sets, :setup_name
 
     def images
         image_set.all_images
@@ -80,6 +80,10 @@ class Edition < ActiveRecord::Base
     def copy_tree_from_parent(relation)
         root = parent.send(relation)
         self.send("#{relation}=", root.duplicate)
+    end
+
+    def setup_name
+        self.short_name = name unless self.short_name
     end
 
     def setup_sets

@@ -85,10 +85,17 @@ $( function( ) {
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {
-      var idx = $.bbq.getState( this.id, true ) || 0;
+      var idx = $.bbq.getState( this.id, true );
+
+      // show the drawer if it contains a selected tab
+      if ($( this ).hasClass( 'collapsed' ) && typeof idx != 'undefined') {
+          $(this).find('.drawer-handle').click();
+      }
+      idx = idx || 0;
 
       $( this ).find( tabSelector ).removeClass( "selected" ).eq( idx ).addClass( "selected" );
       $( this ).find( contentSelector ).hide( ).eq( idx ).show( );
+
     } );
   } );
 
