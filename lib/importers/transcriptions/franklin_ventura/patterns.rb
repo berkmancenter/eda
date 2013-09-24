@@ -1,5 +1,5 @@
 module Patterns
-    Holder_extractor = /\(<F53621>(?<loc_code>(a|h|bpl|y-brbl|y-mssa))<F255>( (1896)?<F53621>(?<subloc_code>(b|h|l|st|mlt|mtb|pc|to|tr))<F255>(, )?)?(?<id>[^\)]*)\)/
+    Holder_extractor = /(?<before>\(|; |and )<F53621>(?<loc_code>(a|h|bpl|y-brbl|y-mssa))<F255>( (1896)?<F53621>(?<subloc_code>(b|h|l|st|mlt|mtb|pc|to|tr))<F255>(, )?)? ?(?<id>[^\)<;]+)(?<after>\)|;| and)/
 
     Title_pattern = /(Y_PNT_PNT|@PNT[^\d]|@PNT2_1|Y_PNT2_PNT2)/ 
     Title_extractor = /= (?<number>\d*)\t(?<title>[^\r\n]*)/
@@ -44,9 +44,11 @@ module Patterns
     Normal_font = /(<(F|P)*(255|58586)*(M|D)*>)/
     Normal_font_reversed = /(>(M|D)*(552|68585)*(F|P)*)</
 
+    Secondary_source_pattern = /\[<em>(?<variant>.{1,3})<\/em>\]/
+
     Poem_line_extractors = [
-        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
-        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <P9(MI)?>(?<variant>.*)<P255(D)?> ?\t(?<line>[^\t\r\n]*)/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <(P9)?(MI)?>(?<variant>.*)<(P255)?(D)?> ?\t(?<line>[^\t\r\n]*)\t(?<fascicle>[^\r\n]*)?/,
+        /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = <(P9)?(MI)?>(?<variant>.*)<(P255)?(D)?> ?\t(?<line>[^\t\r\n]*)/,
         /@PS = (<F58586P9M>)?\[<MI>(?<variant>.*)<(D|M)>\](<F255P255D>)?\t(?<line>[^\t]*)\t?(?<line_num>\d*)/,
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\t]*)\t(?<line_num>\d*)/,
         /(@PS(_NO-RT-IND)?|@PM(_NO-RT-IND)?|@PMS|@POEM1M|@POEM1S|@PE) = \t(?<line>[^\r\n]*)/

@@ -1,6 +1,6 @@
 <% work.stanzas.each do |stanza| %>
 <% stanza.lines.each do |line| %>
-<%= raw render_line(line).gsub(/(<i>|<\/i>)/,'') %>
+<%= HTMLEntities.new.decode(strip_tags(render_line(line))) %>
 <% end -%>
 <% unless stanza == work.stanzas.last -%>
 

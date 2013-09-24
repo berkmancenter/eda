@@ -10,9 +10,20 @@ namespace :emily do
 
         desc 'Process Amherst images to cut double images into singles'
         task :amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            output_dir = args[:output_dir] || Eda::Application.config.emily['image_directory']
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
-            AmherstImageProcessor.new.process_directory(args[:input_dir], output_dir, web_image_output_dir)
+            AmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            AmherstImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process BPL images to create tifs'
+        task :bpl_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            BPLImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            #BPLImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
         desc 'Create web-ready images for page turning'
@@ -20,13 +31,32 @@ namespace :emily do
             output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             HarvardImageProcessor.new.process_directory_for_web(args[:input_dir], output_dir)
         end
+
+        desc 'Create images to works map'
+        task :images_to_transcriptions_map, [:output_map_file, :blank_images_file] => [:environment] do |task, args|
+            output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
+            blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
+            ImageToTranscriptionConnector.new.create_map(output_map_file, blank_images_file)
+        end
+
+        desc 'Connect all existing transcriptions together'
+        task :transcriptions_map, [:map_file, :publication_history_file] => [:environment] do |task, args|
+            map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
+            TranscriptionConnecter.new.connect(map_file)
+        end
     end
 
     namespace :connect do
-        desc 'Connect all existing transcriptions together'
-        task :transcriptions, [:j_to_f_map_file] => [:environment] do |task, args|
-            map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
-            TranscriptionConnecter.new.connect(map_file)
+        desc 'Connect images to editions'
+        task :images_to_editions  => [:environment] do |task|
+            ImageToEditionConnector.new.connect
+        end
+
+        desc 'Connect images to works using the map'
+        task :images_to_transcriptions, [:image_to_work_map_file, :work_map_file] => [:environment] do |task, args|
+            image_to_work_map_file = args[:image_to_work_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
+            work_map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
+            ImageToTranscriptionConnector.new.connect(image_to_work_map_file, work_map_file)
         end
     end
 
@@ -40,10 +70,25 @@ namespace :emily do
     end
 
     namespace :import do
+        desc 'Import work metadata CSV'
+        task :metadata, [:filename, :edition_prefix] => [:environment] do |task, args|
+            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_metadata.csv')
+            edition_prefix = args[:edition_prefix] || 'F'
+            WorkMetadataImporter.new.import(filename, edition_prefix)
+        end
+
+        desc 'Import work publication history CSV'
+        task :publication_history, [:filename, :edition_prefix] => [:environment] do |task, args|
+            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
+            edition_prefix = args[:edition_prefix] || 'F'
+            PublicationHistoryImporter.new.import(filename, edition_prefix)
+        end
+
         namespace :transcriptions do
             desc 'Import transcription corrections'
-            task :corrections, [:filename] => [:environment] do |task, args|
-                CorrectionsImporter.new.import(args[:filename])
+            task :revisions, [:filename] => [:environment] do |task, args|
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'tei_corrections', 'EDA-linereading-FranklinV1.xml')
+                RevisionImporter.new.import(filename)
             end
 
             desc 'Import Johnson works'
@@ -67,28 +112,22 @@ namespace :emily do
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
                 FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
-
-            desc 'Group variants into work sets'
-            task :group_variants, [:edition_prefix] => [:environment] do |task, args|
-                edition_prefix = args[:edition_prefix] || 'F'
-                edition = Edition.find_by_work_number_prefix(edition_prefix)
-                FranklinVentura::Importer.new.group_variants(edition)
-            end
-
         end
 
         namespace :images do 
             desc 'Import image instances from METS records'
-            task :harvard, [:directory, :j_to_f_map_file, :max_images, :test] => [:environment] do |task, args|
+            task :harvard, [:directory, :j_to_f_map_file, :max_images] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
                 max_images = args[:max_images]
-                test = !!args[:test]
-                HarvardImageImporter.new.import(directory, map_file, max_images, test)
+                HarvardImageImporter.new.import(directory, map_file, max_images)
             end
 
             desc 'Import Amherst images'
-            task :amherst => [:environment] do
+            task :amherst, [:image_directory, :mods_directory] => [:environment] do |t, args|
+                image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_output')
+                mods_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
+                AmherstImageImporter.new.import(image_directory, mods_directory)
             end
 
             desc 'Create missing images'
@@ -98,8 +137,8 @@ namespace :emily do
 
             desc "Import images from BPL's Flickr"
             task :bpl, [:image_dir, :j_to_f_map_file] => [:environment] do |t, args|
-                map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
-                BPLFlickrImporter.new.import(args[:image_dir], map_file)
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'bpl')
+                BPLFlickrImporter.new.import(image_dir)
             end
 
             desc 'Import Library of Congress images'
@@ -120,6 +159,30 @@ namespace :emily do
             TEIImporter.new.import_from_file(edition, args[:number], args[:variant], args[:filename])
         end
 
+        desc 'Import everything'
+        task :everything, [:use_existing_maps] => [:environment] do |task, args|
+            if args[:use_existing_maps].nil?
+                use_existing_maps = true
+            else
+                !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
+            end
+            Rake::Task["emily:import:transcriptions:franklin"].execute
+            Rake::Task["emily:import:transcriptions:johnson"].execute
+            Rake::Task["emily:import:transcriptions:gutenberg"].execute
+            Rake::Task["emily:import:transcriptions:revisions"].execute
+            Rake::Task["emily:import:metadata"].execute
+            Rake::Task["emily:import:publication_history"].execute
+            Rake::Task["emily:import:images:harvard"].execute
+            Rake::Task["emily:import:images:amherst"].execute
+            Rake::Task["emily:import:images:bpl"].execute
+            #Rake::Task["emily:connect:images_to_editions"].execute
+            #Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
+            #Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
+            #Rake::Task["emily:connect:images_to_transcriptions"].execute
+            #Rake::Task["emily:import:images:missing"].execute
+            #Rake::Task["emily:import:lexicon"].execute
+        end
+
         desc 'Import minimum content necessary to test'
         task :test_data, [:data_directory] => [:environment] do |t, args|
            # Rake::Task["emily:import:transcriptions:franklin"].execute #({:start_year => 1862, :end_year => 1862, :error_check => false})
@@ -127,6 +190,32 @@ namespace :emily do
             Rake::Task["emily:import:images:harvard"].execute#({:max_images => 500, :test => true})
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
+        end
+    end
+
+    namespace :dump do
+        desc 'Dump work metadata'
+        task :work_metadata, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_metadata.csv')
+            WorkMetadataDumper.new.dump(output_file)
+        end
+
+        desc 'Dump work text'
+        task :work_text, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_text.csv')
+            WorkTextDumper.new.dump(output_file)
+        end
+
+        desc 'Dump work TEI'
+        task :work_tei, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_work_tei.csv')
+            WorkTEIDumper.new.dump(output_file)
+        end
+
+        desc 'Dump image metadata'
+        task :image_metadata, [:output_file] => [:environment] do |t, args|
+            output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_image_metadata.csv')
+            ImageMetadataDumper.new.dump(output_file)
         end
     end
 

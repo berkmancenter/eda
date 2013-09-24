@@ -12,6 +12,19 @@
 
 }
 
+em {
+    font-style: italic;
+}
+
+u {
+    text-decoration: underline;
+}
+
+b {
+    font-weight: normal;
+    font-variant: small-caps;
+}
+
 body.works.edit, body.works.new, body.works.create {
     overflow: hidden;
 }

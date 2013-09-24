@@ -23,16 +23,16 @@ class Edition < ActiveRecord::Base
     belongs_to :image_set, dependent: :destroy
     belongs_to :work_set, dependent: :destroy
 
-    has_many :works, after_add: :add_work_to_work_set, dependent: :destroy
+    has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
 
     attr_accessible :author, :completeness, :date, :description, :name,
-        :work_number_prefix, :parent_id, :public
+        :work_number_prefix, :parent_id, :public, :short_name, :citation
 
     validates :name, presence: true, length: { maximum: 200 }
     validates :description, length: { maximum: 2000 }
     validates :author, length: { maximum: 200 }
     validates :date, length: { maximum: 200 }
-    validates :work_number_prefix, length: { maximum: 2 }
+    validates :work_number_prefix, length: { maximum: 6 }
 
     scope :is_public, where(public: true)
     scope :for_user, lambda { |user|

@@ -16,6 +16,7 @@ class Line < ActiveRecord::Base
   has_many :line_modifiers, :through => :work, :conditions => proc{ "start_line_number <= #{number} AND end_line_number >= #{number}" }
   attr_accessible :number, :text
 
+  after_initialize :load_modifiers
   before_destroy :destroy_mods
 
   def chars
@@ -23,7 +24,7 @@ class Line < ActiveRecord::Base
   end
 
   def mods_at(address)
-      line_modifiers.where(:start_address => address, :parent_id => nil)
+      @mods.select{|m| m.start_address == address && m.parent_id == nil}
       #work.line_modifiers.all.select{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
   end
 
@@ -36,6 +37,10 @@ class Line < ActiveRecord::Base
   end
 
   private
+
+  def load_modifiers
+      @mods = line_modifiers.all
+  end
 
   def destroy_mods
       work.line_modifiers.where("start_line_number <= #{number} AND end_line_number >= #{number}").destroy_all

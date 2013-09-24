@@ -31,11 +31,11 @@ class Work < ActiveRecord::Base
     has_many :revisions, dependent: :destroy
     has_many :appearances, class_name: 'WorkAppearance', dependent: :destroy
 
-    attr_accessible :date, :metadata, :number, :title, :variant, :text
+    attr_accessible :date, :metadata, :number, :title, :variant, :text, :secondary_source
 
     validates :date, :number, :title, :variant, length: { maximum: 200 }
     validates :number, numericality: { only_integer: true }
-    validate :metadata_size
+    #validate :metadata_size
 
     after_initialize :setup_defaults
     before_create :setup_work
@@ -114,21 +114,48 @@ class Work < ActiveRecord::Base
         self.image_set = image_set
     end
 
+    def clear_holder_info
+        metadata['holder_code'] = nil
+        metadata['holder_subcode'] = nil
+        metadata['holder_id'] = nil
+    end
+
     def holder_code=(code)
-        self.metadata['holder_code'] = code
+        if metadata['holder_code']
+            self.metadata['holder_code'] << code
+        else
+            self.metadata['holder_code'] = [code]
+        end
     end
 
     def holder_subcode=(subcode)
-        self.metadata['holder_subcode'] = subcode
+        if metadata['holder_subcode']
+            self.metadata['holder_subcode'] << subcode
+        else
+            self.metadata['holder_subcode'] = [subcode]
+        end
     end
 
     def holder_id=(id)
-        self.metadata['holder_id'] = id
+        if metadata['holder_id']
+            self.metadata['holder_id'] << id
+        else
+            self.metadata['holder_id'] = [id]
+        end
     end
 
     def fascicle=(fascicle)
         self.metadata['fascicle'] = fascicle
     end
+
+    def note=(note)
+        if metadata['notes']
+            self.metadata['notes'] << note
+        else
+            self.metadata['notes'] = [note]
+        end
+    end
+
 
     def fascicle_position=(position)
         self.metadata['fascicle_position'] = position
@@ -195,10 +222,20 @@ class Work < ActiveRecord::Base
         (!new_record? && count == 1) || (new_record? && count == 0)
     end
 
+    def self.find_by_full_id(id)
+        match = id.match(/^(?<prefix>[A-Z]+([0-9]*-)?)(?<number>\d+)(?<variant>[A-Z](\.[0-9])?)?/)
+        edition = Edition.find_by_work_number_prefix(match[:prefix])
+        return unless edition
+        works = edition.works
+        works = works.where(number: match[:number])
+        works = works.where(variant: match[:variant]) if match[:variant]
+        works.first
+    end
+
     protected
 
     def metadata_size
-        if metadata.to_yaml.size > 2000
+        if metadata.to_yaml.size > 10000
             errors.add(:metadata, I18n.t('errors.messages.too_big'))
         end
     end

@@ -12,9 +12,47 @@ class TEIImporter
        works.first
     end
 
-    def parse_id(id)
-       id_pattern = /([A-Za-z]*)(\d*)-?(\D.*)/
-       id_pattern.match(id).captures
+    def parse_line(line, line_index = nil)
+        orphans = {}
+        line_modifiers = []
+        if line['n']
+            line_num = line['n']
+        else
+            line_num = line_index
+        end
+        if line_num.nil?
+            puts 'Need line number:'
+            puts line
+            exit
+        end
+        line.traverse do |child|
+            next unless child.class == Nokogiri::XML::Element
+            m = create_modifier_from_node(child)
+            next unless m
+            m.start_address = start_address(child.parent, child)
+            if child.parent == line
+                m.assign_attributes(
+                    :start_line_number => line_num,
+                    :end_line_number => line_num
+                )
+            else
+                if orphans[child.parent]
+                    orphans[child.parent] << m
+                else
+                    orphans[child.parent] = [m]
+                end
+            end
+            if orphans[child]
+                m.children = orphans[child]
+                orphans[child] = nil
+            end
+            line_modifiers << m
+        end
+        {
+            line: Line.new( :number => line_num, :text => clean_str(line)),
+            modifiers: line_modifiers
+        }
+
     end
 
     def import(string, work = nil)
@@ -30,39 +68,9 @@ class TEIImporter
             s = Stanza.new(:position => i)
             stanza.css('l').each do |line|
                 line_index += 1
-                orphans = {}
-                if line['n']
-                    line_num = line['n'] = line_index
-                else
-                    line_num = line_index
-                end
-                line.traverse do |child|
-                    next unless child.class == Nokogiri::XML::Element
-                    m = create_modifier_from_node(child)
-                    next unless m
-                    m.start_address = start_address(child.parent, child)
-                    if child.parent == line
-                        m.assign_attributes(
-                            :start_line_number => line_num,
-                            :end_line_number => line_num
-                        )
-                    else
-                        if orphans[child.parent]
-                            orphans[child.parent] << m
-                        else
-                            orphans[child.parent] = [m]
-                        end
-                    end
-                    if orphans[child]
-                        m.children = orphans[child]
-                        orphans[child] = nil
-                    end
-                    work.line_modifiers << m
-                end
-                s.lines << Line.new(
-                    :number => line_num,
-                    :text => clean_str(line)
-                )
+                line_object, modifiers = parse_line(line, line_index).values
+                line_index = line_object.line_num
+                s.lines << line_object
             end
             work.stanzas << s
         end
@@ -79,9 +87,9 @@ class TEIImporter
     def clean_str(parent_node, node_to_keep = nil)
         mine = Nokogiri.XML('<doc xmlns="http://www.tei-c.org/ns/1.0"><mine></mine></doc>').at_css('mine')
         parent_node.traverse do |c|
-            mine << c.clone if c == node_to_keep || (['text'].include?(c.name) && c.parent == parent_node)
+            mine << c.clone if c == node_to_keep || (['text', 'emph'].include?(c.name) && c.parent == parent_node)
         end
-        mine.inner_html
+        mine.inner_html.gsub('emph>', 'em>')
     end
 
     def create_modifier_from_node(node)
@@ -116,7 +124,6 @@ class TEIImporter
         end
         m
     end
-        
 
     def start_address(line_node, node_to_find)
         clean_str(line_node, node_to_find).index(node_to_find.to_html)

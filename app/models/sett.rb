@@ -79,7 +79,8 @@ class Sett < ActiveRecord::Base
     def duplicate
         self.class.skip_callback :create, :before, :set_default_left_and_right
         self.class.skip_callback :save, :before, :store_new_parent
-        self.class.skip_callback :save, :after, :move_to_new_parent, :set_depth!
+        self.class.skip_callback :save, :after, :move_to_new_parent
+        self.class.skip_callback :save, :after, :set_depth!
 
         offset = Sett.maximum('rgt') + 1 - lft
 
@@ -102,14 +103,15 @@ class Sett < ActiveRecord::Base
         Sett.transaction do
             cloned_tree.each do |clone|
                 next if clone.root?
-                clone.parent_id = map[clone.parent_id]
+                clone.update_column(:parent_id, map[clone.parent_id])
                 clone.save!
             end
         end
 
         self.class.set_callback :create, :before, :set_default_left_and_right
         self.class.set_callback :save, :before, :store_new_parent
-        self.class.set_callback :save, :after, :move_to_new_parent, :set_depth!
+        self.class.set_callback :save, :after, :move_to_new_parent
+        self.class.set_callback :save, :after, :set_depth!
 
         cloned_tree.first
     end

@@ -22,7 +22,9 @@ module FranklinVentura
         include ActionView::Helpers::SanitizeHelper
         def create_edition
             edition = Edition.new(
-                name: 'The Poems of Emily Dickinson: Variorum Edition',
+                name: 'The Poems of Emily Dickinson, Variorum Edition, Franklin, 1998',
+                short_name: 'Franklin Variorum 1998',
+                citation: 'The Poems of Emily Dickinson, Variorum Edition, Edited by R. W. Franklin, Cambridge, Mass.: Belknap Press of Harvard University Press, 1998',
                 author: 'R. W. Franklin',
                 date: Date.new(1998, 1, 1),
                 work_number_prefix: 'F',
@@ -40,17 +42,18 @@ module FranklinVentura
             edition
         end
 
-        def sub(pattern)
-            Regexp.new(pattern.to_s.gsub("<", '\|--').gsub('>', '--\|'))
-        end
-
-        def markup_file(file)
+        def markup_file(file, simple = false)
             string = file.read
-            string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\n\\k<title>\n</title>\n")
+            string.gsub!(Full_title_extractor, "\n</work>\n\n<work>\n<number>\\k<number></number>\n<title>\\k<title></title>\n")
+            string.gsub!(Variant_title_extractor, "\n<title>\\k<title></title>\n")
             string.gsub!(Poem_start_pattern, "\n<poem>\n\\1")
             string.gsub!(Poem_end_pattern, "\n</stanza>\n</poem>\n\n\\1")
-            string.gsub!(Publication_extractor, "\n<publication>\\k<publications></publication>\n")
+            string.gsub!(Published_extractor, "<published><publication>\\k<publication></publication><date>\\k<year>-\\k<month>-\\k<day></date><pages>\\k<pages></pages><variant>\\k<source_variant></variant></published>") unless simple
+            string.gsub!(Publication_extractor, "\n<publications>\\k<publications></publications>\n")
             string.gsub!(Manuscript_extractor, "\n<manuscript>\\k<manuscript></manuscript>\n")
+            # Twice on purpose for when patterns overlap
+            string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
+            string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
             string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
             string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
             string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
@@ -66,12 +69,33 @@ module FranklinVentura
             string = fix_font_changes(string)
             string.gsub!('<<', '&laquo;')
             string.gsub!('>>', '&raquo;')
-            string = sanitize(string, tags: %w(em b u p deviations fascicle line variant linenum year work title poem stanza publication manuscript number alternates emendations divisions revisions))
+            string.gsub!('<~>', '<br/>')
+            string = sanitize(string, tags: %w(br em b u p holder loccode subloccode id deviations fascicle line variant linenum year work title poem stanza publications published publication date pages manuscript number alternates emendations divisions revisions))
             string.sub!('</work>', '')
             string << "\n</work>\n"
             string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
             string.gsub!(/^\s*$\n/, '')
+            string = split_variants(string)
+            string = stick_modifiers_in_poems(string)
             string
+        end
+
+        def stick_modifiers_in_poems(string)
+            new_string = ''
+            have_poem_end = false
+            hold_pattern = /^(<divisions|<emendations|<revisions|<alternates)/
+            poem_end_pattern = /<\/poem>/
+            string.each_line do |line|
+                if line.match(poem_end_pattern)
+                    have_poem_end = true
+                elsif !line.match(hold_pattern) && have_poem_end
+                    new_string << "</poem>\n#{line}"
+                    have_poem_end = false
+                else
+                    new_string << line
+                end
+            end
+            new_string
         end
 
         def markup_poem_lines(string)
@@ -139,189 +163,152 @@ module FranklinVentura
             new_string
         end
 
-        def process_file(file)
-            in_poem, ignore_next_line = false, false
-            poem, stanza = nil, nil
-            tags, variant_titles = [], []
-            held_holder_code, held_holder_subcode, held_holder_id = nil, nil, nil
-            file.each_line do |line|
-                # Find tags that we'll have to translate
-                #line.scan(/<([-0-9A-Z%]*)>/) { |m| tags << m[0] }
-                if ignore_next_line
-                    ignore_next_line = false
-                    next
-                end
-                if line.match(Ignore_next_line_pattern)
-                    ignore_next_line = true
-                end
-
-                # Is this a title?
-                if line.match(Title_pattern)
-                    match = Title_extractor.match(line)
-                    if match && Title_extractor.named_captures.keys.all?{ |name| match[name] }
-                        close_poem(poem) if poem
-                        poem = Work.new(
-                            number: match[:number].to_i,
-                            title: CharMap::replace_no_itals(match[:title]).strip,
-                            date: Date.new(File.basename(file.path).to_i)
-                        )
-                    end
-                end
-
-                if held_holder_code && in_poem
-                    poem.holder_code = held_holder_code
-                    held_holder_code = nil
-                end
-                if held_holder_subcode && in_poem
-                    poem.holder_subcode = held_holder_subcode
-                    held_holder_subcode = nil
-                end
-                if held_holder_id && in_poem
-                    poem.holder_id = held_holder_id
-                    held_holder_id = nil
-                end
-
-                if holder_match = line.match(Holder_extractor)
-                    held_holder_code = holder_match[:loc_code].upcase.strip if holder_match[:loc_code]
-                    held_holder_subcode = holder_match[:subloc_code].upcase.strip if holder_match[:subloc_code]
-                    if holder_match[:subloc_code] == 'PC'
-                        held_holder_subcode = '1896PC'
-                    end
-                    held_holder_id = holder_match[:id].strip if holder_match[:id]
-                end
-
-                # Is this a second or third title?
-                match = Variant_title_extractor.match(line)
-                variant_titles << match[:title] if match && match[:title]
-
-                in_poem = true if line.match(Poem_start_pattern)
-
-                # Add all our line modifieres
-                add_modifiers!(poem, line)
-
-                if line.match(Publication_pattern)
-                    publications = line.match(Publication_extractor)['publications']
-                    publications.scan(Published_extractor) do |match|
-                        args = Hash[Published_extractor.names.zip(match)]
-                        begin
-                            date = Date.parse([args['year'], args['month'], args['day']].join('-').gsub(/-*$/, ''))
-                        rescue
-                            date = nil
-                        end
-                        poem.appearances << WorkAppearance.new(:year => args['year'].to_i, :date => date)
-                    end
-                end
-
-                if in_poem
-                    # Setup the stanza
-                    stanza = Stanza.new if line.match(Stanza_start_pattern)
-
-                    if line.match(Stanza_boundary_pattern)
-                        poem.stanzas << stanza
-                        stanza = Stanza.new
-                    end
-
-                    matches = Poem_line_extractors.map{ |e| e.match(line) } \
-                        .delete_if{|m| m.nil?} \
-                        .reduce({}){|captures, match| captures.merge(match.named_captures)}
-
-                    unless matches.empty?
-                        # If we have a new variant, create a new poem
-                        if matches['variant']
-                            if poem.variant.nil?
-                                poem.variant = CharMap::replace_no_itals(matches['variant'])
-                                puts "poem: #{poem.number} #{poem.variant}"
-                            else
-                                title = variant_titles.empty? ? poem.title : variant_titles.shift
-                                close_poem(poem)
-                                poem = Work.new(
-                                    number: poem.number,
-                                    title: CharMap::replace_no_itals(title).strip,
-                                    variant: CharMap::replace(matches['variant']),
-                                    date: Date.new(File.basename(file.path).to_i)
-                                )
-                                puts "poem: #{poem.number} #{poem.variant}"
-                            end
-                        end
-
-                        stanza_line = Line.new(:text => CharMap::replace(matches['line']).strip)
-                        stanza_line.number = line_number(poem, stanza, matches)
-                        stanza.lines << stanza_line
-                    end
-
-                    # Add stanza to poem if complete
-                    if line.match(Poem_end_pattern)
-                        poem.stanzas << stanza
-                        in_poem = false
-                    end
-                end
-            end
-            close_poem(poem) if poem
-        end
-
         def import(directory, from_year = 1850, to_year = 1886)
             puts "Importing Franklin works"
             edition = create_edition
             @poems = []
-            string = ''
+            simple_string = ''
+            complex_string = ''
 
             Dir.open(directory).sort.each do |filename|
-                next unless File.extname(filename) == '.TXT' && (from_year..to_year).include?(filename.to_i)
-                #process_file(File.open("#{directory}/#{filename}"))
-                string << markup_file(File.open("#{directory}/#{filename}"))
+                next unless File.extname(filename) == '.TXT' && ((from_year..to_year).include?(filename.to_i) || filename == 'UNDATED.TXT')
+                simple_string << markup_file(File.open("#{directory}/#{filename}"), true)
+                complex_string << markup_file(File.open("#{directory}/#{filename}"))
             end
-            string = "<works>#{string}</works>"
+            simple_string = "<works>#{simple_string}</works>"
+            complex_string = "<works>#{complex_string}</works>"
 
-            File.write(Rails.root.join('tmp', 'franklin_test.xml'), string)
-            works = parse_franklin(string)
+            File.write(Rails.root.join('tmp', 'franklin_test_complex.xml'), complex_string)
+            File.write(Rails.root.join('tmp', 'franklin_test_simple.xml'), simple_string)
+            works = parse_xml(simple_string, complex_string)
             edition.works = works
             edition.save!
             post_process!(edition)
         end
 
-        def parse_franklin(string)
+        # For poems like 1356
+        def split_variants(string)
+            string.gsub(/<variant>([^<]+), ([^<]+)<\/variant>/, '<variant>\1</variant><variant>\2</variant>')
+        end
+
+        def breakup_publications(work)
+            work.metadata['Publications'] = work.metadata['Publication'].split(/(\.|;)/).select{|s| !['.',';'].include?(s)}
+        end
+
+        def parse_xml(simple_string, complex_string)
             works = []
-            doc = Nokogiri::XML::Document.parse(string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-            doc.css('work').each do |work|
+            doc = Nokogiri::XML::Document.parse(complex_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            simple_doc = Nokogiri::XML::Document.parse(simple_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            pbar = ProgressBar.new('Parsing Franklin', doc.css('work').count)
+            doc.css('work').each_with_index do |work, i|
+                simple_work = simple_doc.css('work')[i]
                 year = work.xpath('preceding-sibling::year').first.text.to_i
                 number = work.at('number').text.to_i
-                title = work.at('title').text
-                work.css('poem').each do |poem|
-                    variant = poem.at('variant')
-                    next unless variant
-                    w = Work.create(
-                        number: number,
-                        title: title,
-                        date: Date.new(year, 1, 1),
-                        variant: variant.inner_html
-                    )
-                    poem.css('stanza').each_with_index do |stanza, i|
-                        s = w.stanzas.build(position: i)
-                        stanza.css('line').each do |line|
-                            if line.at('linenum')
-                                line_number = line.at('linenum').text.to_i
-                                line.at('linenum').remove
-                            else
-                                line_number = line_number(w, s, {'line_num' => ''})
-                            end
-                            s.lines.build(
-                                text: line.inner_html,
-                                number: line_number
-                            )
+                #puts number
+                titles = work.css('title').map(&:text)
+                work.css('poem').each_with_index do |poem, i|
+                    poem.css('variant').each do |variant|
+                        variant = variant.inner_html
+                        next unless variant
+                        secondary = false
+                        if secondary = variant.match(Secondary_source_pattern)
+                            variant = secondary[:variant]
                         end
+                        w = Work.create(
+                            number: number,
+                            title: titles[i] || titles.first,
+                            date: Date.new(year, 1, 1),
+                            variant: variant,
+                            secondary_source: !!secondary
+                        )
+
+                        add_stanzas(w, poem)
+                        add_manuscript(w, work, simple_work)
+                        add_holder_info(w, poem)
+                        add_publication(w, work, simple_work)
+                        breakup_publications(w)
+                        w.save!
+                        add_modifiers!(w, poem)
+                        works << w
                     end
-                    w.save!
-                    works << w
+                    pbar.inc
                 end
             end
             works
         end
 
-        def add_modifiers!(poem, line)
+        def add_holder_info(work, poem_xml)
+            if work.variant == 'A'
+                previous_sibling = poem_xml.parent.at('manuscript')
+            else
+                previous_sibling = poem_xml.previous_element if poem_xml.previous_element.matches?('p')
+            end
+            if previous_sibling && previous_sibling.css('holder').count > 0
+                work.clear_holder_info
+                # Work gets last holder in paragraph
+                previous_sibling.css('holder').each do |holder|
+                    holder_ids = holder.at('id').text.strip.split(/(^\d+\/|,)/).reject{|i| i.to_i == 0}.map{|id| id.strip.sub(/\/$/, '')}
+                    holder_ids.each do |id|
+                        work.holder_code = holder.at('loccode').text.strip
+                        work.holder_subcode = holder.at('subloccode').text.strip
+                        work.holder_id = id
+                    end
+                end
+            end
+        end
+
+        def add_publication(work, work_xml, simple_work_xml)
+            if node = simple_work_xml.at('publications')
+                work.metadata['Publication'] = node.inner_html
+            end
+            if node = work_xml.at('publications')
+                node.css('published').each do |published|
+                    if variant = published.at('variant')
+                        next unless work.variant == variant.text.strip
+                    end
+                    year, month, day = published.at('date').text.split('-').compact
+                    month ||= 1
+                    day ||= 1
+                    work.appearances.create(
+                        publication: published.at('publication').inner_html,
+                        date: Date.parse("#{year}-#{month}-#{day}"),
+                        pages: published.at('pages').text
+                    )
+                end
+            end
+        end
+
+        def add_manuscript(work, work_xml, simple_work_xml)
+            if node = simple_work_xml.at('manuscript')
+                work.metadata['Manuscript'] = node.inner_html
+            end
+        end
+
+        def add_stanzas(work, poem_xml)
+            poem_xml.css('stanza').each_with_index do |stanza, i|
+                s = work.stanzas.build(position: i)
+                stanza.css('line').each do |line|
+                    if line.at('linenum')
+                        line_number = line.at('linenum').text.to_i
+                        line.at('linenum').remove
+                    else
+                        line_number = line_number(work, s, {'line_num' => ''})
+                    end
+                    s.lines.build(
+                        text: line.inner_html,
+                        number: line_number
+                    )
+                end
+            end
+            work
+        end
+
+        def add_modifiers!(poem, poem_xml)
             ['division', 'emendation', 'revision', 'alternate'].each do |var|
                 capped = var.camelize
-                next unless line.match("Patterns::#{capped}_pattern".constantize)
-                instances = prep_modifier(line, "Patterns::#{capped}_extractor".constantize, var.pluralize)
+                next unless node = poem_xml.at(var.pluralize)
+                inner_xml = node.inner_html 
+                instances = prep_modifier(inner_xml)
                 instances.each do |instance|
                     i = self.send("get_#{var}", instance)
                     poem.line_modifiers.push(*i) if i 
@@ -329,21 +316,22 @@ module FranklinVentura
             end
         end
 
-        def close_poem(poem)
-            assign_stanza_positions(poem)
-            poem.save!
-            @poems << poem
-        end
-
         def line_number(poem, stanza, matches)
             line_num = nil
-            # Get line number
+            # First line of work
             if stanza.lines.empty? && (poem.stanzas.empty? || poem.stanzas.size == 1)
                 line_num = 1
+            # Next line in current stanza 
             elsif stanza.lines.last && stanza.lines.last.number
                 line_num = stanza.lines.last.number + 1
-            elsif poem.stanzas.last.lines.last && poem.stanzas.last.lines.last.number
-                line_num = poem.stanzas.last.lines.last.number + 1
+            # Next line in new stanza
+            elsif stanza.position > 0 && poem.stanzas[-2].lines.last.number
+                line_num = poem.stanzas[-2].lines.last.number + 1
+            else
+                puts poem.stanzas.inspect
+                puts stanza.lines.inspect
+                puts matches.inspect
+                exit
             end
             if matches['line_num'].to_i > 0
                 line_num = matches['line_num'].to_i
@@ -355,70 +343,40 @@ module FranklinVentura
             locate_emendations!(edition)
             locate_divisions!(edition)
             locate_alternates!(edition)
-            fix_exceptions!(edition)
-            group_variants(edition)
         end
 
-        def fix_exceptions!(edition)
-            w = Work.find_by_number_and_variant(325, 'C')
-            w.stanzas.each_with_index{|s| s.destroy if s.position > 6} if w
-            w = Work.find_by_number_and_variant(321, 'C')
-            w.stanzas.each_with_index{|s| s.destroy if s.position > 0} if w
-        end
-
-        def group_variants(edition)
-            group = []
-            edition.works.each do |work|
-                if group.empty? || group.last.number == work.number
-                    group << work
-                elsif group.count > 1 && group.last.number != work.number
-                    wg = WorkSet.create!(:name => "#{group.last.number} variants")
-                    group.each do |w|
-                        ws = WorkSet.create!
-                        ws.work = w
-                        ws.move_to_child_of wg
-                        ws.save!
-                    end
-                    wg.save!
-                    group = [work]
-                else
-                    group = [work]
-                end
-            end
-        end
-
-        def prep_modifier(modifier, extractor, extracted)
-            mods = modifier.match(extractor)[extracted].split('<_><|><~>').drop(1) \
-                .map{|d| d.gsub("\r\n ",'').strip.split('<R>') }.flatten \
-                .delete_if do |d|
-                if d.include?('<MI>') 
-                    puts "mod: #{d}"
+        def prep_modifier(inner_xml)
+            mods = inner_xml.split(/<br\s?\/?>/).drop(1).map(&:strip).delete_if do |d|
+                if d.include?('<em>') 
+                    #puts "mod: #{d}"
                     true
                 else
                     false 
                 end
-                end
-        end
-
-        def assign_stanza_positions(poem)
-            poem.stanzas.each_with_index do |s, i|
-                s.position = i
             end
         end
+
 
         def pattern(chars)
             Regexp.new("(^|\\b|\\s)#{Regexp.escape(chars)}($|\\b|\\s)")
         end
 
         def locate_emendations!(edition)
+            pbar = ProgressBar.new("Locating Emendations", edition.works.reduce(0){|c, w| w.emendations.count + c})
             edition.works.each do |work|
                 work.emendations.each do |e|
+                    pbar.inc
                     next unless e.start_address == nil && e.new_characters
                     pattern = pattern(e.new_characters)
                     line = work.line(e.start_line_number)
                     mods = line.line_modifiers if line
                     if mods && mods.count > 1
-                        mods.sort_by!{|mod| line.text.index(pattern(mod.original_characters)) || 0 }.reverse!
+                        mods.each do |mod|
+                            if mod.original_characters.nil?
+                                puts mod.inspect
+                            end
+                        end
+                        mods.sort_by!{|mod| sanitize(line.text).index(pattern(mod.original_characters)) || 0 }.reverse!
                         mods.each do |mod|
                             pull_emendation(line, mod)
                         end
@@ -430,41 +388,50 @@ module FranklinVentura
         end
 
         def pull_emendation(line, e)
-            return unless line && e.new_characters && match = line.text.match(pattern(e.new_characters))
+            return unless line && e.new_characters && match = sanitize(line.text).match(pattern(e.new_characters))
             e.start_address = match.offset(0)[0]
             e.start_address += 1 if match[0][0] == ' '
             e.end_address = e.start_address + e.new_characters.length if e.start_address
             e.save!
+            # TODO: This isn't going to pull out the emendation correctly if
+            # the emendation contains tags
             line.text = line.text.sub(e.new_characters, '')
             line.save!
         end
 
         def locate_divisions!(edition)
+            pbar = ProgressBar.new("Locating Divisions", edition.works.reduce(0){|c, w| w.divisions.count + c})
             edition.works.each do |work|
                 work.divisions.each do |e|
                     if e.parent
-                        line = e.parent.chars.join
+                        line = sanitize(e.parent.chars.join)
                     elsif work.line(e.start_line_number)
-                        line = work.line(e.start_line_number).text
+                        line = sanitize(work.line(e.start_line_number).text)
                     end
-                    if line && line.index(e.original_characters)
-                        e.start_address = line.index(e.original_characters) + e.original_characters.length
+                    if line && line.index(pattern(e.original_characters))
+                        e.start_address = line.index(pattern(e.original_characters)) + e.original_characters.length + 1
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
+                    pbar.inc
                 end
             end
         end
 
         def locate_alternates!(edition)
+            pbar = ProgressBar.new("Locating Alternates", edition.works.reduce(0){|c, w| w.alternates.count + c})
             edition.works.each do |work|
                 work.alternates.each do |e|
                     line = work.line(e.start_line_number)
-                    if line && line.text.index(e.original_characters)
-                        e.start_address = line.text.index(e.original_characters)
+                    if line && e.start_address == 0 && e.end_address == 9999
+                        e.end_address = line.text.length - 1
+                        e.save!
+                    elsif line && sanitize(line.text).index(pattern(e.original_characters))
+                        e.start_address = sanitize(line.text).index(pattern(e.original_characters))
                         e.end_address = e.start_address if e.start_address
                         e.save!
                     end
+                    pbar.inc
                 end
             end
         end

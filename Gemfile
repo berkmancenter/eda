@@ -19,6 +19,10 @@ gem 'cache_digests'
 gem 'memcache-client'
 gem 'activerecord-import'
 gem 'rubyzip', require: 'zip'
+gem 'amatch'
+gem 'htmlentities'
+gem 'progressbar'
+gem 'naturally'
 
 group :development, :test do
   gem 'rspec-rails'

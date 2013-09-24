@@ -22,6 +22,6 @@
 class Emendation < LineModifier
     # For rendering this with child modifiers
     def chars
-        original_characters.chars.to_a
+        original_characters ? original_characters.chars.to_a : new_characters.chars.to_a
     end
 end
