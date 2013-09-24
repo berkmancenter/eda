@@ -2,6 +2,8 @@ class CreateEditions < ActiveRecord::Migration
   def change
     create_table :editions do |t|
       t.string :name
+      t.string :short_name
+      t.string :citation
       t.string :author
       t.datetime :date
       t.string :work_number_prefix

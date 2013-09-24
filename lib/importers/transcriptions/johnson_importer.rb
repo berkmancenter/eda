@@ -3,7 +3,9 @@ class JohnsonImporter
     def import(filename, max_poems = nil)
         puts "Importing Johnson works"
         edition = Edition.new(
-            :name => 'The Poems of Emily Dickinson',
+            :name => 'The Poems of Emily Dickinson, Johnson, 1955',
+            :short_name => 'Johnson Poems 1955',
+            :citation => 'The Poems of Emily Dickinson,  Thomas H. Johnson, Cambridge, Mass.: Belknap Press of Harvard University Press, 1955',
             :author => 'Thomas H. Johnson',
             :date => Date.new(1951, 1, 1),
             :work_number_prefix => 'J',

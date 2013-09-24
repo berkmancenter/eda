@@ -17,7 +17,9 @@ class GutenbergImporter
 
     def create_editions
         first_edition = Edition.new(
-            :name => 'Poems: First Series',
+            :name => 'Poems by Emily Dickinson, Todd and Higginson, 1890',
+            :short_name => 'Poems 1890',
+            :citation => 'Poems by Emily Dickinson, Mabel Loomis Todd and T. W. Higginson, Boston: Roberts Brothers, 1890',
             :author => 'Emily Dickinson',
             :date => Date.new(1890, 1, 1),
             :work_number_prefix => 'P90-',
@@ -33,7 +35,9 @@ class GutenbergImporter
             editable: true
         )
         second_edition = Edition.new(
-            :name => 'Poems: Second Series',
+            :name => 'Poems by Emily Dickinson: Second Series, Higginson and Todd, 1891',
+            :short_name => 'Poems 1891',
+            :citation => 'Poems by Emily Dickinson: Second Series,  T. W. Higginson and Mabel Loomis Todd, Boston: Roberts Brothers, 1891',
             :author => 'Emily Dickinson',
             :date => Date.new(1891, 1, 1),
             :work_number_prefix => 'P91-',
@@ -49,7 +53,9 @@ class GutenbergImporter
             editable: true
         )
         third_edition = Edition.new(
-            :name => 'Poems: Third Series',
+            :name => 'Poems by Emily Dickinson: Third Series, Todd, 1896',
+            :short_name => 'Poems 1896',
+            :citation => 'Poems by Emily Dickinson: Third Series,  Mabel Loomis Todd, Boston: Roberts Brothers, 1896',
             :author => 'Emily Dickinson',
             :date => Date.new(1896, 1, 1),
             :work_number_prefix => 'P96-',

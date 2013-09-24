@@ -26,7 +26,7 @@ class Edition < ActiveRecord::Base
     has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
 
     attr_accessible :author, :completeness, :date, :description, :name,
-        :work_number_prefix, :parent_id, :public
+        :work_number_prefix, :parent_id, :public, :short_name, :citation
 
     validates :name, presence: true, length: { maximum: 200 }
     validates :description, length: { maximum: 2000 }

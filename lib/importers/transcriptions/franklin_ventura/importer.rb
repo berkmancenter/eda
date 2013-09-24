@@ -22,7 +22,9 @@ module FranklinVentura
         include ActionView::Helpers::SanitizeHelper
         def create_edition
             edition = Edition.new(
-                name: 'The Poems of Emily Dickinson: Variorum Edition',
+                name: 'The Poems of Emily Dickinson, Variorum Edition, Franklin, 1998',
+                short_name: 'Franklin Variorum 1998',
+                citation: 'The Poems of Emily Dickinson, Variorum Edition, Edited by R. W. Franklin, Cambridge, Mass.: Belknap Press of Harvard University Press, 1998',
                 author: 'R. W. Franklin',
                 date: Date.new(1998, 1, 1),
                 work_number_prefix: 'F',
