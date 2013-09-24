@@ -1,1 +1,3 @@
-<%= render partial: 'works/table', locals: { works: @works, edition: @edition } %>
+<% cache cache_key_for_works(@works, @edition) do %>
+    <%= render partial: 'works/table', locals: { works: @works, edition: @edition } %>
+<% end %>
