@@ -58,18 +58,43 @@
      * search, browse, lexicon
      */
 
-    #search-panel {
-        width: 25%;
-        .search-works-form #q {
-            width: 90%;
-        }
-        /*
-        -moz-transition: width, left 0.7s;
-        -webkit-transition: width, left 0.7s;
-        transition: width, left 0.7s;
-         */
+  #search-panel {
+    width: 25%;
+    .search-works-form {
+      #q {
+        width: 90%;
+      }
 
+      span.icon {
+        background: url( 'search.png' ) 0 0;
+      }
+
+      &:hover {
+        span.icon {
+          background: url( 'search.png' ) -14px 0;
+        }
+      }
     }
+
+
+.search-works-options {
+  #current_edition {
+    width: 90%;
+  }
+
+  a, a:visited {
+    color: $darkGray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: $lightGray;
+    text-decoration: none;
+  }
+}
+
+
+  }
 
     #interactive-image-panel {
         width: 42%;

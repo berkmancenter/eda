@@ -1,7 +1,3 @@
 <header>
-    <h2 class="edition-name"><%= image_set.image.url %><%# edition.name %></h2>
-    <span class="edition-creator">
-        &mdash; <%= user_signed_in? && edition.owner == current_user ? 'Me' : edition.author %>
-    </span>
-    <h3 class="image-set-name"><%= image_set.image && image_set.image.metadata ? image_set.image.metadata['Label'] : t(:image_not_available) %></h3>
+  <h1><%= @this_editions_works.first.title %></h1>
 </header>

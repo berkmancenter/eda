@@ -16,16 +16,11 @@
     }
 
     span.icon {
-      background: url( 'search.png' );
+      background: url( 'search.png' ) -28px 0;
+      cursor: pointer;
       display: inline-block;
       height: 14px;
       width: 14px;
-    }
-
-    &:hover {
-      span.icon {
-        background: url( 'search.png' ) -14px 0;
-      }
     }
   }
 
@@ -36,13 +31,12 @@
 
 .search-works-options {
   a, a:visited {
-    color: $darkGray;
+    color: $tan;
     text-decoration: none;
   }
 
   a:hover {
-    color: $lightGray;
-    text-decoration: none;
+    text-decoration: underline;
   }
 
   h2 {
