@@ -1,5 +1,5 @@
 <h3><%= reading_list.name %></h3>
-<ul>
+<ul class="work-list">
     <% reading_list.works.each do |work| %>
         <%= render partial: 'works/list_item', locals: { work: work, edition: work.edition } %>
     <% end %>

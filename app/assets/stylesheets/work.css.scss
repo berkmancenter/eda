@@ -148,3 +148,9 @@ body.works.edit, body.works.new, body.works.create {
 #work-table-wrapper {
     display: none;
 }
+.work-metadata, .work-appearances {
+    display: none;
+}
+.work-reading-list h3:first-child {
+    margin-top: 0.2em;
+}

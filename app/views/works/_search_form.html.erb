@@ -2,8 +2,9 @@
     <%= label_tag(:q, 'Search for:') %>
     <%= text_field_tag(:q, params[:q]) %>
     <%= button_tag raw("#{image_tag('search.png')} <span>Search</span>"), name: nil %>
+    <div><a class="search-works-options-toggle" href="javascript:void(0);"><h2>Search options</h2></a></div>
     <div class="search-works-options">
-        <a href="javascript:void(0);"><h2>Search options</h2></a>
+        <label for="current_edition">Edition</label>
         <%= select_tag 'current_edition',
             options_for_select(
                 [['All', 'all']] + Edition.for_user(current_user).map{|e| [e.name, e.id]},

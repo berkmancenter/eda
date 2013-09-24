@@ -2,8 +2,8 @@ $( function( ) {
   $('form#search-works').on('ajax:success', function(e, data) {
       $('.search-works-results').replaceWith(data);
   });
-  $( '.search-works-options a' ).click( function( e ) {
-    $( '.search-works-options' ).toggleClass( 'open' );
+  $( '.search-works-options-toggle' ).click( function( e ) {
+    $( '.search-works-options, .search-works-options-toggle' ).toggleClass( 'open' );
     return false;
   } );
 

@@ -34,13 +34,11 @@
   }
 }
 
-.search-works-options {
-  a, a:visited {
+.search-works-options-toggle {
     color: $darkGray;
     text-decoration: none;
-  }
 
-  a:hover {
+  &:hover {
     color: $lightGray;
     text-decoration: none;
   }
@@ -55,20 +53,19 @@
     font-size: .8em;
     width: 1em;
   }
-
-  input, select {
-    display: none;
-  }
 }
 
-.search-works-options.open {
+.search-works-options-toggle.open {
   h2:before {
     content: "▼ ";
   }
+}
 
-  input, select {
+.search-works-options {
+    display: none;
+}
+.search-works-options.open {
     display: block;
-  }
 }
 
 .search-works-results {
@@ -124,3 +121,7 @@
     width: 4em;
   }
 }
+.static-pages.home #search-works div {
+    display: none;
+}
+

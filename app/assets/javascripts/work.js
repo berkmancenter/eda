@@ -108,7 +108,6 @@ $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique,
  
 function fnCreateSelect( aData )
 {
-    console.log(aData);
     var r='<select><option value=""></option>', i, iLen=aData.length;
     for ( i=0 ; i<iLen ; i++ )
     {
@@ -137,5 +136,14 @@ $(document).ready(function() {
     $('#new_edition #edition_submit_action input').on('click', function() {
         $('.flash').hide();
         setTimeout(function() { $('.flash.wait').show(); }, 400);
+    });
+
+    $('.show-metadata').on('click', function(e) {
+        e.preventDefault();
+        $(this).parent().find('.work-metadata').modal();
+    });
+    $('.show-appearances').on('click', function(e) {
+        e.preventDefault();
+        $(this).parent().find('.work-appearances').modal();
     });
 });

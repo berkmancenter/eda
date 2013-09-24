@@ -41,11 +41,18 @@
                     <%= render partial: 'works/transcriptions/show', locals: { work: work, edition: edition } %>
                 </div>
 
-                <!--
-                <dl class="work-metadata"><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
-                <div class="work-appearances"><%= render partial: 'works/appearances', locals: { work: work } %></div>
+                <div>
+                    <a class="show-metadata" href="#"><%= t :show_metadata %></a>
+                    <dl class="work-metadata"><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                    <% if work.appearances.count > 0 %>
+                    <a class="show-appearances" href="#"><%= t :show_appearances %></a>
+                    <div class="work-appearances"><%= render partial: 'works/appearances', locals: { work: work } %></div>
+                    <% end %>
+                </div>
+
                 <div><%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei) %></div>
-                -->
+                <div><%= render partial: 'reading_lists/add_form', locals: { edition: edition, work: work} %></div>
+
                 <% if user_signed_in? && (work_to_edit.nil? || work != work_to_edit) %>
                 <div>
                     <%= link_to t(:edit_work), edit_edition_image_set_work_path(edition, image_set, work) %>

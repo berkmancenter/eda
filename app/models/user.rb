@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
     attr_accessible :email
 
     before_create :set_defaults
+    after_create :create_reading_list
 
     def note_for(notable)
         return unless notable.notes
@@ -45,5 +46,9 @@ class User < ActiveRecord::Base
 
     def set_defaults
         self.current_edition = Edition.find_by_name(Eda::Application.config.emily['default_edition'])
+    end
+
+    def create_reading_list
+        reading_lists.create(name: I18n.t(:default_reading_list))
     end
 end

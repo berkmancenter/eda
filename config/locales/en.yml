@@ -52,6 +52,7 @@ en:
   successful_update: '%{model} updated successfully'
   download_image: 'Download Image'
   image_not_found: 'Image not found'
+  default_reading_list: 'My Reading List'
 
   form_error:
     one: 'An error occurred when saving. See below for details.'

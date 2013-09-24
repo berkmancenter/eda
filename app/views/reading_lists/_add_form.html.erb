@@ -1,0 +1,4 @@
+<%= form_tag add_to_reading_list_edition_work_path(edition, work), remote: true do %>
+    <%= select_tag 'reading_list_id', options_from_collection_for_select(current_user.reading_lists, :id, :name) %>
+    <%= submit_tag 'Add', class: 'eda-btn-light' %>
+<% end %>

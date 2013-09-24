@@ -5,7 +5,14 @@ ul.work-list {
   padding: 0;
 }
 
-li.work-list-item:nth-child(2n+1) {
+li.work-list-item:first-child {
+    border-top: 1px dotted $lightGray;
+}
+li.work-list-item:last-child {
+    border-bottom: 1px dotted $lightGray;
+}
+
+li.work-list-item:nth-child(2n) {
   background: $tan;
 }
 
@@ -21,7 +28,7 @@ li.work-list-item {
     display: block;
     height: 100%;
     left: 0;
-    padding: .25em;
+    padding: 0.25em 0.5em;
     position: absolute;
     top: 0;
     width: 100%;
