@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20130821160430) do
 
   create_table "editions", :force => true do |t|
     t.string   "name"
+    t.string   "short_name"
+    t.string   "citation"
     t.string   "author"
     t.datetime "date"
     t.string   "work_number_prefix"
