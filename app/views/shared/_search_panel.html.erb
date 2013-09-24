@@ -11,7 +11,9 @@
         <section class="search-works">
             <h1>Search Works</h1>
             <%= render partial: 'works/search_form', locals: { remote: true } %>
-            <%= render partial: "works/search_results_list" %>
+            <% if @search %>
+                <%= render partial: "works/search_results_list" %>
+            <% end %>
         </section>
         <%= render partial: "works/browse" %>
     </div>

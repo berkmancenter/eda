@@ -19,15 +19,6 @@ class ImagesController < ApplicationController
             @note = @page.image_set.notes.new if @page.image_set
         end
 
-        if params[ :q ]
-          @search = Work.search do
-            #with( :edition_id, @edition.id )
-            fulltext params[ :q ] do
-              fields( :lines, :title => 2.0 )
-            end
-          end
-        end
-
         respond_to do |format|
             format.html do 
                 render

@@ -4,6 +4,11 @@
     <%= button_tag raw("#{image_tag('search.png')} <span>Search</span>"), name: nil %>
     <div class="search-works-options">
         <a href="javascript:void(0);"><h2>Search options</h2></a>
-        <%= render 'shared/forms/edition_selector' %>
+        <%= select_tag 'current_edition',
+            options_for_select(
+                [['All', 'all']] + Edition.for_user(current_user).map{|e| [e.name, e.id]},
+                session[:current_edition] ? Edition.find(session[:current_edition]).id : 'all'
+            )
+        %>
     </div>
 <% end %>

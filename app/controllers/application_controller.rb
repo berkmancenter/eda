@@ -47,11 +47,20 @@ class ApplicationController < ActionController::Base
         session[:current_edition] = params[:current_edition] if params[:current_edition]
         params[:q] = session[:q] if session[:q]
         params[:current_edition] = session[:current_edition] if session[:current_edition]
+        if params[:current_edition] == 'all'
+            params[:current_edition] = session[:current_edition] = nil
+        end
 
-        @search = Work.search do
-            with(:edition_id, params[:current_edition]) if params[:current_edition]
-            fulltext params[:q] do
-                fields(:lines, :title => 2.0)
+        if params[:q].strip == ''
+            @search = nil
+            params[:q] = nil
+            session[:q] = nil
+        else
+            @search = Work.search do
+                with(:edition_id, params[:current_edition]) if params[:current_edition]
+                fulltext params[:q] do
+                    fields(:lines, :title => 2.0)
+                end
             end
         end
     end

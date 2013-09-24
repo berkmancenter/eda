@@ -1,8 +1,0 @@
-<%= select_tag 'current_edition',
-    options_from_collection_for_select(
-        Edition.for_user(current_user),
-        :id,
-        :name,
-        session[:current_edition] ? Edition.find(session[:current_edition]).id :
-        Edition.find_by_name(Eda::Application.config.emily['default_edition']).id)
-%>

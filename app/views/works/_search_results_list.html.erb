@@ -1,4 +1,5 @@
 <div class="search-works-results">
+    <% if @search %>
     <h2>
         <%= pluralize @search.total, 'result' %>
         for &quot;<span class="query"><%= params[:q] %></span>&quot;
@@ -8,4 +9,5 @@
             <li><%= link_to render_work_result_link(Work.find( work.primary_key )), image_set_path_from_work(Work.find( work.primary_key ) ) %></li>
         <% end %>
     </ul>
+    <% end %>
 </div>

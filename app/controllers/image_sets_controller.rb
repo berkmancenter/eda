@@ -3,7 +3,7 @@ class ImageSetsController < ApplicationController
     before_filter :load_edition
     before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
-    before_filter :set_users_current_edition
+    #before_filter :set_users_current_edition
 
     include TheSortableTreeController::Rebuild
     include TheSortableTreeController::ExpandNode
