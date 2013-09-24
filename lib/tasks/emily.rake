@@ -222,6 +222,7 @@ namespace :emily do
     desc 'Request everything now so the caches are warm'
     task :warm_cache => [:environment] do |t|
         app = ActionDispatch::Integration::Session.new(Rails.application)
+        app.get(Rails.application.routes.url_helpers.works_path)
         Edition.all.each do |edition|
             # Visit the edition work list
             app.get(Rails.application.routes.url_helpers.edition_works_path(edition))

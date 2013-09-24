@@ -1,3 +1,4 @@
+<% cache cache_key_for_works(works, defined?(edition) ? edition : nil) do %>
 <div id="work-table-wrapper">
 <table class="works">
     <thead>
@@ -47,3 +48,4 @@
         }
     </style>
 </noscript>
+<% end %>
