@@ -1,7 +1,7 @@
-<%= form_tag search_works_path, remote: defined?(remote) ? remote : false, id: 'search-works' do %>
+<%= form_tag search_works_path, remote: defined?(remote) ? remote : false, id: 'search-works', class: 'search-works-form' do %>
     <%= label_tag(:q, 'Search for:') %>
     <%= text_field_tag(:q, params[:q]) %>
-    <%= button_tag raw("#{image_tag('search.png')} <span>Search</span>"), name: nil %>
+    <%= button_tag raw('<span class="icon"></span> <span>Search</span>'), name: nil %>
     <div><a class="search-works-options-toggle" href="javascript:void(0);"><h2>Search options</h2></a></div>
     <div class="search-works-options">
         <label for="current_edition">Edition</label>

@@ -39,7 +39,9 @@ class Line < ActiveRecord::Base
   private
 
   def load_modifiers
-      @mods = line_modifiers.all
+      if number.present?
+        @mods = line_modifiers.all
+      end
   end
 
   def destroy_mods

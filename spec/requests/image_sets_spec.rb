@@ -90,7 +90,7 @@ describe ( 'image_sets requests' ) {
         }
       end
 
-      describe ( 'search panel' ) {
+      describe 'search panel', :js => true do
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
         context ( 'without search q' ) {
@@ -100,21 +100,23 @@ describe ( 'image_sets requests' ) {
           }
         }
 
-        context ( 'with search submit' ) {
+        context 'with search submit', :js => true do
           before {
             fill_in 'Search for:', with: 'awake'
-            click_button 'Search'
+            #click_button 'Search'
+            page.execute_script("$('.search-works-form button').click()")
           }
 
           it ( 'should have performed a search' ) {
-            should have_selector '.search-works form input[name="q"][value="awake"]'
+            snap
+            should have_selector '.search-works-form input[name="q"][value="awake"]'
 
             should have_selector '.search-works-results'
 
             should have_css '.search-works-results a', count: 1
           }
-        }
-      }
+        end
+      end
 
       describe 'browse panel', :js => true do
         before {
@@ -174,7 +176,7 @@ describe ( 'image_sets requests' ) {
             }
 
             it {
-              should have_css 'h1', text: wonder
+              should have_css 'h1', text: wonder, visible: false
             }
           }
         }

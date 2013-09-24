@@ -16,20 +16,15 @@
     }
 
     span.icon {
-      background: url( 'search.png' );
+      background: url( 'search.png' ) -28px 0;
+      cursor: pointer;
       display: inline-block;
       height: 14px;
       width: 14px;
     }
-
-    &:hover {
-      span.icon {
-        background: url( 'search.png' ) -14px 0;
-      }
-    }
   }
 
-  label {
+  & > label {
     display: none;
   }
 }
@@ -66,6 +61,9 @@
 }
 .search-works-options.open {
     display: block;
+    label {
+        display: block;
+    }
 }
 
 .search-works-results {
@@ -124,4 +122,3 @@
 .static-pages.home #search-works div {
     display: none;
 }
-
