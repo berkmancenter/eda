@@ -19,7 +19,7 @@ class WorksController < ApplicationController
             load_edition
             @works = @edition.all_works
         else
-            @works = Work.scoped
+            @works = Work.where(edition_id: Edition.for_user(current_user))
         end
         render :layout => !request.xhr?
     end

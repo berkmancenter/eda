@@ -13,18 +13,13 @@
         </tr>
     </thead>
     <tbody>
-<% works.each do |work| %>
-    <tr>
-        <% if !defined?(edition) || edition.nil? %>
-            <td><%= work.edition.short_name %></td>
-        <% end %>
-        <td><%= strip_tags work.full_id %></td>
-        <td><%= link_to work.title, image_set_path_from_work(work) %></td>
-        <!-- <td><%= work.has_image? %></td> -->
-        <td><%= work.date.strftime('%Y') if work.date %></td>
-        <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
-    </tr>
-<% end %>
+<% works.each do |work| %><tr>
+<% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %>
+<td><%= strip_tags work.full_id %></td>
+<td><%= link_to work.title, image_set_path_from_work(work) %></td>
+<td><%= work.date.strftime('%Y') if work.date %></td>
+<td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
+</tr><% end %>
     </tbody>
     <tfoot>
         <tr>
