@@ -7,7 +7,11 @@ class WorksController < ApplicationController
 
     def browse
         @works = Work.starts_with(params[:first_letter])
-        render :layout => !request.xhr?
+        if request.xhr?
+            render 'works/list', layout: false
+        else
+            render 'works/index'
+        end
     end
 
     def index
@@ -128,28 +132,11 @@ class WorksController < ApplicationController
     end
 
     def search
-        if user_signed_in?
-            current_user.current_edition = Edition.find(params[:current_edition])
+        if request.xhr?
+            render partial: 'works/search_results_list', layout: false
         else
-            session[:current_edition] = params[:current_edition]
+            render
         end
-
-        if params[:q]
-            @search = Work.search do
-                with(:edition_id, params[:current_edition]) if params[:current_edition]
-                fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
-                end
-            end
-            session[:search_results] = {
-                total: @search.total,
-                q: @search.query.to_params[:q],
-                results: @search.results
-            }
-       end
-        # causes infinite loop in /search, is this needed for
-        # search on /editions/:edition_id/image_sets/:id
-        #redirect_to request.referrer if request.referrer
     end
 
     def choose_edition

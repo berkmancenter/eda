@@ -1,8 +1,14 @@
-<section class="works-search view">
-  <%= render( {
-    partial: "works/search",
-    locals: {
-      action_url: search_works_path
-    }
-  } ) %>
+<section class="search-works">
+<div class="search-works-form">
+    <h1>Search Works</h1>
+    <%= render partial: 'works/search_form' %>
+</div>
+
+<% if @search.present? %>
+    <h2>
+        <%= pluralize @search.total, 'result' %>
+        for &quot;<span class="query"><%= params[:q] %></span>&quot;
+    </h2>
+    <%= render partial: 'works/table', locals: { works: @search.results } %>
+<% end %>
 </section>

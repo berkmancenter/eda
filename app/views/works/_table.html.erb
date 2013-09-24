@@ -1,0 +1,49 @@
+<div id="work-table-wrapper">
+<table class="works">
+    <thead>
+        <tr>
+            <% unless defined? edition %>
+                <th>Edition</th>
+            <% end %>
+            <th>Number</th>
+            <th>Title</th>
+            <!--<th>Has Image</th>-->
+            <th>Date</th>
+            <th>Recipient</th>
+        </tr>
+    </thead>
+    <tbody>
+<% works.each do |work| %>
+    <tr>
+        <% unless defined? edition %>
+            <td><%= work.edition.short_name %></td>
+        <% end %>
+        <td><%= strip_tags work.full_id %></td>
+        <td><%= link_to work.title, image_set_path_from_work(work) %></td>
+        <!-- <td><%= work.has_image? %></td> -->
+        <td><%= work.date.strftime('%Y') if work.date %></td>
+        <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
+    </tr>
+<% end %>
+    </tbody>
+    <tfoot>
+        <tr>
+            <% unless defined? edition %>
+                <th class="edition-footer"></th>
+            <% end %>
+            <th></th>
+            <th></th>
+            <!--<th></th>-->
+            <th class="date-footer"></th>
+            <th class="recipient-footer"></th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<noscript>
+    <style>
+        #work-table-wrapper {
+            display: block;
+        }
+    </style>
+</noscript>
