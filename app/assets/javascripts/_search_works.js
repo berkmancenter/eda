@@ -18,7 +18,7 @@ $( function( ) {
     e.preventDefault();
 
     $.get($(this).attr('href'), function(data) {
-      $(e.target).closest('section').find('.lexicon-word').html(data);
+      $.modal(data);
     });
 
     return false;
