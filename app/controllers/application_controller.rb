@@ -93,7 +93,6 @@ class ApplicationController < ActionController::Base
     def pull_works_for_edition_image_set(edition, image_set)
         all_works = Work.in_editions(Edition.for_user(current_user)).
             in_image(image_set.image).group_by{ |w| w.edition == edition }
-        logger.info(all_works.inspect)
         @this_editions_works = all_works[true]
         if @this_editions_works.nil? && edition.is_child?
             @this_editions_works = Work.joins(:edition).where(

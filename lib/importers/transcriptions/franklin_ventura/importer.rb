@@ -183,7 +183,7 @@ module FranklinVentura
             works = parse_xml(simple_string, complex_string)
             edition.works = works
             edition.save!
-            post_process!(edition)
+            #post_process!(edition)
         end
 
         # For poems like 1356
@@ -226,6 +226,7 @@ module FranklinVentura
                         add_manuscript(w, work, simple_work)
                         add_holder_info(w, poem)
                         add_publication(w, work, simple_work)
+                        add_fascicle_set_info(w, poem)
                         breakup_publications(w)
                         w.save!
                         add_modifiers!(w, poem)
@@ -235,6 +236,23 @@ module FranklinVentura
                 end
             end
             works
+        end
+
+        def add_fascicle_set_info(work, poem_xml)
+            return unless poem_xml.at('fascicle')
+            pattern = /<b>(?<type>f|s)<\/b>(?<number>[0-9.]+)/
+            matches = poem_xml.at('fascicle').inner_html.match(pattern)
+            return unless matches && matches[:type] && matches[:number]
+            case matches[:type]
+            when 'f'
+                numbers = matches[:number].split('.').map(&:to_i)
+                work.metadata['fascicle'] = numbers.first
+                work.metadata['fascicle_order'] = numbers.last
+            when 's'
+                work.metadata['set'] = matches[:number].to_i
+            end
+            puts work.metadata
+            exit
         end
 
         def add_holder_info(work, poem_xml)

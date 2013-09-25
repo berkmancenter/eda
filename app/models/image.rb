@@ -16,6 +16,6 @@
 
 class Image < ActiveRecord::Base
     has_many :sets, class_name: 'ImageSet'
-    attr_accessible :credits, :url, :metadata, :web_width, :web_height
+    attr_accessible :credits, :url, :metadata, :web_width, :web_height, :title
     serialize :metadata
 end

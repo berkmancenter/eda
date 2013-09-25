@@ -67,6 +67,11 @@ namespace :emily do
                 TranscriptionErrorFinder.new.find_errors(edition.works)
             end
         end
+
+        desc 'Find works without images'
+        task :works_without_images => [:environment] do |task|
+            puts Work.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
+        end
     end
 
     namespace :import do

@@ -5,6 +5,7 @@ class ImageToTranscriptionConnector
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
         blank_images = File.readlines(blank_images_file).map(&:strip)
+        amherst_map = CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true)
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
         Image.all.each do |image|
@@ -12,7 +13,7 @@ class ImageToTranscriptionConnector
             next if blank_images.include? image.url
             next unless image.metadata
             if image.metadata['Identifiers']
-                works = works_for_amherst(image, franklin, johnson)
+                #works = works_for_amherst(image, franklin, johnson)
             elsif image.metadata['Label']
                 works = works_for_harvard(image, franklin, johnson)
             elsif image.metadata['Identifier (Johnson Poem #)']
@@ -39,6 +40,9 @@ class ImageToTranscriptionConnector
                         ]
                 end
             end
+        end
+        amherst_map.each do |row|
+            map << row
         end
     end
 
