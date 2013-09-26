@@ -118,10 +118,18 @@ function fnCreateSelect( aData )
  
 $(document).ready(function() {
     var table = $('table.works').dataTable({
-        "aoColumnDefs": [
-            { "sType": "natural", "aTargets": [ 0, 1 ] }
-        ],
-        "fnInitComplete": function() { $('#work-table-wrapper').show(); }
+        oLanguage: {
+          sSearch: "Search within these results: "
+        },
+
+        aoColumnDefs: [ {
+          sType: "natural",
+          aTargets: [ 0, 1 ]
+        } ],
+
+        fnInitComplete: function() {
+          $('#work-table-wrapper').show();
+        }
     });
 
     $("th.edition-footer, th.date-footer, th.recipient-footer").each( function () {

@@ -31,5 +31,9 @@ describe ( 'works/search' ) {
     it {
       should have_css 'th:first-child', text: I18n.t( 'datatable.th_title' )
     }
+
+    it {
+      should have_css 'tfoot th.edition-footer'
+    }
   }
 }

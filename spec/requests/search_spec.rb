@@ -21,12 +21,16 @@ describe ( 'search requests' ) {
     }
   }
 
-  describe ( 'get /search/awake (default edition)' ) {
+  describe 'get /search/awake (default edition)', :js => true do
     before { visit "#{search_works_path( 'awake' )}" } #?current_edition=3" }
 
     it ( 'should return a search page' ) {
       should have_selector( 'form[action="/search"]' );
       should have_selector( 'input[name="q"]' );
+    }
+
+    it ( 'should have secondary text filter' ) {
+      should have_css 'label', text: 'Search within these results:'
     }
 
     it ( 'should have a result table' ) {
@@ -37,7 +41,7 @@ describe ( 'search requests' ) {
       should have_css 'h2', text: '1 result'
       should have_css "a[href='#{awake_iset_path}']"
     }
-  }
+  end
 
   describe 'get /search/awake?current_edition=1 ( no results in this edition )', :js => true do
     before { visit "#{search_works_path( 'awake' )}?current_edition=1" }
