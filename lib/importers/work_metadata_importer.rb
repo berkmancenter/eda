@@ -19,6 +19,6 @@ class WorkMetadataImporter
     end
 
     def get_work(row)
-        Work.find_by_number_and_variant(row['Franklin Number'], row['Variant'].gsub(/[^A-Z\.0-9]/, '')) if row['Franklin Number'] && row['Variant']
+        Work.where(number: row['Franklin Number'], variant: row['Variant'].gsub(/[^A-Z\.0-9]/, '')).where(secondary_source: row['Variant'][0] == '[') if row['Franklin Number'] && row['Variant']
     end
 end

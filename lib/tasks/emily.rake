@@ -26,6 +26,33 @@ namespace :emily do
             #BPLImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
+        desc 'Process LOC images to create tifs'
+        task :loc_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process LOC images to create tifs'
+        task :aas_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process LOC images to create tifs'
+        task :other_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
         desc 'Create web-ready images for page turning'
         task :web_images, [:input_dir, :output_dir] => [:environment] do |t, args|
             output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
@@ -70,7 +97,7 @@ namespace :emily do
 
         desc 'Find works without images'
         task :works_without_images => [:environment] do |task|
-            puts Work.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
+            puts Edition.find_by_work_number_prefix('F').works.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
         end
     end
 
@@ -103,6 +130,12 @@ namespace :emily do
                 JohnsonImporter.new.import(filename, max_poems)
             end
 
+            desc 'Import Single Hound'
+            task :single_hound, [:filename] => [:environment] do |task, args|
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'single_hound.xml')
+                SingleHoundImporter.new.import(filename)
+            end
+
             desc 'Import Project Gutenberg works'
             task :gutenberg, [:filename] => [:environment] do |task, args|
                 filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'gutenberg.html')
@@ -117,6 +150,16 @@ namespace :emily do
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
                 FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
+
+            desc 'Import all transcriptions'
+            task :all, [:filename] => [:environment] do |task, args|
+                Rake::Task["emily:import:transcriptions:franklin"].execute
+                Rake::Task["emily:import:transcriptions:johnson"].execute
+                Rake::Task["emily:import:transcriptions:gutenberg"].execute
+                Rake::Task["emily:import:transcriptions:single_hound"].execute
+                Rake::Task["emily:import:transcriptions:revisions"].execute
+            end
+
         end
 
         namespace :images do 
@@ -147,8 +190,31 @@ namespace :emily do
             end
 
             desc 'Import Library of Congress images'
-            task :loc => [:environment] do
-                # These don't exist yet
+            task :loc, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'loc_output')
+                BPLFlickrImporter.new.import(image_dir)
+            end
+
+            desc 'Import AAS images'
+            task :aas, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'aas_output')
+                AASImageImporter.new.import(image_dir)
+            end
+
+            desc 'Import other images'
+            task :other, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'other_output')
+                OtherImageImporter.new.import(image_dir)
+            end
+
+            desc 'Import all images'
+            task :all => [:environment] do
+                Rake::Task["emily:import:images:aas"].execute
+                Rake::Task["emily:import:images:loc"].execute
+                Rake::Task["emily:import:images:other"].execute
+                Rake::Task["emily:import:images:harvard"].execute
+                Rake::Task["emily:import:images:amherst"].execute
+                Rake::Task["emily:import:images:bpl"].execute
             end
         end
 
@@ -171,15 +237,10 @@ namespace :emily do
             else
                 !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
             end
-            Rake::Task["emily:import:transcriptions:franklin"].execute
-            Rake::Task["emily:import:transcriptions:johnson"].execute
-            Rake::Task["emily:import:transcriptions:gutenberg"].execute
-            Rake::Task["emily:import:transcriptions:revisions"].execute
+            Rake::Task["emily:import:transcriptions:all"].execute
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
-            Rake::Task["emily:import:images:harvard"].execute
-            Rake::Task["emily:import:images:amherst"].execute
-            Rake::Task["emily:import:images:bpl"].execute
+            Rake::Task["emily:import:images:all"].execute
             Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps

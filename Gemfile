@@ -23,12 +23,14 @@ gem 'amatch'
 gem 'htmlentities'
 gem 'progressbar'
 gem 'naturally'
+gem 'roman-numerals'
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'annotate'
   gem 'ruby-prof'
   gem 'test-unit'
+  #gem 'sql-logging'
 end
 
 group :test do
