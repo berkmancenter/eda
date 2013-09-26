@@ -1,0 +1,2 @@
+class LOCImageImporter
+end

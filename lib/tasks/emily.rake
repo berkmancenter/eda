@@ -26,6 +26,33 @@ namespace :emily do
             #BPLImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
+        desc 'Process LOC images to create tifs'
+        task :loc_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process LOC images to create tifs'
+        task :aas_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process LOC images to create tifs'
+        task :other_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
         desc 'Create web-ready images for page turning'
         task :web_images, [:input_dir, :output_dir] => [:environment] do |t, args|
             output_dir = args[:output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
@@ -123,6 +150,16 @@ namespace :emily do
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_ventura')
                 FranklinVentura::Importer.new.import(directory, start_year.to_i, end_year.to_i)
             end
+
+            desc 'Import all transcriptions'
+            task :all, [:filename] => [:environment] do |task, args|
+                Rake::Task["emily:import:transcriptions:franklin"].execute
+                Rake::Task["emily:import:transcriptions:johnson"].execute
+                Rake::Task["emily:import:transcriptions:gutenberg"].execute
+                Rake::Task["emily:import:transcriptions:single_hound"].execute
+                Rake::Task["emily:import:transcriptions:revisions"].execute
+            end
+
         end
 
         namespace :images do 
@@ -180,6 +217,7 @@ namespace :emily do
             Rake::Task["emily:import:transcriptions:franklin"].execute
             Rake::Task["emily:import:transcriptions:johnson"].execute
             Rake::Task["emily:import:transcriptions:gutenberg"].execute
+            Rake::Task["emily:import:transcriptions:single_hound"].execute
             Rake::Task["emily:import:transcriptions:revisions"].execute
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute

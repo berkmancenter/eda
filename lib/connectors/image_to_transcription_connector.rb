@@ -6,6 +6,7 @@ class ImageToTranscriptionConnector
         johnson = Edition.find_by_work_number_prefix('J')
         blank_images = File.readlines(blank_images_file).map(&:strip)
         amherst_map = CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true)
+        other_map = CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'other_image_to_work_map.csv'), headers: true)
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
         Image.all.each do |image|
@@ -42,6 +43,9 @@ class ImageToTranscriptionConnector
             end
         end
         amherst_map.each do |row|
+            map << row
+        end
+        other_map.each do |row|
             map << row
         end
     end
@@ -150,16 +154,20 @@ class ImageToTranscriptionConnector
         output = []
         franklin_numbers = image.metadata['Label'].scan(/Fr(\d{1,4})(\D|$)/).flatten.map(&:to_i).delete_if{|i| i == 0}
         johnson_numbers = image.metadata['Label'].scan(/J(\d{1,4})(\D|$)/)
-        call_number_pattern = /ms_am_1118_3_(\d{1,3})_\d{4}/
+        call_number_pattern = /ms_am_1118_\d_(?<subcode>B|L|H)?(?<number>\d{1,3})/
         call_number_matches = image.url.match(call_number_pattern)
-        if call_number_matches
-            works = franklin.works.where(number: franklin_numbers).all
-            output = works.select do |w|
-                w.metadata['holder_id'] &&
-                    w.metadata['holder_code'] &&
-                    w.metadata['holder_code'].first == 'h' &&
-                    w.metadata['holder_id'].first.to_i == call_number_matches[1].to_i
+        return output unless call_number_matches
+        # Try to pick a variant by matching holder information
+        works = franklin.works.where(number: franklin_numbers).all
+        output = works.select do |w|
+            matches = (w.metadata['holder_id'] &&
+                       w.metadata['holder_code'] &&
+                       w.metadata['holder_code'].first == 'h' &&
+                       w.metadata['holder_id'].first.to_i == call_number_matches[:number].to_i)
+            if call_number_matches[:subcode]
+                matches = matches && call_number_matches[:subcode].downcase == w.metadata['holder_subcode'].first.downcase
             end
+            matches
         end
         return output
     end
@@ -182,9 +190,10 @@ class ImageToTranscriptionConnector
             works = []
             works = all_works(work_map, select_hash)
             works.each do |work|
-                work.image_set = work.image_set.duplicate
-                work.image_set << Image.find_by_url(row['image_url'])
-                work.save!
+                image_set = work.image_set.duplicate
+                image_set << Image.find_by_url(row['image_url'])
+                work.image_set = image_set
+                work.save(validate: false)
             end
             work_map.rewind
             pbar.inc
