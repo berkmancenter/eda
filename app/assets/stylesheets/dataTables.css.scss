@@ -14,12 +14,35 @@ table.dataTable thead th {
 	font-weight: bold;
 	cursor: pointer;
 	*cursor: hand;
+  white-space: nowrap;
+
+  /* give the title some room */
+  &:first-child {
+    width: 12em;
+  }
 }
 
 table.dataTable tfoot th {
 	padding: 3px 18px 3px 10px;
 	border-top: 1px solid black;
 	font-weight: bold;
+  text-align: left;
+  vertical-align: bottom;
+
+  &.date-footer:before {
+    content: "Filter by Date";
+    font-size: .8em;
+  }
+
+  &.recipient-footer:before {
+    content: "Filter by Recipient";
+    font-size: .8em;
+  }
+
+  &.edition-footer:before {
+    content: "Filter by Edition/Library";
+    font-size: .8em;
+  }
 }
 
 table.dataTable td {

@@ -54,6 +54,10 @@ en:
   image_not_found: 'Image not found'
   default_reading_list: 'My Reading List'
 
+  datatable:
+    th_title: 'First Line/Title'
+    th_edition: 'Edition/Library'
+
   form_error:
     one: 'An error occurred when saving. See below for details.'
     other: '%{count} errors occurred when saving. See below for details.'
