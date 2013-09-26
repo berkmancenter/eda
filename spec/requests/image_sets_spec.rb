@@ -109,8 +109,6 @@ describe ( 'image_sets requests' ) {
           it ( 'should have performed a search' ) {
             find( '.search-works-form input[name="q"]' ).value.should eq( 'awake' )
 
-            snap
-
             should have_selector '.search-works-results'
 
             should have_css '.search-works-results a', count: 1
@@ -282,8 +280,7 @@ describe ( 'image_sets requests' ) {
       describe 'text drawer', :js => true do
         before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
 
-        it {
-          # 5754 default to closed
+        it ( 'should default to closed #5754' ) {
           should have_css '.view.minus-work-panel'
           should have_css '#work-panel.collapsed'
         }
@@ -297,6 +294,18 @@ describe ( 'image_sets requests' ) {
             should_not have_css '.view.minus-work-panel'
             should_not have_css '#work-panel.collapsed'
           }
+        }
+      end
+
+      context 'text drawer with panel selection', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=0"
+        }
+
+        it ( 'should default to open' ) {
+          # user needs to see the 'selected' panel in the drawer
+          should_not have_css '.view.minus-work-panel'
+          should_not have_css '#work-panel.collapsed'
         }
       end
 
@@ -336,7 +345,8 @@ describe ( 'image_sets requests' ) {
         it {
           click_link 'A'
           click_link 'awake'
-          should have_css '.lexicon-word section.word'
+          #should have_css '.lexicon-word section.word'
+          find( '.simplemodal-data' ).visible?.should be_true
         }
       end
     }
