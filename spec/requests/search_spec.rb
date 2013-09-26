@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe ( 'search requests' ) {
+
+  let ( :awake ) { 'Awake ye muses nine, sing me a strain divine' }
+  let ( :awake_work ) { Work.find_by_title( awake ) }
+  let ( :awake_iset_path ) { edition_image_set_path( awake_work.edition, awake_work.image_set.children.first ) }
+
   # require test:seed
   subject { page }
 
@@ -24,16 +29,17 @@ describe ( 'search requests' ) {
       should have_selector( 'input[name="q"]' );
     }
 
-    it ( 'should have a result list' ) {
-      should have_selector( '.search-works-results' );
+    it ( 'should have a result table' ) {
+      should have_selector( '#work-table-wrapper' );
     }
 
     it ( 'should have one result' ) {
-      should have_css( '.search-works-results a', { count: 1 } );
+      should have_css 'h2', text: '1 result'
+      should have_css "a[href='#{awake_iset_path}']"
     }
   }
 
-  describe ( 'get /search/awake?current_edition=1 ( no results in this edition )' ) {
+  describe 'get /search/awake?current_edition=1 ( no results in this edition )', :js => true do
     before { visit "#{search_works_path( 'awake' )}?current_edition=1" }
 
     it ( 'should return a search page' ) {
@@ -41,14 +47,14 @@ describe ( 'search requests' ) {
       should have_selector( 'input[name="q"]' );
     }
 
-    it {
-      should have_selector( '.search-works-results' );
+    it ( 'should have a result table' ) {
+      should have_selector( '#work-table-wrapper' );
     }
 
     it {
-      should_not have_selector( '.search-works-results a' );
+      should_not have_css "a[href='#{awake_iset_path}']"
     }
-  }
+  end
 
   context 'with search submit' do
     before {
@@ -58,11 +64,11 @@ describe ( 'search requests' ) {
     }
 
     it ( 'should have performed a search' ) {
-      should have_selector( '.search-works form input[name="q"][value="awake"]' );
+      find( '.search-works-form input[name="q"]' ).value.should eq( 'awake' )
 
-      should have_selector( '.search-works-results' );
+      should have_selector( '#work-table-wrapper' );
 
-      should have_css( '.search-works-results a', { count: 1 } );
+      should have_css "a[href='#{awake_iset_path}']"
     }
   end
 }
