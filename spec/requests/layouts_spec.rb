@@ -6,20 +6,23 @@ describe 'layout requests' do
   subject { page }
 
   describe 'get sample page' do
-    before { visit about_url }
+    before { visit about_path }
 
     it { should have_selector( 'header' ) }
 
     it { should have_selector( 'header h1' ) }
 
     it { should have_selector( 'header nav.main' ) }
-    it { should have_selector( 'header nav.main a[href="' + root_url + '"]', { text: 'Home' } ) }
-    it { should have_selector( 'header nav.main a[href="' + about_url + '"]', { text: 'About' } ) }
+    it { should have_selector( 'header nav.main a[href*="' + root_path + '"]', { text: 'Home' } ) }
+    it { should have_selector( 'header nav.main a[href*="' + about_path + '"]', { text: 'About' } ) }
 
     it { should have_selector( 'header nav.user' ) }
 
-    # without being signed in yet
-    it { should have_selector( 'header nav.user a[href="' + new_user_session_url + '"]', { text: 'Sign In' } ) }
+    context ( 'without being signed in' ) {
+      it {
+        should have_css 'header nav.user a[href*="' + new_user_session_path + '"]', text: 'Sign In'
+      }
+    }
 
     it { should have_selector( 'footer' ) }
 
@@ -27,9 +30,9 @@ describe 'layout requests' do
 
     it { should have_selector( 'footer nav.footer' ) }
 
-    it { should have_selector( 'footer nav.footer a[href="' + terms_url + '"]', { text: 'Terms & Conditions' } ) }
-    it { should have_selector( 'footer nav.footer a[href="' + privacy_url + '"]', { text: 'Privacy' } ) }
-    it { should have_selector( 'footer nav.footer a[href="' + contact_url + '"]', { text: 'Contact Us' } ) }
+    it { should have_selector( 'footer nav.footer a[href*="' + terms_path + '"]', { text: 'Terms & Conditions' } ) }
+    it { should have_selector( 'footer nav.footer a[href*="' + privacy_path + '"]', { text: 'Privacy' } ) }
+    it { should have_selector( 'footer nav.footer a[href*="' + contact_path + '"]', { text: 'Contact Us' } ) }
   end
 
 end

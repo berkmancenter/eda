@@ -31,7 +31,6 @@ describe 'static pages requests' do
     before { visit about_path }
 
     it {
-      snap
       should have_title 'About Emily Dickinson Archive'
     }
 

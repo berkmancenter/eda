@@ -13,6 +13,9 @@
             <%= render partial: 'works/search_form', locals: { remote: true } %>
             <% if @search %>
                 <%= render partial: "works/search_results_list" %>
+            <% else %>
+            <%# #5851 we need an empty results div for ajax search %>
+                <div class="search-works-results">
             <% end %>
         </section>
         <%= render partial: "works/browse" %>
