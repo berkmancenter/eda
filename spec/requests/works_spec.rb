@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-include WorkHelper
-
 describe ( 'works requests' ) {
   subject { page }
 
@@ -14,14 +12,14 @@ describe ( 'works requests' ) {
 
   end
 
-  describe 'get /editions/:edition_id/works/:id' do
+  describe 'get /editions/:edition_id/works/:id', :js => true do
     context 'with no stanzas' do
       let ( :work ) { Work.find_by_title 'no_stanzas' }
 
       before { visit edition_work_path( work.edition, work ) }
 
       it ( 'should render empty work and not throw exception' ) { 
-        should have_selector( 'h1', text: work.title );
+        should have_title 'Emily Dickinson Archive'
       }
     end
   end

@@ -1,4 +1,6 @@
 class WorksController < ApplicationController
+    include WorkHelper
+
     before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
     before_filter :load_edition, except: [:index, :browse, :search, :choose_edition]
     before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
