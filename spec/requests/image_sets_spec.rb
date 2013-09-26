@@ -103,13 +103,13 @@ describe ( 'image_sets requests' ) {
         context 'with search submit', :js => true do
           before {
             fill_in 'Search for:', with: 'awake'
-            #click_button 'Search'
-            page.execute_script("$('.search-works-form button').click()")
+            click_button 'Search'
           }
 
           it ( 'should have performed a search' ) {
+            find( '.search-works-form input[name="q"]' ).value.should eq( 'awake' )
+
             snap
-            should have_selector '.search-works-form input[name="q"][value="awake"]'
 
             should have_selector '.search-works-results'
 
