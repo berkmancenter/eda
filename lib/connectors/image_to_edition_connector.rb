@@ -18,24 +18,24 @@ class ImageToEditionConnector
             edition.save!
         end
 
-        last_image = nil
-        root_image_set = ImageSet.new(name: 'All Images')
+#        last_image = nil
+#        root_image_set = ImageSet.new(name: 'All Images')
 
         # TODO: Check that there are no blank pages in fascicles
         # Use Houghton order for those not ordered by Franklin
-        works_by_fascicle = Work.all.group_by{|w| w.metadata['fascicle']}
-        works_by_fascicle.each do |fascicle, works|
-            image_set = ImageSet.new(name: "Fascicle #{fascicle}")
-            image_set.move_to_child_of root_image_set
-            works.sort_by!{|w| w.metadata['fascicle_order']}
-            works.each do |work|
-                work.image_set.each do |image|
-                    next if image == last_image
-                    image_set << image
-                    last_image = image
-                end
-            end
-        end
-        Work.all.group_by{|w| w.metadata['set']}
+#        works_by_fascicle = Work.all.group_by{|w| w.metadata['fascicle']}
+#        works_by_fascicle.each do |fascicle, works|
+#            image_set = ImageSet.new(name: "Fascicle #{fascicle}")
+#            image_set.move_to_child_of root_image_set
+#            works.sort_by!{|w| w.metadata['fascicle_order']}
+#            works.each do |work|
+#                work.image_set.each do |image|
+#                    next if image == last_image
+#                    image_set << image
+#                    last_image = image
+#                end
+#            end
+#        end
+#        Work.all.group_by{|w| w.metadata['set']}
     end
 end

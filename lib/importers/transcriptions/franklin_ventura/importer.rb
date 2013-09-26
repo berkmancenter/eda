@@ -251,8 +251,6 @@ module FranklinVentura
             when 's'
                 work.metadata['set'] = matches[:number].to_i
             end
-            puts work.metadata
-            exit
         end
 
         def add_holder_info(work, poem_xml)

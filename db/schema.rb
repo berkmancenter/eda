@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20130821160430) do
   add_index "editions", ["work_set_id"], :name => "index_editions_on_work_set_id"
 
   create_table "images", :force => true do |t|
+    t.text     "title"
     t.text     "url"
     t.text     "metadata"
     t.text     "credits"
