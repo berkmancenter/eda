@@ -174,7 +174,7 @@ describe ( 'image_sets requests' ) {
             }
 
             it {
-              should have_css 'h1', text: wonder, visible: false
+              should have_css '.work-transcription h3', text: wonder
             }
           }
         }
