@@ -1,9 +1,9 @@
-class LOCImageImporter
+class AASImageImporter
     def import(directory)
-        puts "Importing Library of Congress images"
-        collection = Collection.create!(name: 'Library of Congress', :metadata => {'Library' => 'Library of Congress'})
+        puts "Importing AAS images"
+        collection = Collection.create!(name: 'American Antiquarian Society', :metadata => {'Library' => 'AAS'})
         total_files = Dir.entries(directory).count
-        pbar = ProgressBar.new('LOC Images', total_files)
+        pbar = ProgressBar.new('AAS Images', total_files)
         Dir.open(directory).each_with_index do |filename, i|
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
@@ -11,7 +11,7 @@ class LOCImageImporter
             width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
             image = Image.new(
                 :url => image_url,
-                :credits => 'LOC credits',
+                :credits => 'AAS credits',
                 :web_width => width,
                 :web_height => height,
                 :metadata => {

@@ -190,8 +190,31 @@ namespace :emily do
             end
 
             desc 'Import Library of Congress images'
-            task :loc => [:environment] do
-                # These don't exist yet
+            task :loc, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'loc_output')
+                BPLFlickrImporter.new.import(image_dir)
+            end
+
+            desc 'Import AAS images'
+            task :aas, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'aas_output')
+                AASImageImporter.new.import(image_dir)
+            end
+
+            desc 'Import other images'
+            task :other, [:image_dir] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'other_output')
+                OtherImageImporter.new.import(image_dir)
+            end
+
+            desc 'Import all images'
+            task :all => [:environment] do
+                Rake::Task["emily:import:images:aas"].execute
+                Rake::Task["emily:import:images:loc"].execute
+                Rake::Task["emily:import:images:other"].execute
+                Rake::Task["emily:import:images:harvard"].execute
+                Rake::Task["emily:import:images:amherst"].execute
+                Rake::Task["emily:import:images:bpl"].execute
             end
         end
 
@@ -214,16 +237,10 @@ namespace :emily do
             else
                 !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
             end
-            Rake::Task["emily:import:transcriptions:franklin"].execute
-            Rake::Task["emily:import:transcriptions:johnson"].execute
-            Rake::Task["emily:import:transcriptions:gutenberg"].execute
-            Rake::Task["emily:import:transcriptions:single_hound"].execute
-            Rake::Task["emily:import:transcriptions:revisions"].execute
+            Rake::Task["emily:import:transcriptions:all"].execute
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
-            Rake::Task["emily:import:images:harvard"].execute
-            Rake::Task["emily:import:images:amherst"].execute
-            Rake::Task["emily:import:images:bpl"].execute
+            Rake::Task["emily:import:images:all"].execute
             Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
