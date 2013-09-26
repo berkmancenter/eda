@@ -23,6 +23,7 @@ gem 'amatch'
 gem 'htmlentities'
 gem 'progressbar'
 gem 'naturally'
+gem 'roman-numerals'
 
 group :development, :test do
   gem 'rspec-rails'

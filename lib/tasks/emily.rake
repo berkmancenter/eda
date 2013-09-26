@@ -70,7 +70,7 @@ namespace :emily do
 
         desc 'Find works without images'
         task :works_without_images => [:environment] do |task|
-            puts Work.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
+            puts Edition.find_by_work_number_prefix('F').works.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
         end
     end
 
@@ -101,6 +101,12 @@ namespace :emily do
                 max_poems = args[:max_poems]
                 filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'johnson.txt')
                 JohnsonImporter.new.import(filename, max_poems)
+            end
+
+            desc 'Import Single Hound'
+            task :single_hound, [:filename] => [:environment] do |task, args|
+                filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'single_hound.xml')
+                SingleHoundImporter.new.import(filename)
             end
 
             desc 'Import Project Gutenberg works'

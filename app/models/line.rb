@@ -24,8 +24,13 @@ class Line < ActiveRecord::Base
   end
 
   def mods_at(address)
-      @mods.select{|m| m.start_address == address && m.parent_id == nil}
+      if @mods.nil?
+          output = []
+      else
+          output = @mods.select{|m| m.start_address == address && m.parent_id == nil}
+      end
       #work.line_modifiers.all.select{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
+      output
   end
 
   def parent
