@@ -32,5 +32,19 @@ describe 'ImageSet model' do
       iis.children.count.should eq( 0 )
     end
 
+    describe 'leaf_after' do
+      context 'image_set has an image with a greater position number' do
+        it { pending 'returns the image with the next greatest position number' }
+      end
+
+      context 'image_set does not have an image with a greater position number' do
+        it { pending 'returns the first image of the next image_set' }
+      end
+
+      context 'last image of last image_set' do
+        it { pending 'returns nil' }
+      end
+    end
+
   end
 end
