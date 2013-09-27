@@ -1,5 +1,38 @@
 namespace :emily do
 
+    desc 'Rename images to match holder ids'
+    task :rename_images => [:environment] do |t|
+        directory = '/home/justin/Desktop/previews/'
+        Dir.entries(directory).each do |f|
+            next unless File.file?(File.join(directory, f))
+            url = f.sub('.jpg', '')
+            image = Image.find_by_url(url)
+            if image.nil?
+                puts url
+            end
+            next if image.nil? || image.url.nil?
+            case f[0..1]
+            when 'ms'
+                next
+            when 'as'
+                pattern = /-\d{1,2}(-\d+)?$/
+                id = image.metadata['Identifiers'].find{|i| i.starts_with?('Amherst Manuscript')}
+                if url.match(pattern)
+                    new_name = "#{id.parameterize}#{url.match(pattern)[0]}"
+                else 
+                    puts url
+                end
+                File.rename(File.join(directory, f), File.join(directory, new_name))
+            when '24'
+                id = image.metadata['Identifier (BPL Ms. #)']
+                new_name = id.parameterize + '-' + image.metadata['Accession No']
+                File.rename(File.join(directory, f), File.join(directory, new_name))
+            else
+                #puts f
+            end
+        end
+    end
+
     namespace :generate do
         desc 'Process Harvard images to remove color bars and copyright info'
         task :harvard_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
@@ -96,8 +129,19 @@ namespace :emily do
         end
 
         desc 'Find works without images'
-        task :works_without_images => [:environment] do |task|
-            puts Edition.find_by_work_number_prefix('F').works.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}.map{|w| w.full_id}.join("\n")
+        task :works_without_images, [:output_file] => [:environment] do |task, args|
+            require 'csv'
+            output_file = args[:output_file] || Rails.root.join('tmp', 'without_images.csv')
+            csv = CSV.open(output_file, 'wb')
+            csv << ['work_id', 'holder_info']
+            works = Edition.find_by_work_number_prefix('F').works.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}
+            works.each do |work|
+                metadata = nil
+                if work.metadata['holder_code']
+                    metadata = work.metadata['holder_code'].zip(work.metadata['holder_subcode'], work.metadata['holder_id']).map{|m| m.join(' ')}.join(', ')
+                end
+                csv << [work.full_id, metadata]
+            end
         end
     end
 
