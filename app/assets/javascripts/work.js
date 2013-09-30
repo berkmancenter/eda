@@ -124,7 +124,7 @@ $(document).ready(function() {
 
         aoColumnDefs: [ {
           sType: "natural",
-          aTargets: [ 0, 1 ]
+          aTargets: [ 4 ]
         } ],
 
         fnInitComplete: function() {
