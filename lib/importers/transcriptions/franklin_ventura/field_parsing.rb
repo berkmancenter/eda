@@ -70,6 +70,7 @@ module FieldParsing
     end
 
     def get_alternate(text)
+        a = []
         alternate_pattern = /(?<line_num>\d+) (?<alternates>.*)/
         full_line_alternate_pattern = /(?<line_num>\d+)\] (?<alternates>.*)/
         matches = text.match(alternate_pattern)
@@ -77,13 +78,15 @@ module FieldParsing
         if matches && matches['line_num'] && matches['alternates']
             alts = matches['alternates'].split('] ')
             if alts[0] && alts[1]
-                a = Alternate.new(
-                    :start_line_number => matches['line_num'].to_i,
-                    :end_line_number => matches['line_num'].to_i,
-                    :original_characters => alts[0].strip,
-                    :new_characters => alts[1].strip,
-                    :subtype => 'alternate'
-                )
+                alts[1].split('&#8226;').each do |alt|
+                    a << Alternate.new(
+                        :start_line_number => matches['line_num'].to_i,
+                        :end_line_number => matches['line_num'].to_i,
+                        :original_characters => alts[0].strip,
+                        :new_characters => alt.strip,
+                        :subtype => 'alternate'
+                    )
+                end
                 return a
             else
                 #puts matches.inspect

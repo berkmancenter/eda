@@ -4,6 +4,7 @@
 class GutenbergImporter
 
     def import(filename)
+        puts 'Importing Gutenberg editions'
         editions = create_editions
         text = File.open(filename, 'r:ISO-8859-1:UTF-8').read
         xml = turn_into_xml(text)
@@ -101,7 +102,7 @@ class GutenbergImporter
     def parse_xml(xml)
         seri = []
         doc = Nokogiri::XML::Document.parse(xml, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-        pbar = ProgressBar.new("Parse XML", doc.css('work').count)
+        pbar = ProgressBar.new("Parse Gutenberg", doc.css('work').count)
         doc.css('series').each do |series|
             works = []
             series.css('work').each_with_index do |work, i|
