@@ -4,18 +4,19 @@ var targetAspectRatio = 0.62;
 
 $(function() { 
     var sbsPages = $( ".sbs-pages" );
-    var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.82;
-    var imageWidth = imageHeight * targetAspectRatio;
 
-    // Event handlers
-    $('.side-by-side #next-page').on('click', function() { sbsPages.turn('next'); });
-    $('.side-by-side #previous-page').on('click', function() { sbsPages.turn('previous'); });
+    if ( sbsPages.length > 0 ) {
+        var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.82;
+        var imageWidth = imageHeight * targetAspectRatio;
 
-    // Make controls prettier
-    $('.page-controls div').css({margin: '0.2em 0 0', width: imageWidth + 'px'}).find('a').css('margin', 0);
-    $('.page-links div').css({margin: '0.1em 0 0', width: imageWidth + 'px'});
+        // Event handlers
+        $('.side-by-side #next-page').on('click', function() { sbsPages.turn('next'); });
+        $('.side-by-side #previous-page').on('click', function() { sbsPages.turn('previous'); });
 
-    if ( numberOfPages ) {
+        // Make controls prettier
+        $('.page-controls div').css({margin: '0.2em 0 0', width: imageWidth + 'px'}).find('a').css('margin', 0);
+        $('.page-links div').css({margin: '0.1em 0 0', width: imageWidth + 'px'});
+
         $('.total-pages').html(numberOfPages);
         var page;
         if ( window.location.hash ) {
@@ -61,26 +62,26 @@ $(function() {
                 }
             }
         });
-    }
 
-    function addPage(images, page, book) {
-        // 	First check if the page is already in the book
-        if (!book.turn('hasPage', page)) {
-            // Create an element for this page
-            var element = $('<div />', {'class': 'page '+((page%2==0) ? 'odd' : 'even'), 'id': 'page-'+page}).html('<i class="loader"></i>');
-            // If not then add the page
-            book.turn('addPage', element, page);
+        function addPage(images, page, book) {
+            // 	First check if the page is already in the book
+            if (!book.turn('hasPage', page)) {
+                // Create an element for this page
+                var element = $('<div />', {'class': 'page '+((page%2==0) ? 'odd' : 'even'), 'id': 'page-'+page}).html('<i class="loader"></i>');
+                // If not then add the page
+                book.turn('addPage', element, page);
 
-            element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl}));
+                element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl}));
+            }
         }
-    }
 
-    function fullImageUrl(filename, width, height) {
-        height = height || imageHeight;
-        width = width || imageWidth;
-        var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
-        return imageUrlTemplate.replace('{image_filename}', filename)
-            .replace('{width}', Math.round(width))
-            .replace('{height}', Math.round(height));
+        function fullImageUrl(filename, width, height) {
+            height = height || imageHeight;
+            width = width || imageWidth;
+            var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+            return imageUrlTemplate.replace('{image_filename}', filename)
+                .replace('{width}', Math.round(width))
+                .replace('{height}', Math.round(height));
+        }
     }
 });
