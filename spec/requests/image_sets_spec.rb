@@ -87,6 +87,15 @@ describe ( 'image_sets requests' ) {
             should have_css '.view.minus-search-panel'
             should have_css '#search-panel.collapsed'
           }
+
+          describe ( 'refresh with collapsed search drawer' ) {
+            before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+            it ( 'should still hide search panel' ) {
+              should have_css '.view.minus-search-panel'
+              should have_css '#search-panel.collapsed'
+            }
+          }
         }
       end
 
@@ -178,6 +187,7 @@ describe ( 'image_sets requests' ) {
             }
           }
         }
+
       end
 
       describe 'interactive image panel', :js => true do
@@ -278,7 +288,10 @@ describe ( 'image_sets requests' ) {
       end
 
       describe 'text drawer', :js => true do
-        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+        before {
+          visit edition_image_set_path( w.edition, w.image_set.children.first )
+          snap
+        }
 
         it ( 'should default to closed #5754' ) {
           should have_css '.view.minus-work-panel'
@@ -294,6 +307,16 @@ describe ( 'image_sets requests' ) {
             should_not have_css '.view.minus-work-panel'
             should_not have_css '#work-panel.collapsed'
           }
+
+          describe ( 'refresh with collapsed text drawer' ) {
+            before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+            it ( 'should still hide work panel' ) {
+              should_not have_css '.view.minus-work-panel'
+              should_not have_css '#work-panel.collapsed'
+            }
+          }
+
         }
       end
 

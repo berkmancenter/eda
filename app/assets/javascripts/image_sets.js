@@ -44,8 +44,12 @@ $( function( ) {
   /* Setup drawers */
   $drawerHandle.click( function( ) {
     var drawerId = $(this).data('drawer');
-    $('#' + drawerId).toggleClass( 'collapsed' );
+    var collapsed = $('#' + drawerId).toggleClass( 'collapsed' ).hasClass( 'collapsed' );
     $(viewSelector).toggleClass( 'minus-' + drawerId );
+
+    if ( window.sessionStorage ) {
+      window.sessionStorage.setItem( drawerId + '-collapsed',  collapsed );
+    }
   } );
   
   /* Setup bottom drawer */
@@ -85,12 +89,22 @@ $( function( ) {
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {
-      var idx = $.bbq.getState( this.id, true );
+      var drawerId = this.id;
+      var idx = $.bbq.getState( drawerId, true );
 
-      // show the drawer if it contains a selected tab
-      if ($( this ).hasClass( 'collapsed' ) && typeof idx != 'undefined') {
+      if ( window.sessionStorage && window.sessionStorage.getItem( drawerId + '-collapsed' ) !== null ) {
+        // show the drawer if told to do so in sessionStorage
+        // overrides opening drawer based on panel selection below
+        var collapsed = window.sessionStorage.getItem( drawerId + '-collapsed' ) === 'true';
+        $('#' + drawerId).toggleClass( 'collapsed', collapsed );
+        $(viewSelector).toggleClass( 'minus-' + drawerId, collapsed );
+      } else {
+        // show the drawer if it contains a selected tab
+        if ($( this ).hasClass( 'collapsed' ) && typeof idx != 'undefined') {
           $(this).find('.drawer-handle').click();
+        }
       }
+
       idx = idx || 0;
 
       $( this ).find( tabSelector ).removeClass( "selected" ).eq( idx ).addClass( "selected" );
