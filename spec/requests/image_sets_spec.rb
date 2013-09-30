@@ -125,6 +125,28 @@ describe ( 'image_sets requests' ) {
         end
       end
 
+      describe 'toggle browse panel', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}"
+          click_link 'Browse'
+        }
+
+        it {
+          should have_css '.browse-works'
+          current_url.should match 'search-panel=1'
+        }
+
+        describe ( 'toggle image drawer' ) {
+          before {
+            click_link I18n.t( :image_info )
+          }
+
+          it ( 'should not affect browse panel in url' ) {
+            current_url.should match 'search-panel=1'
+          }
+        }
+      end
+
       describe 'browse panel', :js => true do
         before {
           visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#search-panel=1"
@@ -290,7 +312,6 @@ describe ( 'image_sets requests' ) {
       describe 'text drawer', :js => true do
         before {
           visit edition_image_set_path( w.edition, w.image_set.children.first )
-          snap
         }
 
         it ( 'should default to closed #5754' ) {

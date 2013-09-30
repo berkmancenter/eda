@@ -50,6 +50,8 @@ $( function( ) {
       $( '.image-drawer-tabs a' ).removeClass( 'hidden' ).not( this ).addClass( 'hidden' );
       $( '.image-drawer-content>div' ).removeClass( 'hidden' ).not( drawerContentSelector ).addClass( 'hidden' );
     }
+
+    return false;
   } );
 
   if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
