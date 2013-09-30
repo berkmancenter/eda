@@ -1,26 +1,4 @@
 $( function( ) {
-  $(".edition-selector").on('change', function() {
-      window.location.href = $(this).val();
-  });
-
-  var sbsPages = $( ".sbs-pages" );
-  
-  if ( sbsPages.length ) {
-    var page;
-    if ( window.location.hash ) {
-      var hashParts = window.location.hash.split( '/' );
-      if ( $.isNumeric( hashParts[ 1 ] ) ) {
-        page = parseInt( hashParts[ 1 ] );
-      }
-
-    }
-    sbsPages.turn( {
-      width: 770,
-      height: 600,
-      page: page
-    } );
-  }
-
   var interactiveImagePanel = $( '#interactive-image-panel' );
   var tabs = $( ".tab-menu" );
   var tabSelector = ".panel-menu a";
@@ -30,6 +8,10 @@ $( function( ) {
   var bottomDrawerSelector = '.bottom.drawer';
 
   var $drawerHandle = $( '.left.drawer-handle,.right.drawer-handle' );
+
+  $(".edition-selector").on('change', function() {
+      window.location.href = $(this).val();
+  });
 
   tabs.find( tabSelector ).click( function( ) {
     var state = { };
