@@ -314,7 +314,28 @@
     width: 30em;
 }
 
-.ui-tooltip-content {
-    display: inline-block;
+.side-by-side {
+    .page-controls {
+        margin-top: 0.6em;
+        div {
+            display: inline-block;
+            margin: 0.2em 10% 0;
+        }
+    }
+    .page-links {
+        text-align: center;
+
+        div {
+            display: inline-block;
+            margin: 0.1em 10% 0;
+        }
+    }
+    .page-counter {
+        text-align: center;
+        margin-top: -2em;
+    }
 }
-/* media break at columns=28em */
+i.preview {
+    float: left;
+    cursor: pointer;
+}

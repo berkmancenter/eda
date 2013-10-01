@@ -5,27 +5,27 @@ describe( "Work model" ) {
 
   subject { work }
 
-  describe "#image_after" do
-      context "work doesn't have an image with a greater position number" do
-          pending 'it "returns nil"'
-      end
-
-      context "work has an image with a greater position number" do
-          pending 'it "returns the image with the next greatest position number"'
-      end
-  end
   describe( "with valid data" ) {
-
     it {
       should be_valid
     }
   }
+
+  describe 'has_image?' do
+    it { pending 'returns true if work has image' }
+  end
 
   describe( "with an edition" ) {
     describe( "the work's edition" ) {
       it {
         work.edition.should_not eq( nil )
       }
+    }
+  }
+
+  describe ( 'find_by_edition_and_image_set' ) {
+    it {
+      pending 'should return all works in the given image_set'
     }
   }
 }

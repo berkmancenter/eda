@@ -1,26 +1,4 @@
 $( function( ) {
-  $(".edition-selector").on('change', function() {
-      window.location.href = $(this).val();
-  });
-
-  var sbsPages = $( ".sbs-pages" );
-  
-  if ( sbsPages.length ) {
-    var page;
-    if ( window.location.hash ) {
-      var hashParts = window.location.hash.split( '/' );
-      if ( $.isNumeric( hashParts[ 1 ] ) ) {
-        page = parseInt( hashParts[ 1 ] );
-      }
-
-    }
-    sbsPages.turn( {
-      width: 770,
-      height: 600,
-      page: page
-    } );
-  }
-
   var interactiveImagePanel = $( '#interactive-image-panel' );
   var tabs = $( ".tab-menu" );
   var tabSelector = ".panel-menu a";
@@ -31,6 +9,10 @@ $( function( ) {
   var previewUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_url}.tif&WID=<%= Eda::Application.config.emily['image_hover_preview_width'] %>&CVT=jpeg";
 
   var $drawerHandle = $( '.left.drawer-handle,.right.drawer-handle' );
+
+  $(".edition-selector").on('change', function() {
+      window.location.href = $(this).val();
+  });
 
   tabs.find( tabSelector ).click( function( ) {
     var state = { };
@@ -45,8 +27,12 @@ $( function( ) {
   /* Setup drawers */
   $drawerHandle.click( function( ) {
     var drawerId = $(this).data('drawer');
-    $('#' + drawerId).toggleClass( 'collapsed' );
+    var collapsed = $('#' + drawerId).toggleClass( 'collapsed' ).hasClass( 'collapsed' );
     $(viewSelector).toggleClass( 'minus-' + drawerId );
+
+    if ( window.sessionStorage ) {
+      window.sessionStorage.setItem( drawerId + '-collapsed',  collapsed );
+    }
   } );
   
   /* Setup bottom drawer */
@@ -65,6 +51,8 @@ $( function( ) {
       $( '.image-drawer-tabs a' ).removeClass( 'hidden' ).not( this ).addClass( 'hidden' );
       $( '.image-drawer-content>div' ).removeClass( 'hidden' ).not( drawerContentSelector ).addClass( 'hidden' );
     }
+
+    return false;
   } );
 
   if ( window.sessionStorage && window.sessionStorage.getItem( 'seenDrawer' ) ) {
@@ -86,12 +74,22 @@ $( function( ) {
 
   $( window ).on( "hashchange", function( e ) {
     tabs.each( function( ) {
-      var idx = $.bbq.getState( this.id, true );
+      var drawerId = this.id;
+      var idx = $.bbq.getState( drawerId, true );
 
-      // show the drawer if it contains a selected tab
-      if ($( this ).hasClass( 'collapsed' ) && typeof idx != 'undefined') {
+      if ( window.sessionStorage && window.sessionStorage.getItem( drawerId + '-collapsed' ) !== null ) {
+        // show the drawer if told to do so in sessionStorage
+        // overrides opening drawer based on panel selection below
+        var collapsed = window.sessionStorage.getItem( drawerId + '-collapsed' ) === 'true';
+        $('#' + drawerId).toggleClass( 'collapsed', collapsed );
+        $(viewSelector).toggleClass( 'minus-' + drawerId, collapsed );
+      } else {
+        // show the drawer if it contains a selected tab
+        if ($( this ).hasClass( 'collapsed' ) && typeof idx != 'undefined') {
           $(this).find('.drawer-handle').click();
+        }
       }
+
       idx = idx || 0;
 
       $( this ).find( tabSelector ).removeClass( "selected" ).eq( idx ).addClass( "selected" );
@@ -116,14 +114,20 @@ $( function( ) {
     $( '.note-save-result' ).css('display', 'inline').text( 'Saved' ).delay(1000).fadeOut(1000);
   } );
 
-  // Preview image
-  $( document ).tooltip({
-      items: "a.previewable-image",
-      position: 
+  function fullImageUrl(filename, width, height) {
+      width = <%= Eda::Application.config.emily['small_image_preview_width'] %>
+      var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+      return imageUrlTemplate.replace('{image_filename}', filename)
+          .replace('{width}', Math.round(width))
+          .replace('{height}', Math.round(height));
+  }
+  $(document).tooltip({
+      items: ".preview",
+      position: { my: "left top", at: "right bottom" },
       content: function() {
           var element = $( this );
-          var imageUrl = previewUrlTemplate.replace('{image_url}', element.data('image-url'));
-          return '<img class="image-preview" alt="' + element.text() + '" src="' + imageUrl + '" />';
+          var text = '';
+          return "<img class='map' alt='" + text + "' src='" + fullImageUrl(element.data('image-filename')) + "'>";
       }
-    });
+  });
 } );

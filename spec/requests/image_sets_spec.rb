@@ -87,6 +87,15 @@ describe ( 'image_sets requests' ) {
             should have_css '.view.minus-search-panel'
             should have_css '#search-panel.collapsed'
           }
+
+          describe ( 'refresh with collapsed search drawer' ) {
+            before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+            it ( 'should still hide search panel' ) {
+              should have_css '.view.minus-search-panel'
+              should have_css '#search-panel.collapsed'
+            }
+          }
         }
       end
 
@@ -114,6 +123,28 @@ describe ( 'image_sets requests' ) {
             should have_css '.search-works-results a', count: 1
           }
         end
+      end
+
+      describe 'toggle browse panel', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}"
+          click_link 'Browse'
+        }
+
+        it {
+          should have_css '.browse-works'
+          current_url.should match 'search-panel=1'
+        }
+
+        describe ( 'toggle image drawer' ) {
+          before {
+            click_link I18n.t( :image_info )
+          }
+
+          it ( 'should not affect browse panel in url' ) {
+            current_url.should match 'search-panel=1'
+          }
+        }
       end
 
       describe 'browse panel', :js => true do
@@ -178,6 +209,7 @@ describe ( 'image_sets requests' ) {
             }
           }
         }
+
       end
 
       describe 'interactive image panel', :js => true do
@@ -278,7 +310,9 @@ describe ( 'image_sets requests' ) {
       end
 
       describe 'text drawer', :js => true do
-        before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+        before {
+          visit edition_image_set_path( w.edition, w.image_set.children.first )
+        }
 
         it ( 'should default to closed #5754' ) {
           should have_css '.view.minus-work-panel'
@@ -294,6 +328,16 @@ describe ( 'image_sets requests' ) {
             should_not have_css '.view.minus-work-panel'
             should_not have_css '#work-panel.collapsed'
           }
+
+          describe ( 'refresh with collapsed text drawer' ) {
+            before { visit edition_image_set_path( w.edition, w.image_set.children.first ) }
+
+            it ( 'should still hide work panel' ) {
+              should_not have_css '.view.minus-work-panel'
+              should_not have_css '#work-panel.collapsed'
+            }
+          }
+
         }
       end
 

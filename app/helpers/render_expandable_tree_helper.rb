@@ -18,8 +18,9 @@ module RenderExpandableTreeHelper
         "
           <li data-node-id='#{ node.id }'>
             <div class='item'>
-          #{"<i class='handle'></i>" if h.user_signed_in? && h.current_user == options[:edition].owner}
+              #{"<i class='handle'></i>" if h.user_signed_in? && h.current_user == options[:edition].owner}
               #{"<b class='expand plus'>+</b>" unless node.leaf?}
+              #{"<i class='preview' data-image-filename='#{node.nestable.url}'>Pre</i>" if node.nestable && node.nestable.url}
               #{ show_link }
               #{ controls }
             </div>
@@ -40,11 +41,7 @@ module RenderExpandableTreeHelper
         end
         title_field = options[:title]
 
-        if node.nestable && node.nestable.url
-            "<h4>#{ h.link_to(node.send(title_field), url, data: { image_url: node.nestable.url}, class: 'previewable-image') }</h4>"
-        else
-            "<h4>#{ h.link_to(node.send(title_field), url) }</h4>"
-        end
+        "<h4>#{ h.link_to(node.send(title_field), url) }</h4>"
       end
 
       def controls
