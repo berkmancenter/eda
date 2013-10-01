@@ -9,7 +9,7 @@ class ImageSetsController < ApplicationController
     include TheSortableTreeController::ExpandNode
 
     def index
-        @image_sets = @edition.image_set.self_and_descendants.includes(:nestable)
+        @image_sets = @edition.image_set.children.includes(:nestable)
     end
 
     def show

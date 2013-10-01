@@ -1,5 +1,13 @@
-<ol class="sortable_tree" data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>">
+<ol class="sortable_tree expandable"
+    data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>"
+    data-expand_node_url="<%= expand_node_edition_image_sets_url(@edition) %>">
     <% cache cache_key_for_image_sets(@image_sets) do %>
-<%= build_server_tree(@image_sets, type: :sortable, edition: @edition, title: :name, rebuild_url: rebuild_edition_image_sets_url(@edition)) %>
+        <%= build_server_tree(
+            @image_sets,
+            type: :expandable,
+            edition: @edition,
+            title: :name,
+            rebuild_url: rebuild_edition_image_sets_url(@edition)
+        ) %>
     <% end %>
 </ol>

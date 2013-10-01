@@ -17,5 +17,6 @@
 //= require jquery.dataTables
 //= require jquery.simplemodal
 //= require sortable_tree/initializer
+//= require expandable_tree/initializer
 //= require turn
 //= require_tree .

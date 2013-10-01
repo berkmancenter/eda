@@ -28,6 +28,7 @@ $( function( ) {
   var notesSelector = "#set-notes";
   var viewSelector = 'section.view';
   var bottomDrawerSelector = '.bottom.drawer';
+  var previewUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_url}.tif&WID=<%= Eda::Application.config.emily['image_hover_preview_width'] %>&CVT=jpeg";
 
   var $drawerHandle = $( '.left.drawer-handle,.right.drawer-handle' );
 
@@ -114,4 +115,17 @@ $( function( ) {
     var d = new Date();
     $( '.note-save-result' ).css('display', 'inline').text( 'Saved' ).delay(1000).fadeOut(1000);
   } );
+
+  // Preview image
+  $( document ).tooltip({
+      items: "a.previewable-image",
+      position: { my: "left top+15", at: "right bottom", collision: "flipfit" },
+      content: function() {
+          var element = $( this );
+          var imageUrl = previewUrlTemplate.replace('{image_url}', element.data('image-url'));
+          return '<img class="image-preview" alt="' + element.text() + '" src="' + imageUrl + '" />';
+      }
+    });
+
+    console.log($(window).height() - $('header').height() - $('footer').height());
 } );

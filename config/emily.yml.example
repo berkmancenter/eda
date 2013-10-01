@@ -1,6 +1,7 @@
 defaults: &DEFAULTS
     default_edition: "The Poems of Emily Dickinson: Variorum Edition"
     image_download_max_width: 1200
+    image_hover_preview_width: 200
 
 development:
     <<: *DEFAULTS

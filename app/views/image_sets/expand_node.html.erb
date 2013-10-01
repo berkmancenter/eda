@@ -1,0 +1,8 @@
+<ol class="nested_set">
+    <%= build_server_tree(
+        @children,
+        type: :expandable,
+        edition: @edition,
+        title: :name
+    ) %>
+</ol>

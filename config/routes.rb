@@ -11,6 +11,7 @@ Eda::Application.routes.draw do
         resources :image_sets do
             collection do 
                 post :rebuild
+                post :expand_node
             end
             resources :works
         end
