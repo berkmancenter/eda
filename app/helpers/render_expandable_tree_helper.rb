@@ -18,7 +18,7 @@ module RenderExpandableTreeHelper
         "
           <li data-node-id='#{ node.id }'>
             <div class='item'>
-              <i class='handle'></i>
+          #{"<i class='handle'></i>" if h.user_signed_in? && h.current_user == options[:edition].owner}
               #{"<b class='expand plus'>+</b>" unless node.leaf?}
               #{ show_link }
               #{ controls }
@@ -48,6 +48,7 @@ module RenderExpandableTreeHelper
       end
 
       def controls
+          return unless h.user_signed_in? && h.current_user == options[:edition].owner
         node = options[:node]
 
         edit_path = h.url_for(:controller => options[:klass].pluralize, :action => :edit, :id => node)
@@ -55,8 +56,8 @@ module RenderExpandableTreeHelper
 
         "
           <div class='controls'>
-            #{ h.link_to '', edit_path, :class => :edit }
-            #{ h.link_to '', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
+            #{ h.link_to 'Edit', edit_path, :class => :edit }
+            #{ h.link_to 'Delete', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           </div>
         "
       end

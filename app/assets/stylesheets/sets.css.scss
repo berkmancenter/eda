@@ -39,3 +39,22 @@
         border-left: 1px dotted $darkTan;
     }
 }
+
+.sortable_tree .expand {
+    border: 0;
+    color: $tan;
+    font-size: 16px;
+    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    margin: 3px 10px 0 0;
+}
+
+.sortable_tree .controls {
+    a.edit, a.delete, a.edit:hover, a.delete:hover {
+        background: transparent;
+        color: $tan;
+        width: auto;
+        height: auto;
+    }
+}

@@ -119,13 +119,11 @@ $( function( ) {
   // Preview image
   $( document ).tooltip({
       items: "a.previewable-image",
-      position: { my: "left top+15", at: "right bottom", collision: "flipfit" },
+      position: 
       content: function() {
           var element = $( this );
           var imageUrl = previewUrlTemplate.replace('{image_url}', element.data('image-url'));
           return '<img class="image-preview" alt="' + element.text() + '" src="' + imageUrl + '" />';
       }
     });
-
-    console.log($(window).height() - $('header').height() - $('footer').height());
 } );
