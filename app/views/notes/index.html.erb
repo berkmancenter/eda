@@ -1,0 +1,8 @@
+<ul>
+<% @notes.each do |note| %>
+    <li>
+    <%= link_to(note.notable.name, url_for(note.notable)) %>
+    <%= note.note %>
+    </li>
+<% end %>
+</ul>

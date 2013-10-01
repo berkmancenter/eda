@@ -19,11 +19,8 @@ $(function() {
 
         $('.total-pages').html(numberOfPages);
         var page;
-        if ( window.location.hash ) {
-            var hashParts = window.location.hash.split( '/' );
-            if ( $.isNumeric( hashParts[ 1 ] ) ) {
-                page = parseInt( hashParts[ 1 ] );
-            }
+        if ( $.isNumeric( $.url().param('page') ) ) {
+            page = parseInt( $.url().param('page') );
         }
 
         sbsPages.turn({

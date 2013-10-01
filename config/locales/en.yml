@@ -32,6 +32,7 @@ en:
   sign_in: 'sign in'
   my_notes: 'My Notes'
   image_info: 'Image Info'
+  word_filter_label: 'Filter'
 
   create_new_edition: 'Create New Edition'
   or: 'or'

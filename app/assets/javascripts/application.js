@@ -16,6 +16,8 @@
 //= require jquery.ui.nestedSortable
 //= require jquery.dataTables
 //= require jquery.simplemodal
+//= require jquery.fastLiveFilter
+//= require purl
 //= require sortable_tree/initializer
 //= require expandable_tree/initializer
 //= require turn
