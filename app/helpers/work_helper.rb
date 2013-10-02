@@ -42,7 +42,7 @@ module WorkHelper
         edition_image_set_path(work.edition, image_set) if image_set
     end
 
-    def edition_selector(other_editions_works, selected_edition)
+    def edition_selector(other_editions_works, selected_edition, id = nil)
         other_editions_works ||= []
         options = []
         disabled = []
@@ -59,7 +59,7 @@ module WorkHelper
         end
         options = options.sort_by{|o| o[1] == selected ? 1 : 2}
 
-        select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector'
+        select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector', id: id
     end
 
     def cache_key_for_works(works, edition=nil)

@@ -30,17 +30,17 @@ table.dataTable tfoot th {
   vertical-align: bottom;
 
   &.date-footer:before {
-    content: "Filter by Date";
+    content: "Filter by Date ";
     font-size: .8em;
   }
 
   &.recipient-footer:before {
-    content: "Filter by Recipient";
+    content: "Filter by Recipient ";
     font-size: .8em;
   }
 
   &.edition-footer:before {
-    content: "Filter by Edition/Library";
+    content: "Filter by Edition/Library ";
     font-size: .8em;
   }
 }

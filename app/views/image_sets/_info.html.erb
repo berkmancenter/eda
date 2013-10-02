@@ -5,7 +5,11 @@
   <% unless image.metadata.nil? %>
   <dl class="credits">
       <dt class="image-credits">Credits</dt><dd><%= image.credits %></dd>
-      <%= render partial: 'shared/metadata', locals: { object: image } %>
   </dl>
+  <a class="show-metadata" href="javascript:void(0);"><%= t :show_metadata %></a>
+  <div class="metadata">
+      <h2>Image Metadata</h2>
+      <dl><%= render partial: 'shared/metadata', locals: { object: image } %></dl>
+  </div>
   <% end %>
 </div>

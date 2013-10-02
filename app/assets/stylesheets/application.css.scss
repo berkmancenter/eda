@@ -134,7 +134,7 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
     h1 {
-      background: $darkGray;
+      background: $highlightGray;
       display: inline-block;
       font-weight: normal;
       padding: 18px 27px 20px;
@@ -151,8 +151,8 @@ body {
   }
 
   .view:not(.three-panel) {
-    padding: 0.4em 2em 4em;
-    margin: 1.2em 5%;
+    padding: 1.4em 2em 4em;
+    margin: 0em 7%;
     background: -webkit-gradient(linear, 0% 100%, 0% 0%, from($darkGray), to($highlightGray), color-stop(.4,$highlightGray));
     border-radius: 2px;
 
@@ -271,3 +271,14 @@ textarea, input:not([type]), input[type="color"], input[type="email"], input[typ
         color: $alertRed;
     }
 }
+
+section.view > form input {
+    margin-bottom: 1em;
+}
+dt {
+    font-weight: bold;
+}
+dd {
+    margin-left: 2em;
+}
+

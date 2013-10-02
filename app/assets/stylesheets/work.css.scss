@@ -31,8 +31,10 @@ body.works.edit, body.works.new, body.works.create {
 
 // work-transcription section rendered from shared
 .work-transcription {
+
   font-size: .9em;
   padding: 0.3em 2em 1em;
+
 
   .line {
       display: block;
@@ -148,7 +150,7 @@ body.works.edit, body.works.new, body.works.create {
 #work-table-wrapper {
     display: none;
 }
-.work-metadata, .work-appearances {
+.metadata, .work-appearances {
     display: none;
 }
 .work-reading-list h3:first-child {

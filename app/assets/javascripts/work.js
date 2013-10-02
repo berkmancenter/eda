@@ -148,7 +148,7 @@ $(document).ready(function() {
 
     $('.show-metadata').on('click', function(e) {
         e.preventDefault();
-        $(this).parent().find('.work-metadata').modal();
+        $(this).parent().find('.metadata').modal();
     });
     $('.show-appearances').on('click', function(e) {
         e.preventDefault();

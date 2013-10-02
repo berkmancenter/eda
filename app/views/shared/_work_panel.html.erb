@@ -11,7 +11,8 @@
     <div class="panel-content">
         <section class="work-transcription">
 
-        <%= edition_selector(other_editions_works, edition) unless work_to_edit %>
+        <label for="edition-selector">Edition: </label>
+        <%= edition_selector(other_editions_works, edition, 'edition-selector') unless work_to_edit %>
 
         <% if work_to_edit && work_to_edit.new_record? %>
             <div class="work-body">
@@ -42,8 +43,12 @@
                 </div>
 
                 <div>
-                    <a class="show-metadata" href="#"><%= t :show_metadata %></a>
-                    <dl class="work-metadata"><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                    <a class="show-metadata" href="javascript:void(0);"><%= t :show_metadata %></a>
+                    <div class="metadata">
+                        <h2>Work Metadata</h2>
+                        <dl><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                    </div>
+
                     <% if work.appearances.count > 0 %>
                     <a class="show-appearances" href="#"><%= t :show_appearances %></a>
                     <div class="work-appearances"><%= render partial: 'works/appearances', locals: { work: work } %></div>

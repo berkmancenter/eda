@@ -33,6 +33,7 @@ en:
   my_notes: 'My Notes'
   image_info: 'Image Info'
   word_filter_label: 'Filter'
+  show_metadata: 'Show Metadata'
 
   create_new_edition: 'Create New Edition'
   or: 'or'
