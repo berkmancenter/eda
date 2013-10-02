@@ -1,5 +1,5 @@
 class ImageToEditionConnector
-    def connect
+    def connect_straight
         pbar = ProgressBar.new("Connecting", Collection.count * Edition.count)
         Edition.all.each do |edition|
             old_image_set = edition.image_set
@@ -17,25 +17,34 @@ class ImageToEditionConnector
             edition.image_set.update_column(:rgt, Sett.maximum('rgt') + 1)
             edition.save!
         end
+    end
 
-#        last_image = nil
-#        root_image_set = ImageSet.new(name: 'All Images')
+    def connect
+        last_image = nil
+        root_image_set = ImageSet.create(name: 'All Images')
 
-        # TODO: Check that there are no blank pages in fascicles
-        # Use Houghton order for those not ordered by Franklin
-#        works_by_fascicle = Work.all.group_by{|w| w.metadata['fascicle']}
-#        works_by_fascicle.each do |fascicle, works|
-#            image_set = ImageSet.new(name: "Fascicle #{fascicle}")
-#            image_set.move_to_child_of root_image_set
-#            works.sort_by!{|w| w.metadata['fascicle_order']}
-#            works.each do |work|
-#                work.image_set.each do |image|
-#                    next if image == last_image
-#                    image_set << image
-#                    last_image = image
-#                end
-#            end
-#        end
-#        Work.all.group_by{|w| w.metadata['set']}
+       # TODO: Check that there are no blank pages in fascicles
+       # Use Houghton order for those not ordered by Franklin
+        works_by_fascicle = Work.all.group_by{|w| w.metadata['fascicle']}
+        pbar = ProgressBar.new("Connecting", works_by_fascicle.keys.count)
+        works_by_fascicle.each do |fascicle, works|
+            image_set = ImageSet.create(name: "Fascicle #{fascicle}")
+            image_set.move_to_child_of root_image_set
+            works.sort_by!{|w| w.metadata['fascicle_order']}
+            works.each do |work|
+                work.image_set.all_images.each do |image|
+                    # Don't add an image more than once (assumes in correct order)
+                    next if image == last_image
+                    image_set << image
+                    last_image = image
+                end
+            end
+            pbar.inc
+        end
+        Edition.all.each do |edition|
+            edition.image_set = root_image_set.duplicate
+            edition.save!
+        end
+        #works_by_set = Work.all.group_by{|w| w.metadata['set']}
     end
 end

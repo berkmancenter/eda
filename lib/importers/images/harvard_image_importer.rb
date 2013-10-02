@@ -39,7 +39,8 @@ class HarvardImageImporter
                         'Imported' => Time.now.to_s,
                         'Order' => page['ORDER'].to_i,
                         'Order Label' => page['ORDERLABEL'],
-                        'Label' => page['LABEL']
+                        'Label' => page['LABEL'],
+                        'Filename' => image_url
                     }
                 )
                 image_count += 1

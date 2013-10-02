@@ -1,11 +1,17 @@
 <nav class="main">
   <ul>
-    <li><%= link_to( 'Home', root_url, ( params[ :action ] == 'home' ? { class: 'selected' } : nil ) ) %></li>
+      <li><%= link_to t(:home_link), root_url, class: "#{"selected" if link_selected?(:home_link)}" %></li>
     <% if params[:action] != 'home' %>
-        <li><%= link_to( 'Manuscripts', works_url, ( params[ :controller ] == 'works' && params[ :action ] == 'index' ? { class: 'selected' } : nil ) ) %></li>
-        <li><%= link_to( 'Lexicon', words_url, ( params[:controller] == 'words' ? { class: 'selected' } : nil ) ) %></li>
+        <li>
+        <%= link_to t(:manuscript_link), works_url, id: 'manuscripts', class: "#{"selected" if link_selected?(:manuscript_link)}" %>
+        <ul>
+            <li>By Work</li>
+            <li>By Image</li>
+        </ul>
+        </li>
+        <li><%= link_to t(:lexicon_link) , words_url, class: "#{"selected" if link_selected?(:lexicon_link)}" %></li>
     <% end %>
-    <li><%= link_to( 'About', about_url, ( params[ :action ] == 'about' || params[ :action ] == 'faq' || params[ :action ] == 'team' || params[ :action ] == 'terms' || params[ :action ] == 'privacy' || params[ :action ] == 'contact' ? { class: 'selected' } : nil ) ) %></li>
+    <li><%= link_to t(:about_link), about_url, class: "#{"selected" if link_selected?(:about_link)}" %></li>
   </ul>
 </nav>
 

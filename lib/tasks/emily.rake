@@ -128,6 +128,23 @@ namespace :emily do
             end
         end
 
+        desc 'Find variants pointing at same images'
+        task :variant_images, [:output_file] => [:environment] do |task, args|
+            require 'csv'
+            output_file = args[:output_file] || Rails.root.join('tmp', 'variant_images.csv')
+            csv = CSV.open(output_file, 'wb')
+            csv << ['image_url', 'word_ids']
+            edition = Edition.find_by_work_number_prefix('F')
+            works = edition.works.all.group_by(&:number)
+            works.each do |number, variants|
+                next unless variants.count > 1
+                duplicated_images = variants.map{|w| w.image_set.all_images}.flatten.group_by(&:id).select{|id, is| is.count > 1}.values.flatten.uniq
+                duplicated_images.each do |i|
+                    csv << [i.url, edition.works.in_image(i).map(&:full_id).join(', ')]
+                end
+            end
+        end
+
         desc 'Find works without images'
         task :works_without_images, [:output_file] => [:environment] do |task, args|
             require 'csv'

@@ -18,6 +18,7 @@
 //= require jquery.simplemodal
 //= require jquery.fastLiveFilter
 //= require purl
+//= require dropit
 //= require sortable_tree/initializer
 //= require expandable_tree/initializer
 //= require turn

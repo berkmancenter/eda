@@ -1,6 +1,6 @@
 class ImageSetsController < ApplicationController
     before_filter :authenticate_user!, only: :rebuild
-    before_filter :load_edition
+    before_filter :load_edition, except: [:index]
     before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
     #before_filter :set_users_current_edition
@@ -9,7 +9,12 @@ class ImageSetsController < ApplicationController
     include TheSortableTreeController::ExpandNode
 
     def index
-        @image_sets = @edition.image_set.children.includes(:nestable)
+        if params[:edition_id]
+            load_edition
+            @image_sets = @edition.image_set.children.includes(:nestable)
+        else
+            @image_sets = Collection.scoped
+        end
     end
 
     def show

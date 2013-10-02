@@ -56,6 +56,11 @@ en:
   image_not_found: 'Image not found'
   default_reading_list: 'My Reading List'
 
+  home_link: 'Home'
+  manuscript_link: 'Manuscripts'
+  lexicon_link: 'Lexicon'
+  about_link: 'About'
+
   datatable:
     th_title: 'First Line/Title'
     th_edition: 'Edition/Library'

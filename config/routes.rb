@@ -62,6 +62,7 @@ Eda::Application.routes.draw do
 
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'
+    get 'collections' => 'image_sets#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
