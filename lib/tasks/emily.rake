@@ -262,17 +262,31 @@ namespace :emily do
                 AASImageImporter.new.import(image_dir)
             end
 
-            desc 'Import other images'
-            task :other, [:image_dir] => [:environment] do |t, args|
-                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'other_output')
-                OtherImageImporter.new.import(image_dir)
+            desc 'Import Beinecke images'
+            task :beinecke, [:image_csv] => [:environment] do |t, args|
+                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
+                ImageCSVImporter.new.import(image_csv)
+            end
+
+            desc 'Import Smith images'
+            task :smith, [:image_csv] => [:environment] do |t, args|
+                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
+                ImageCSVImporter.new.import(image_csv)
+            end
+
+            desc 'Import Vassar images'
+            task :vassar, [:image_csv] => [:environment] do |t, args|
+                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
+                ImageCSVImporter.new.import(image_csv)
             end
 
             desc 'Import all images'
             task :all => [:environment] do
                 Rake::Task["emily:import:images:aas"].execute
                 Rake::Task["emily:import:images:loc"].execute
-                Rake::Task["emily:import:images:other"].execute
+                Rake::Task["emily:import:images:beinecke"].execute
+                Rake::Task["emily:import:images:smith"].execute
+                Rake::Task["emily:import:images:vassar"].execute
                 Rake::Task["emily:import:images:harvard"].execute
                 Rake::Task["emily:import:images:amherst"].execute
                 Rake::Task["emily:import:images:bpl"].execute
