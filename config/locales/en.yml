@@ -58,8 +58,13 @@ en:
 
   home_link: 'Home'
   manuscript_link: 'Manuscripts'
+  by_work_link: 'By Work'
+  by_image_link: 'By Image'
   lexicon_link: 'Lexicon'
   about_link: 'About'
+  my_reading_lists_link: 'My Reading Lists'
+  my_notes_link: 'My Notes'
+  my_account_link: 'My Account'
 
   datatable:
     th_title: 'First Line/Title'

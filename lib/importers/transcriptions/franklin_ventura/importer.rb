@@ -280,7 +280,7 @@ module FranklinVentura
             if node = work_xml.at('publications')
                 node.css('published').each do |published|
                     if variant = published.at('variant')
-                        next unless work.variant == variant.text.strip
+                        next unless work.variant == variant.text.strip || variant.text.empty?
                     end
                     year, month, day = published.at('date').text.split('-').compact
                     month ||= 1

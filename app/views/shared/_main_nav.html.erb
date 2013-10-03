@@ -3,15 +3,22 @@
       <li><%= link_to t(:home_link), root_url, class: "#{"selected" if link_selected?(:home_link)}" %></li>
     <% if params[:action] != 'home' %>
         <li>
-        <%= link_to t(:manuscript_link), works_url, id: 'manuscripts', class: "#{"selected" if link_selected?(:manuscript_link)}" %>
-        <ul>
-            <li>By Work</li>
-            <li>By Image</li>
-        </ul>
+        <%= link_to t(:manuscript_link), works_url, id: 'manuscripts', class: "#{"selected" if link_selected?(:manuscript_link)}", data: { dropdown: '#manuscript-dropdown', 'vertical-offset' => '12'} %>
         </li>
         <li><%= link_to t(:lexicon_link) , words_url, class: "#{"selected" if link_selected?(:lexicon_link)}" %></li>
     <% end %>
     <li><%= link_to t(:about_link), about_url, class: "#{"selected" if link_selected?(:about_link)}" %></li>
   </ul>
+  
+  <div id="manuscript-dropdown" class="dropdown">
+      <ul class="dropdown-menu">
+          <li>
+          <%= link_to t(:by_work_link), works_url %>
+          </li>
+          <li>
+          <%= link_to t(:by_image_link), collections_url %>
+          </li>
+      </ul>
+  </div>
 </nav>
 

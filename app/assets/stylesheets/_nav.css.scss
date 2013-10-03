@@ -24,3 +24,19 @@ nav.main {
 nav.user {
   float: right;
 }
+.dropdown .dropdown-menu, .dropdown .dropdown-panel {
+    background: $highlightGray;
+    border-radius: 0;
+    border: 1px solid $gray;
+    li {
+        display: block;
+    }
+    li > a {
+        color: $lightGray;
+    }
+    li > a:hover {
+        text-decoration: underline;
+        background-color: inherit;
+        color: inherit;
+    }
+}

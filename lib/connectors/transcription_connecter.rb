@@ -117,6 +117,20 @@ class TranscriptionConnecter
         end
     end
 
+    def pull_variant_from_single_hound(publications)
+        sh_pattern = /(<em>)?SH(<\/em>)? \(1914\)/
+        publications.each do |pub|
+            if pub.match(sh_pattern)
+                return pull_variant(pub)
+            end
+        end
+    end
+
+    def find_sh_works_by_page(pages)
+        pages = pages.sub('116-17', '116-117').sub('150-51', '150-151').split('-')
+        Edition.find_by_work_number_prefix('SH14-').works.all.select{|w| w.metadata['Page'] && pages.include?(w.metadata['Page'])}
+    end
+
     def connect(work_map)
         puts 'Connecting Transcriptions'
         map = CSV.open(work_map, 'wb')
@@ -129,6 +143,7 @@ class TranscriptionConnecter
             'P90-' => /<em>Poems<\/em> \(1890\)/,
             'P91-' => /<em>Poems<\/em> \(1891\)/,
             'P96-' => /<em>Poems<\/em> \(1896\)/,
+            'SH14-' => /(<em>)?SH(<\/em>)? \(1914\)/
         }
         similarity_maps = {
             'P90-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P90-')).read,
@@ -139,6 +154,7 @@ class TranscriptionConnecter
         pbar = ProgressBar.new("Connecting", franklin.works.count)
         franklin.works.each do |work|
             pbar.inc
+            added_row = false
             row = CSV::Row.new(headers, [])
             row['F'] = work.full_id
             unless work.metadata && work.metadata['Publications']
@@ -162,7 +178,20 @@ class TranscriptionConnecter
                     end
                 end
             end
-            map << row
+            work.appearances.each do |appearance|
+                if appearance.publication.strip == 'SH' && appearance.date.year == 1914
+                    variant = pull_variant_from_single_hound(work.metadata['Publications'])
+                    variant = work.variant if work.variants.count == 0
+                    next unless variant == work.variant
+                    sh_works = find_sh_works_by_page(appearance.pages)
+                    sh_works.each do |work|
+                        row['SH14-'] = work.full_id
+                        map << row
+                        added_row = true
+                    end
+                end
+            end
+            map << row unless added_row
         end
     end
 end
