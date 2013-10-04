@@ -1,15 +1,15 @@
-class LOCImageImporter
+class VassarImageImporter
     def import(directory)
-        puts "Importing Library of Congress images"
-        collection = Collection.create!(name: 'Library of Congress, Manuscript Division')
+        puts "Importing Vassar images"
+        collection = Collection.create!(name: 'Vassar College, Archives & Special Collections Library')
         total_files = Dir.entries(directory).count
-        pbar = ProgressBar.new('LOC Images', total_files)
+        pbar = ProgressBar.new('Vassar', total_files)
         Dir.open(directory).each_with_index do |filename, i|
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
                 :url => image_url,
-                :credits => 'LOC credits',
+                :credits => 'Vassar credits',
                 :metadata => {
                     'Imported' => Time.now.to_s,
                 }

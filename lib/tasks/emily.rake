@@ -77,13 +77,31 @@ namespace :emily do
             GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
-        desc 'Process LOC images to create tifs'
-        task :other_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other'
-            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/other_output'
+        desc 'Process Beinecke images to create tifs'
+        task :beinecke_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/beinecke'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/beinecke_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
-            GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+            #GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process Smith images to create tifs'
+        task :smith_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/smith'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/smith_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            #GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
+        end
+
+        desc 'Process Vassar images to create tifs'
+        task :vassar_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/vassar'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/vassar_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+            #GeneralImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
         desc 'Create web-ready images for page turning'
@@ -96,7 +114,13 @@ namespace :emily do
         task :images_to_transcriptions_map, [:output_map_file, :blank_images_file] => [:environment] do |task, args|
             output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
             blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
-            ImageToTranscriptionConnector.new.create_map(output_map_file, blank_images_file)
+            additional_maps = [
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'aas.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'smith.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'vassar.csv'), headers: true)
+            ]
+            ImageToTranscriptionConnector.new.create_map(output_map_file, additional_maps, blank_images_file)
         end
 
         desc 'Connect all existing transcriptions together'
@@ -253,43 +277,45 @@ namespace :emily do
             desc 'Import Library of Congress images'
             task :loc, [:image_dir] => [:environment] do |t, args|
                 image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'loc_output')
-                BPLFlickrImporter.new.import(image_dir)
+                LOCImageImporter.new.import(image_dir)
             end
 
             desc 'Import AAS images'
             task :aas, [:image_dir] => [:environment] do |t, args|
                 image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'aas_output')
-                AASImageImporter.new.import(image_dir)
+                metadata_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'aas_metadata.csv')
+                AASImageImporter.new.import(image_dir, metadata_csv)
             end
 
             desc 'Import Beinecke images'
-            task :beinecke, [:image_csv] => [:environment] do |t, args|
-                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
-                ImageCSVImporter.new.import(image_csv)
+            task :beinecke, [:image_directory] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'beinecke_output')
+                metadata_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke_metadata.csv')
+                BeineckeImageImporter.new.import(image_dir, metadata_csv)
             end
 
             desc 'Import Smith images'
-            task :smith, [:image_csv] => [:environment] do |t, args|
-                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
+            task :smith, [:image_directory] => [:environment] do |t, args|
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'smith_output')
                 ImageCSVImporter.new.import(image_csv)
             end
 
             desc 'Import Vassar images'
             task :vassar, [:image_csv] => [:environment] do |t, args|
-                image_csv = args[:image_csv] || File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv')
+                image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'vassar_output')
                 ImageCSVImporter.new.import(image_csv)
             end
 
             desc 'Import all images'
             task :all => [:environment] do
                 Rake::Task["emily:import:images:aas"].execute
-                Rake::Task["emily:import:images:loc"].execute
+                Rake::Task["emily:import:images:amherst"].execute
                 Rake::Task["emily:import:images:beinecke"].execute
+                Rake::Task["emily:import:images:bpl"].execute
+                Rake::Task["emily:import:images:harvard"].execute
+                Rake::Task["emily:import:images:loc"].execute
                 Rake::Task["emily:import:images:smith"].execute
                 Rake::Task["emily:import:images:vassar"].execute
-                Rake::Task["emily:import:images:harvard"].execute
-                Rake::Task["emily:import:images:amherst"].execute
-                Rake::Task["emily:import:images:bpl"].execute
             end
         end
 

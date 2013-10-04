@@ -1,15 +1,15 @@
-class LOCImageImporter
+class SmithImageImporter
     def import(directory)
-        puts "Importing Library of Congress images"
-        collection = Collection.create!(name: 'Library of Congress, Manuscript Division')
+        puts "Importing other images"
+        collection = Collection.create!(name: 'Smith College, Mortimer Rare Book Room')
         total_files = Dir.entries(directory).count
-        pbar = ProgressBar.new('LOC Images', total_files)
+        pbar = ProgressBar.new('Smith', total_files)
         Dir.open(directory).each_with_index do |filename, i|
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
                 :url => image_url,
-                :credits => 'LOC credits',
+                :credits => 'Smith credits',
                 :metadata => {
                     'Imported' => Time.now.to_s,
                 }

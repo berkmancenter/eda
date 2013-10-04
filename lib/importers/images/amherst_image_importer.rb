@@ -1,7 +1,7 @@
 class AmherstImageImporter
     def import(image_directory, mods_directory)
         puts 'Importing Amherst Images'
-        collection = Collection.create(name: 'Amherst Image Collection', metadata: { 'Credits' => 'Amherst Credits' })
+        collection = Collection.create(name: 'Amherst College, Frost Library')
         last_call_number = ''
         sheet_group = collection
         pbar = ProgressBar.new('Amherst', Dir.entries(image_directory).count)
@@ -17,13 +17,9 @@ class AmherstImageImporter
             end
             last_call_number = call_number
             image_url = image_filename.match(/(.*).tif/)[1]
-            web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
-            width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
             image = Image.create(
                 url: image_url,
                 credits: 'Amherst credits',
-                web_width: width,
-                web_height: height,
                 metadata: {
                     'Imported' => Time.now.to_s,
                     'Identifiers' => doc.css('identifier[type=local]').map(&:text),

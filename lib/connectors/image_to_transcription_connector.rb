@@ -1,12 +1,10 @@
 require 'csv'
 class ImageToTranscriptionConnector
-    def create_map(output_map_file, blank_images_file)
+    def create_map(output_map_file, additional_maps, blank_images_file)
         pbar = ProgressBar.new('Images', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
         blank_images = File.readlines(blank_images_file).map(&:strip)
-        amherst_map = CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true)
-        other_map = CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'other_image_to_work_map.csv'), headers: true)
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
         Image.all.each do |image|
@@ -42,11 +40,10 @@ class ImageToTranscriptionConnector
                 end
             end
         end
-        amherst_map.each do |row|
-            map << row
-        end
-        other_map.each do |row|
-            map << row
+        additional_maps.each do |a_map|
+            a_map.each do |row|
+                map << row
+            end
         end
     end
 

@@ -2,7 +2,7 @@ require 'csv'
 class HarvardImageImporter
     def import(directory, johnson_franklin_map, max_images = nil)
         puts "Importing Harvard images"
-        collection = Collection.create!(:name => 'Harvard Image Collection', :metadata => {'Library' => 'Houghton'})
+        collection = Collection.create!(:name => 'Harvard University, Houghton Library')
         image_count = 0
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new("Harvard Img", total_files)
@@ -27,14 +27,9 @@ class HarvardImageImporter
                 else
                     next
                 end
-                web_file = Rails.root.join('app', 'assets', 'images', Eda::Application.config.emily['web_image_directory'], image_url + '.jpg').to_s
-                width, height = `identify -format "%wx%h" "#{web_file}"`.split('x').map(&:to_i)
-
                 image = Image.new(
                     :url => image_url,
                     :credits => 'Harvard credits',
-                    :web_width => width,
-                    :web_height => height,
                     :metadata => {
                         'Imported' => Time.now.to_s,
                         'Order' => page['ORDER'].to_i,
