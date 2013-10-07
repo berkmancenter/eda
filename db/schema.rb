@@ -14,14 +14,14 @@
 ActiveRecord::Schema.define(:version => 20130821160430) do
 
   create_table "definitions", :force => true do |t|
-    t.integer  "word_id"
+    t.integer  "word_variant_id"
     t.integer  "number"
     t.text     "definition"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
-  add_index "definitions", ["word_id"], :name => "index_definitions_on_word_id"
+  add_index "definitions", ["word_variant_id"], :name => "index_definitions_on_word_variant_id"
 
   create_table "editions", :force => true do |t|
     t.string   "name"
@@ -162,12 +162,20 @@ ActiveRecord::Schema.define(:version => 20130821160430) do
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
-  create_table "words", :force => true do |t|
-    t.string   "word"
+  create_table "word_variants", :force => true do |t|
+    t.integer  "word_id"
     t.string   "endings"
     t.string   "part_of_speech"
+    t.text     "etymology"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "words", :force => true do |t|
+    t.string   "word"
+    t.string   "sortable_word"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "work_appearances", :force => true do |t|

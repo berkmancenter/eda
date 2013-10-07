@@ -11,9 +11,8 @@
 #
 
 class Word < ActiveRecord::Base
-    attr_accessible :endings, :part_of_speech, :word
-    has_many :definitions, :order => 'number'
-    default_scope order(:word)
+    default_scope order(:sortable_word)
+    has_many :variants, class_name: 'WordVariant'
     scope :starts_with, lambda { |first_letter| where('word ILIKE ?', "#{first_letter}%") }
 
     searchable do

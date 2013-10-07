@@ -11,6 +11,7 @@
 #
 
 class Definition < ActiveRecord::Base
-  belongs_to :word
+  belongs_to :word_variant
   attr_accessible :definition, :number
+  default_scope order(:number)
 end
