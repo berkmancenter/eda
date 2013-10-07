@@ -309,13 +309,13 @@ namespace :emily do
             desc 'Import Smith images'
             task :smith, [:image_directory] => [:environment] do |t, args|
                 image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'smith_output')
-                ImageCSVImporter.new.import(image_csv)
+                SmithImageImporter.new.import(image_dir)
             end
 
             desc 'Import Vassar images'
             task :vassar, [:image_csv] => [:environment] do |t, args|
                 image_dir = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'vassar_output')
-                ImageCSVImporter.new.import(image_csv)
+                VassarImageImporter.new.import(image_dir)
             end
 
             desc 'Import all images'

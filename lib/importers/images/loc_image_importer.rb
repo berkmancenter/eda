@@ -15,6 +15,7 @@ class LOCImageImporter
                 }
             )
             collection << image
+            pbar.inc
         end
         collection.save!
     end
