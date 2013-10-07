@@ -1,5 +1,6 @@
 require 'csv'
 class ImageToTranscriptionConnector
+    include Rails.application.routes.url_helpers
     def create_map(output_map_file, additional_maps, blank_images_file, lost_works_file)
         pbar = ProgressBar.new('Images', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
@@ -7,8 +8,6 @@ class ImageToTranscriptionConnector
         blank_images = File.readlines(blank_images_file).map(&:strip)
         map = CSV.open(output_map_file, 'wb')
         map << ['image_url', 'J', 'F']
-        #TODO:ignore works that shouldn't be connected (any secondary plus
-        #those that are lost)
         lost_works = CSV.read(lost_works_file).flatten
         Image.all.each do |image|
             pbar.inc
@@ -44,6 +43,25 @@ class ImageToTranscriptionConnector
             a_map.each do |row|
                 next if lost_works.include?(row['F'])
                 map << row
+            end
+        end
+    end
+
+    def create_map_to_review(output_map_file, additional_maps, blank_images_file, lost_works_file)
+        pbar = ProgressBar.new('Review', Image.count)
+        franklin = Edition.find_by_work_number_prefix('F')
+        johnson = Edition.find_by_work_number_prefix('J')
+        blank_images = File.readlines(blank_images_file).map(&:strip)
+        map = CSV.open(output_map_file, 'wb')
+        map << ['image_url', 'J', 'F', 'collection', 'link']
+        lost_works = CSV.read(lost_works_file).flatten
+        Collection.all.each do |collection|
+            collection.all_images.each do |image|
+                franklin.works.in_image(image).each do |work|
+                    image_set = work.image_set.leaves_containing(image).first
+                    map << [image.url, nil, work.full_id, collection.name, edition_image_set_url(franklin, image_set)]
+                end
+                pbar.inc
             end
         end
     end
