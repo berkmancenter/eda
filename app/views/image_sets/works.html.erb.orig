@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+<% provide :view_classes, 'three-panel minus-work-panel' %>
+=======
+<% provide :view_classes, 'three-panel minus-search-panel' %>
+>>>>>>> new_franklin_import
+
+<%= render partial: 'image_sets/header', locals: { edition: @edition, image_set: @image_set } %>
+<%= render partial: 'shared/search_panel' %>
+<%= render partial: 'shared/image_panel', locals: {
+    edition: @edition, image_set: @image_set, note: @note,
+    next_image: @next_image, previous_image: @previous_image
+    }
+%>
+<%= render partial: "shared/work_panel", locals: {
+        edition: @edition,
+        image_set: @image_set,
+        this_editions_works: @this_editions_works,
+        other_editions_works: @other_editions_works,
+        variants: @variants,
+        work_to_edit: @work,
+        next_image: @next_image
+    }
+%>

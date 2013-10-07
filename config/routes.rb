@@ -33,6 +33,13 @@ Eda::Application.routes.draw do
     end
 
     resources :reading_lists
+
+    resources :collections, only: [:index, :show] do
+        collection do
+            post :expand_node
+        end
+    end
+
     resources :works do
         member do 
             get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
@@ -62,7 +69,6 @@ Eda::Application.routes.draw do
 
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'
-    get 'collections' => 'image_sets#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

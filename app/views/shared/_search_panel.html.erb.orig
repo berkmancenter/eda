@@ -1,0 +1,21 @@
+<<<<<<< HEAD
+<div id="search-panel" class="tab-menu panel">
+    <a class="left drawer-handle" data-drawer="search-panel">
+        <span><%= t :search_drawer_label %></span>
+    </a>
+=======
+<div id="search-panel" class="tab-menu panel collapsed">
+    <div class="left drawer-handle" data-drawer="search-panel">
+        <div><%= t :search_drawer_label %></div>
+    </div>
+>>>>>>> new_franklin_import
+    <ul class="panel-menu">
+        <li><a href="#">Search</a></li>
+        <li><a href="#">Browse</a></li>
+    </ul>
+
+    <div class="panel-content">
+        <%= render partial: "works/search" %>
+        <%= render partial: "works/browse" %>
+    </div>
+</div>

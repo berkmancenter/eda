@@ -3,18 +3,17 @@ class ImageSetsController < ApplicationController
     before_filter :load_edition, except: [:index]
     before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
-    #before_filter :set_users_current_edition
 
     include TheSortableTreeController::Rebuild
     include TheSortableTreeController::ExpandNode
 
     def index
-        if params[:edition_id]
-            load_edition
-            @image_sets = @edition.image_set.children.includes(:nestable)
-        else
-            @image_sets = Collection.scoped
-        end
+        load_edition
+        @image_sets = @edition.image_set.children.includes(:nestable)
+    end
+
+    def collections
+        @image_sets = Collection.scoped
     end
 
     def show

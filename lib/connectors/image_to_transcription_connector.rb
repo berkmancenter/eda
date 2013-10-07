@@ -1,12 +1,15 @@
 require 'csv'
 class ImageToTranscriptionConnector
-    def create_map(output_map_file, additional_maps, blank_images_file)
+    def create_map(output_map_file, additional_maps, blank_images_file, lost_works_file)
         pbar = ProgressBar.new('Images', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
         blank_images = File.readlines(blank_images_file).map(&:strip)
         map = CSV.open(output_map_file, 'wb')
-        map << ['image_url', 'J', 'F', 'position_in_work_set', 'position_in_image_set']
+        map << ['image_url', 'J', 'F']
+        #TODO:ignore works that shouldn't be connected (any secondary plus
+        #those that are lost)
+        lost_works = CSV.read(lost_works_file).flatten
         Image.all.each do |image|
             pbar.inc
             next if blank_images.include? image.url
@@ -20,28 +23,26 @@ class ImageToTranscriptionConnector
             end
             next unless works
             works.each do |w|
+                next if lost_works.include?(w.full_id)
                 case w.edition
                     when franklin
                         map << [
                             image.url,
                             nil,
                             w.full_id,
-                            nil,
-                            franklin.image_set.leaves_containing(image).first.position_in_level + 1
                         ]
                     when johnson
                         map << [
                             image.url,
                             w.full_id,
                             nil,
-                            nil,
-                            johnson.image_set.leaves_containing(image).first.position_in_level + 1
                         ]
                 end
             end
         end
         additional_maps.each do |a_map|
             a_map.each do |row|
+                next if lost_works.include?(row['F'])
                 map << row
             end
         end

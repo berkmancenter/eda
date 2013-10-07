@@ -32,10 +32,15 @@ module RenderExpandableTreeHelper
       def show_link
         node = options[:node]
         ns   = options[:namespace]
+        options[:edition] = Eda::Application.config.emily['default_edition'] unless options[:edition]
+        puts options[:edition].inspect
+        puts Eda::Application.config.emily[:default_edition].inspect
         if node.is_a? ImageSet
             url = h.edition_image_set_url(options[:edition], node)
         elsif node.is_a? WorkSet
             url = h.edition_work_set_url(options[:edition], node)
+        elsif node.is_a? Collection
+            url = h.collection_url(node)
         else
             url  = h.url_for(ns + [node])
         end

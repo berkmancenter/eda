@@ -1,0 +1,10 @@
+<ol class="sortable_tree expandable"
+    data-expand_node_url="<%= expand_node_collections_url %>">
+    <% cache cache_key_for_collections(@collections) do %>
+        <%= build_server_tree(
+            @collections,
+            type: :expandable,
+            title: :name
+        ) %>
+    <% end %>
+</ol>

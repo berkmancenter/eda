@@ -3,6 +3,7 @@ namespace :emily do
     desc 'Rename images to match holder ids'
     task :rename_images => [:environment] do |t|
         directory = '/home/justin/Desktop/previews/'
+        include ImageRenamer
         Dir.entries(directory).each do |f|
             next unless File.file?(File.join(directory, f))
             url = f.sub('.jpg', '')
@@ -11,24 +12,26 @@ namespace :emily do
                 puts url
             end
             next if image.nil? || image.url.nil?
-            case f[0..1]
-            when 'ms'
-                next
-            when 'as'
-                pattern = /-\d{1,2}(-\d+)?$/
-                id = image.metadata['Identifiers'].find{|i| i.starts_with?('Amherst Manuscript')}
-                if url.match(pattern)
-                    new_name = "#{id.parameterize}#{url.match(pattern)[0]}"
-                else 
-                    puts url
-                end
-                File.rename(File.join(directory, f), File.join(directory, new_name))
-            when '24'
-                id = image.metadata['Identifier (BPL Ms. #)']
-                new_name = id.parameterize + '-' + image.metadata['Accession No']
-                File.rename(File.join(directory, f), File.join(directory, new_name))
-            else
-                #puts f
+            new_name = new_filename(image)
+            File.rename(File.join(directory, f), File.join(directory, new_name))
+        end
+    end
+
+    desc 'Convert missing image csv'
+    task :convert_missing, [:input_file, :output_file] => [:environment] do |t, args|
+        include ImageRenamer
+        require 'csv'
+        input_file = args[:output_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_missing_images_manual_map.csv')
+        output_file = args[:output_file] || File.join(Eda::Application.config.emily['data_directory'], 'manual_map.csv')
+        output_file = CSV.open(output_file, 'wb')
+        output_file << ['image_url', 'J', 'F']
+        map = {}
+        Image.all.each do |image|
+            map[new_filename(image)] = image.url
+        end
+        CSV.foreach(input_file, headers: true) do |row|
+            if row['image_filename'] && map[row['image_filename'].strip]
+                output_file << [map[row['image_filename'].strip], nil, row['work_id']]
             end
         end
     end
@@ -111,16 +114,19 @@ namespace :emily do
         end
 
         desc 'Create images to works map'
-        task :images_to_transcriptions_map, [:output_map_file, :blank_images_file] => [:environment] do |task, args|
+        task :images_to_transcriptions_map, [:output_map_file, :blank_images_file, :lost_works_file] => [:environment] do |task, args|
+            require 'csv'
             output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map.csv')
             blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
+            lost_works_file = args[:lost_works_file] || File.join(Eda::Application.config.emily['data_directory'], 'lost_works.csv')
             additional_maps = [
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'aas.csv'), headers: true),
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv'), headers: true),
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'smith.csv'), headers: true),
-                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'vassar.csv'), headers: true)
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'vassar.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true)
             ]
-            ImageToTranscriptionConnector.new.create_map(output_map_file, additional_maps, blank_images_file)
+            ImageToTranscriptionConnector.new.create_map(output_map_file, additional_maps, blank_images_file, lost_works_file)
         end
 
         desc 'Connect all existing transcriptions together'
@@ -183,6 +189,12 @@ namespace :emily do
                 end
                 csv << [work.full_id, metadata]
             end
+        end
+
+        desc 'Find works with images that should not have images'
+        task :should_not_have_images, [:output_file] => [:environment] do |task, args|
+            require 'csv'
+            output_file = args[:output_file] || Rails.root.join('tmp', 'should_not_have_images.csv')
         end
     end
 

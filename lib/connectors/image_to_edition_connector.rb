@@ -22,6 +22,7 @@ class ImageToEditionConnector
     def connect
         last_image = nil
         root_image_set = ImageSet.create(name: 'All Images')
+        added_images = []
 
        # TODO: Check that there are no blank pages in fascicles
        # Use Houghton order for those not ordered by Franklin
@@ -38,7 +39,16 @@ class ImageToEditionConnector
                     # Don't add an image more than once (assumes in correct order)
                     next if image == last_image
                     image_set << image
-                    last_image = image
+                    added_images << image.id
+                    # Attempt to include blank backs of pages
+                    next_image = work.image_set.leaf_after(work.image_set.leaf_containing(image)).image
+                    if Work.in_image(next_image).empty?
+                        image_set << next_image
+                        added_images << next_image.id
+                        last_image = next_image
+                    else
+                        last_image = image
+                    end
                 end
             end
             pbar.inc
@@ -56,9 +66,26 @@ class ImageToEditionConnector
                     # Don't add an image more than once (assumes in correct order)
                     next if image == last_image
                     image_set << image
-                    last_image = image
+                    added_images << image.id
+                    next_image = work.image_set.leaf_after(work.image_set.leaf_containing(image)).image
+                    if Work.in_image(next_image).empty?
+                        image_set << next_image
+                        added_images << next_image.id
+                        last_image = next_image
+                    else
+                        last_image = image
+                    end
                 end
             end
+            pbar.inc
+        end
+
+        pbar = ProgressBar.new("Connecting", Image.count)
+        image_set = ImageSet.create(name: "Other Images")
+        image_set.move_to_child_of root_image_set
+        Image.all.each do |image|
+            next if added_images.include?(image.id)
+            image_set << image
             pbar.inc
         end
 
