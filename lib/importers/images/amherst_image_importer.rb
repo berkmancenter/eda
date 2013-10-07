@@ -25,7 +25,7 @@ class AmherstImageImporter
             }
 
             image = Image.create(
-                title: "Amherst - #{metdata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}",
+                title: "Amherst - #{metadata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}",
                 url: image_url,
                 credits: 'Amherst credits',
                 metadata: metadata
