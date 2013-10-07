@@ -2,13 +2,13 @@
 <table class="works">
     <thead>
         <tr>
-            <th><%= t 'datatable.th_title' %></th>
+            <th class="work-title"><%= t 'datatable.th_title' %></th>
             <th>Date</th>
             <th>Recipient</th>
             <% if !defined?(edition) || edition.nil? %>
                 <th><%= t 'datatable.th_edition' %></th>
             <% end %>
-            <th>Number</th>
+            <th class="work-number">Number</th>
             <!--<th>Has Image</th>-->
         </tr>
     </thead>

@@ -124,7 +124,7 @@ $(document).ready(function() {
 
         aoColumnDefs: [ {
           sType: "natural",
-          aTargets: [ 4 ]
+          aTargets: [ 'work-title', 'work-number' ]
         } ],
 
         fnInitComplete: function() {

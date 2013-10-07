@@ -124,9 +124,27 @@ namespace :emily do
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv'), headers: true),
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'smith.csv'), headers: true),
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'vassar.csv'), headers: true),
-                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true)
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'manual_map.csv'), headers: true)
             ]
             ImageToTranscriptionConnector.new.create_map(output_map_file, additional_maps, blank_images_file, lost_works_file)
+        end
+
+        desc 'Create images to works map after everything has been imported'
+        task :images_to_transcriptions_map_for_review, [:output_map_file, :blank_images_file, :lost_works_file] => [:environment] do |task, args|
+            require 'csv'
+            output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map_to_review.csv')
+            blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
+            lost_works_file = args[:lost_works_file] || File.join(Eda::Application.config.emily['data_directory'], 'lost_works.csv')
+            additional_maps = [
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'aas.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'beinecke.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'smith.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'image_csvs', 'vassar.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true),
+                CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'manual_map.csv'), headers: true)
+            ]
+            ImageToTranscriptionConnector.new.create_map_to_review(output_map_file, additional_maps, blank_images_file, lost_works_file)
         end
 
         desc 'Connect all existing transcriptions together'
@@ -332,9 +350,10 @@ namespace :emily do
         end
 
         desc 'Import BYU Lexicon'
-        task :lexicon, [:filename] => [:environment] do |task, args|
-            filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'lexicon.csv')
-            LexiconImporter.new.import(filename)
+        task :lexicon, [:term_file, :definition_file] => [:environment] do |task, args|
+            term_file = args[:term_file] || File.join(Eda::Application.config.emily['data_directory'], 'lexicon_terms.csv')
+            definition_file = args[:definition_file] || File.join(Eda::Application.config.emily['data_directory'], 'lexicon_defs.csv')
+            LexiconImporter.new.import(term_file, definition_file)
         end
 
         desc 'Import TEI file'
