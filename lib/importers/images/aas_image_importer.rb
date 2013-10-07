@@ -19,6 +19,7 @@ class AASImageImporter
             end
             metadata['Imported'] = Time.now.to_s
             image = Image.new(
+                :title => "AAS - #{image_url}",
                 :url => image_url,
                 :credits => 'AAS credits',
                 :metadata => metadata

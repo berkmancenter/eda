@@ -59,6 +59,7 @@ class BPLFlickrImporter
                     output = `wget -nv -P "#{image_dir}" #{url} 2>&1`
                 end
                 image = Image.create(
+                    :title => "BPL - #{metadata['Identifier (BPL Ms. #)']} - #{metadata['Relation']}",
                     :url => File.basename(filename, '.jpg'),
                     :credits => 'Boston Public Library',
                     :metadata => metadata

@@ -8,6 +8,7 @@ class LOCImageImporter
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
+                :title => "LOC - #{image_url}",
                 :url => image_url,
                 :credits => 'LOC credits',
                 :metadata => {

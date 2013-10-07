@@ -8,6 +8,7 @@ class SmithImageImporter
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
+                :title => "Smith - #{image_url}",
                 :url => image_url,
                 :credits => 'Smith credits',
                 :metadata => {

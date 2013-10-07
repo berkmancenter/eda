@@ -17,15 +17,18 @@ class AmherstImageImporter
             end
             last_call_number = call_number
             image_url = image_filename.match(/(.*).tif/)[1]
+            metadata = {                   
+                'Imported' => Time.now.to_s,
+                'Identifiers' => doc.css('identifier[type=local]').map(&:text),
+                'Shelf Location' => doc.at('shelfLocator').text,
+                'Title' => doc.at('title').text
+            }
+
             image = Image.create(
+                title: "Amherst - #{metdata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}",
                 url: image_url,
                 credits: 'Amherst credits',
-                metadata: {
-                    'Imported' => Time.now.to_s,
-                    'Identifiers' => doc.css('identifier[type=local]').map(&:text),
-                    'Shelf Location' => doc.at('shelfLocator').text,
-                    'Title' => doc.at('title').text
-                }
+                metadata: metadata
             )
             sheet_group << image
         end

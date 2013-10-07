@@ -19,6 +19,7 @@ class BeineckeImageImporter
             end
             metadata['Imported'] = Time.now.to_s
             image = Image.new(
+                :title => "Yale - #{image_url} - #{metadata['Page']}",
                 :url => image_url,
                 :credits => 'Beinecke credits',
                 :metadata => metadata

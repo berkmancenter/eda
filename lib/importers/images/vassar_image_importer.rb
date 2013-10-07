@@ -8,6 +8,7 @@ class VassarImageImporter
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
+                :title => "Vassar - #{image_url}",
                 :url => image_url,
                 :credits => 'Vassar credits',
                 :metadata => {
