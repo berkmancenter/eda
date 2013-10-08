@@ -1,7 +1,278 @@
 <% provide :title, "About Emily Dickinson Archive" %>
 
+<%= render( {
+  partial: 'shared/about_panel_menu'
+} ) %>
 
-  <%= render( {
-    partial: 'shared/about_panel_menu'
-  } ) %>
+<nav>
+  <ul>
+    <li>
+      <a href="#dickinson-in-print">Dickinson in Print</a>
+      <ul>
+        <li><a href="#published-in-dickinsons-lifetime">Published in Dickinson’s Lifetime</a></li>
+        <li><a href="#selected-posthumous-editions">Selected Posthumous Editions of Poems and Letters</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#dickinson-related-sites">Dickinson-Related Sites</a>
+      <ul>
+        <li><a href="#institutions-with-major-dickinson-holdings">Institutions with Major Dickinson Holdings</a></li>
+        <li><a href="#other-dickinson-sites">Other Dickinson Sites</a></li>
+      </ul>
+    </li>
+    <li><a href="#additional-print-resources">Additional Print Resources</a></li>
+  </ul>
+</nav>
 
+<h2 id="dickinson-in-print">Dickinson in Print</h2>
+
+<h3 id="published-in-dickinsons-lifetime">Published in Dickinson's Lifetime</h3>
+
+
+<p>Emily Dickinson was not identified as the author on any of the poems, or the one letter, published in her lifetime.</p>
+
+<dl>
+
+<dt>1850 February. Magnum bonum, harem scarum</dt>
+
+<dd>A letter dated “Valentine Eve” in The Indicator 2 [Amherst College], <%= link_to 'page 223', asset_path( 'static_pages/Magnum bonum p1 17620_0031.jpg' ) %> and <%= link_to 'page 224', asset_path( 'static_pages/Magnum bonum p2 17620_0032.jpg' ) %></dd>
+
+<dt>1852 February 20. Sic transit gloria mundi</dt>
+
+<dd>Published as “A Valentine” in Springfield Daily Republican, p. [2].</dd>
+
+<dt>1858 August 2. Nobody knows this little rose</dt>
+
+<dd>Published as “To Mrs. -----, with a Rose” in <%= link_to 'Springfield Daily Republican, p. 2.', asset_path( 'static_pages/To Mrs with a rose 7268_1858Aug2_0001.jpg' ) %></dd>
+
+<dt>1861 May 4. I taste a liquor never brewed</dt>
+
+<dd>Published as “The May-Wine” in <%= link_to 'Springfield Daily Republican, p. 8.', asset_path( 'static_pages/The May Wine 7268_1861May4_0001.jpg' ) %></dd>
+
+<dt>1861 May 11. I taste a liquor never brewed</dt>
+	
+<dd>Published as “The May-Wine” in Springfield Weekly Republican, p. 6.</dd>
+
+<dt>1862 March 1. Safe in their alabaster chambers</dt>
+
+<dd>Published as “The Sleeping” in <%= link_to 'Springfield Daily Republican, p. 2.', asset_path( 'static_pages/The Sleeping 7268_1862Mar1_0001.jpg' ) %></dd>
+
+<dt>1864 February 29–April 2. Blazing in gold and quenching in purple</dt>
+
+<dd>Published as “Sunset” in Drum Beat (February 20), p. 3; in Springfield Daily Republican (March 30), p. 6; and in Springfield Weekly Republican (April 2), p. 7.</dd>
+
+<dt>1864 March 2–16. Flowers - Well - if anybody</dt>
+
+<dd>Published as “Flowers” in
+  <ul>
+    <li><%= link_to 'Drum Beat (March 2), p. 2', 'http://pds.lib.harvard.edu/pds/view/46718808?n=72&printThumbnails=no' %></li>
+    <li><%= link_to 'Springfield Daily Republican (9 March), p. 6', asset_path( 'static_pages/Flowers 7268_1864Mar9_0001.jpg' ) %></li>
+    <li>Springfield Weekly Republican (March 12), p. 6 and</li>
+    <li>Boston Post (March 16), p. 2.</li>
+  </ul>
+</dd>
+
+<dt>1864 March 11. These are the days when birds come back</dt>
+
+<dd>Published as “October” in <a href="http://pds.lib.harvard.edu/pds/view/46718808?n=109&printThumbnails=no">Drum Beat, p. 7.</a></dd>
+
+<dt>1864 March 12. Some keep the Sabbath going to church</dt>
+
+<dd>Published as “My Sabbath” in <a href="http://pds.lib.harvard.edu/pds/view/46716049?printThumbnails=no&action=jp2resize&op=j&imagesize=2400&pvHeight=1200&pvWidth=1200&n=3&rotation=0&bbx1=0&bby1=0&bbx2=95&bby2=130&jp2Res=0.25&pres=.125&jp2x=-1&jp2y=-1&maximum.x=11&maximum.y=11">Round Table, p. 195.</a></dd>
+
+<dt>1864 April 27. Success is counted sweetest</dt>
+
+<dd>Published in Brooklyn Daily Union, p. 12.</dd>
+
+<dt>1866 February 14–17. A narrow fellow in the grass</dt>
+
+<dd>Published as “The Snake” in
+  <ul>
+    <li><%= link_to 'Springfield Daily Republican (February 14), p. 6', asset_path( 'static_pages/The Snake 7268_1866Feb14_0001.jpg' ) %> and</li>
+    <li>Springfield Weekly Republican (February 17), p. 7.</li>
+  </ul>
+</dd>
+
+<dt>1878. Success is counted sweetest</dt>
+
+<dd>Published as “Success,” in George Parsons Lathrop, ed., A Masque of Poets. Including Guy Vernon, a Novelette in <a href="http://pds.lib.harvard.edu/pds/view/43434190">Verse. Boston: Roberts Brothers, 1878; p. 174.</a></dd>
+
+</dl>
+
+<h3 id="selected-posthumous-editions">Selected Posthumous Editions of Poems and Letters (in order of appearance)</h3>
+
+<dl>
+  <dt>Poems by Emily Dickinson. Edited by Two of Her Friends, Mabel Loomis Todd and T. W. Higginson. [First Series] Boston: Roberts Brothers, 1890.</dt>
+  <dd><a href="http://pds.lib.harvard.edu/pds/view/43369310">Thomas Wentworth Higginson copy (first printing)</a></dd>
+
+  <dt>Poems by Emily Dickinson. Edited by Two of Her Friends, T. W. Higginson and Mabel Loomis Todd. Second Series. Boston: Roberts Brothers, 1891.</dt>
+  <dd><a href="http://pds.lib.harvard.edu/pds/view/43369309">William Dean Howell’s copy</a>, given to him by Lavinia Dickinson</dd>
+
+  <dt>Poems by Emily Dickinson. Edited by Two of Her Friends, T. W. Higginson and Mabel Loomis Todd. [Third Series] Boston: Roberts Brothers, 1896.</dt>
+  <dd><a href="http://pds.lib.harvard.edu/pds/view/43374842">http://pds.lib.harvard.edu/pds/view/43374842</a></dd>
+</dl>
+
+<p>These three nineteenth-century editions were the first volumes of Dickinson’s poems to reach the public, and they established her as a major American poet. Following the conventions of the day, the editors supplied titles to poems, regularized capitalization and punctuation, and sometimes changed words and deleted entire stanzas. Todd was acquainted with Dickinson in Amherst, receiving several notes from her but never meeting her face-to-face; and she had an intimate relationship with the poet’s brother, Austin Dickinson. Higginson, a minister and popular writer, corresponded with Dickinson over many years, offering her literary encouragement and advice. All three volumes are included in EDA.</p>
+
+<dl>
+
+  <dt>Letters of Emily Dickinson. Edited by Mabel Loomis Todd. Boston: Roberts Brothers, 1894.</dt>
+  <dd>
+    <ul>
+      <li><a href="http://pds.lib.harvard.edu/pds/view/43368302">vol. 1.</a></li>
+      <li><a href="http://pds.lib.harvard.edu/pds/view/43368303">vol. 2.</a></li>
+    </ul>
+    <p>Collected by Todd with the assistance of Lavinia Dickinson, the edition is highly selective and heavily edited in a style typical of its time.</p>
+  </dd>
+
+  <dt>The Single Hound: Poems of a Lifetime, with an Introduction by Her Niece, Martha Dickinson Bianchi. Boston: Little, Brown, 1914.</dt>
+  <dd>
+    <a href="http://pds.lib.harvard.edu/pds/view/43374839">http://pds.lib.harvard.edu/pds/view/43374839</a>
+    <p>Bianchi, daughter of Austin and Susan Dickinson, added to the number of Dickinson poems available to the public by publishing a large number of the poems sent by her aunt to her mother, Susan Gilbert Huntington Dickinson. Susan Dickinson was a friend of Emily Dickinson before she became her sister-in-law and, as the recipient of more than 250 poems, was an important source of literary feedback. She is the only correspondent for whom Dickinson changed a poem. See “Emily Dickinson Writing a Poem” in the <a href="http://archive.emilydickinson.org/safe/index.html">Dickinson Electronic Archive</a>. This edition in included in EDA.</p>
+  </dd>
+
+  <dt>The Complete Poems of Emily Dickinson; With an Introduction by Her Niece, Martha Dickinson Bianchi. Boston: Little, Brown, 1924 (1925).</dt>
+  <dd>
+    <p>This edition combined the poems published in the three nineteenth-century editions edited by Todd and Higginson with the poems published in The Single Hound, and added five previously unpublished poems. Bianchi removed the titles given to the poems by Todd and Higginson.</p>
+  </dd>
+
+  <dt>The Life and Letters of Emily Dickinson, by Her Niece, Martha Dickinson Bianchi. Boston and New York: Houghton Mifflin Company, 1924.</dt>
+  <dd></dd>
+
+  <dt>Further Poems of Emily Dickinson. Edited by Martha Dickinson Bianchi and Alfred Leete Hampson. Boston: Little, Brown, 1929.</dt>
+  <dd>
+    <p>Includes 180 previously unpublished poems, and publishes eight poems in full that were previously published in part.</p>
+  </dd>
+
+  <dt>The Poems of Emily Dickinson. Centenary Edition. Boston: Little, Brown, 1930.</dt>
+  <dd></dd>
+
+  <dt>Letters of Emily Dickinson. Edited by Mabel Loomis Todd. New York: Harper, 1931.</dt>
+  <dd>
+    <p>A revised and enlarged edition of Todd’s 1894 edition.</p>
+  </dd>
+
+  <dt>Bianchi, Martha Dickinson. Emily Dickinson Face to Face: Unpublished Letters with Notes and Reminiscences. Boston: Houghton Mifflin, 1932.</dt>
+  <dd></dd>
+
+  <dt>Poems for Youth. Edited by Alfred Leete Hampson. Boston: Little, Brown, 1934.</dt>
+  <dd></dd>
+
+  <dt>Unpublished Poems of Emily Dickinson. Edited by Martha Dickinson Bianchi and Alfred Leete Hampson. Boston: Little, Brown, 1935.</dt>
+  <dd></dd>
+
+  <dt>Poems by Emily Dickinson. Edited by Martha Dickinson Bianchi and Alfred Leete Hampson. Boston: Little, Brown 1937.</dt>
+  <dd></dd>
+
+  <dt>Bolts of Melody: New Poems of Emily Dickinson. Edited by Mabel Loomis Todd and Millicent Todd Bingham. New York and London: Harper and Brothers, 1945.</dt>
+  <dd>
+    <p>Includes more than 650 previously unpublished Dickinson poems.</p>
+  </dd>
+
+  <dt>Bingham, Millicent Todd. Ancestors’ Brocades: The Literary Debut of Emily Dickinson. New York: Harper, 1945.</dt>
+  <dd>
+    <p>Bingham, daughter of one of Dickinson’s first editors, Mabel Loomis Todd, offers her account of the rift between Todd and the Dickinson family over a plot of land bequeathed by the poet’s brother, Austin, to Todd; and gives a partial account of how this affected subsequent work on the poet.</p>
+  </dd>
+
+  <dt>Emily Dickinson's Letters to Dr. and Mrs. Josiah Gilbert Holland. Edited by Their Granddaughter, Theodora Van Wagenen Ward. Cambridge: Belknap Press of Harvard University Press, 1951.</dt>
+  <dd></dd>
+
+  <dt>Emily Dickinson: A Revelation. Edited by Millicent Todd Bingham. New York: Harper and Brothers, 1954.</dt>
+  <dd><p>Publication of the forty drafts and fragments not destroyed following Dickinson's death, and containing drafts of letters to Judge Otis P. Lord.</p></dd>
+
+  <dt>Emily Dickinson’s Home: Letters of Edward Dickinson and His Family. Edited by Millicent Todd Bingham. New York: Harper and Brothers,1954.</dt>
+  <dd></dd>
+
+  <dt>The Poems of Emily Dickinson. Edited by Thomas H. Johnson. 3 vols. Cambridge: Belknap Press of Harvard University Press, 1955.</dt>
+  <dd><p>Includes 1,775 poems, arranged chronologically, with variant readings critically compared with all known manuscripts. Transcripts and notes for individual poems are included within EDA.</p></dd>
+
+  <dt>The Letters of Emily Dickinson. Edited by Thomas H. Johnson and Theodora Ward. Cambridge: Belknap Press of Harvard University Press, 1958.</dt>
+  <dd><p>The first attempt to collect all extant Dickinson letters, it includes transcriptions of 1,049 letters addressed to approximately 100 correspondents.</p></dd>
+
+  <dt>The Lyman Letters: New Light on Emily Dickinson and Her Family. Edited by Richard Sewall. Amherst: University of Massachusetts Press, 1965.</dt>
+  <dd></dd>
+
+  <dt>The Manuscript Books of Emily Dickinson. Edited by R. W. Franklin. 2 vols. Cambridge: Belknap Press of Harvard University Press, 1981.</dt>
+  <dd><p>Black-and-white reproductions of Dickinson’s fascicles and sets, which are held by Harvard University and Amherst College, with one sheet at the Library of Congress. Digital color reproductions of these same materials are included in EDA.</p></dd>
+
+  <dt>The Master Letters of Emily Dickinson. Edited by R. W. Franklin. Amherst: Amherst College Press, 1986.</dt>
+  <dd><p>Includes facsimiles of the three passionate letters written by Dickinson to a still-unidentified “Master.”</p></dd>
+
+  <dt>“Emily Dickinson to Abiah Root: Ten Reconstructed Letters.” Edited by R. W. Franklin. Emily Dickinson Journal 4:1 (1995): 1–43.</dt>
+  <dd></dd>
+
+  <dt>“The Elizabeth Putnam Whitney Manuscripts and New Strategies for Editing Emily Dickinson’s Letters.” Edited by Ellen Louise Hart. Emily Dickinson Journal 4:1 (1995): 44–74.</dt>
+  <dd></dd>
+
+  <dt>Emily Dickinson's Open Folios: Scenes of Reading, Surfaces of Writing. Edited by Marta L. Werner. Ann Arbor: University of Michigan Press, 1995.</dt>
+  <dd><p>A facsimile edition, with transcriptions, of a group of forty late drafts and fragments known as the "Lord letters." See also Ravished Slates: <a href="http://www.emilydickinson.org/ravished-slates-re-visioning-the-lord-letters">Re-visioning the “Lord Letters,” A Scholarly Exploration of Material Evidence</a>.</p></dd>
+
+  <dt>The Poems of Emily Dickinson: Variorum Edition. Edited by R. W. Franklin. Cambridge: Belknap Press of Harvard University Press, 1998. 3 vols.</dt>
+  <dd><p>Includes 1,789 poems, arranged chronologically, with transcriptions of variant manuscript versions of poems. Transcripts, notes for individual poems, and poem publication history are included within EDA.</p></dd>
+
+  <dt>The Poems of Emily Dickinson: Reading Edition. Edited by R. W. Franklin. Cambridge: Belknap Press of Harvard University Press, 1999.</dt>
+  <dd><p>Derived from Franklin’s 1998 Variorum Edition, it provides an edited, single version of each poem.</p></dd>
+
+  <dt>Radical Scatters: Emily Dickinson's Fragments and Related Texts, 1870–1886. Edited by Marta L. Werner. Ann Arbor: University of Michigan Press, 1999. Licensed resource; subscription required.</dt>
+  <dd><p>A searchable database of the manuscript fragments left by Emily Dickinson now at Amherst College Library.</p></dd>
+
+  <dt>Open Me Carefully: Emily Dickinson's Intimate Letters to Susan Huntington Dickinson. Edited by Ellen Louise Hart and Martha Nell Smith. Ashfield: Paris Press, 1998.</dt>
+  <dd></dd>
+
+  <dt>Emily Dickinson's Correspondences: A Born-Digital Textual Inquiry. Edited by Martha Nell Smith and Lara Vetter; Ellen Louise Hart, consulting editor. [Charlottesville]: University of Virginia Press, Rotunda. [2008]. Licensed resource; subscription required.</dt>
+  <dd><p>Seventy-four poems, letters, and letter-poems from Dickinson's correspondence with her sister-in-law Susan Dickinson.</p></dd>
+</dl>
+
+<h2 id="dickinson-related-sites">Dickinson-Related Sites</h2>
+
+<h3 id="institutions-with-major-dickinson-holdings">Institutions with Major Dickinson Holdings</h3>
+
+<p>Three of the partner institutions in this initial phase &ndash; Amherst’s Frost Library, Boston Public Library, and Harvard's Houghton Library &ndash; have much Dickinson material not yet included in EDA. Please see the <%= link_to 'Team section', team_path %> for more information about the partner institutions.</p>
+
+<dl>
+
+  <dt>Emily Dickinson Museum: The Homestead and The Evergreens. Amherst, MA <a href="http://www.emilydickinsonmuseum.org/">http://www.emilydickinsonmuseum.org</a></dt>
+  <dd><p>The Emily Dickinson Museum comprises two historic houses in the center of Amherst, Massachusetts, associated with the poet Emily Dickinson and members of her family during the nineteenth and early twentieth centuries. The Homestead was the birthplace and home from 1855–1886 of the poet. The Evergreens, next door, was home to her brother Austin Dickinson, his wife Susan, and their three children. The Museum provides biographical information about the poet and her family at <a href="http://www.emilydickinsonmuseum.org/emilys_biography">http://www.emilydickinsonmuseum.org/emilys_biography</a>.</p></dd>
+
+  <dt>Brown University. <a href="http://dl.lib.brown.edu/libweb/about/hay/">John Hay Library</a>, Providence, RI</dt>
+  <dd><p>Includes the personal papers of Martha Dickinson Bianchi, the poet’s niece (including family and editorial correspondence, diaries, notes, worksheets, photographs, and other materials); the personal papers of Alfred Leete Hampson and his wife, Mary Landis Hampson (from whom the Houghton Library Dickinson Collection was purchased); and the 3,000 volume family library from The Evergreens, the Austin Dickinson home in Amherst, Massachusetts, of which Houghton's Dickinson family library was a part. The Barton Levi St. Armand Collection of Dickinson Family Papers (listed as “Dickinson Papers”) includes letters of Austin, Susan, and Ned Dickinson. A <a href="http://library.brown.edu/collatoz/">browsable list of collections</a> is provided.</p></dd>
+
+  <dt><a href="http://www.joneslibrary.org/specialcollections/">Jones Library Special Collections</a>, Amherst, MA</dt>
+  <dd><p>The Dickinson Collection consists of four autograph poems and 17 autograph letters, and an additional ca. 7,000 items, including family correspondence, newspaper clippings, photographs, contemporary artwork and prints, and more. An <a href="http://www.joneslibrary.org/specialcollections/collections/dickinson/dickinson_print.html">Emily Dickinson Finding Aid</a> is available.</p></dd>
+
+  <dt>Yale University Library, <a href="http://www.library.yale.edu/mssa/">Manuscripts and Archives</a>, New Haven, CT</dt>
+  <dd><p>The collection includes the papers of <a href="http://hdl.handle.net/10079/fa/mssa.ms.0496c">Mabel Loomis Todd</a>, early editor of Emily Dickinson; her daughter, <a href="http://hdl.handle.net/10079/fa/mssa.ms.0496d">Millicent Todd Bingham</a>, who gave the Dickinson manuscripts in the Todd family's possession to Amherst College; as well as Todd family photographs and memorabilia. The four Dickinson poems, and transcripts for poems for which the original does not survive, are not included in the first release of EDA but will be added shortly.</p></dd>
+ 
+</dl>
+
+<h3 id="other-dickinson-sites">Other Dickinson Sites</h3>
+
+<dl>
+  <dt><a href="http://www.emilydickinson.org/">Dickinson Electronic Archive 2</a></dt>
+  <dd><p>The Dickinson Electronic Archives 2 is a scholarly resource showcasing the possibility of interdisciplinary and collaborative research and exploring the potential of the digital environment to reveal new interpretive material, cultural, historical, and theoretical contexts, besides previously ungathered writings of Susan Dickinson. The site includes a bibliography of secondary sources on Dickinson at <a href="http://www.emilydickinson.org/bibliography">http://www.emilydickinson.org/bibliography</a>.</p></dd>
+
+  <dt><a href="http://nrs.harvard.edu/urn-3:FHCL.Hough:hou00321">Dickinson Family Library</a></dt>
+  <dd><p>This is a list of approximately 600 books owned by the Dickinson family and published before Emily Dickinson’s death in 1886. The list includes both books now housed at the Houghton Library, Harvard University; and additional books owned by the family, some of which are now at Brown University. While many of these books contain markings, only a few can be directly associated with the poet. Color digital facsimiles of many of the volumes are available, including <a href="http://pds.lib.harvard.edu/pds/view/24025603">the poet’s Bible</a>, the family's two-volume Webster's dictionary ( <a href="http://pds.lib.harvard.edu/pds/view/44810046">vol 1.</a> and <a href="http://pds.lib.harvard.edu/pds/view/44810047">vol 2.</a>), and many volumes of poetry and fiction.</p></dd>
+
+  <dt><a href="http://www.emilydickinsoninternationalsociety.org/node/337">Emily Dickinson International Society Bulletin</a></dt>
+  <dd><p>Published twice yearly by EDIS, it includes short articles about Dickinson and current Dickinson scholarship, as well as reviews and news.</p></dd>
+
+  <dt><a href="http://muse.jhu.edu/journals/edj">Emily Dickinson Journal. Volume 1 (1992)–current.</a></dt>
+  <dd><p>The journal of the Emily Dickinson International Society, it is the major source for current scholarship on Dickinson, publishing writing by young scholars as well as work by those established in the field. Licensed resource; subscription required.</p></dd>
+
+  <dt><a href="http://museums.fivecolleges.edu/info.php?museum=ac&page=0&v=2&s=&type=ext&t=objects&f=&d=&id_number=Ac+edm&op-earliest_year=%3E%3D&op-latest_year=%3C%3D">The Evergreens Art Collection</a></dt>
+  <dd><p>The collection includes 218 artworks from the home of the poet’s brother and sister-in-law, Austin and Susan Dickinson.</p></dd>
+</dl>
+
+<h2 id="additional-print-resources">Additional Print Resources</h2>
+
+<dl>
+  <dt>Leyda, Jay. The Years and Hours of Emily Dickinson. 2 vols. New Haven: Yale University Press, 1960.</dt>
+  <dd><p>Includes a number of juxtaposed documents, transcribed and extracted from manuscripts and printed sources, ordered in a single chronology.</p></dd>
+
+  <dt>MacKenzie, Cynthia. A Concordance to the Letters of Emily Dickinson. Boulder: University of Colorado Press, 2000.</dt>
+  <dd></dd>
+
+  <dt>Rosenbaum, S. P. [Stanford Patrick]. A Concordance to the Poems of Emily Dickinson. Ithaca: Cornell University Press [1964].</dt>
+  <dd></dd>
+</dl>

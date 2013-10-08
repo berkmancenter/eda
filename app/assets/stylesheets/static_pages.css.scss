@@ -27,11 +27,15 @@ body.static-pages {
   }
 
   h2 {
-    font-weight: normal;
+    font-size: 1.8em;
     margin: 2em 0 1em 0;
   }
 
-  .reference-list {
+  h3 {
+    font-size: 1.4em;
+  }
+
+  li {
     list-style-type: none;
   }
 }
@@ -124,7 +128,6 @@ body.static-pages.home {
     }
 
     li {
-      list-style-type: none;
       margin: 1em 0;
 
       a {
@@ -170,3 +173,10 @@ body.static-pages.home {
     width: 52em * 1.0 / 0.8;
   }
 }
+
+body.static-pages.resources {
+  dt {
+    margin-top: 1em;
+  }
+}
+
