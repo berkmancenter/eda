@@ -93,9 +93,17 @@ body.static-pages.home {
   .welcome {
     border-right: 1px solid $gray;
     display: inline-block;
-    padding: 2em 2em 2em 0;
     font-size: 0.9em;
+    padding: 2em 2em 2em 0;
     width: 28em;
+
+    a {
+      text-transform: uppercase;
+    }
+  }
+
+  .welcome-more {
+    display: none;
   }
 
   .icon-links {
@@ -163,12 +171,14 @@ body.static-pages.home {
 
       .home-link-title {
         display: block;
+        font-size: .9em;
         text-transform: uppercase;
         white-space: nowrap;
         vertical-align: left;
       }
 
       p {
+        font-size: .9em;
         margin: 0;
       }
     }
