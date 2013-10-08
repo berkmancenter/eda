@@ -138,12 +138,12 @@ body {
       background: $highlightGray;
       display: inline-block;
       font-weight: normal;
-      padding: 18px 27px 20px;
-      margin: 0 0 0 27px*2;
+      height: 32px;
+      margin: 10px 0 24px 27px*2;
       white-space: nowrap;
-      width: 27px * 14;
+      width: 27px * 15;
       font-size: 0;
-      background-image: url('/assets/logo.png');
+      background-image: url("logo.png");
     }
 
     .hr {

@@ -60,26 +60,11 @@ body.static-pages.home {
       width: 100%;
   }
 
-  .home-ornaments {
-    background: url('ornament-med-tan.png') repeat-x 0 0;
-    display: inline-block;
-    font-size: 36px;
-    font-weight: normal;
-    height: 75px;
-    margin: 0 auto;
-    text-align: center;
-    width: 530px;
-  }
-
   .home-logo {
-      background: url('big_logo.png') no-repeat 50%;
+      background: url('EDAoutlines.png') no-repeat 50%;
+      height: 156px;
+      margin-bottom: 1em;
       width: 100%;
-      height: 40px;
-  }
-
-  h1 {
-    margin: 0 0 1em;
-    padding: 0;
   }
 
   .view .hr {
