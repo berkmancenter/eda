@@ -53,6 +53,14 @@ namespace :emily do
             AmherstImageProcessor.new.process_directory_for_web(output_dir, web_image_output_dir)
         end
 
+        desc 'Process missing Amherst images to cut double images into singles'
+        task :missing_amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
+            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_missing'
+            output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_missing_output'
+            web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
+            MissingAmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
+        end
+
         desc 'Process BPL images to create tifs'
         task :bpl_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
             input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl'
@@ -291,6 +299,12 @@ namespace :emily do
                 image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_output')
                 mods_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
                 AmherstImageImporter.new.import(image_directory, mods_directory)
+            end
+
+            desc 'Import missing Amherst images'
+            task :missing_amherst, [:image_directory, :mods_directory] => [:environment] do |t, args|
+                image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_missing_output')
+                MissingAmherstImageImporter.new.import(image_directory)
             end
 
             desc 'Create missing images'

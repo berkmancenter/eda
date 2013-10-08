@@ -18,7 +18,7 @@ module ImageRenamer
             new_name = id.parameterize + '-' + image.metadata['Accession No']
             return new_name
         else
-            return nil
+            return url
         end
     end
 end
