@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :edition do
     factory :johnson do
       name "The Poems of Emily Dickinson"
+      short_name 'Johnson Edition'
       author "Thomas H. Johnson"
       date "1951-01-01"
       work_number_prefix "J"
@@ -11,6 +12,7 @@ FactoryGirl.define do
 
     factory :franklin do
       name "The Poems of Emily Dickinson: Variorum Edition"
+      short_name 'Franklin Edition'
       author "R. W. Franklin"
       date "1998-01-01"
       work_number_prefix "F"
@@ -20,6 +22,7 @@ FactoryGirl.define do
 
     factory :tested do
       name 'Test Edition'
+      short_name 'Test Edition'
       author 'Ryan Westphal'
       date '2013-06-06'
       work_number_prefix 'T'
@@ -305,17 +308,27 @@ FactoryGirl.define do
   factory :word do
     factory :awake do
       word 'awake'
-      attributes {{ endings: '', part_of_speech: 'adj' }}
+    end
+  end
+
+  factory :word_variant do
+    factory :awake_adj do
+      #word awake
+      endings ''
+      part_of_speech 'adj'
+      etymology ''
     end
   end
 
   factory :definition do
     factory :awake_one do
+      #word_variant awake_adj
       number 1
       definition 'Fully conscious; totally aware; not dreaming; [fig.] fixed in a permanent state; not in a temporary state.'
     end
 
     factory :awake_two do
+      #word_variant awake_adj
       number 2
       definition 'Living; physically functioning.'
     end

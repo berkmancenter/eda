@@ -56,6 +56,7 @@ Eda::Application.routes.draw do
 
     match 'about' => 'static_pages#about'
     match 'faq' => 'static_pages#faq'
+    match 'resources' => 'static_pages#resources'
     match 'team' => 'static_pages#team'
     match 'terms' => 'static_pages#terms'
     match 'privacy' => 'static_pages#privacy'

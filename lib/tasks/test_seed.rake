@@ -160,9 +160,10 @@ namespace :db do
       # words
       
       awake = FactoryGirl.create :awake
-      awake.definitions << FactoryGirl.create( :awake_one )
-      awake.definitions << FactoryGirl.create( :awake_two )
-      awake.save
+      awake_adj = FactoryGirl.create :awake_adj
+      awake_adj.definitions << FactoryGirl.create( :awake_one )
+      awake_adj.definitions << FactoryGirl.create( :awake_two )
+      awake_adj.save
 
       Sunspot.commit
     end

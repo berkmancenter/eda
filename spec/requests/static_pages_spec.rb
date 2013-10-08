@@ -37,18 +37,24 @@ describe 'static pages requests' do
     it {
       should have_selector( '.about-panel-menu' )
 
-      # full test of about-panel-menu links
-      should have_selector( '.about-panel-menu a[href*="' + about_path + '"]' )
-      should have_selector( '.about-panel-menu a[href*="' + faq_path + '"]' )
-      should have_selector( '.about-panel-menu a[href*="' + team_path + '"]' )
-      should have_selector( '.about-panel-menu a[href*="' + terms_path + '"]' )
-      should have_selector( '.about-panel-menu a[href*="' + privacy_path + '"]' )
-      should have_selector( '.about-panel-menu a[href*="' + contact_path + '"]' )
+      # link tests moved to _about_panel_menu parital
     }
   end
 
   describe 'get /faq' do
     before { visit faq_path }
+
+    it {
+      should have_title 'About Emily Dickinson Archive'
+    }
+
+    it {
+      should have_selector( '.about-panel-menu' )
+    }
+  end
+
+  describe 'get /resources' do
+    before { visit resources_path }
 
     it {
       should have_title 'About Emily Dickinson Archive'

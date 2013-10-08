@@ -1,8 +1,155 @@
 <% provide :title, "About Emily Dickinson Archive" %>
 
+<%= render( {
+  partial: 'shared/about_panel_menu'
+} ) %>
 
-  <%= render( {
-    partial: 'shared/about_panel_menu'
-  } ) %>
+<!-- EDA FAQ -->
 
+<ol>
+	<li><a href="#1">How many poems are in Emily Dickinson&rsquo;s oeuvre?</a></li>
+	<li><a href="#2">What do the terms &ldquo;fascicle&rdquo; and &ldquo;set&rdquo; mean?</a></li>
+	<li><a href="#3">The few poems published in Dickinson&rsquo;s lifetime, and poems in the early editions, have titles, but the later editions do not. Did Dickinson give her poems titles?</a></li>
+	<li><a href="#4">Did Emily Dickinson date her poems?</a></li>
+	<li><a href="#5">Is it easy to distinguish what is a poem, and what is a letter, in Dickinson&rsquo;s manuscripts?</a></li>
+	<li><a href="#6">What are the words, the marks, the initials, and the numbers that precede the poems on some of the manuscripts? Were they made by Dickinson?</a></li>
+	<li><a href="#7">What are the marks within Dickinson&rsquo;s poems, and the words at the bottom, in the margins, and above or below words, in some poems?</a></li>
+	<li><a href="#8">Why do the transcriptions of the poems look different from the poems as Dickinson wrote them on her page?</a></li>
+	<li><a href="#9">Why do some lines appear in two different poems in the Johnson and Franklin editions?</a></li>
+	<li><a href="#10">Why does more than one manuscript appear when I type in a first line?</a></li>
+	<li><a href="#11">I want to look at the original. Can I do that, and if so how?</a></li>
+	<li><a href="#12">Would I be allowed to reproduce an image on my blog/in a paper/in a thesis/a book?</a></li>
+</ul>
+
+<a name="1"></a>
+<h2>1. How many poems are in Emily Dickinson&rsquo;s oeuvre?</h2>
+<p>R. W. Franklin&rsquo;s 1998 variorum&mdash;the most recent and comprehensive edition of Dickinson&rsquo;s poems to date&mdash;contains 1,789 distinct poems; of these 1,789, 1,685 can be traced to manuscripts composed in Dickinson&rsquo;s hand, while the remaining 104 are reproduced from transcripts made by Susan Dickinson, Frances Norcross, Martha Dickinson Bianchi, Mabel Loomis Todd, and Millicent Todd Bingham, and from published sources including the <i>Youth&rsquo;s Companion</i> and the <i>Independent.</i> The number &ldquo;1,789,&rdquo; however, is not stable. First of all, many of Dickinson&rsquo;s poems exist in more than one draft or version. When we include the number of manuscript versions in our count, the number rises from 1,789 poems to 2,357 poem drafts or versions. Second, editors have not always agreed about what constitutes a &ldquo;poem.&rdquo; Questions such as &ldquo;Is a letter a poem?&rdquo; or &ldquo;When does a variant version of a poem become a new poem?&rdquo; trouble hard and fast tallies of Dickinson&rsquo;s poems. Third, we cannot know that all the poems Dickinson wrote survived, or have been found.</p>
+
+<a name="2"></a>
+<h2>2. What do the terms &ldquo;fascicle&rdquo; and &ldquo;set&rdquo; mean?</h2>
+<%= image_tag 'faq/fasciclereproduction.jpg', { alt: 'reproduction of a fascicle' } %>
+<p class="credit">Photo credit: A reproduction of a fascicle. Courtesy Emily Dickinson Museum, Amherst, MA.</p>
+<p>&ldquo;Fascicle&quot; is the name that Emily Dickinson's early editor, Mabel Loomis Todd, gave to the homemade manuscript books into which Dickinson copied hundreds of poems, probably beginning in the late 1850s and continuing through the late 1860s. Dickinson constructed the fascicles by writing poems onto sheets of standard stationery already folded in two to create two leaves (four pages). She then stacked several such sheets on top of each other, stabbed two holes in the left margin through the stack, and threaded string through the holes and tied the sheets together. Occasionally she varied this basic pattern by binding half-sheets (cut along the fold) into the stack of folded sheets. &ldquo;Set&rdquo; is a term first used by editor R.W. Franklin to describe groups of unbound sheets of similar paper and size that were never bound by the poet. There are 40 fascicles, and 15 sets.</p>
+<p>Dickinson herself did not number or label the fascicles. They were taken apart by the first editors of Dickinson&rsquo;s poetry, and so have had to be reconstructed by various scholars. Within this site, we use the order established by R.W. Franklin, <i>The Poems of Emily Dickinson </i>(Cambridge: Belknap Press of the Harvard University Press, 1998). Not all Dickinson scholars agree with his reconstruction.</p>
+<p>For additional reading about fascicles, see Mary Loeffelholz, <a href="http://pds.lib.harvard.edu/pds/view/2573358?n=20536&amp;s=4&amp;printThumbnails=no">&ldquo;What is a fascicle?&rdquo; in <i>Harvard Library Bulletin</i> New Series 10:1 (Spring 1999) 23-42</a></p>
+
+<a name="3"></a>
+<h2>3. The few poems published in Dickinson&rsquo;s lifetime, and poems in the early editions, have titles, but the later editions do not. Did Dickinson give her poems titles?</h2>
+<p>Titles were added by Dickinson&rsquo;s early editors because it was customary for published poems to have titles. If you look at the images of the manuscripts, you will see that Dickinson did not title her poems. Later editors such as Thomas Johnson and R.W. Franklin use the first line of the poem as a &ldquo;title.&rdquo; Johnson and Franklin also assigned numbers to the poems, based on their attempts to establish a chronology.</p>
+<p>Only nine of Dickinson&rsquo;s known poems had titles assigned to them, according to R.W. Franklin, <i>Poems </i>(1998), Appendix 6:</p>
+<table>
+	<tr><th>Title</th><th>First line</th><th></th></tr>
+	<tr><td>Snow flakes</td><td>I counted till they danced so</td><td>(Fascicle 2)</td></tr>
+	<tr><td>Pine Bough</td><td>A feather from the Whippowil</td><td>(Fascicle 12)</td></tr>
+	<tr><td>Purple</td><td>A color of a Queen is this</td><td>(Fascicle 39)</td></tr>
+	<tr><td>&ldquo;Nay&rdquo; Susan!</td><td>The guest is gold and crimson</td><td>(sent to Susan Dickinson)</td></tr>
+	<tr><td>Whistling under my window</td><td>Heart not so heavy as mine</td><td>(sent to Kate Anthon; original lost)</td></tr>
+	<tr><td>Baby</td><td>Teach him when he makes the names</td><td>(sent to Mary Bowles)</td></tr>
+	<tr><td>The Blue bird</td><td>Before you thought of spring</td><td>(on a surviving draft; and on lost originals sent to Louise and Frances Norcross, and to Helen Hunt Jackson)</td></tr>		
+	<tr><td>The Bumble Bee&rsquo;s Religion</td><td>His little hearse like figure</td><td>(sent to Gilbert Dickinson)</td></tr>
+	<tr><td>Diagnosis of the Bible, by a Boy</td><td>The Bible is an untold volume</td><td>(on a draft)</td></tr>
+</table>
+<p>Dickinson also referred to a very small number of other poems using brief phrases or nouns without quotation marks and often without definite articles. In an 1883 letter to Thomas Niles, an editor at Roberts Brothers in Boston, for instance, she enclosed four poems, referring to one of them (&ldquo;No brigadier throughout the year&rdquo;) as &ldquo;the Bird&rdquo; and another (&ldquo;A route of evanescence&rdquo;) as &ldquo;A Humming Bird.&rdquo;</p>
+
+<a name="4"></a>
+<h2>4. Did Emily Dickinson date her poems?</h2>
+<p>With the exception of poems included in dated letters (e.g. &ldquo;As by the dead we love to sit&rdquo;), Dickinson did not date the manuscript copies of her poems. In efforts to establish a chronology for Dickinson&rsquo;s manuscripts scholars have analyzed her handwriting, dated the paper she used, and drawn on postmarks and other means of dating letters connected to poems.</p>
+<p>In her early letters and poems, Dickinson used a fairly conventional cursive hand (where the letters are joined together), but over the course of the 1860s this changed gradually but substantially, so that by the mid-1870s her ligations (combinations of joined letters) had almost entirely disappeared.</p>
+<p>These methods of dating are conjectural and imprecise. Nor can they tell us with certainty when Dickinson actually composed a poem, since we cannot know whether she wrote out earlier copies that were destroyed or lost. At best, they allow us to assign a rough date to Dickinson&rsquo;s surviving manuscripts.</p>
+
+<a name="5"></a>
+<h2>5. Is it easy to distinguish what is a poem, and what is a letter, in Dickinson&rsquo;s manuscripts?</h2>
+<p>In some instances, editors of her work disagree about where a letter ends and a poem begins. For example, in <a href="/editions/1/image_sets/69197">this manuscript</a>:</p>
+<%= image_tag 'faq/hb90-1.jpg', { alt: 'Emily Dickinson: A.L. and poem. to Susan Huntington Dickinson (Houghton Library B90 p.1)' } %><%= image_tag 'faq/hb90-2.jpg', { alt: '(Houghton Library B90 p.2)' } %>
+<p>did she see the first part as a &ldquo;letter&rdquo; and the second as a &ldquo;poem&rdquo; when she moved from (this transcription is line-by-line):</p>
+<p class="stanza">
+	<span class="line">&nbsp;Morning</span><br/>
+	<span class="line">might come</span><br/>
+	<span class="line">by Accident,</span><br/>
+	<span class="line">Sister -</span><br/>
+	<span class="line">Night comes</span><br/>
+	<span class="line">by Event -</span><br/>
+	<span class="line">To believe the</span><br/>
+	<span class="line">final line of</span><br/>
+	<span class="line">the Card would</span><br/>
+	<span class="line">foreclose Faith -</span><br/>
+	<span class="line">Faith is <u>Doubt</u> -</span><br/>
+</p>
+<p>to:</p>
+<p class="stanza">
+	<span class="line">Sister -</span><br/>
+	<span class="line">Show me</span><br/>
+	<span class="line">Eternity, and</span><br/>
+	<span class="line">I will show</span><br/>
+	<span class="line">you Memory -</span><br/>
+	<span class="line">Both in one</span><br/>
+	<span class="line">package lain</span><br/>
+	<span class="line">And lifted</span><br/>
+	<span class="line">back again -</span><br/>
+	<span class="line">Be Sue, while</span><br/>
+	<span class="line">I am Emily -</span><br/>
+	<span class="line">Be next, what</span><br/>
+	<span class="line">you have ever</span><br/>
+	<span class="line">been, Infinity &mdash;</span><br/>
+</p>
+<p>Hart and Smith in <i>Open Me Carefully: Emily Dickinson&rsquo;s Intimate Letters to Susan Huntington Dickinson</i>, describe all of these lines as a &ldquo;letter-poem&rdquo; to Susan. R.W. Franklin considers the second &ldquo;Sister-&rdquo; a signature for the first group of lines, rather than as part of the poem.</p>
+<p>Such editorial decisions influence how one counts &ldquo;poems&rdquo; on the one hand and &ldquo;letters&rdquo; on the other.</p>
+
+<a name="6"></a>
+<h2>6. What are the words, the marks, the initials, and the numbers that precede the poems on some of the manuscripts? Were they made by Dickinson?</h2>
+<p>No. Marks usually found at the top of the manuscript page, rather than within the poems, were made by Dickinson&rsquo;s early editors.</p>
+<p><a href="/editions/1/image_sets/68456">The first page of Fascicle 29</a> shows a number of such marks at the top of the page.</p>
+<%= image_tag 'faq/h149a.jpg', { alt: 'Fascicle 29' } %>
+<p>R.W. Franklin in his &ldquo;Introduction&rdquo; to <i>The Manuscript Books</i> (1981) interprets these editorial marks as follows. Lavinia Dickinson, the poet's sister, turned the manuscripts over to her sister-in-law, Susan Dickinson, to prepare them for publication shortly after Emily Dickinson&rsquo;s death. Susan Dickinson's letters D, F, L., N, P, S, and W occur at the head of poems in several fascicles. The letter H is probably also hers. The meaning of these letters is not clear, although they perhaps indicate certain themes: N for a poem about nature, D for death, L for love or life, for example, possibly suggesting a way of organizing the poems into topic clusters for publication. The numbers in blue pencil are generally ascribed to Mabel Todd or her copyists; and the lightly written &ldquo;no&rdquo; to Martha Dickinson Bianchi, noting that the poem had not been published.</p>
+<p>Susan Dickinson&rsquo;s numbers 1, 2, and 3 also appear on the manuscripts (not on this example, but see <a href="/editions/1/image_sets/67883">&ldquo;I&rsquo;m nobody! who are you?&rdquo;</a>).</p>
+<%= image_tag 'faq/h35a.jpg', { alt: 'I\'m nobody! who are you?' } %>
+<p>Franklin also attributes the X, XX, XXX markings to Susan Dickinson.</p>
+
+<a name="7"></a>
+<h2>7. What are the marks within Dickinson&rsquo;s poems, and the words at the bottom, in the margins, and above or below words, in some poems?</h2>
+<p>The little &ldquo;+&rdquo; signs, or crosses, which Dickinson placed near a word on the line indicate a variant to that word. A variant may appear above the word, as in <a href="/editions/1/image_sets/67348">&ldquo;The maddest dream recedes unrealized&rdquo;</a>:</p>
+<%= image_tag 'faq/h69a.jpg', { alt: 'The maddest dream recedes unrealized' } %>
+<p>Here, there is a + before the word &ldquo;maddest,&rdquo; while above it, and keyed to it by another +, is the alternative &ldquo;nearest.&rdquo; In many poems Dickinson did not choose among the variants, allowing them to stand as non-exclusive alternatives. In the copy of &ldquo;The nearest dream recedes unrealized&rdquo; that Dickinson sent to T.W. Higginson, she adopted all three variants in this poem (&ldquo;nearest&rdquo; for &ldquo;maddest&rdquo;; &ldquo;Lifts&rdquo; for &ldquo;Spreads&rdquo;; and &ldquo;bewildered&rdquo; for &ldquo;defrauded,&rdquo; each pair linked by + signs).</p>
+<p>Variants may also appear to the side of a line, as in the penultimate line of <a href="/editions/1/image_sets/67880">&ldquo;That after horror that &lsquo;twas us&rdquo;</a>:</p>
+<%= image_tag 'faq/h33b.jpg', { alt: 'That after horror that \'twas us' } %>
+<p>Or at right angles to the poem, as in <a href="/editions/1/image_sets/67278">&ldquo;There is a pain so utter,&rdquo;</a> where three variants to words are written sideways on the right margin of the sheet:</p>
+<%= image_tag 'faq/h156a.jpg', { alt: 'There is a pain so utter' } %>
+<p>Or underneath a word, as in the last line of <a href="/editions/1/image_sets/68770">&ldquo;Of bronze and blaze,&rdquo;</a> where a variant to a word is listed underneath that word (here without the + sign):</p>
+<%= image_tag 'faq/h74c.jpg', { alt: 'Of bronze and blaze' } %>
+<p>In <a href="/editions/1/image_sets/67442">&ldquo;I gave myself to him,&rdquo;</a> variants are noted at the bottom of the fascicle sheet:</p>
+<%= image_tag 'faq/h172b.jpg', { alt: 'I gave myself to him' } %>
+<p>At times, Dickinson seems to be fitting variants into the available blank space on the fascicle sheet, without regard for uniform placement. For example, in <a href="/editions/1/image_sets/67931">&ldquo;If I may have it when it&rsquo;s dead,&rdquo;</a> the variant may be to the side of the word; to the side of the line; below the line; or at the end of the poem: &ldquo;Wealth I cannot weigh,&rdquo; a near-complete poetic line, is a variant for &ldquo;Tis Bliss I cannot weigh&rdquo;), while &ldquo;Right,&rdquo; (copied below &ldquo;Wealth&rdquo; ) is an alternative to both &ldquo;Bliss&rdquo; and &ldquo;Wealth.&rdquo; As the last example illustrates, Dickinson may provide more than one variant for a given word.</p>
+<%= image_tag 'faq/h142a-1.jpg' %><%= image_tag 'faq/h142a-2.jpg' %><%= image_tag 'faq/h142a-3.jpg' %>
+<p>Whole poems may be variants of each other. Thus <a href="/editions/1/image_sets/68783">&ldquo;I showed her hights she never saw,&rdquo;</a> which Dickinson sent to Susan Dickinson, has a variant in Fascicle 16, <a href="/editions/1/image_sets/63019">&ldquo;He showed me hights I never saw,&rdquo;</a> in which the gender is changed, as well as the positions of lover and speaker (&ldquo;I could not find my &lsquo;Yes&rsquo;&mdash;&rdquo; replacing &ldquo;She could not find her Yes&mdash;&rdquo; in the copy sent to Susan).</p>
+<%= image_tag 'faq/h276.jpg', { alt: 'I showed her hights she never saw' } %><%= image_tag 'faq/h61c.jpg', { alt: 'He showed me hights I never saw' } %>
+<p>Very occasionally, Dickinson drew a line through a word, indicating a decision to cancel one word and substitute another, as, for example, in <a href="/editions/1/image_sets/68778">&ldquo;I like a look of agony,&rdquo;</a> in which in the first line of the second stanza &ldquo;Death, comes&rdquo; is decisively crossed out and replaced by &ldquo;The Eyes glaze once&mdash;and that is Death&mdash;,&rdquo;:</p>
+<%= image_tag 'faq/h53b.jpg', { alt: 'I like a look of agony' } %>
+<p>and in <a href="/editions/1/image_sets/68773">&ldquo;There came a day at summer&rsquo;s full,&rdquo;</a> where a determination against word choices is marked by lines through those words.</p>
+<%= image_tag 'faq/h128a.jpg', { alt: 'There came a day at summer\'s full' } %>
+<p>These examples are drawn from Sharon Cameron, <i>Choosing Not Choosing: Dickinson&rsquo;s Fascicles</i> (Chicago: University of Chicago Press, 1992).</p>
+
+<a name="8"></a>
+<h2>8. Why do the transcriptions of the poems look different from the poems as Dickinson wrote them on her page?</h2>
+<p>Historically, most editors of Dickinson&rsquo;s poems have regarded them as cast in metrical forms, hence their transcriptions follow conventional stanzaic and metrical cues rather than the visual arrangement of the words on her manuscript pages. More recent editors sometimes lineate their transcripts following Dickinson&rsquo;s visual line on her manuscript page.</p>
+
+<a name="9"></a>
+<h2>9. Why do some lines appear in two different poems in the Johnson and Franklin editions?</h2> 
+<p>Thomas H. Johnson and R. W. Franklin do not always agree on how to interpret the manuscript page. For example, while Johnson ascribed the following lines of Houghton MS Am 1118.3 (157) to the penultimate stanza of <a href="/editions/1/image_sets/65781">&ldquo;I tie my hat I crease my shawl&rdquo;</a> (<a href="/editions/2/image_sets/73933">Johnson 443</a>/<a href="/editions/1/image_sets/65781">Franklin 522</a>), Franklin ascribed the lines to <a href="/editions/1/image_sets/68820">&ldquo;A pit but heaven over it&rdquo;</a> (<a href="/editions/1/image_sets/68820">Franklin 508</a>/<a href="/editions/2/image_sets/77120">Johnson 1712</a>), a poem for which, with the exception of the five lines in question, the manuscript is lost.</p>
+<p>These are the lines: &ldquo;&rsquo;Twould start them--/We&mdash;could tremble--/But since we got a Bomb--/And held it in our Bosom--/Nay&mdash;Hold it&mdash;it is calm&mdash;.&rdquo;</p>
+<p>Franklin argued that Dickinson used a single sheet, Houghton MS Am 1118.3 (152), on which to copy the conclusions to two separate poems.</p>
+
+<a name="10"></a>
+<h2>10. Why does more than one manuscript appear when I type in a first line?</h2>
+Dickinson often copied a poem more than once, and so there are several extant autograph manuscripts for some poems.</p>
+
+<a name="11"></a>
+<h2>11. I want to look at the original. Can I do that, and if so how?</h2>
+<p>This site includes images of manuscripts held at many different libraries and archives, and each will have its own policy about access. You should contact the library/archive and ask; there is contact information listed under <%= link_to 'Partners and Credits', team_path %>.</p>
+
+<a name="12"></a>
+<h2>12. Would I be allowed to reproduce an image on my blog/in a paper/in a thesis/a book?</h2>
+<p>The content of this site is governed by a Creative Commons Attribution-Non-Commercial-NoDerivs 3.0 Unported License (CC BY-NC-ND 3.0) (available at <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/legalcode">http://creativecommons.org/licenses/by-nc-nd/3.0/legalcode</a>).</p>
+<p>You are allowed to use an image found in EDA on your blog, or in a classroom project or assignment BUT you also need to credit the library/archive that holds the original manuscript (this is listed under the image) and the EDA. For use in a book or thesis, you do need permission; please contact the institution listed as holding the original manuscript. Contact information can be found under <%= link_to 'Partners and Credits', team_path %>. For more information, see <%= link_to 'Copyright and Terms of Use', terms_path %>.</p>
+
+<!-- end EDA FAQ -->
 
