@@ -85,7 +85,7 @@ class ImageToEditionConnector
             pbar.inc
         end
 
-        pbar = ProgressBar.new("Connecting", Image.count)
+        pbar = ProgressBar.new("Connecting", Image.count - added_images.count)
         image_set = ImageSet.create(name: "Other Images")
         image_set.move_to_child_of root_image_set
         Image.all.each do |image|
@@ -93,6 +93,8 @@ class ImageToEditionConnector
             image_set << image
             pbar.inc
         end
+        image_set.save!
+        root_image_set.save!
 
         Edition.all.each do |edition|
             edition.image_set = root_image_set.duplicate

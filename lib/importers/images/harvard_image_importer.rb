@@ -28,7 +28,7 @@ class HarvardImageImporter
                     next
                 end
                 image = Image.new(
-                    :title => "Houghton Library - #{page['Label']}",
+                    :title => "Houghton Library - #{page['LABEL']}",
                     :url => image_url,
                     :credits => 'Harvard credits',
                     :metadata => {
