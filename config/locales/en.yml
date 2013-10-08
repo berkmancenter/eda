@@ -65,6 +65,7 @@ en:
   my_reading_lists_link: 'My Reading Lists'
   my_notes_link: 'My Notes'
   my_account_link: 'My Account'
+  my_profile_link: 'My Profile'
 
   datatable:
     th_title: 'First Line/Title'
