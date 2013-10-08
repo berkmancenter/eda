@@ -2,12 +2,14 @@
 
 .image-sets.show {
     overflow: hidden;
+    min-width: 864px;
 }
 
 .image-sets.show .view.side-by-side {
     padding-top: 0;
     h2 {
-        margin-top: 0.5em;
+        margin-top: 0;
+        padding-top: .5em;
     }
     .sbs-pages {
         margin: 0 auto;
@@ -316,23 +318,48 @@
 
 .side-by-side {
     .page-controls {
-        margin-top: 0.6em;
+        padding-top: .6em;
+        white-space: nowrap;
+
         div {
             display: inline-block;
-            margin: 0.2em 10% 0;
+            vertical-align: middle;
+        }
+
+        .previous-page-container {
+          text-align: right;
+        }
+
+        .page-counter {
+          text-align: center;
+          width: 128px;
+        }
+
+        .next-page-container {
+          text-align: left;
         }
     }
     .page-links {
         text-align: center;
+        white-space: nowrap;
 
         div {
             display: inline-block;
             margin: 0.1em 10% 0;
         }
-    }
-    .page-counter {
-        text-align: center;
-        margin-top: -2em;
+
+        a {
+          background: url( 'manuscript_view_icon.png' ) no-repeat;
+          border: solid 2px $darkGray;
+          border-radius: 2px;
+          display: inline-block;
+          height: 36px;
+          width: 68px;
+
+          &:hover {
+            border: solid 2px $lightTan;
+          }
+        }
     }
 }
 i.preview {
