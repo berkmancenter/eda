@@ -4,17 +4,6 @@
 <% cache @image_set do %>
   <h2><%= @image_set.name %></h2>
 
-  <noscript>
-      <% @image_set.all_images.each do |image| %>
-          <div class="own-size" style="width: <%= image.web_width %>px; height: <%= image.web_height %>px;">
-              <% if page = @edition.image_set.leaves_containing(image).first %>
-                  <%= link_to image_tag(preview_url(image), height: 600), edition_image_set_path(@edition, page) %>
-              <% else %>
-                  <%= image_tag preview_url(image) %>
-              <% end %>
-          </div>
-      <% end %>
-  </noscript>
 
   <script>
       var images = [

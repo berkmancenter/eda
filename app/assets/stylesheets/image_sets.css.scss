@@ -135,11 +135,11 @@
             left: -25%;
         }
         #interactive-image-panel {
-            width: 60%;
+            width: 64%;
             left: -25%;
         }
         #work-panel {
-            width: 40%;
+            width: 36%;
             left: -25%;
         }
 
@@ -219,7 +219,7 @@
 
         &.left {
             border-radius: 0px 2px 2px 0;
-            top: 4em;
+            top: 5em;
             right: -2em;
             width: 2em;
             height: 4.8em;
@@ -234,7 +234,7 @@
 
         &.right {
             border-radius: 2px 0px 0px 2px;
-            top: 4em;
+            top: 5em;
             left: -2em;
             width: 2em;
             height: 4.8em;
@@ -267,7 +267,7 @@
         border-radius: 2px 2px 0 0;
         bottom: 0;
         color: $darkGray;
-        height: 12em;
+        height: 4em;
         padding: 0;
         position: absolute;
         width: 94%;
@@ -276,7 +276,7 @@
 
     #interactive-image-panel.collapsed {
       .bottom.drawer {
-        bottom: -12em;
+        bottom: -6em;
       }
     }
 
@@ -301,7 +301,7 @@
             height: 90%;
             textarea {
                 width: 100%;
-                height: 11em;
+                height: 90%;
             }
             .note-save-result {
                 padding-left: 0.5em;

@@ -10,12 +10,13 @@
   }
 
   a, a:visited {
-    font-family: 'Carrois Gothic SC';
+    font-family: 'Source Sans Pro';
     text-shadow: 1px 1px 15px $shadowGray;
+    color: $tan;
   }
 
   a:hover, a.selected {
-    color: $tan;
+    color: white;
   }
 }
 

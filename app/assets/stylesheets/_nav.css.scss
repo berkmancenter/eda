@@ -3,7 +3,7 @@
 nav.main, nav.user {
   display: inline-block;
   text-align: left;
-  font-family: 'Carrois Gothic SC';
+  font-family: 'PT Serif';
   text-shadow: 1px 1px 15px $lightShadowGray;
 
   ul {
@@ -19,10 +19,14 @@ nav.main, nav.user {
 
 nav.main {
   margin-right: 1em;
+  font-size: 1.1em;
+  font-family: 'PT Serif';
 }
 
 nav.user {
   float: right;
+  font-family: 'Source Sans Pro';
+  font-size: 0.8em;
 }
 .dropdown .dropdown-menu, .dropdown .dropdown-panel {
     background: $highlightGray;
@@ -30,6 +34,7 @@ nav.user {
     border: 1px solid $gray;
     li {
         display: block;
+        margin-bottom: 0.2em;
     }
     li > a {
         color: $lightGray;
