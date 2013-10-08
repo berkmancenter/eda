@@ -8,10 +8,10 @@ en:
       too_long: '%{attribute} is too long. (The maximum is %{count} characters.)'
       too_big: '%{attribute} is too large.'
 
-  home_browse_title: 'Browse Manuscripts'
+  home_browse_title: 'Browse for Manuscript Images'
   home_lex_title: 'Lexicon'
 
-  works_search_h1: 'Search Manuscripts'
+  works_search_h1: 'Search for Manuscript Images'
 
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
