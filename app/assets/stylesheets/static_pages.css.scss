@@ -102,11 +102,15 @@ body.static-pages.home {
     display: inline-block;
     vertical-align: top;
     padding-top: 2em;
-    width: 20em;
+    width: 24em;
 
     .search-works-form {
       h1 {
         font-size: 1.2em;
+      }
+
+      input {
+        width: 18em;
       }
 
       button {
