@@ -38,6 +38,10 @@ body.static-pages {
   li {
     list-style-type: none;
   }
+
+  ul.reference-list {
+    font-weight: bold;
+  }
 }
 
 body.static-pages.home {
