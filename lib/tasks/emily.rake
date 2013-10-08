@@ -354,6 +354,7 @@ namespace :emily do
             task :all => [:environment] do
                 Rake::Task["emily:import:images:aas"].execute
                 Rake::Task["emily:import:images:amherst"].execute
+                Rake::Task["emily:import:images:missing_amherst"].execute
                 Rake::Task["emily:import:images:beinecke"].execute
                 Rake::Task["emily:import:images:bpl"].execute
                 Rake::Task["emily:import:images:harvard"].execute
@@ -387,10 +388,10 @@ namespace :emily do
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
             Rake::Task["emily:import:images:all"].execute
-            Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:connect:images_to_transcriptions"].execute
+            Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
         end

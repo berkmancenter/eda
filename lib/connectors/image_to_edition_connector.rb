@@ -40,9 +40,11 @@ class ImageToEditionConnector
                     next if image == last_image
                     image_set << image
                     added_images << image.id
+                    next_image = nil
                     # Attempt to include blank backs of pages
-                    next_image = work.image_set.leaf_after(work.image_set.leaf_containing(image)).image
-                    if Work.in_image(next_image).empty?
+                    next_image_set = work.image_set.leaf_after(work.image_set.leaves_containing(image).first)
+                    next_image = next_image_set.image if next_image_set
+                    if next_image && Work.in_image(next_image).empty?
                         image_set << next_image
                         added_images << next_image.id
                         last_image = next_image
@@ -67,9 +69,12 @@ class ImageToEditionConnector
                     next if image == last_image
                     image_set << image
                     added_images << image.id
-                    next_image = work.image_set.leaf_after(work.image_set.leaf_containing(image)).image
-                    if Work.in_image(next_image).empty?
-                        image_set << next_image
+                    next_image = nil
+                    # Attempt to include blank backs of pages
+                    next_image_set = work.image_set.leaf_after(work.image_set.leaves_containing(image).first)
+                    next_image = next_image_set.image if next_image_set
+                    if next_image && Work.in_image(next_image).empty?
+                        next_image = work.image_set.leaf_after(work.image_set.leaf_containing(image)).image
                         added_images << next_image.id
                         last_image = next_image
                     else
