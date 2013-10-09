@@ -1,6 +1,7 @@
 <div class="about-menus">
   <ul class="about-panel-menu panel-menu">
     <li><%= link_to( 'Overview', about_url, ( params[ :action ] == 'about' ? { class: 'selected' } : nil ) ) %></li>
+    <li><%= link_to( 'How to Use', use_url, ( params[ :action ] == 'use' ? { class: 'selected' } : nil ) ) %></li>
     <li><%= link_to( 'FAQ', faq_url, ( params[ :action ] == 'faq' ? { class: 'selected' } : nil ) ) %></li>
     <li><%= link_to( 'Resources', resources_url, ( params[ :action ] == 'resources' ? { class: 'selected' } : nil ) ) %></li>
     <li><%= link_to( raw( 'Partners &amp;<br/>Credits' ), team_url, ( params[ :action ] == 'team' ? { class: 'selected' } : nil ) ) %></li>
