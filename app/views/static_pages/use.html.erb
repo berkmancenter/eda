@@ -1,0 +1,120 @@
+<% provide :title, "About Emily Dickinson Archive" %>
+
+<%= render( {
+  partial: 'shared/about_panel_menu'
+} ) %>
+
+<nav>
+  <ul>
+    <li><a href="#search">Search</a></li>
+    <li><a href="#images">Images</a></li>
+    <li><a href="#text">Text</a></li>
+    <li><a href="#lexicon">Lexicon</a></li>
+  </ul>
+</nav>
+
+<h2 id="search">Search</h2>
+
+<p>
+Search finds manuscript images based on transcribed text from the <%= link_to 'editions currently available', "#{about_path}#editions" %> in EDA. 
+Greater relevance is given to matches in the <%= link_to 'first line or title', "#{faq_path}#3" %> and to words that occur multiple times within a poem.
+</p>
+<h3>Search Results</h3>
+<p>
+Search results display information about each manuscript: 
+<%= link_to 'first line or title', "#{faq_path}#3" %>, presumed <%= link_to 'date', "#{faq_path}#4" %> and recipient (if provided), and a reference number for each work related to the image&mdash;
+according to the <%= link_to 'edition or library', about_path %> that provided the information.
+</p>
+<h3>Options and Sorting</h3>
+<p>
+By default, search finds manuscript images using full text from all available <%= link_to 'editions', "#{about_path}#editions" %> and <%= link_to 'libraries', team_path %>. 
+Search results can be limited to a single edition or library&mdash;or a specific piece of information, such as first line&mdash;
+before or after searching. Search results can be sorted by selecting the heading of each column in the main search results view.
+</p>
+
+<h2 id="images">Manuscript Images</h2>
+
+<p>
+EDA makes high-resolution images of manuscripts of Dickinson&rsquo;s poetry available. Unavailable images&mdash;
+which may include Dickinson manuscripts that have been described or transcribed by others but are presumed lost or destroyed, or forthcoming images from the project&rsquo;s growing list of partners and collaborators&mdash;
+are represented by a placeholder image taken from <i><%= link_to raw( 'Emily Dickinson&rsquo;s Herbarium' ), resources_path %></i>.
+</p>
+<h3>Enlarging</h3>
+<p>
+To magnify manuscript images, double-click the image or use the &ldquo;Zoom In&rdquo; icon.
+The &ldquo;Zoom Out&rdquo; icon reduces; the &ldquo;Go home&rdquo; icon returns to default size; 
+and &ldquo;Full Page&rdquo; fills the screen with the image; clicking again or hitting &ldquo;Esc&rdquo; returns to the original view.
+</p>
+<%= image_tag 'zoomin_rest.png' %>
+<%= image_tag 'zoomout_rest.png' %>
+<%= image_tag 'home_rest.png' %>
+<%= image_tag 'fullpage_rest.png' %>
+
+<h3>Saving and Annotating</h3>
+<p>
+Open the &ldquo;My Notes&rdquo; tab to write and save your own annotations on each image page.
+Open &ldquo;Save to Reading List&rdquo; to create one or more lists of images to order and revisit. 
+To save notes or reading lists, you will need to <%= link_to 'sign up/sign in', new_user_session_url %> to EDA.
+</p>
+<h3>Downloading</h3>
+To download a large version of the image and its associated metadata and credits, use the &ldquo;Save&rdquo; icon. 
+The image will download as an uncompressed file, 1200 pixels wide at 96dpi, approximately 1-2MB in file size. 
+To request larger files, contact the owning library. 
+Image attribution&mdash;
+<i>which must be included whenever the image is used under the terms of the Creative Commons license for this site</i>&mdash;
+will download as a separate text file 
+(consult information about EDA <%= link_to 'Copyright & Terms of Use', terms_path %>).
+</p>
+<h3>Page Turning and Reading View</h3>
+<p>
+&ldquo;Previous Page&rdquo; and &ldquo;Next Page&rdquo; move between manuscript images in order. 
+&ldquo;Reading View&rdquo; shows facing pages and simulates physical page-turning with interactive animation. 
+The order of pages is determined by the edition or library context you choose; 
+this can be changed using the menu provided (including your own page order, if you have signed in and created an edition). 
+</p>
+
+<%= image_tag 'use_page_controls.png' %>
+
+<h2 id="text">Text</h2>
+<h3>Transcripts</h3>
+<p>
+&ldquo;Text&rdquo; contains words transcribed from the manuscripts by the editors of <%= link_to 'editions', "#{about_path}#editions" %>. 
+The text, if available, is determined by the edition or library context you choose; 
+this can be changed using the menu provided (including your own transcripts, if you have signed in and created an edition). 
+</p><p>
+Some pages show only part of a larger work, while others contain many small works. 
+Some pages have several alternative transcripts for each work, while others may only have one. 
+And some pages include more text than has been transcribed by the available editions, while others include no text at all.
+</p>
+<h3>Line Breaks, Variant Words, and Notes</h3>
+<p>
+View information from editions about the text with the controls below. 
+The  &ldquo;Line Breaks&rdquo; and &ldquo;Variant Words&rdquo; visualize (and hide) the selected edition&rsquo;s textual notes, if any.
+Notes&rdquo; views this information as text instead, and may provide further clarification about the manuscript and transcript. 
+Some editions do not include line breaks, variant words, or notes.
+</p>
+<h3>Metadata, Encoding, and Downloading</h3>
+<p>
+&ldquo;Metadata&rdquo; describes the source of the text in greater detail. 
+&ldquo;Download as TEI&rdquo; saves the <%= link_to 'encoded text', "#{about_path}#encoding" %> and associated credits. 
+<i>The text attribution must be included whenever the text is used under the terms of the Creative Commons license for this site</i>
+(consult information about EDA <%= link_to 'Copyright & Terms of Use', terms_path %>).
+</p>
+<h3>Creating an Edition</h3>
+<p>
+To save your own edition, you will need to <%= link_to 'sign up/sign in', new_user_session_url %> to EDA. 
+Your edition can be based on an existing edition&rsquo;s page order and transcripts or started from scratch.
+Within your edition you may: include/hide pages, add/change metadata, change page order, and add your own transcripts.
+Once saved, your edition is available for you to search for manuscript images and display as transcript text.
+</p>
+
+<h2 id="lexicon">Lexicon</h2>
+<p>
+Browse alphabetically through more than 9,000 words in Dickinson&rsquo;s poetry, as defined in her dictionary, Webster's 1844 <i>American Dictionary of the English Language</i>. 
+Each word details a part of speech and definition&mdash;
+often with many different senses. 
+From each lexicon entry, search for words in Dickinson&rsquo;s poems to see their use in context. 
+<%= link_to 'Resources', resources_path %> links to images of Dickinson&rsquo;s Webster&rsquo;s Dictionary under the Dickinson family library.
+</p>
+
+<a href="#">Back to top</a>
