@@ -1,7 +1,8 @@
 <section class="work-reading-list">
   <% if user_signed_in? %>
       <% current_user.reading_lists.each do |reading_list| %>
-          <%= render partial: 'reading_lists/show', locals: { reading_list: reading_list.self_and_descendants } %>
+          <h3><%= reading_list.name %></h3>
+          <%= render partial: 'reading_lists/ajax_show', locals: { reading_list: reading_list.self_and_descendants } %>
       <% end %>
   <% else %>
       <p class="sign-in">

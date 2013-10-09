@@ -10,12 +10,5 @@
         </ol>
     <% end %>
     <ul class="occurrences">
-        <% @search.hits.each do |hit| %>
-            <% hit.highlights(:line).each do |highlight| %>
-        <li>
-            <%= highlight.format{|word| %Q|<b class="highlight">#{word}</b>|} %>
-        </li>
-            <% end %>
-        <% end %>
     </ul>
 </section>

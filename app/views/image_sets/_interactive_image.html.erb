@@ -2,7 +2,7 @@
   <% if image_set.image.url.nil? %>
     <%= image_tag asset_path("missing_image.jpg") %>
   <% else %>
-      <div id="page-image"><noscript><%= raw image_tag preview_url(image_set.image) %></noscript></div>
+      <div id="page-image"></div>
       <%= javascript_include_tag "openseadragon" %>
       <script>
             OpenSeadragon({

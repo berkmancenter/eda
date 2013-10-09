@@ -10,7 +10,6 @@ class WordsController < ApplicationController
     
     def show
         @word = Word.find(params[:id])
-        do_search(@word.word)
         render :layout => !request.xhr?
     end
 

@@ -114,8 +114,7 @@ $( function( ) {
   } );
 
   function fullImageUrl(filename, width, height) {
-      width = <%= Eda::Application.config.emily['small_image_preview_width'] %>;
-      var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+      width = width || smallImagePreviewWidth;
       return imageUrlTemplate.replace('{image_filename}', filename)
           .replace('{width}', Math.round(width))
           .replace('{height}', Math.round(height));

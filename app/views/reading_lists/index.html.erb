@@ -2,7 +2,7 @@
 <ul>
     <% @reading_lists.each do |reading_list| %>
         <li>
-        <h3><%= link_to reading_list.name, reading_list_path(reading_list) %></h3>
+        <h3><%= reading_list.name %></h3>
         <% if reading_list.descendants.empty? %>
             <p><%= t :reading_list_empty %></p>
         <% else %>

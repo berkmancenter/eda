@@ -38,8 +38,11 @@ module WorkHelper
     end
 
     def image_set_path_from_work(work)
-        image_set = work.edition.image_set.leaves_showing_work(work).first
-        edition_image_set_path(work.edition, image_set) if image_set
+        cache_key = "ispfw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
+        Rails.cache.fetch(cache_key) do 
+            image_set = work.edition.image_set.leaves_showing_work(work).first
+            edition_image_set_path(work.edition, image_set) if image_set
+        end
     end
 
     def edition_selector(other_editions_works, selected_edition, id = nil)
