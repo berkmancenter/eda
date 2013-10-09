@@ -19,15 +19,22 @@
       var numberOfPages = images.length;
   </script>
 
-  <div class="sbs-pages"></div>
+  <div class="sbs-pages-container page-controls">
+    <div class="previous-page-container"><a class="change-page" href="javascript:void(0);" id="previous-page" title="Previous Page"></a></div>
+
+    <div>
+      <div class="sbs-pages"></div>
+    </div>
+
+    <div class="next-page-container"><a class="change-page" href="javascript:void(0);" id="next-page" title="Next Page"></a></div>
+  </div>
+
   <div class="page-links">
       <div class="left-image-link">&nbsp;</div>
       <div class="right-image-link">&nbsp;</div>
   </div>
-  <div class="page-controls">
-      <div class="previous-page-container"><a class="change-page" href="javascript:void(0);" id="previous-page" title="Previous Page"></a></div>
+  <div class="page-counter-container">
       <div class="page-counter"><span class="current-page-number"></span> / <span class="total-pages"></span></div>
-      <div class="next-page-container"><a class="change-page" href="javascript:void(0);" id="next-page" title="Next Page"></a></div>
   </div>
   <script type="text/javascript">
       var smallImagePreviewWidth = <%= Eda::Application.config.emily['small_image_preview_width'] %>;
