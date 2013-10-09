@@ -43,6 +43,15 @@ body.static-pages {
   ul.reference-list {
     font-weight: bold;
   }
+
+  .about-menus {
+    margin-bottom: 1em;
+    text-align: center;
+
+    li {
+      vertical-align: middle;
+    }
+  }
 }
 
 body.static-pages.home {
