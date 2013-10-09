@@ -1,26 +1,162 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <style type="text/css">
-    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
-    div.dialog {
-      width: 25em;
-      padding: 0 4em;
-      margin: 4em auto 0 auto;
-      border: 1px solid #ccc;
-      border-right-color: #999;
-      border-bottom-color: #999;
-    }
-    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
-  </style>
-</head>
+  <meta charset="utf-8" />
+    <title>Emily Dickinson Archive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  <style>
+      * {
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+      }
+
+      @viewport {
+          width: device-width;
+      }
+      footer,
+      header,
+      nav,
+      section {
+          display: block;
+      }
+
+      .hr {
+          border: solid 1px #4b4b4b;
+          border-width: 1px 0 0 0;
+          height: 0px;
+          margin: 0;
+          width: 100%;
+      }
+
+      .menu-container {
+          display: block;
+          margin: 0;
+          padding: 0;
+          text-align: left;
+          width: 100%;
+      }
+
+      html {
+          color: #e7cf98;
+          font-family: 'Source Sans Pro';
+          font-size: 16px;
+      }
+
+      h2, h3 {
+          font-weight: 400;
+      }
+
+      body {
+          background: #333333;
+          line-height: 1.33em;
+          margin: 0;
+          min-width: 512px;
+      }
+      body a, body a:visited {
+          color: #888888;
+          text-decoration: none;
+      }
+      body a:hover, body a.selected {
+          color: #eeddb5;
+      }
+      body a:hover {
+          text-decoration: underline;
+      }
+      body > header {
+          background: url("assets/ornament-small.png") repeat-x 0 10px;
+          background-color: #383838;
+          margin: 0;
+          padding: 0;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      body > header h1 {
+          background: #383838;
+          display: inline-block;
+          font-weight: normal;
+          height: 32px;
+          margin: 10px 0 0 54px;
+          white-space: nowrap;
+          width: 405px;
+          font-size: 0;
+          background-image: url("assets/logo.png");
+      }
+      body > header .hr {
+          margin-top: 0.7em;
+      }
+      body .view:not(.three-panel) {
+          padding: 1.4em 2em 4em;
+          margin: 0em 7%;
+          background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(#333333), to(#383838), color-stop(0.4, #383838));
+          border-radius: 2px;
+      }
+      body .view:not(.three-panel) header h1 {
+          font-weight: normal;
+          margin: 0;
+          padding: 0;
+      }
+      body footer {
+          background: #333333;
+          text-align: center;
+      }
+      body footer p {
+          font-size: .8em;
+          margin: 1em auto;
+          max-width: 800px;
+      }
+      body footer nav li {
+          display: inline-block;
+          list-style-type: none;
+          margin: 0 1em;
+      }
+      body footer a.berkman-link {
+          background: url("assets/berkman_logo_small.png");
+          display: inline-block;
+          height: 24px;
+          vertical-align: middle;
+          width: 48px;
+      }
+      footer {
+          font-size: 0.8em;
+          bottom: 0;
+          height: 3em;
+          left: 0;
+          position: fixed;
+          right: 0;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      footer ul {
+          margin-top: 0.6em;
+      }
+
+  </style>
+  <meta content="authenticity_token" name="csrf-param" />
+<meta content="Zg5KUt3jN75jo1qIMMIN9dCUp0fYbfDz6pPc/fKvCTs=" name="csrf-token" />
+</head>
 <body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <h1>The page you were looking for doesn't exist.</h1>
-    <p>You may have mistyped the address or the page may have moved.</p>
-  </div>
+    <header>
+    <h1>Emily Dickinson Archive</h1>
+
+    <div class="menu-container">
+        <nav class="main">
+        </nav>
+    </div>
+    <div class="hr"></div>
+    </header>
+    <p>We apologize, but the page you are looking for does not exist.</p>
+    <footer>
+    <div class="hr"></div>
+    <nav class="footer">
+    <ul>
+        <li><a href="http://cyber.law.harvard.edu" class="berkman-link" title="Berkman Center for Internet and Society"></a></li>
+        <li><a href="http://localhost:3000/terms">Copyright and Terms of Use</a></li>
+        <li><a href="http://localhost:3000/privacy">Privacy</a></li>
+        <li><a href="http://localhost:3000/contact">Contact Us</a></li>
+    </ul>
+    </nav>
+    </footer>
 </body>
 </html>

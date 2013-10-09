@@ -14,7 +14,7 @@
 
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" /> 
-  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Carrois+Gothic+SC|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
   
   
   <%= stylesheet_link_tag    "application", :media => "all" %>
@@ -37,10 +37,10 @@
   </header>
 
   <% if notice %>
-      <div class="flash notice"><p><%= notice %></p></div>
+      <div class="flash notice"><p><%= notice %><span class="flash-dismiss">&nbsp;</span></p></div>
   <% end %>
   <% if alert %>
-      <div class="flash alert"><p><%= alert %></p></div>
+      <div class="flash alert"><p><%= alert %><span class="flash-dismiss">&nbsp;</span></p></div>
   <% end %>
 
   <section class="view <%= yield :view_classes %>">

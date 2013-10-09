@@ -41,27 +41,34 @@ class ApplicationController < ActionController::Base
         revision
     end
 
-    def do_search
+    def do_search(query = nil)
+        params[:q] = query unless query.nil?
+        sync_search_params_and_session
+        return unless params[:q]
+        @search = Work.search do
+            with(:edition_id, params[:current_edition]) if params[:current_edition]
+            fulltext params[:q] do
+                fields(:lines, :title => 2.0)
+            end
+        end
+        params.delete(:q) if query
+    end
+
+    def sync_search_params_and_session
         return unless params[:q] || session[:q]
         session[:q] = params[:q] if params[:q]
         session[:current_edition] = params[:current_edition] if params[:current_edition]
         params[:q] = session[:q] if session[:q]
         params[:current_edition] = session[:current_edition] if session[:current_edition]
         if params[:current_edition] == 'all'
-            params[:current_edition] = session[:current_edition] = nil
+            params.delete(:current_edition)
+            session.delete(:current_edition)
         end
 
-        if params[:q].strip == ''
+        if params[:q].strip.empty?
             @search = nil
-            params[:q] = nil
-            session[:q] = nil
-        else
-            @search = Work.search do
-                with(:edition_id, params[:current_edition]) if params[:current_edition]
-                fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
-                end
-            end
+            params.delete(:q)
+            session.delete(:q)
         end
     end
 

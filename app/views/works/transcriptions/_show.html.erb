@@ -4,7 +4,7 @@
     <p class="stanza" data-number="<%= stanza.position %>">
     <% stanza.lines.each do |line| %>
         <span class="line" data-line="<%= line.number %>">
-            <%= raw render_line(line) %>
+            <%= sanitize(render_line(line), tags: ['em', 'strong', 'ruby', 'rp', 'rt', 'br', 'span', 'p', 'ins', 'del']) %>
             <% unless line.just_author_break? %>
                 <br class="emily author"/>
             <% end %>

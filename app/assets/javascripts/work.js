@@ -150,8 +150,8 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).parent().find('.metadata').modal();
     });
-    $('.show-appearances').on('click', function(e) {
-        e.preventDefault();
-        $(this).parent().find('.work-appearances').modal();
+
+    $('.toggler').on('click', function() {
+        $(this).toggleClass('expanded').next('.toggleable').slideToggle(200);
     });
 });

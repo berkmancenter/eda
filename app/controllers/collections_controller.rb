@@ -7,4 +7,8 @@ class CollectionsController < ApplicationController
     def show
         @collection = Collection.find(param[:id])
     end
+
+    def sortable_model
+        ImageSet
+    end
 end

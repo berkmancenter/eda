@@ -10,8 +10,10 @@
     <div class="panel-content">
         <section class="work-transcription">
 
-        <label for="edition-selector">Edition: </label>
-        <%= edition_selector(other_editions_works, edition, 'edition-selector') unless work_to_edit %>
+        <% unless work_to_edit %>
+        <label class="edition-select" for="edition-selector">Edition: </label>
+        <%= edition_selector(other_editions_works, edition, 'edition-selector') %>
+        <% end %>
 
         <% if work_to_edit && work_to_edit.new_record? %>
             <div class="work-body">
@@ -41,20 +43,18 @@
                     <%= render partial: 'works/transcriptions/show', locals: { work: work, edition: edition } %>
                 </div>
 
-                <div>
-                    <a class="show-metadata" href="javascript:void(0);"><%= t :show_metadata %></a>
-                    <div class="metadata">
-                        <h2>Work Metadata</h2>
-                        <dl><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                <div class="about-work">
+                    <h4 class="toggler">About Work</h4>
+                    <div class="toggleable">
+                        <a class="show-metadata eda-btn-light" href="javascript:void(0);"><%= t :show_work_metadata %></a><br />
+                        <%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei), class: 'eda-btn-light' %>
+                        <div class="metadata">
+                            <h2>Work Metadata</h2>
+                            <dl><%= render partial: 'shared/metadata', locals: { object: work } %></dl>
+                        </div>
                     </div>
-
-                    <% if work.appearances.count > 0 %>
-                    <a class="show-appearances" href="#"><%= t :show_appearances %></a>
-                    <div class="work-appearances"><%= render partial: 'works/appearances', locals: { work: work } %></div>
-                    <% end %>
                 </div>
 
-                <div><%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei) %></div>
                 <% if user_signed_in? %>
                     <div><%= render partial: 'reading_lists/add_form', locals: { edition: edition, work: work} %></div>
                 <% end %>

@@ -32,4 +32,10 @@ module ApplicationHelper
   def devise_mapping
     @devise_mapping ||= Devise.mappings[:user]
   end
+
+  def cache_key_for_multiple(objects)
+        count          = objects.count
+        max_updated_at = objects.maximum(:updated_at).try(:utc).try(:to_s, :number)
+        "#{objects.first.class.name.underscore.pluralize}/many-#{count}-#{max_updated_at}"
+  end
 end

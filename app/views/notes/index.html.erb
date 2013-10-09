@@ -1,8 +1,13 @@
+<h2><%= t :my_notes %></h2>
+<% if @notes.empty? %>
+    <p><%= t :no_notes %></p>
+<% else %>
 <ul>
 <% @notes.each do |note| %>
     <li>
-    <%= link_to(note.notable.name, url_for(note.notable)) %>
-    <%= note.note %>
+    On: <%= link_to(note.notable.name, url_for(note.notable)) %>
+    <p><%= note.note %></p>
     </li>
 <% end %>
 </ul>
+<% end %>

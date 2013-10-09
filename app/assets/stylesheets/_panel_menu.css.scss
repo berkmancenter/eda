@@ -18,6 +18,12 @@
   a:hover, a.selected {
     color: white;
   }
+  a.selected {
+    border-bottom: 1px dotted white;
+  }
+  a.selected:hover {
+      text-decoration: none;
+  }
 }
 
 .panel-content {

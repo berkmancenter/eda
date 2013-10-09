@@ -48,7 +48,7 @@ class Work < ActiveRecord::Base
         integer :edition_id
         string(:number) { |work| work.number.to_s }
         text :title
-        text :lines do
+        text :lines, stored: true do
             lines.map{|l| l.text }
         end
     end

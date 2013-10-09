@@ -19,6 +19,7 @@
 
 class ReadingList < WorkSet
     alias_method :works, :all_works
+
     def works=(new_works)
         existing_works = works
         existing_work_ids = existing_works.map(&:id)

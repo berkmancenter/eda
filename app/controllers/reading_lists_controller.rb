@@ -1,12 +1,16 @@
 class ReadingListsController < ApplicationController
     before_filter :authenticate_user!
     before_filter :load_reading_list, :except => [:index, :create]
+    before_filter :check_reading_list_owner, except: [:index, :create]
+
+    include TheSortableTreeController::Rebuild
 
     def index
         @reading_lists = current_user.reading_lists
     end
 
     def show
+        @reading_list = @reading_list.self_and_descendants
     end
     
     def edit
@@ -19,13 +23,29 @@ class ReadingListsController < ApplicationController
     end
 
     def create
-        @reading_list = current_user.reading_lists.create(params[:reading_list])
-        redirect_to reading_lists_path
+        if current_user.reading_lists.create(params[:reading_list])
+            flash[:notice] = t :reading_list_successfully_created
+        else
+            flash[:alert] = t :error_creating_reading_list
+        end
+        redirect_to my_reading_lists_path
+    end
+
+    def sortable_model
+        WorkSet
     end
 
     private
 
     def load_reading_list
         @reading_list = current_user.reading_lists.find(params[:id])
+    end
+
+    def check_reading_list_owner
+        unless current_user == @reading_list.owner
+            flash[:alert] = t :cannot_view_reading_list
+            session[:previous_url] = request.fullpath
+            redirect_to session[:two_urls_back] || root_path
+        end
     end
 end

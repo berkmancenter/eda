@@ -24,6 +24,7 @@ gem 'htmlentities'
 gem 'progressbar'
 gem 'naturally'
 gem 'roman-numerals'
+gem 'exception_notification'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -16,6 +16,12 @@
     }
 }
 
+.drawer {
+    a:hover {
+        color: $darkGray;
+    }
+}
+
 .view.three-panel {
     left: 0;
     margin: 0;
@@ -269,7 +275,7 @@
         border-radius: 2px 2px 0 0;
         bottom: 0;
         color: $darkGray;
-        height: 4em;
+        height: 5em;
         padding: 0;
         position: absolute;
         width: 94%;
@@ -308,6 +314,9 @@
             .note-save-result {
                 padding-left: 0.5em;
             }
+        }
+        p {
+            text-align: center;
         }
     }
 }

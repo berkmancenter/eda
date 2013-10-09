@@ -1,10 +1,12 @@
 <section class="work-reading-list">
   <% if user_signed_in? %>
       <% current_user.reading_lists.each do |reading_list| %>
-          <%= render partial: 'reading_lists/show', locals: { reading_list: reading_list } %>
+          <%= render partial: 'reading_lists/show', locals: { reading_list: reading_list.self_and_descendants } %>
       <% end %>
   <% else %>
+      <p class="sign-in">
       <%= raw t(:reading_list_sign_in, sign_in_link: link_to(t(:sign_in), new_user_session_path)) %>
+      </p>
   <% end %>
 </section>
 

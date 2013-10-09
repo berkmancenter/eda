@@ -1,6 +1,11 @@
-<h3><%= reading_list.name %></h3>
-<ul class="work-list">
-    <% reading_list.works.each do |work| %>
-        <%= render partial: 'works/list_item', locals: { work: work, edition: work.edition } %>
+<ol class="work-list <%= "sortable_tree" if reading_list.count > 1 %>" data-max_levels="2" data-rebuild_url="<%= rebuild_reading_lists_url %>">
+    <%= build_server_tree(
+        reading_list,
+        type: :sortable,
+        title: :name,
+        rebuild_url: rebuild_reading_lists_url
+    ) %>
+    <% if reading_list.count == 1 %>
+        <li><p><%= t :reading_list_empty %></p></li>
     <% end %>
-</ul>
+</ol>

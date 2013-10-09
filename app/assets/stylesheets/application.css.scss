@@ -83,6 +83,10 @@ summary {
   &:hover {
     background: $lightTan;
     cursor: pointer;
+    a {
+        color: $darkGray;
+        text-decoration: none;
+    }
   }
 }
 
@@ -202,6 +206,21 @@ body {
     color: #000;
     display: inline-block;
     box-shadow: 0 0 20px $shadowGray;
+    position: relative;
+}
+
+.flash-dismiss {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    display: block;
+    top: 3px;
+    right: 3px;
+    background: url('small_x.png');
+    cursor: pointer;
+    &:hover {
+        background: url('small_x_hover.png');
+    }
 }
 
 .notice p {
@@ -283,3 +302,10 @@ dd {
     margin-left: 2em;
 }
 
+.toggler {
+    cursor: pointer;
+}
+
+.toggleable {
+    display: none;
+}

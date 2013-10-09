@@ -32,7 +32,11 @@ Eda::Application.routes.draw do
         resources :notes
     end
 
-    resources :reading_lists
+    resources :reading_lists do
+        collection do 
+            post :rebuild
+        end
+    end
 
     resources :collections, only: [:index, :show] do
         collection do

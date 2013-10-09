@@ -1,10 +1,18 @@
+<% cache cache_key_for_multiple(@words) do %>
 <div class="word-filter-wrapper">
     <%= label_tag(:filter, t(:word_filter_label)) %>
     <%= text_field_tag(:word_filter, nil,  class: 'word-filter') %>
 </div>
 <ul class="word-list">
-    <% @words.each do |word| %>
-        <li><%= link_to(word.word, word_path(word)) %></li>
+    <% @words.group_by{|w| w.word.first.downcase }.each do |letter, words| %>
+        <% words.each do |word| %>
+            <li>
+            <% if word == words.first %>
+                <div class="letter-break"><%= letter.upcase %></div>
+            <% end %>
+                <%= link_to(word.word, word_path(word)) %>
+            </li>
+        <% end %>
     <% end %>
 </ul>
 <script>
@@ -12,3 +20,4 @@
         $('.word-filter').fastLiveFilter('.word-list');
     });
 </script>
+<% end %>

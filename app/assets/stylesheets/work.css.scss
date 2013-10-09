@@ -40,9 +40,6 @@ body.works.edit, body.works.new, body.works.create {
       display: block;
   }
 
-  br {
-      display: none;
-  }
 
   ins:before {
       content:"(";
@@ -66,13 +63,16 @@ body.works.edit, body.works.new, body.works.create {
       display: inline;
   }
 
+  label.edition-select {
+      font-weight: bold;
+  }
 }
 
 .work-body, form.work #work_text {
     font-family: "PT Serif";
     font-size: 12px;
     color: $darkGray;
-    padding: 1em 2em;
+    padding: 1em 2em 0.3em;
     white-space: nowrap;
     background-color: $lightTan;
 
@@ -81,8 +81,15 @@ body.works.edit, body.works.new, body.works.create {
         white-space: normal;
     }
 
+    br {
+        display: none;
+    }
+
     .stanza {
         margin-bottom: 1.5em;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     .page-break {
@@ -154,6 +161,29 @@ body.works.edit, body.works.new, body.works.create {
 .metadata, .work-appearances {
     display: none;
 }
-.work-reading-list h3:first-child {
-    margin-top: 0.2em;
+.work-reading-list {
+    h3:first-child {
+        margin-top: 0.2em;
+    }
+    .sign-in {
+        margin: 2em 0.5em;
+        text-align: center;
+        white-space: normal;
+    }
+}
+.about-work {
+    h4 {
+        margin: 0;
+    }
+    .eda-btn-light {
+        display: inline-block;
+        font-size: 0.9em;
+        margin-top: 0.3em;
+    }
+    .toggleable {
+        padding-left: 1em;
+    }
+}
+.work-tools {
+    margin-top: 2em;
 }

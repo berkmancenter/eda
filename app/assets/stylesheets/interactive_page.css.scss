@@ -18,7 +18,7 @@
     /* match .view .panel top */
     top: 2em;
     /* .bottom.drawer + .page-controls */
-    bottom: 9em;
+    bottom: 10em;
     -moz-transition: bottom 0.7s;
     -webkit-transition: bottom 0.7s;
     transition: bottom 0.7s;
@@ -72,6 +72,22 @@
 .credits {
   font-size: 0.8em;
   overflow: auto;
+  dt {
+      display: inline-block;
+  }
+  dd {
+      margin-left: 0.3em;
+      display: inline-block;
+  }
+
+}
+
+.credits-buttons {
+  text-align: center;
+  font-size: 0.8em;
+  a {
+      margin: 0 0.2em;
+  }
 }
 
 .bottom.drawer .credits {

@@ -1,7 +1,7 @@
 <ol class="sortable_tree expandable"
     data-rebuild_url="<%= rebuild_edition_image_sets_url(@edition) %>"
     data-expand_node_url="<%= expand_node_edition_image_sets_url(@edition) %>">
-    <% cache cache_key_for_image_sets(@image_sets) do %>
+    <% cache cache_key_for_multiple(@image_sets) do %>
         <%= build_server_tree(
             @image_sets,
             type: :expandable,

@@ -65,4 +65,14 @@ Eda::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  
+  Eda::Application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :sender_address => %{"Emily Dickinson" <eda-error@edickinson.org.com>},
+    :exception_recipients => ['jclark+eda@cyber.law.harvard.edu', 'rwestphal+eda@cyber.law.harvard.edu']
+  }
+
+  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 end

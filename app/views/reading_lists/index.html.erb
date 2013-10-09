@@ -1,9 +1,22 @@
+<h2><%= t :my_reading_lists %></h2>
 <ul>
     <% @reading_lists.each do |reading_list| %>
-        <li><%= link_to reading_list.name, reading_list_path(reading_list) %></li>
+        <li>
+        <h3><%= link_to reading_list.name, reading_list_path(reading_list) %></h3>
+        <% if reading_list.descendants.empty? %>
+            <p><%= t :reading_list_empty %></p>
+        <% else %>
+            <ol>
+                <% reading_list.descendants.each do |work_set| %>
+                    <li><%= link_to work_set.work.full_title, image_set_path_from_work(work_set.work) %></li>
+                <% end %>
+            </ol>
+        <% end %>
+        </li>
     <% end %>
 </ul>
+<h3><%= t :new_reading_list %></h3>
 <%= form_for ReadingList.new do |f| %>
     <%= f.text_field :name %>
-    <%= f.submit 'New Reading List' %>
+    <%= f.submit 'New Reading List', class: 'eda-btn-light' %>
 <% end %>

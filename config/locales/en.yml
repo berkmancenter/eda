@@ -30,15 +30,26 @@ en:
   hide_edits: 'Hide Edits'
   reading_list_sign_in: 'Please %{sign_in_link} to save works to your reading list'
   sign_in: 'sign in'
-  my_notes: 'My Notes'
-  image_info: 'Image Info'
+  image_info: 'About Image'
   word_filter_label: 'Filter'
-  show_metadata: 'Show Metadata'
+  show_image_metadata: 'More Image Metadata'
+  show_work_metadata: 'More Work Metadata'
+
+  my_reading_lists: 'My Reading Lists'
+  new_reading_list: 'Create New Reading List'
+  reading_list_empty: 'This reading list is currently empty'
+  reading_list_successfully_created: 'Your reading list has been successfully created.'
+  error_creating_reading_list: 'There was an error creating your reading list.'
+  edit_reading_list: 'Edit Reading List'
+
+  my_notes: 'My Notes'
+  no_notes: 'You have not yet made any notes.'
 
   create_new_edition: 'Create New Edition'
   or: 'or'
   cannot_edit_edition: 'You do not have permissions to modify that edition.'
 
+  cannot_view_reading_list: 'You are not the owner of that reading list'
   revision_already_exists: "You've already begun editing this work in this edition."
 
   works_drawer_label: 'Text'
