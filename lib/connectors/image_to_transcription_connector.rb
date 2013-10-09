@@ -47,19 +47,31 @@ class ImageToTranscriptionConnector
         end
     end
 
-    def create_map_to_review(output_map_file, additional_maps, blank_images_file, lost_works_file)
+    def create_map_to_review(output_map_file, output_map_file_by_edition, additional_maps, blank_images_file, lost_works_file)
         pbar = ProgressBar.new('Review', Image.count)
         franklin = Edition.find_by_work_number_prefix('F')
         johnson = Edition.find_by_work_number_prefix('J')
         blank_images = File.readlines(blank_images_file).map(&:strip)
         map = CSV.open(output_map_file, 'wb')
+        map_by_edition = CSV.open(output_map_file_by_edition, 'wb')
         map << ['image_url', 'J', 'F', 'collection', 'link']
+        map_by_edition << ['edition', 'link', 'has_image']
         lost_works = CSV.read(lost_works_file).flatten
         Collection.all.each do |collection|
             collection.all_images.each do |image|
                 franklin.works.in_image(image).each do |work|
                     image_set = work.image_set.leaves_containing(image).first
                     map << [image.url, nil, work.full_id, collection.name, edition_image_set_url(franklin, image_set)]
+                end
+                pbar.inc
+            end
+        end
+
+        pbar = ProgressBar.new('By Edition', ImageSet.count)
+        Edition.all.each do |edition|
+            edition.image_set.leaves.each do |image_set|
+                if image_set.image && !edition.works.in_image(image_set.image).empty?
+                    map_by_edition << [edition.short_name, edition_image_set_url(edition, image_set), !(image_set.image.url.nil? || image_set.image.url.empty?)]
                 end
                 pbar.inc
             end

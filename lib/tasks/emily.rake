@@ -139,9 +139,10 @@ namespace :emily do
         end
 
         desc 'Create images to works map after everything has been imported'
-        task :images_to_transcriptions_map_for_review, [:output_map_file, :blank_images_file, :lost_works_file] => [:environment] do |task, args|
+        task :images_to_transcriptions_map_for_review, [:output_map_file, :output_map_file_by_edition, :blank_images_file, :lost_works_file] => [:environment] do |task, args|
             require 'csv'
             output_map_file = args[:output_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map_to_review.csv')
+            output_map_file_by_edition = args[:output_map_file_by_edition] || File.join(Eda::Application.config.emily['data_directory'], 'image_to_work_map_to_review_by_edition.csv')
             blank_images_file = args[:blank_images_file] || File.join(Eda::Application.config.emily['data_directory'], 'blank_amherst_images.txt')
             lost_works_file = args[:lost_works_file] || File.join(Eda::Application.config.emily['data_directory'], 'lost_works.csv')
             additional_maps = [
@@ -152,13 +153,18 @@ namespace :emily do
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_to_work_map.csv'), headers: true),
                 CSV.open(File.join(Eda::Application.config.emily['data_directory'], 'manual_map.csv'), headers: true)
             ]
-            ImageToTranscriptionConnector.new.create_map_to_review(output_map_file, additional_maps, blank_images_file, lost_works_file)
+            ImageToTranscriptionConnector.new.create_map_to_review(output_map_file, output_map_file_by_edition, additional_maps, blank_images_file, lost_works_file)
         end
 
         desc 'Connect all existing transcriptions together'
         task :transcriptions_map, [:map_file, :publication_history_file] => [:environment] do |task, args|
             map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
             TranscriptionConnecter.new.connect(map_file)
+        end
+
+        desc 'Generate image credits'
+        task :image_credits => [:environment] do |task, args|
+            ImageCreditGenerator.new.generate!
         end
     end
 
@@ -237,6 +243,10 @@ namespace :emily do
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
             edition_prefix = args[:edition_prefix] || 'F'
             PublicationHistoryImporter.new.import(filename, edition_prefix)
+        end
+
+        desc 'Import Franklin and Johnson recipients'
+        task :recipients, [:johnson_file, :franklin_file] => [:environment] do |t, args|
         end
 
         namespace :transcriptions do

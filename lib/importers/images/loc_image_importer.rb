@@ -2,6 +2,11 @@ class LOCImageImporter
     def import(directory)
         puts "Importing Library of Congress images"
         collection = Collection.create!(name: 'Library of Congress, Manuscript Division')
+        collection.metadata = {
+            'URL' => 'http://www.loc.gov/rr/mss/',
+            'Long Name' => 'Manuscript Division, Library of Congress, Washington, D.C.',
+            'Code' => 'LOC'
+        }
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('LOC Images', total_files)
         Dir.open(directory).each_with_index do |filename, i|

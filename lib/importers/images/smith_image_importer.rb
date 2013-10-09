@@ -2,6 +2,11 @@ class SmithImageImporter
     def import(directory)
         puts "Importing other images"
         collection = Collection.create!(name: 'Smith College, Mortimer Rare Book Room')
+        collection.metadata = {
+            'URL' => 'http://www.smith.edu/libraries/libs/rarebook/',
+            'Long Name' => 'Mortimer Rare Book Room, Smith College, Northampton, MA',
+            'Code' => 'SCL'
+        }
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('Smith', total_files)
         Dir.open(directory).each_with_index do |filename, i|

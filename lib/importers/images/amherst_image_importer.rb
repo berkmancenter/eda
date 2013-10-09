@@ -2,6 +2,11 @@ class AmherstImageImporter
     def import(image_directory, mods_directory)
         puts 'Importing Amherst Images'
         collection = Collection.create(name: 'Amherst College, Frost Library')
+        collection.metadata = {
+            'URL' => 'https://www.amherst.edu/library/archives/holdings/edickinson',
+            'Long Name' => 'Amherst College Library, Amherst MA',
+            'Code' => 'A,ACL'
+        }
         last_call_number = ''
         sheet_group = collection
         pbar = ProgressBar.new('Amherst', Dir.entries(image_directory).count)

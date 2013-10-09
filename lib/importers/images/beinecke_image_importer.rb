@@ -3,6 +3,11 @@ class BeineckeImageImporter
     def import(directory, metadata_csv)
         puts "Importing Beinecke images"
         collection = Collection.create!(name: 'Yale University, Beinecke Rare Book & Manuscript Library')
+        collection.metadata = {
+            'URL' => 'http://beinecke.library.yale.edu/',
+            'Long Name' => 'Yale Collection of American Literature, Beinecke Library, Yale University, New Haven, CT',
+            'Code' => 'Y-MSSA'
+        }
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('Beinecke Images', total_files)
         metadata_csv = CSV.open(metadata_csv, headers: true)

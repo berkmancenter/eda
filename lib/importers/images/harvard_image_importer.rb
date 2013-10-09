@@ -3,6 +3,11 @@ class HarvardImageImporter
     def import(directory, johnson_franklin_map, max_images = nil)
         puts "Importing Harvard images"
         collection = Collection.create!(:name => 'Harvard University, Houghton Library')
+        collection.metadata = {
+            'URL' => 'http://hcl.harvard.edu/libraries/houghton/collections/modern/dickinson.cfm',
+            'Long Name' => 'Houghton Library, Harvard University,  Cambridge, MA',
+            'Code' => 'H,HCL'
+        }
         image_count = 0
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new("Harvard Img", total_files)

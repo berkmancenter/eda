@@ -3,6 +3,11 @@ class AASImageImporter
     def import(directory, metadata_csv)
         puts "Importing AAS images"
         collection = Collection.create!(name: 'American Antiquarian Society')
+        collection.metadata = {
+            'URL' => 'http://www.americanantiquarian.org/',
+            'Long Name' => 'American Antiquarian Society, Worcester, MA',
+            'Code' => 'AAS'
+        }
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('AAS Images', total_files)
         metadata_csv = CSV.open(metadata_csv, headers: true)

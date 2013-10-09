@@ -11,7 +11,14 @@ class BPLFlickrImporter
     PER_PAGE = 500
     def import(image_dir)
         puts 'Importing BPL images from Flickr'
-        collection = Collection.create(:name => 'Boston Public Library')
+        collection = Collection.create(
+            :name => 'Boston Public Library'
+        )
+        collection.metadata = {
+            'URL' => 'http://www.bpl.org/research/rb/index.htm',
+            'Long Name' => 'Boston Public Library, Rare Books and Manuscripts Collection, Boston, MA',
+            'Code' => 'BPL'
+        }
         FlickRaw.api_key="1a639ffd8be5ff472f5aa4889f447082"
         FlickRaw.shared_secret="95eb6034f3da44c3"
         pattern = /<b>(?<key>.*):<\/b> (?<value>.*)$/
