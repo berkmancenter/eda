@@ -191,6 +191,7 @@ FactoryGirl.define do
   factory :image do
     factory :image_one do
       url 'ms_am_1118_10_10_0001'
+      title 'p. 2, Your - Riches - taught me - poverty! , L258, J299, Fr418'
       metadata {{
         'Imported' => '2013-07-11 12:00:00 -0400',
         'Order' => '2',
