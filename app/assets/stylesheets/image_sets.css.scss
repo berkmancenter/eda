@@ -322,17 +322,6 @@
         padding-top: .5em;
     }
 
-
-    .page-counter-container {
-      text-align: center;
-    }
-
-    .page-counter {
-      display: inline-block;
-      margin-top: -2em;
-      position: fixed;
-    }
-
     /* actually contains .sbs-pages now */
     .page-controls {
         padding-top: .6em;
@@ -366,9 +355,27 @@
         text-align: center;
         white-space: nowrap;
 
-        div {
+        &>div {
             display: inline-block;
-            margin: 0.1em 10% 0;
+            height: 40px;
+            margin: 0;
+        }
+
+        .left-image-link {
+          margin-left: 64px;
+        }
+
+        .page-counter-container {
+          vertical-align: middle;
+          width: 128px;
+        }
+
+        .page-counter {
+          display: block;
+        }
+
+        .right-image-link {
+          margin-right: 64px;
         }
 
         a {
