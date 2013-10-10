@@ -54,10 +54,19 @@ module FranklinVentura
             # Twice on purpose for when patterns overlap
             string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
             string.gsub!(Holder_extractor, "\\k<before><holder><loccode>\\k<loc_code></loccode><subloccode>\\k<subloc_code></subloccode><id>\\k<id></id></holder>\\k<after>") unless simple
-            string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
-            string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
-            string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
-            string.gsub!(Division_extractor, "\n<divisions>\\k<divisions></divisions>\n")
+
+            if simple
+                string.gsub!(Revision_extractor, "\n<mods><MI>Revision<D> \\k<revisions></mods>\n")
+                string.gsub!(Alternate_extractor, "\n<mods>\\k<alternates></mods>\n")
+                string.gsub!(Emendation_extractor, "\n<mods><MI>Emendation<D> \\k<emendations></mods>\n")
+                string.gsub!(Division_extractor, "\n<mods><MI>Division<D> \\k<divisions></mods>\n")
+            else
+                string.gsub!(Revision_extractor, "\n<revisions>\\k<revisions></revisions>\n")
+                string.gsub!(Alternate_extractor, "\n<alternates>\\k<alternates></alternates>\n")
+                string.gsub!(Emendation_extractor, "\n<emendations>\\k<emendations></emendations>\n")
+                string.gsub!(Division_extractor, "\n<divisions>\\k<divisions></divisions>\n")
+            end
+
             string.gsub!(Stanza_start_pattern, "\n<stanza>\n\\0")
             string.gsub!(Stanza_boundary_pattern, "</stanza>\n<stanza>\n\\0")
             string.gsub!(Paragraph_extractor, "\n<p>\\k<paragraph></p>\n")
@@ -70,7 +79,7 @@ module FranklinVentura
             string.gsub!('<<', '&laquo;')
             string.gsub!('>>', '&raquo;')
             string.gsub!('<~>', '<br/>')
-            string = sanitize(string, tags: %w(br em b u p holder loccode subloccode id deviations fascicle line variant linenum year work title poem stanza publications published publication date pages manuscript number alternates emendations divisions revisions))
+            string = sanitize(string, tags: %w(br em b u p holder loccode subloccode id deviations fascicle line variant linenum year work title poem stanza mods publications published publication date pages manuscript number alternates emendations divisions revisions))
             string.sub!('</work>', '')
             string << "\n</work>\n"
             string.gsub!(/^(@|@1 = |@6.5PTS = |@PGBRK = |@PNT_1_1 = |@TRH1 = .*)$/, '')
@@ -83,7 +92,7 @@ module FranklinVentura
         def stick_modifiers_in_poems(string)
             new_string = ''
             have_poem_end = false
-            hold_pattern = /^(<divisions|<emendations|<revisions|<alternates)/
+            hold_pattern = /^(<divisions|<emendations|<revisions|<alternates|<mods)/
             poem_end_pattern = /<\/poem>/
             string.each_line do |line|
                 if line.match(poem_end_pattern)
@@ -197,12 +206,12 @@ module FranklinVentura
 
         def parse_xml(simple_string, complex_string)
             works = []
-            doc = Nokogiri::XML::Document.parse(complex_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-            simple_doc = Nokogiri::XML::Document.parse(simple_string, nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            doc = Nokogiri::XML::Document.parse(complex_string.encode('ASCII-8BIT'), nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+            simple_doc = Nokogiri::XML::Document.parse(simple_string.encode('ASCII-8BIT'), nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
             pbar = ProgressBar.new('Parsing Franklin', doc.css('work').count)
             doc.css('work').each_with_index do |work, i|
                 simple_work = simple_doc.css('work')[i]
-                year = work.xpath('preceding-sibling::year').first.text.to_i
+                year = work.xpath('preceding-sibling::year[1]').first.text.to_i
                 number = work.at('number').text.to_i
                 #puts number
                 titles = work.css('title').map(&:text)
@@ -227,6 +236,7 @@ module FranklinVentura
                         add_holder_info(w, poem)
                         add_publication(w, work, simple_work)
                         add_fascicle_set_info(w, poem)
+                        add_mods(w, work, simple_work)
                         breakup_publications(w)
                         w.save!
                         add_modifiers!(w, poem)
@@ -236,6 +246,10 @@ module FranklinVentura
                 end
             end
             works
+        end
+
+        def add_mods(work, poem_xml, simple_xml)
+            work.metadata['Inscription Notes'] = simple_xml.css('mods').map{|m| m.inner_html}.join("<br />")
         end
 
         def add_fascicle_set_info(work, poem_xml)
@@ -259,15 +273,18 @@ module FranklinVentura
             else
                 previous_sibling = poem_xml.previous_element if poem_xml.previous_element.matches?('p')
             end
-            if previous_sibling && previous_sibling.css('holder').count > 0
-                work.clear_holder_info
-                # Work gets last holder in paragraph
-                previous_sibling.css('holder').each do |holder|
-                    holder_ids = holder.at('id').text.strip.split(/(^\d+\/|,)/).reject{|i| i.to_i == 0}.map{|id| id.strip.sub(/\/$/, '')}
-                    holder_ids.each do |id|
-                        work.holder_code = holder.at('loccode').text.strip
-                        work.holder_subcode = holder.at('subloccode').text.strip
-                        work.holder_id = id
+            if previous_sibling
+                work.metadata['Note'] = previous_sibling.text
+                if previous_sibling.css('holder').count > 0
+                    work.clear_holder_info
+                    # Work gets last holder in paragraph
+                    previous_sibling.css('holder').each do |holder|
+                        holder_ids = holder.at('id').text.strip.split(/(^\d+\/|,)/).reject{|i| i.to_i == 0}.map{|id| id.strip.sub(/\/$/, '')}
+                        holder_ids.each do |id|
+                            work.holder_code = holder.at('loccode').text.strip
+                            work.holder_subcode = holder.at('subloccode').text.strip
+                            work.holder_id = id
+                        end
                     end
                 end
             end
@@ -311,7 +328,7 @@ module FranklinVentura
                         line_number = line_number(work, s, {'line_num' => ''})
                     end
                     s.lines.build(
-                        text: line.inner_html,
+                        text: line.inner_html.gsub('"', '&quot;'),
                         number: line_number
                     )
                 end

@@ -4,6 +4,7 @@ k* Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT lice
  * Contributors: Mike Grier (mgrier.com), Clint Priest, Kyle Adams, guillermo
  * See: http://js-naturalsort.googlecode.com/svn/trunk/naturalSort.js
  */
+
 function naturalSort (a, b) {
     var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
         sre = /(^[ ]*|[ ]*$)/g,
@@ -46,9 +47,19 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return naturalSort(a,b);
     },
 
-"natural-desc": function ( a, b ) {
-    return naturalSort(a,b) * -1;
-}
+    "natural-desc": function ( a, b ) {
+        return naturalSort(a,b) * -1;
+    },
+
+    "without-punc-pre": function ( a ) {
+        return a.replace(/("|'|\[|<[^>]*>)/g, '');
+    },
+    "without-punc-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+    "without-punc-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
 } );
 
 (function($) {
@@ -108,6 +119,7 @@ $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique,
  
 function fnCreateSelect( aData )
 {
+    aData = aData.sort();
     var r='<select><option value=""></option>', i, iLen=aData.length;
     for ( i=0 ; i<iLen ; i++ )
     {
@@ -122,10 +134,15 @@ $(document).ready(function() {
           sSearch: "Search within these results: "
         },
 
-        aoColumnDefs: [ {
+        aoColumnDefs: [
+        {
           sType: "natural",
-          aTargets: [ 'work-title', 'work-number' ]
-        } ],
+          aTargets: [ 'work-number' ]
+        }, {
+            sType: "without-punc",
+            aTargets: [ 'work-title' ]
+        }
+        ],
 
         fnInitComplete: function() {
           $('#work-table-wrapper').show();

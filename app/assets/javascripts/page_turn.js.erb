@@ -3,6 +3,27 @@
 var targetAspectRatio = 0.62;
 
 $(function() { 
+    function addPage(images, page, book) {
+        // 	First check if the page is already in the book
+        if (!book.turn('hasPage', page)) {
+            // Create an element for this page
+            var element = $('<div />', {'class': 'page '+((page%2==0) ? 'odd' : 'even'), 'id': 'page-'+page}).html('<i class="loader"></i>');
+            // If not then add the page
+            book.turn('addPage', element, page);
+
+            element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl}));
+        }
+    }
+
+    function fullImageUrl(filename, width, height) {
+        height = height || imageHeight;
+        width = width || imageWidth;
+        var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+        return imageUrlTemplate.replace('{image_filename}', filename)
+    .replace('{width}', Math.round(width))
+    .replace('{height}', Math.round(height));
+    }
+
     var sbsPages = $( ".sbs-pages" );
 
     if ( sbsPages.length > 0 ) {
@@ -60,25 +81,5 @@ $(function() {
             }
         });
 
-        function addPage(images, page, book) {
-            // 	First check if the page is already in the book
-            if (!book.turn('hasPage', page)) {
-                // Create an element for this page
-                var element = $('<div />', {'class': 'page '+((page%2==0) ? 'odd' : 'even'), 'id': 'page-'+page}).html('<i class="loader"></i>');
-                // If not then add the page
-                book.turn('addPage', element, page);
-
-                element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl}));
-            }
-        }
-
-        function fullImageUrl(filename, width, height) {
-            height = height || imageHeight;
-            width = width || imageWidth;
-            var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
-            return imageUrlTemplate.replace('{image_filename}', filename)
-                .replace('{width}', Math.round(width))
-                .replace('{height}', Math.round(height));
-        }
     }
 });

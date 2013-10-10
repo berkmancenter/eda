@@ -43,7 +43,7 @@ class ImagesController < ApplicationController
             temp_image.write(open(large_jpg_url(@image)).read)
             temp_image.rewind
 
-            temp_metadata.write(@image.credits)
+            temp_metadata.write(@image.text_credits)
             temp_metadata.rewind
 
             Zip::OutputStream.open(temp_zip.path) do |zip|

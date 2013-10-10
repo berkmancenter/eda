@@ -9,6 +9,6 @@
         <%= pluralize @search.total, 'result' %>
         for &quot;<span class="query"><%= params[:q] %></span>&quot;
     </h2>
-    <%= render partial: 'works/table', locals: { works: @search.results } %>
+    <%= render partial: 'works/table', locals: { works: @search.results, search: @search } %>
 <% end %>
 </section>

@@ -47,19 +47,47 @@ class ApplicationController < ActionController::Base
         return unless params[:q]
         @search = Work.search do
             with(:edition_id, params[:current_edition]) if params[:current_edition]
-            fulltext params[:q] do
-                fields(:lines, :title => 2.0)
+            case params[:limit_to_field]
+            when 'work_text'
+                fulltext params[:q] do
+                    fields(:lines, :title => 2.0)
+                end
+            when 'title'
+                fulltext params[:q] do
+                    fields(:title)
+                end
+            when 'work_metadata'
+                fulltext params[:q] do
+                    fields(:metadata)
+                end
+            else
+                fulltext params[:q] do
+                    fields(:lines, :title => 2.0)
+                end
             end
+            paginate page: 1, per_page: Work.count
         end
-        params.delete(:q) if query
+        clear_search if query
+    end
+
+    def clear_search
+        params.delete(:q)
+        params.delete(:current_edition)
+        params.delete(:limit_to_field)
+
+        session.delete(:q)
+        session.delete(:current_edition)
+        session.delete(:limit_to_field)
     end
 
     def sync_search_params_and_session
         return unless params[:q] || session[:q]
         session[:q] = params[:q] if params[:q]
         session[:current_edition] = params[:current_edition] if params[:current_edition]
+        session[:limit_to_field] = params[:limit_to_field] if params[:limit_to_field]
         params[:q] = session[:q] if session[:q]
         params[:current_edition] = session[:current_edition] if session[:current_edition]
+        params[:limit_to_field] = session[:limit_to_field] if session[:limit_to_field]
         if params[:current_edition] == 'all'
             params.delete(:current_edition)
             session.delete(:current_edition)
@@ -67,8 +95,7 @@ class ApplicationController < ActionController::Base
 
         if params[:q].strip.empty?
             @search = nil
-            params.delete(:q)
-            session.delete(:q)
+            clear_search 
         end
     end
 

@@ -72,6 +72,10 @@ module WorkHelper
         "works/many-#{count}-#{max_updated_at}#{edition_id}"
     end
 
+    def search_rank(search, work)
+        search.hits.index{|h| h.primary_key == work.id.to_s && h.class_name == work.class.name} + 1
+    end
+
     def with_format(format, &block)
         old_formats = formats
         begin

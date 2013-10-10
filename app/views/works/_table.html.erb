@@ -2,6 +2,9 @@
 <table class="works">
     <thead>
         <tr>
+            <% if defined?(search) && !search.nil? %>
+                <th><%= t 'datatable.th_relevance' %></th>
+            <% end %>
             <th class="work-title"><%= t 'datatable.th_title' %></th>
             <th>Date</th>
             <th>Recipient</th>
@@ -9,20 +12,25 @@
                 <th><%= t 'datatable.th_edition' %></th>
             <% end %>
             <th class="work-number">Number</th>
-            <!--<th>Has Image</th>-->
+            <th>Work Metadata</th>
         </tr>
     </thead>
     <tbody>
 <% works.each do |work| %><tr>
+<% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %>
 <td><%= link_to work.title, image_set_path_from_work(work) %></td>
 <td><%= work.date.strftime('%Y') if work.date %></td>
 <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
 <% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %>
 <td><%= strip_tags work.full_id %></td>
+<td><a href="javascript:void(0);">Show Metadata</a></td>
 </tr><% end %>
     </tbody>
     <tfoot>
         <tr>
+            <% if defined?(search) && !search.nil? %>
+                <th></th>
+            <% end %>
             <th></th>
             <th class="date-footer"></th>
             <th class="recipient-footer"></th>
@@ -30,7 +38,7 @@
                 <th class="edition-footer"></th>
             <% end %>
             <th></th>
-            <!--<th></th>-->
+            <th></th>
         </tr>
     </tfoot>
 </table>

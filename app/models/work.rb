@@ -51,6 +51,13 @@ class Work < ActiveRecord::Base
         text :lines, stored: true do
             lines.map{|l| l.text }
         end
+        text :metadata do 
+            metadata.reduce('') do |all, m|
+                value = m.last.is_a?(Array) ? m.last.join(' ') : m.last.to_s
+                value = ActionController::Base.helpers.strip_tags(value)
+                "#{all} #{value}"
+            end
+        end
     end
 
     def title
