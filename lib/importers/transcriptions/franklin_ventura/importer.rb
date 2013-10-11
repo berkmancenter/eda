@@ -211,7 +211,7 @@ module FranklinVentura
             pbar = ProgressBar.new('Parsing Franklin', doc.css('work').count)
             doc.css('work').each_with_index do |work, i|
                 simple_work = simple_doc.css('work')[i]
-                year = work.xpath('preceding-sibling::year[1]').first.text.to_i
+                year = work.xpath('preceding-sibling::year').first.text.to_i
                 number = work.at('number').text.to_i
                 #puts number
                 titles = work.css('title').map(&:text)
