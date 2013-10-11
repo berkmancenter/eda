@@ -32,6 +32,9 @@ $( function( ) {
     if ( window.sessionStorage ) {
       window.sessionStorage.setItem( drawerId + '-collapsed',  collapsed );
     }
+    setTimeout(function() {
+      seadragonViewer.viewport.ensureVisible(true);
+    }, 30);
   } );
   
   /* Setup bottom drawer */

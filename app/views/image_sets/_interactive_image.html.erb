@@ -5,7 +5,7 @@
       <div id="page-image"></div>
       <%= javascript_include_tag "openseadragon" %>
       <script>
-            OpenSeadragon({
+            var seadragonViewer = OpenSeadragon({
                 id:            "page-image",
                 prefixUrl: '/assets/',
                 tileSources: '<%= "#{Eda::Application.config.emily['image_host']}?DeepZoom=#{Eda::Application.config.emily['image_directory']}/#{image_set.image.url}.tif.dzi" %>'
