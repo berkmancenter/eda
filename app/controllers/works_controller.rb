@@ -2,9 +2,9 @@ class WorksController < ApplicationController
     include WorkHelper
 
     before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
-    before_filter :load_edition, except: [:index, :browse, :search, :choose_edition]
+    before_filter :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
     before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
-    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :choose_edition]
+    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :choose_edition, :metadata]
     before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
@@ -139,6 +139,10 @@ class WorksController < ApplicationController
         else
             render
         end
+    end
+
+    def metadata
+        render layout: !request.xhr?
     end
 
     def choose_edition
