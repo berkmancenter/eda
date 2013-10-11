@@ -16,15 +16,7 @@
         </tr>
     </thead>
     <tbody>
-<% works.each do |work| %><tr>
-<% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %>
-<td><%= link_to work.title, image_set_path_from_work(work) %></td>
-<td><%= work.date.strftime('%Y') if work.date %></td>
-<td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
-<% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %>
-<td><%= strip_tags work.full_id %></td>
-<td><a class="show-metadata" href="javascript:void(0);">Show</a><div class="metadata"><dl><%= render partial: 'shared/metadata', locals: { object: work } %></dl></div></td>
-</tr><% end %>
+<% works.each do |work| %><tr><% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %><td><%= link_to work.title.strip, image_set_path_from_work(work) %></td><td><%= work.date.strftime('%Y') if work.date %></td><td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td><% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %><td><%= strip_tags work.full_id %></td><td><a class="m" href="#" data-i="<%= work.id %>">+</a></td></tr><% end %>
     </tbody>
     <tfoot>
         <tr>

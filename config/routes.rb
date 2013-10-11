@@ -47,6 +47,7 @@ Eda::Application.routes.draw do
     resources :works do
         member do 
             get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
+            get :metadata
         end
         collection do
             match '/:first_letter' => 'works#browse', :as => :by_letter, :first_letter => /[A-Za-z]/

@@ -129,6 +129,12 @@ function fnCreateSelect( aData )
 }
  
 $(document).ready(function() {
+    $('.m').on('click', function(e) {
+        e.preventDefault();
+        $.get(rootUrl + 'works/' + $(this).data('i') + '/metadata', function(data) {
+            $.modal(data);
+        });
+    });
     var table = $('table.works').dataTable({
         oLanguage: {
           sSearch: "Search within these results: "
@@ -167,6 +173,7 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).parent().find('.metadata').modal();
     });
+
 
     $('.toggler').on('click', function() {
         $(this).toggleClass('expanded').next('.toggleable').slideToggle(200);

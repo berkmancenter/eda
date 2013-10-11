@@ -24,6 +24,7 @@
   <script type="text/javascript">
     var smallImagePreviewWidth = <%= Eda::Application.config.emily['small_image_preview_width'] %>;
     var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+    var rootUrl = "<%= root_url %>";
   </script>
 </head>
 <body class="<%= body_class( params ) %>">
