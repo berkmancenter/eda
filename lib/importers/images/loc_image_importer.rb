@@ -1,7 +1,7 @@
 class LOCImageImporter
     def import(directory)
         puts "Importing Library of Congress images"
-        collection = Collection.create!(name: 'Library of Congress, Manuscript Division')
+        collection = Collection.create!(name: 'Library of Congress')
         collection.metadata = {
             'URL' => 'http://www.loc.gov/rr/mss/',
             'Long Name' => 'Manuscript Division, Library of Congress, Washington, D.C.',

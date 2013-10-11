@@ -1,7 +1,7 @@
 class VassarImageImporter
     def import(directory)
         puts "Importing Vassar images"
-        collection = Collection.create!(name: 'Vassar College, Archives & Special Collections Library')
+        collection = Collection.create!(name: 'Vassar Special Collections')
         collection.metadata = {
             'URL' => 'http://specialcollections.vassar.edu/',
             'Long Name' => 'Archives and Special Collections Library, Vassar College, Poughkeepsie, NY',
