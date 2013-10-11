@@ -119,10 +119,30 @@
           vertical-align: middle;
           width: 48px;
       }
-      p {
-          margin-top: 2em;
-          text-align: center;
+      section.content {
+          margin: 2em auto;
+          width: 60%;
       }
+
+      .message {
+        font-size: 1.2em;
+        margin: 2em 0;
+        text-align: center;
+      }
+
+      label {
+        display: block;
+      }
+
+      blockquote {
+        font-style: italic;
+        margin-top: 4em;
+      }
+
+      .line {
+        display: block;
+      }
+
       footer {
           font-size: 0.8em;
           bottom: 0;
@@ -142,7 +162,7 @@
 </head>
 <body>
     <header>
-    <h1>Emily Dickinson Archive</h1>
+    <h1></h1>
 
     <div class="menu-container">
         <nav class="main">
@@ -150,9 +170,32 @@
     </div>
     <div class="hr"></div>
     </header>
-    <p>We apologize, but an error has occurred.</p>
-    <p>We&apos;ve been informed of the issue and will do our best to prevent it from happening in the future.</p>
-    <p><a href="/">Back to Home</a></p>
+
+    <section class="content">
+      <h2 class="message">An unexpected server error has occurred.</h2>
+
+      <form accept-charset="UTF-8" action="/search" class="search-works-form" id="search-works" method="get">
+          <label for="q">Search for Manuscript Images</label>
+          <input id="q" name="q" placeholder="Search poem text..." type="text" />
+          <button type="submit"><span class="icon"></span> <span>Search</span></button>
+      </form>
+
+      <p>Consult <a href="/use">How to Use</a></p>
+
+      <p>Return <a href="/">Home</a></p>
+
+      <p><a href="/contact">Contact Us</a></p>
+
+      <blockquote class="stanza">
+        <span class="line">Meeting by Accident, </span>
+        <span class="line">We hovered by design - </span>
+        <span class="line">As often as a Century </span>
+        <span class="line">An error so divine</span>
+      </blockquote>
+
+      <p><a href="/editions/1/image_sets/79362">--Amherst - Amherst Manuscript # 282 - Meeting by accident</a></p>
+    </section>
+
     <footer>
     <div class="hr"></div>
     <nav class="footer">
