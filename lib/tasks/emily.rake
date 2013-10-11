@@ -272,6 +272,11 @@ namespace :emily do
             WorkMetadataImporter.new.import(filename, edition_prefix)
         end
 
+        desc 'Import library editions'
+        task :library_editions => [:environment] do |task|
+
+        end
+
         desc 'Import work publication history CSV'
         task :publication_history, [:filename, :edition_prefix] => [:environment] do |task, args|
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
@@ -281,8 +286,19 @@ namespace :emily do
 
         desc 'Import Franklin and Johnson recipients'
         task :recipients, [:map_file] => [:environment] do |t, args|
+            puts 'Importing Recipients'
+            require 'csv'
             map_file = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'recipients.csv')
+            pbar = ProgressBar.new('Recipients', CSV.readlines(map_file).count)
             CSV.foreach(map_file, headers: true) do |row|
+                work = Work.find_by_full_id(row['work_id'])
+                if work
+                    work.metadata['Recipient'] = row['recipient']
+                    work.save!
+                else
+                    puts "Not found: #{row['work_id']}"
+                end
+                pbar.inc
             end
         end
 
@@ -441,6 +457,9 @@ namespace :emily do
             Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
+            Rake::Task["emily:generate:image_credits"].execute
+            Rake::Task["emily:import:recipients"].execute
+            Rake::Task["emily:clean_up_metadata"].execute
         end
 
         desc 'Import minimum content necessary to test'

@@ -33,7 +33,7 @@ en:
   image_info: 'About Image'
   word_filter_label: 'Filter'
   show_image_metadata: 'More Image Metadata'
-  show_work_metadata: 'More Work Metadata'
+  show_work_metadata: 'All Work Metadata'
 
   my_reading_lists: 'My Reading Lists'
   new_reading_list: 'Create New Reading List'
@@ -66,6 +66,7 @@ en:
   download_image: 'Download Image'
   image_not_found: 'Image not found'
   default_reading_list: 'My Reading List'
+  inscription_notes: 'Inscription Notes'
 
   home_link: 'Home'
   manuscript_link: 'Manuscripts'

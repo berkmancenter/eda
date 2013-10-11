@@ -12,7 +12,7 @@
                 <th><%= t 'datatable.th_edition' %></th>
             <% end %>
             <th class="work-number">Number</th>
-            <th>Work Metadata</th>
+            <th>More</th>
         </tr>
     </thead>
     <tbody>
@@ -23,7 +23,7 @@
 <td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td>
 <% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %>
 <td><%= strip_tags work.full_id %></td>
-<td><a href="javascript:void(0);">Show Metadata</a></td>
+<td><a class="show-metadata" href="javascript:void(0);">Show</a><div class="metadata"><dl><%= render partial: 'shared/metadata', locals: { object: work } %></dl></div></td>
 </tr><% end %>
     </tbody>
     <tfoot>
