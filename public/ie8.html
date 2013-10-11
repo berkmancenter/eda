@@ -66,14 +66,14 @@
       body a:hover {
           text-decoration: underline;
       }
-      body > header {
+      body .header {
           background: url("/assets/ornament-small.png") repeat-x 0 10px;
           background-color: #383838;
           margin: 0;
           padding: 0;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
       }
-      body > header h1 {
+      body h1 {
           background: #383838;
           display: inline-block;
           font-weight: normal;
@@ -84,20 +84,15 @@
           font-size: 0;
           background-image: url("/assets/logo.png");
       }
-      body > header .hr {
+      body .hr {
           margin-top: 0.7em;
       }
-      body .view:not(.three-panel) {
-          padding: 1.4em 2em 4em;
-          margin: 0em 7%;
-          background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(#333333), to(#383838), color-stop(0.4, #383838));
-          border-radius: 2px;
+
+      .main {
+        padding-bottom: 128px;
+        padding-top: 32px;
       }
-      body .view:not(.three-panel) header h1 {
-          font-weight: normal;
-          margin: 0;
-          padding: 0;
-      }
+
       body .footer {
           background: #333333;
           text-align: center;
@@ -129,7 +124,6 @@
           bottom: 0;
           height: 3em;
           left: 0;
-          position: fixed;
           right: 0;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
       }
@@ -142,27 +136,25 @@
 <meta content="Zg5KUt3jN75jo1qIMMIN9dCUp0fYbfDz6pPc/fKvCTs=" name="csrf-token" />
 </head>
 <body>
-    <header>
-    <h1>Emily Dickinson Archive</h1>
-
-    <div class="menu-container">
-        <nav class="main">
-        </nav>
+    <div class="header">
+      <h1></h1>
+      <div class="hr"></div>
     </div>
-    <div class="hr"></div>
-    </header>
-    <p>We apologize, but the Emily Dickinson Archive is only supported on Internet Explorer 8 using Google Chrome Frame for now.</p>
 
-    <p>Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/eula.html?hl=en&prefersystemlevel=true">install Google Chrome Frame</a> to view this website.</p>
+    <div class="main">
+      <p>We apologize, but the Emily Dickinson Archive is only supported on Internet Explorer 8 using Google Chrome Frame for now.</p>
+
+      <p>Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/eula.html?hl=en&prefersystemlevel=true">install Google Chrome Frame</a> to view this website.</p>
+    </div>
 
     <div class="footer">
-    <div class="hr"></div>
-    <ul>
-        <li><a href="http://cyber.law.harvard.edu" class="berkman-link" title="Berkman Center for Internet and Society"></a></li>
-        <li><a href="http://localhost:3000/terms">Copyright and Terms of Use</a></li>
-        <li><a href="http://localhost:3000/privacy">Privacy</a></li>
-        <li><a href="http://localhost:3000/contact">Contact Us</a></li>
-    </ul>
+      <div class="hr"></div>
+      <ul>
+          <li><a href="http://cyber.law.harvard.edu" class="berkman-link" title="Berkman Center for Internet and Society"></a></li>
+          <li><a href="http://localhost:3000/terms">Copyright and Terms of Use</a></li>
+          <li><a href="http://localhost:3000/privacy">Privacy</a></li>
+          <li><a href="http://localhost:3000/contact">Contact Us</a></li>
+      </ul>
     </div>
 </body>
 </html>
