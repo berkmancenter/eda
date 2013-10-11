@@ -272,8 +272,12 @@
     }
 
     #interactive-image-panel.collapsed {
+      .missing-image {
+        bottom: 3em;
+      }
+
       .bottom.drawer {
-        bottom: -6em;
+        bottom: -5em;
       }
     }
 
