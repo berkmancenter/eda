@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
 
+  <!--[if IE 8]> <meta http-equiv="X-UA-Compatible" content="chrome=1" /> <![endif]-->
+  <!--[if IE 8]> <meta http-equiv="refresh" content="0; url=/ie8.html" /> <![endif]-->
+
   <%= raw( "<noscript>#{ yield( :noscript ) }</noscript>" ) if yield( :noscript ) %>
 
   <% if yield( :title ).empty? %>
@@ -15,11 +18,14 @@
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" /> 
   <link href='//fonts.googleapis.com/css?family=PT+Serif:400,700,400italic|Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
-  
-  
+
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <script type="text/javascript">
+    var smallImagePreviewWidth = <%= Eda::Application.config.emily['small_image_preview_width'] %>;
+    var imageUrlTemplate = "<%= Eda::Application.config.emily['image_host'] %>?FIF=<%= Eda::Application.config.emily['image_directory'] %>/{image_filename}.tif&WID={width}&HEI={height}&CVT=jpeg";
+  </script>
 </head>
 <body class="<%= body_class( params ) %>">
   <header>

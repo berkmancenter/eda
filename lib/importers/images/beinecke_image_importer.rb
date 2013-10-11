@@ -2,7 +2,7 @@ require 'csv'
 class BeineckeImageImporter
     def import(directory, metadata_csv)
         puts "Importing Beinecke images"
-        collection = Collection.create!(name: 'Yale University, Beinecke Rare Book & Manuscript Library')
+        collection = Collection.create!(name: 'Beinecke Library')
         collection.metadata = {
             'URL' => 'http://beinecke.library.yale.edu/',
             'Long Name' => 'Yale Collection of American Literature, Beinecke Library, Yale University, New Haven, CT',

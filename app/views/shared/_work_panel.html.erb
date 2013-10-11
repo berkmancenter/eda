@@ -46,6 +46,32 @@
                 <div class="about-work">
                     <h4 class="toggler">About Work</h4>
                     <div class="toggleable">
+                        <dl class="work-fields">
+                        <% if work.title %>
+                            <dt>First Line/Title</dt>
+                            <dd><%= work.title %></dd>
+                        <% end %>
+                        <% if work.date %>
+                            <dt>Date</dt>
+                            <dd><%= work.date.year %></dd>
+                        <% end %>
+                        <% if work.metadata['Recipient'] %>
+                            <dt>Recipient</dt>
+                            <dd><%= work.metadata['Recipient'] %></dd>
+                        <% end %>
+                        <% if work.edition.name %>
+                            <dt>Edition/Library</dt>
+                            <dd><%= work.edition.short_name %></dd>
+                        <% end %>
+                        <% if work.full_id %>
+                            <dt>Number</dt>
+                            <dd><%= work.full_id %></dd>
+                        <% end %>
+                        <% if work.metadata['Inscription Notes'] %>
+                                <dt class="inscription-notes"><%= t :inscription_notes %></dt>
+                                <dd><%= sanitize work.metadata['Inscription Notes'], tags: ['em', 'strong', 'br'] %></dd>
+                        <% end %>
+                        </dl>
                         <a class="show-metadata eda-btn-light" href="javascript:void(0);"><%= t :show_work_metadata %></a><br />
                         <%= link_to "Download as TEI", edition_work_path(edition, work, format: :tei), class: 'eda-btn-light' %>
                         <div class="metadata">

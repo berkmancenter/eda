@@ -1,7 +1,7 @@
 <div id="image-set-info">
   <% unless image.metadata.nil? %>
   <dl class="credits">
-      <dt class="image-credits">Credits: </dt><dd><%= image.credits %></dd>
+      <dt class="image-credits">Credits: </dt><dd><%= raw image.credits %></dd>
   </dl>
   <div class="credits-buttons">
       <a class="show-metadata eda-btn-light" href="javascript:void(0);"><%= t :show_image_metadata %></a>

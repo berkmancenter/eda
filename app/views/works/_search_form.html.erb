@@ -11,5 +11,15 @@
                 session[:current_edition] ? Edition.find(session[:current_edition]).id : 'all'
             )
         %>
+        <label for="limit_to_field">Search Within</label>
+        <%= select_tag 'limit_to_field',
+            options_for_select([
+               ['Work Text', 'work_text'],
+               ['Title/First Line', 'title'],
+               ['Work Metadata', 'work_metadata']
+            ],
+            session[:limit_to_field] ? session[:limit_to_field] : 'work_text'
+            )
+        %>
     </div>
 <% end %>

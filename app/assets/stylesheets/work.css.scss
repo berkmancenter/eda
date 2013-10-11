@@ -187,3 +187,21 @@ body.works.edit, body.works.new, body.works.create {
 .work-tools {
     margin-top: 2em;
 }
+.work-fields {
+    dd, dt {
+        display: inline;
+    }
+    dt.inscription-notes {
+        display: block;
+    }
+    dd {
+        margin-left: 0.2em;
+    }
+    dd:after {
+        content: '\A';
+        white-space: pre;
+    }
+    dt:after { 
+        content: ": ";
+    }
+}

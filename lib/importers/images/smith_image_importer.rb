@@ -1,7 +1,7 @@
 class SmithImageImporter
     def import(directory)
         puts "Importing other images"
-        collection = Collection.create!(name: 'Smith College, Mortimer Rare Book Room')
+        collection = Collection.create!(name: 'Smith College Libraries')
         collection.metadata = {
             'URL' => 'http://www.smith.edu/libraries/libs/rarebook/',
             'Long Name' => 'Mortimer Rare Book Room, Smith College, Northampton, MA',

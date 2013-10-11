@@ -18,4 +18,8 @@ class Image < ActiveRecord::Base
     has_many :sets, class_name: 'ImageSet'
     attr_accessible :credits, :url, :metadata, :web_width, :web_height, :title
     serialize :metadata
+
+    def text_credits
+        ActionController::Base.helpers.strip_tags(credits.gsub('<br />', "\n"))
+    end
 end

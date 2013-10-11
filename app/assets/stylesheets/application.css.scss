@@ -304,6 +304,17 @@ dd {
 
 .toggler {
     cursor: pointer;
+
+    &:before {
+        content: "▶ ";
+        display: inline-block;
+        font-size: .8em;
+        width: 1em;
+    }
+}
+
+.toggler.expanded:before {
+    content: "▼ ";
 }
 
 .toggleable {
