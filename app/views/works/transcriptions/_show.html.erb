@@ -1,7 +1,7 @@
 <% cache work do %>
 <h3><%= work.full_title %></h3>
 <% work.stanzas.each do |stanza| %>
-    <p class="stanza" data-number="<%= stanza.position %>">
+    <p class="stanza linebreak-emily" data-number="<%= stanza.position %>">
     <% stanza.lines.each do |line| %>
         <span class="line" data-line="<%= line.number %>">
             <%= sanitize(render_line(line), tags: ['em', 'strong', 'ruby', 'rp', 'rt', 'br', 'span', 'p', 'ins', 'del']) %>

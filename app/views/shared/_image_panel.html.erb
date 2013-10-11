@@ -8,8 +8,11 @@
       } %>
 
       <div class="image-drawer-tabs">
+        <% if image_set.image.url.present? %>
           <a href="#" class="one bottom drawer-handle" data-drawer="image-set-info"><%= t :image_info %></a>
-          <a href="#" class="two bottom drawer-handle hidden" data-drawer="set-notes"><%= t :my_notes %></a>
+        <% end %>
+
+        <a href="#" class="two bottom drawer-handle <%= 'hidden' unless image_set.image.url.nil? %>" data-drawer="set-notes"><%= t :my_notes %></a>
       </div>
 
       <div class="image-drawer-content">
