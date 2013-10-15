@@ -272,11 +272,6 @@ namespace :emily do
             WorkMetadataImporter.new.import(filename, edition_prefix)
         end
 
-        desc 'Import library editions'
-        task :library_editions => [:environment] do |task|
-
-        end
-
         desc 'Import work publication history CSV'
         task :publication_history, [:filename, :edition_prefix] => [:environment] do |task, args|
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
@@ -358,10 +353,11 @@ namespace :emily do
             end
 
             desc 'Import Amherst images'
-            task :amherst, [:image_directory, :mods_directory] => [:environment] do |t, args|
+            task :amherst, [:image_directory, :mods_directory, :mets_directory] => [:environment] do |t, args|
                 image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_output')
-                mods_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
-                AmherstImageImporter.new.import(image_directory, mods_directory)
+                mods_directory = args[:mods_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
+                mets_directory = args[:mets_directory] || File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_mets')
+                AmherstImageImporter.new.import(image_directory, mods_directory, mets_directory)
             end
 
             desc 'Import missing Amherst images'
