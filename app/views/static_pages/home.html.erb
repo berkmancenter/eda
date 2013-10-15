@@ -9,7 +9,7 @@
 
 <section class="welcome">
 
-  <p>The Emily Dickinson Archive makes high-resolution images of Dickinson’s surviving manuscripts available in open access, and provides readers with a website through which they can view images of manuscripts held in multiple libraries and archives. This first phase of the EDA includes images for the corpus of poems identified in <i>The Poems of Emily Dickinson: Variorum Edition</i>, edited by R. W. Franklin (Cambridge: Belknap Press of the Harvard University Press, 1998).</p>
+  <p>Emily Dickinson Archive makes high-resolution images of Dickinson’s surviving manuscripts available in open access, and provides readers with a website through which they can view images of manuscripts held in multiple libraries and archives. This first phase of the EDA includes images for the corpus of poems identified in <i>The Poems of Emily Dickinson: Variorum Edition</i>, edited by R. W. Franklin (Cambridge: Belknap Press of the Harvard University Press, 1998).</p>
 
   <a href="javascript:void(0);">Read more</a>
 
@@ -20,7 +20,7 @@
 
     <p>Since those first editorial transcriptions, there has been debate about the importance of the manuscript page to our understanding of Dickinson’s poetry. Some critics argue that Dickinson’s manuscript pages are mediated primarily by metrical and stanzaic conventions. Other critics assert that her manuscript page, with its spaces between words, lines, and stanzas, its ambiguous capitalization and idiosyncratic punctuation, represents Dickinson’s radical revision of these conventions. Some critics believe that Dickinson, over the course of her writing life, came to conceive of her poems as fully realized in their manuscript condition rather than as drafts designed with the printed page in mind. This range of critical opinion provides a compelling reason to make access to images of those manuscript pages more easily and widely available. </p>
 
-    <p>Dickinson’s manuscript page is the focus of the Emily Dickinson Archive. A search of the full text or first line from a poem produces images of all the manuscript versions of the poem, where multiple versions survive. Readers have the option of selecting from a historical array of editors’ transcriptions of these autograph materials into printed form, and of viewing a transcription by physical line or by poetic line, depending upon the editor’s choice. Additionally, readers can use the site’s tools to create their own transcriptions, annotate images, or, by zooming in, look closely at Dickinson’s handwriting.</p>
+    <p>Dickinson’s manuscript page is the focus of Emily Dickinson Archive. A search of the full text or first line from a poem produces images of all the manuscript versions of the poem, where multiple versions survive. Readers have the option of selecting from a historical array of editors’ transcriptions of these autograph materials into printed form, and of viewing a transcription by physical line or by poetic line, depending upon the editor’s choice. Additionally, readers can use the site’s tools to create their own transcriptions, annotate images, or, by zooming in, look closely at Dickinson’s handwriting.</p>
   </div>
 
 </section>
@@ -30,7 +30,10 @@
 <%= render partial: 'works/search_form' %>
 
 <ul>
-  <li><%= home_link 'works-browse.jpg', t( 'home_browse_title' ), 'Sort and filter images by first line, date, or recipient', works_path %></li>
+  <li>
+    <%= home_link 'works-browse.jpg', t( 'home_browse_title' ), 'View images by library collection', collections_path %>
+    <%= link_to 'View by first line, date, recipient, or edition', works_path, class: 'icon-sublink' %>
+  </li>
   <li><%= home_link 'words-index.jpg', t( 'home_lex_title' ), 'Find definitions from Dickinson\'s dictionary and find poems using lexicon words', words_url %></li>
 </ul>
 </nav>

@@ -90,7 +90,7 @@ body.static-pages.home {
     display: inline-block;
     font-size: 0.9em;
     padding: 2em 2em 2em 0;
-    width: 28em;
+    width: 26em;
 
     a {
       text-transform: uppercase;
@@ -105,7 +105,7 @@ body.static-pages.home {
     display: inline-block;
     vertical-align: top;
     padding-top: 2em;
-    width: 24em;
+    width: 26em;
 
     .search-works-form {
       h1 {
@@ -134,17 +134,16 @@ body.static-pages.home {
     }
 
     ul {
-      margin: 2em;
+      margin: 2em 0 2em 2em;
       padding: 0;
     }
 
     li {
+      height: 96px;
       margin: 1em 0;
+      position: relative;
 
       a {
-        display: block;
-        height: 96px;
-        position: relative;
         text-align: left;
       }
 
@@ -173,9 +172,13 @@ body.static-pages.home {
       }
 
       p {
-        color: $tan;
         font-size: .9em;
         margin: 0;
+      }
+
+      .icon-sublink {
+        display: block;
+        font-size: .9em;
       }
     }
 
