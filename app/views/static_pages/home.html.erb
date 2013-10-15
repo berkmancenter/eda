@@ -30,7 +30,10 @@
 <%= render partial: 'works/search_form' %>
 
 <ul>
-  <li><%= home_link 'works-browse.jpg', t( 'home_browse_title' ), 'Sort and filter images by first line, date, or recipient', works_path %></li>
+  <li>
+    <%= home_link 'works-browse.jpg', t( 'home_browse_title' ), 'View images by library collection', collections_path %>
+    <%= link_to 'View by first line, date, recipient, or edition', works_path, class: 'icon-sublink' %>
+  </li>
   <li><%= home_link 'words-index.jpg', t( 'home_lex_title' ), 'Find definitions from Dickinson\'s dictionary and find poems using lexicon words', words_url %></li>
 </ul>
 </nav>
