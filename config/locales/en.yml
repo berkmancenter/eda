@@ -81,7 +81,7 @@ en:
 
   datatable:
     th_title: 'First Line/Title'
-    th_edition: 'Edition/Library'
+    th_edition: 'Edition'
     th_relevance: 'Rank'
 
   form_error:

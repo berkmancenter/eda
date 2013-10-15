@@ -1,8 +1,6 @@
 @import "colors";
 
 @mixin border-radius-top( $r ) {
-  -moz-border-radius: 0px;
-  -webkit-border-radius: $r $r 0px 0px;
   border-radius: $r $r 0px 0px; 
 }
 

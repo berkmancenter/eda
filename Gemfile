@@ -25,6 +25,7 @@ gem 'progressbar'
 gem 'naturally'
 gem 'roman-numerals'
 gem 'exception_notification'
+gem 'autoprefixer-rails'
 
 group :development, :test do
   gem 'rspec-rails'

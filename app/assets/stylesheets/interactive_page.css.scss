@@ -26,12 +26,8 @@
 
 #page-image {
     position: absolute;
-    /* match .view .panel top */
     top: 2em;
-    /* .bottom.drawer + .page-controls */
     bottom: 10em;
-    -moz-transition: bottom 0.7s;
-    -webkit-transition: bottom 0.7s;
     transition: bottom 0.7s;
     width: 96%;
     margin: 0 2%;
