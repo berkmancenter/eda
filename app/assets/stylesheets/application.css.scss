@@ -21,7 +21,7 @@
 
 /* apply a natural box layout model to all elements */
 /* http://paulirish.com/2012/box-sizing-border-box-ftw/ */
-* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+* { box-sizing: border-box; }
 
 @viewport{
     width: device-width;
@@ -74,7 +74,8 @@ summary {
   background: $tan;
   border: solid 1px $darkGray;
   color: $darkGray;
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7E8C6), to(#EEDCB3));
+  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7E8C6), to(#EEDCB3));*/
+  background: linear-gradient(#F7E8C6, #EEDCB3);
   border: 0;
   border-radius: 2px;
   box-shadow: 0 0 2px #8F7341;
@@ -158,7 +159,8 @@ body {
   .view:not(.three-panel) {
     padding: 1.4em 2em 4em;
     margin: 0em 7%;
-    background: -webkit-gradient(linear, 0% 100%, 0% 0%, from($darkGray), to($highlightGray), color-stop(.4,$highlightGray));
+    /*background: -webkit-gradient(linear, 0% 100%, 0% 0%, from($darkGray), to($highlightGray), color-stop(.4,$highlightGray));*/
+    background: linear-gradient($highlightGray, $highlightGray 40%, $darkGray);
     border-radius: 2px;
 
     header h1 {

@@ -1,10 +1,10 @@
 class AmherstImageImporter
     def import(image_directory, mods_directory)
         puts 'Importing Amherst Images'
-        collection = Collection.create(name: 'Amherst College Library')
+        collection = Collection.create(name: 'Amherst College')
         collection.metadata = {
-            'URL' => 'https://www.amherst.edu/library/archives/holdings/edickinson',
-            'Long Name' => 'Amherst College Library, Amherst MA',
+            'URL' => 'https://acdc.amherst.edu/browse/collection/collection:ed',
+            'Long Name' => 'Amherst College, Amherst MA',
             'Code' => 'A,ACL'
         }
         last_call_number = ''

@@ -40,7 +40,7 @@ table.dataTable tfoot th {
   }
 
   &.edition-footer:before {
-    content: "Filter by Edition/Library ";
+    content: "Filter by Edition ";
     font-size: .8em;
   }
 }
@@ -173,8 +173,6 @@ table.dataTable tr.even td.sorting_3 { background-color: $lessLightGray; }
 .paging_full_numbers a.paginate_button,
 .paging_full_numbers a.paginate_active {
 	border: 1px solid #aaa;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	padding: 2px 5px;
 	margin: 0 3px;
