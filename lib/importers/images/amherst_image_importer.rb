@@ -26,7 +26,8 @@ class AmherstImageImporter
                 'Imported' => Time.now.to_s,
                 'Identifiers' => doc.css('identifier[type=local]').map(&:text),
                 'Shelf Location' => doc.at('shelfLocator').text,
-                'Title' => doc.at('title').text
+                'Title' => doc.at('title').text,
+                'Amherst Location' => doc.css('identifier[type=uri]').text
             }
 
             image = Image.create(

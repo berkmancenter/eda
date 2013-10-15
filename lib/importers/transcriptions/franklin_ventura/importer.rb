@@ -211,7 +211,7 @@ module FranklinVentura
             pbar = ProgressBar.new('Parsing Franklin', doc.css('work').count)
             doc.css('work').each_with_index do |work, i|
                 simple_work = simple_doc.css('work')[i]
-                year = work.xpath('preceding-sibling::year').first.text.to_i
+                year = work.xpath('preceding-sibling::year').last.text.to_i
                 number = work.at('number').text.to_i
                 #puts number
                 titles = work.css('title').map(&:text)
@@ -226,10 +226,10 @@ module FranklinVentura
                         w = Work.create(
                             number: number,
                             title: titles[i] || titles.first,
-                            date: Date.new(year, 1, 1),
                             variant: variant,
                             secondary_source: !!secondary
                         )
+                        w.date = Date.new(year, 1, 1) if year > 0
 
                         add_stanzas(w, poem)
                         add_manuscript(w, work, simple_work)
