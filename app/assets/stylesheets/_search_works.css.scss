@@ -30,11 +30,11 @@
 }
 
 .search-works-options-toggle {
-    color: $darkGray;
+    color: $lightGray;
     text-decoration: none;
 
   &:hover {
-    color: $lightGray;
+    color: $tan;
     text-decoration: none;
   }
 
@@ -119,6 +119,17 @@
     width: 4em;
   }
 }
+
 .static-pages.home #search-works div {
     display: none;
+}
+
+.image-sets.show {
+  .search-works-options-toggle {
+    color: $darkGray;
+
+    &:hover {
+      color: $lightGray;
+    }
+  }
 }
