@@ -212,13 +212,54 @@ describe ( 'image_sets requests' ) {
 
       end
 
+      describe 'lexicon panel', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#search-panel=2"
+        }
+
+        it {
+          should have_css '.browse-lexicon'
+          should have_css '.alphabet-list'
+          should have_css '.alphabet-list a', text: 'A'
+          should have_css '.alphabet-results'
+          should have_css '.alphabet-results.lexicon-results'
+          should_not have_css '.lexicon-results a'
+          should have_css '.lexicon-word'
+          should_not have_css '.lexicon-word section.word'
+        }
+      end
+
+      describe 'click lexicon letter', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#search-panel=2"
+        }
+
+        it {
+          click_link 'A'
+          should have_css '.lexicon-results a'
+        }
+      end
+
+      describe 'click lexicon letter', :js => true do
+        before {
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#search-panel=2"
+        }
+
+        it {
+          click_link 'A'
+          click_link 'awake'
+          #should have_css '.lexicon-word section.word'
+          find( '.simplemodal-data' ).visible?.should be_true
+        }
+      end
+
       describe 'interactive image panel', :js => true do
         let ( :image_set ) { w.image_set.children.first }
 
         before { visit edition_image_set_path( w.edition, image_set ) }
 
         it ( 'should have header' ) {
-          should have_css '#interactive-image-panel h1', text: image_set.image.metadata['Label']
+          should have_css '#interactive-image-panel h1', text: 'Amherst - Amherst Manuscript # 794 - Awake ye muses nine'
         }
         
       end
@@ -353,46 +394,6 @@ describe ( 'image_sets requests' ) {
         }
       end
 
-      describe 'lexicon panel', :js => true do
-        before {
-          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
-        }
-
-        it {
-          should have_css '.browse-lexicon'
-          should have_css '.alphabet-list'
-          should have_css '.alphabet-list a', text: 'A'
-          should have_css '.alphabet-results'
-          should have_css '.alphabet-results.lexicon-results'
-          should_not have_css '.lexicon-results a'
-          should have_css '.lexicon-word'
-          should_not have_css '.lexicon-word section.word'
-        }
-      end
-
-      describe 'click lexicon letter', :js => true do
-        before {
-          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
-        }
-
-        it {
-          click_link 'A'
-          should have_css '.lexicon-results a'
-        }
-      end
-
-      describe 'click lexicon letter', :js => true do
-        before {
-          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=1"
-        }
-
-        it {
-          click_link 'A'
-          click_link 'awake'
-          #should have_css '.lexicon-word section.word'
-          find( '.simplemodal-data' ).visible?.should be_true
-        }
-      end
     }
 
     context ( 'non-leaf/sbs view' ) {
