@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     end
 
     def load_edition
-        edition_id = params[:edition_id]
+        edition_id = params[:edition_id] || params[:id]
         @edition = Edition.find(edition_id)
     end
 
