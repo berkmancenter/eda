@@ -5,4 +5,4 @@
   ]
 %>
 
-<%= select_tag 'order', options_for_select( options ), class: 'page-order-selector' %>
+<%= select_tag 'order', options_for_select( options, selected: params['order'] ), class: 'page-order-selector' %>
