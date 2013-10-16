@@ -5,7 +5,8 @@ class WordsController < ApplicationController
         else
             @words = Word.scoped
         end
-        render :layout => !request.xhr?
+        @xhr = request.xhr?
+        render :layout => !@xhr
     end
     
     def show

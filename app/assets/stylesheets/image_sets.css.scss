@@ -54,6 +54,7 @@
 
   #search-panel {
     width: 25%;
+
     .search-works-form {
       #q {
         width: 90%;
@@ -70,23 +71,27 @@
       }
     }
 
+    .search-works-options {
+      #current_edition {
+        width: 90%;
+      }
 
-.search-works-options {
-  #current_edition {
-    width: 90%;
-  }
+      a, a:visited {
+        color: $darkGray;
+        text-decoration: none;
+      }
 
-  a, a:visited {
-    color: $darkGray;
-    text-decoration: none;
-  }
+      a:hover {
+        color: $lightGray;
+        text-decoration: none;
+      }
+    }
 
-  a:hover {
-    color: $lightGray;
-    text-decoration: none;
-  }
-}
-
+    .alphabet-results {
+      p.help {
+        white-space: normal;
+      }
+    }
 
   }
 
