@@ -1,5 +1,28 @@
 namespace :emily do
 
+    desc 'Get image names from URLs'
+    task :map_from_urls, [:url_file, :output_file] => [:environment] do |task, args|
+        require 'csv'
+        urls_file = args[:url_file] || File.join(Eda::Application.config.emily['data_directory'], 'urls.csv')
+        output_file = args[:output_file] || Rails.root.join('tmp', 'map_from_urls.csv')
+        output_file = CSV.open(output_file, 'wb')
+        output_file << ['url', 'image_url', 'J', 'F']
+        franklin = Edition.find_by_work_number_prefix('F')
+        johnson = Edition.find_by_work_number_prefix('J')
+        CSV.foreach(urls_file) do |row|
+            image_set_id = row[0].match(/\/image_sets\/(\d+)$/)[1]
+            image_set = ImageSet.find(image_set_id)
+            works = Work.in_image(image_set.image)
+            works.each do |work|
+                if work.edition == franklin
+                    output_file << [row[0], image_set.image.url, nil, work.full_id]
+                elsif work.edition == johnson
+                    output_file << [row[0], image_set.image.url, work.full_id, nil]
+                end
+            end
+        end
+    end
+
     desc 'Rename images to match holder ids'
     task :rename_images => [:environment] do |t|
         directory = '/home/justin/Desktop/previews/'

@@ -48,7 +48,10 @@ class AmherstImageImporter
         image_filename.match(pattern).named_captures
     end
 
-    def find_mods_file(image_filename)
+    def find_mods_file(image_filename, mets_directory)
+        possible_files = []
+        Dir.entries(mets_directory).each do |filename|
+        end
         <fedora:isPartOf rdf:resource="info:fedora/asc:17270"></fedora:isPartOf>
         <amherst:hasPageNumber>11</amherst:hasPageNumber>
     end
