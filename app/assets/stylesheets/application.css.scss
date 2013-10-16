@@ -314,9 +314,23 @@ dd {
         width: 1em;
     }
 }
+.right-toggler {
+    cursor: pointer;
+
+    &:after {
+        content: " ▶";
+        display: inline-block;
+        font-size: .8em;
+        width: 1em;
+    }
+}
 
 .toggler.expanded:before {
     content: "▼ ";
+}
+
+.right-toggler.expanded:after {
+    content: " ▼";
 }
 
 .toggleable {
