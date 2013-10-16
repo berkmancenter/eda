@@ -5,7 +5,7 @@ class ImageCreditGenerator
         Collection.all.each do |collection|
             if collection.name == 'Amherst College'
                 collection.all_images.each do |image|
-                    credits = %Q|<a href="#{image.metadata['Amherst Location']}" target="_blank">#{collection.metadata['Long Name']}</a>|
+                    credits = %Q|<a href="#{image.metadata['Amherst Location'] ? image.metadata['Amherst Location'] : collection.metadata['URL']}" target="_blank">#{collection.metadata['Long Name']}</a>|
                     parent_collection = collection.leaves_containing(image).first.parent
                     credits += "<br />#{parent_collection.name}" unless parent_collection == collection.root
                     credits += "<br />#{image.title}<br />#{pub_history(image)}"

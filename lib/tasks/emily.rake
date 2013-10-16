@@ -476,8 +476,8 @@ namespace :emily do
             Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
-            Rake::Task["emily:generate:image_credits"].execute
             Rake::Task["emily:import:recipients"].execute
+            Rake::Task["emily:generate:image_credits"].execute
             Rake::Task["emily:clean_up_metadata"].execute
         end
 
@@ -547,6 +547,7 @@ namespace :emily do
             "fascicle_order" => nil,
             "Source" => nil,
             "Source Code" => nil,
+            "Inscription Notes" => "Textual Notes",
             "set" => "Set"
         }
         pbar = ProgressBar.new('Cleanup', Work.count)

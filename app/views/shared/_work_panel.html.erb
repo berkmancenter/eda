@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="about-work">
-                    <h4 class="toggler">About Work</h4>
+                    <h4 class="right-toggler">About Work</h4>
                     <div class="toggleable">
                         <dl class="work-fields">
                         <% if work.title %>
@@ -67,9 +67,9 @@
                             <dt>Number</dt>
                             <dd><%= work.full_id %></dd>
                         <% end %>
-                        <% if work.metadata['Inscription Notes'] %>
+                        <% if work.metadata['Textual Notes'] %>
                                 <dt class="inscription-notes"><%= t :inscription_notes %></dt>
-                                <dd><%= sanitize work.metadata['Inscription Notes'], tags: ['em', 'strong', 'br'] %></dd>
+                                <dd><%= sanitize work.metadata['Textual Notes'], tags: ['em', 'strong', 'br'] %></dd>
                         <% end %>
                         </dl>
                         <a class="show-metadata eda-btn-light" href="javascript:void(0);"><%= t :show_work_metadata %></a><br />

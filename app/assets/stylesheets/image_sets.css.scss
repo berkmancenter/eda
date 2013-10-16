@@ -98,6 +98,8 @@
         position: relative;
         text-align: center;
         top: -0.5em;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
       }
     }
 
