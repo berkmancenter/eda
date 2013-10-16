@@ -83,7 +83,7 @@ class Edition < ActiveRecord::Base
     end
 
     def setup_name
-        self.short_name = name unless self.short_name
+        self.short_name = name if self.short_name.empty?
     end
 
     def setup_sets
