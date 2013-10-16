@@ -86,15 +86,16 @@ class ImageToEditionConnector
         end
 
         pbar = ProgressBar.new("Connecting", Image.count - added_images.count)
-        image_set = ImageSet.create(name: "Other Images")
-        image_set.move_to_child_of root_image_set
-        Image.all.each do |image|
-            next if added_images.include?(image.id)
-            image_set << image
-            pbar.inc
+        Collection.all.each do |collection|
+            collection = collection.duplicate
+            collection.leaves.each do |leaf|
+                if leaf.image && added_images.include?(leaf.image.id)
+                    leaf.destroy
+                end
+                pbar.inc
+            end
+            collection.move_to_child_of root_image_set
         end
-        image_set.save!
-        root_image_set.save!
 
         Edition.all.each do |edition|
             edition.image_set = root_image_set.duplicate
