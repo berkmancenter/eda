@@ -12,12 +12,23 @@ namespace :emily do
         CSV.foreach(urls_file) do |row|
             image_set_id = row[0].match(/\/image_sets\/(\d+)$/)[1]
             image_set = ImageSet.find(image_set_id)
-            works = Work.in_image(image_set.image)
-            works.each do |work|
-                if work.edition == franklin
-                    output_file << [row[0], image_set.image.url, nil, work.full_id]
-                elsif work.edition == johnson
-                    output_file << [row[0], image_set.image.url, work.full_id, nil]
+            if image_set.leaf?
+                images = [image_set.image]
+            else
+                images = image_set.all_images
+            end
+            images.each do |image|
+                works = Work.in_image(image)
+                if works.empty?
+                        output_file << [row[0], image.url]
+                else
+                    works.each do |work|
+                        if work.edition == franklin
+                            output_file << [row[0], image.url, nil, work.full_id]
+                        elsif work.edition == johnson
+                            output_file << [row[0], image.url, work.full_id, nil]
+                        end
+                    end
                 end
             end
         end
