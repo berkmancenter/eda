@@ -1,0 +1,8 @@
+<%
+  options = [
+    [ 'Edition', 'edition' ],
+    [ 'Library', 'library' ]
+  ]
+%>
+
+<%= select_tag 'order', options_for_select( options ), class: 'page-order-selector' %>

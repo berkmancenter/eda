@@ -114,8 +114,10 @@
         #interactive-image-panel {
             width: 70%;
         }
+
         #work-panel {
         }
+
         #search-panel {
             width: 30%;
         }
@@ -256,6 +258,14 @@
         position: absolute;
         width: 94%;
         margin: 0 3% 0;
+    }
+
+    .page-order-container {
+      color: $tan;
+      display: inline-block;
+      font-size: .9em;
+      position: absolute;
+      top: -2em;
     }
 
     #interactive-image-panel.collapsed {

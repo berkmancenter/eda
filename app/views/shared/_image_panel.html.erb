@@ -8,6 +8,11 @@
       } %>
 
       <div class="image-drawer-tabs">
+        <div class="page-order-container">
+          <label class="page-order-select" for="page-order-selector">Page Order</label>
+          <%= render partial: 'image_sets/order_selector' %>
+        </div>
+
         <% if image_set.image.url.present? %>
           <a href="#" class="one bottom drawer-handle" data-drawer="image-set-info"><%= t :image_info %></a>
         <% end %>
