@@ -57,8 +57,10 @@ class TEIImporter
 
     def import(string, work = nil)
         doc = Nokogiri::XML(string)
-        edition_prefix, work_number, work_variant = parse_id(doc.at('body > div[type=transcript]')['id'])
-        work ||= get_work(edition_prefix, work_number, work_variant)
+        unless work
+            edition_prefix, work_number, work_variant = parse_id(doc.at('body > div[type=transcript]')['id'])
+            work = get_work(edition_prefix, work_number, work_variant)
+        end
         work.title = doc.css('title').text
         work.number = work_number
         work.variant = work_variant

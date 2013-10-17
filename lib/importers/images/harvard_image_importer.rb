@@ -50,7 +50,7 @@ class HarvardImageImporter
 
                 sheet_group << image
             end
-            sheet_group.destroy if sheet_group.all_image.empty?
+            sheet_group.destroy if sheet_group.all_images.empty?
         end
         collection.save!
     end

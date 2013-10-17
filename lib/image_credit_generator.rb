@@ -5,9 +5,10 @@ class ImageCreditGenerator
         Collection.all.each do |collection|
             if collection.name == 'Amherst College'
                 collection.all_images.each do |image|
-                    credits = %Q|<a href="#{image.metadata['Amherst Location'] ? image.metadata['Amherst Location'] : collection.metadata['URL']}" target="_blank">#{collection.metadata['Long Name']}</a>|
-                    parent_collection = collection.leaves_containing(image).first.parent
-                    credits += "<br />#{parent_collection.name}" unless parent_collection == collection.root
+                    url = collection.metadata['URL']
+                    url = image.metadata['Amherst Location'] if image.metadata['Amherst Location']
+                    url = "https://acdc.amherst.edu/view/#{image.metadata['Accession Number']}" if image.metadata['Accession Number']
+                    credits = %Q|<a href="#{url}" target="_blank">#{collection.metadata['Long Name']}</a>|
                     credits += "<br />#{image.title}<br />#{pub_history(image)}"
                     image.credits = credits
                     image.save!
@@ -29,12 +30,20 @@ class ImageCreditGenerator
 
     def pub_history(image)
         franklin = Edition.find_by_work_number_prefix('F')
-        output = "<strong>Publication History</strong><br />"
-        franklin.works.in_image(image).each do |work|
-            unless work.metadata['Publication'].nil?
-                output += work.metadata['Publication'].strip + ". #{franklin.short_name} (#{work.full_id}).<br />"
+        works = franklin.works.in_image(image)
+        output = ""
+        has_pub_history = works && works.any?{|w| w.metadata['Publication'] && !w.metadata['Publication'].empty?}
+        output = "<strong>Publication History</strong><br />" if has_pub_history
+        publications = []
+        works.each do |work|
+            unless work.metadata['Publication'].nil? || work.metadata['Publication'].empty?
+                publications <<  work.metadata['Publication'].strip + ". #{franklin.short_name} (#{work.full_id})."
             end
         end
+        publications.uniq.each do |pub|
+            output += pub + '<br />'
+        end
+        output += " -<em>History from #{franklin.short_name}</em>" if has_pub_history
         output.strip
     end
 end

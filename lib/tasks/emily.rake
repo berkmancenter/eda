@@ -403,6 +403,20 @@ namespace :emily do
         end
 
         namespace :images do 
+
+            desc 'Import image fascicle and set order'
+            task :fascicle_order, [:input_file] => [:environment] do |task, args|
+                require 'csv'
+                input_file = args[:input_file] || File.join(Eda::Application.config.emily['data_directory'], 'dumped_image_set.csv')
+                CSV.foreach(input_file, headers: true) do |row|
+                    image = Image.find_by_url(row[0])
+                    image.metadata['fascicle']
+                    image.metadata['fascicle_order']
+                    image.metadata['set']
+
+                end
+            end
+
             desc 'Import image instances from METS records'
             task :harvard, [:directory, :j_to_f_map_file, :exclude_list, :max_images] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
@@ -555,6 +569,19 @@ namespace :emily do
             output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_image_metadata.csv')
             ImageMetadataDumper.new.dump(output_file)
         end
+
+        desc 'Dump edition image set order'
+        task :image_set, [:output_file] => [:environment] do |t, args|
+            require 'csv'
+            output_file = args[:output_file] || File.join(Eda::Application.config.emily['data_directory'], 'dumped_image_set.csv')
+            franklin = Edition.find_by_work_number_prefix('F')
+            output = CSV.open(output_file, 'wb')
+            output << ['image_filename', 'parent_name', 'position_in_parent']
+            franklin.image_set.leaves.each do |leaf|
+                next unless leaf.image && leaf.image.url
+                csv << [leaf.image.url, leaf.parent.name, leaf.position_in_level]
+            end
+        end
     end
 
     desc 'Request everything now so the caches are warm'
@@ -562,13 +589,38 @@ namespace :emily do
         app = ActionDispatch::Integration::Session.new(Rails.application)
         app.get(Rails.application.routes.url_helpers.works_path)
         Edition.all.each do |edition|
-            # Visit the edition work list
-            app.get(Rails.application.routes.url_helpers.edition_works_path(edition))
             # Visit all image sets
             edition.image_set.self_and_descendants.each do |image_set|
                 puts "getting #{edition.id} - #{image_set.id}"
                 app.get(Rails.application.routes.url_helpers.edition_image_set_path(edition, image_set))
             end
+        end
+    end
+    
+    desc 'General clean up'
+    task :clean_up => [:environment] do |t|
+            # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
+            # m.subtype = 'cancellation'; m.save}
+            Rake::Task["emily:remove_empty_image_sets"].execute
+            Rake::Task["emily:clean_up_metadata"].execute
+            Rake::Task["emily:connect:images_to_editions"].execute
+    end
+
+    desc 'Remove empty image sets'
+    task :remove_empty_image_sets => [:environment] do |t|
+        pbar = ProgressBar.new('Removing', Collection.count + Edition.count)
+        Collection.all.each do |collection|
+            collection.leaves.each do |leaf|
+                leaf.destroy unless leaf.image
+            end
+            pbar.inc
+        end
+
+        Edition.all.each do |edition|
+            edition.image_set.leaves.each do |leaf|
+                leaf.destroy unless leaf.image
+            end
+            pbar.inc
         end
     end
 

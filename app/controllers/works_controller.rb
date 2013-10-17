@@ -96,7 +96,13 @@ class WorksController < ApplicationController
 
     def update
         if params[:work][:tei]
-            @work = TEIImporter.new.import(params[:work][:tei].read, @work)
+            begin
+                parsed_tei = TEIImporter.new.import(params[:work][:tei].read, @work)
+            rescue
+                flash[:alert] = I18n.t(:malformed_tei)
+                redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
+            end
+            @work = parsed_tei
         else
             num_work_images = @work.divisions.page_breaks.count + 1
             if params[:commit] == t(:continue_to_next_image)
