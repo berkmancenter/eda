@@ -357,6 +357,25 @@
             margin: 0;
         }
 
+        .image-titles {
+            display: block;
+            height: 1.2em;
+            .left-image-title, .right-image-title {
+                display: inline-block;
+                width: 50%;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+            }
+            .left-image-title {
+                padding-right: 1em;
+                text-align: right;
+            }
+            .right-image-title {
+                padding-left: 1em;
+                text-align: left;
+            }
+        }
+
         .left-image-link {
           margin-left: 64px;
         }
