@@ -45,10 +45,12 @@ class AmherstImageImporter
     def mets_metadata(image_filename, mets_directory)
         mets_filename = find_mods_file(image_filename, mets_directory)
         metadata = {}
-        doc = Nokogiri::XML::Document.parse(File.join(mets_directory, mets_filename), nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
-        doc.css('dc:title').each{ |n| metadata['Title'] = n.text }
-        doc.css('dc:identifier').each{ |n| metadata['Accession Number'] = n.text }
-        doc.css('amherst:hasPageNumber').each{ |n| metadata['Page'] = n.text }
+        doc = Nokogiri::XML(File.open(File.join(mets_directory, mets_filename)))
+        doc.remove_namespaces!
+        doc.css('title').each{ |n| metadata['Title'] = n.text }
+        doc.css('identifier').each{ |n| metadata['Accession Number'] = n.text }
+        doc.css('hasPageNumber').each{ |n| metadata['Page'] = n.text }
+        puts metadata.inspect
         metadata
     end
 
