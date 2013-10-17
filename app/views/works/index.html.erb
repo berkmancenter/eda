@@ -1,3 +1,5 @@
+<h1>Browse Images by Work</h1>
+<p class="help"><%= t 'works_browse_help' %></p>
 <% cache cache_key_for_works(@works, @edition) do %>
     <%= render partial: 'works/table', locals: { works: @works, edition: @edition } %>
 <% end %>

@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     end
 
     def load_edition
-        edition_id = params[:edition_id]
+        edition_id = params[:edition_id] || params[:id]
         @edition = Edition.find(edition_id)
     end
 
@@ -100,7 +100,10 @@ class ApplicationController < ActionController::Base
     end
 
     def store_location
-        puts request.fullpath
+        if Rails.env.development?
+          puts request.fullpath
+        end
+
         if ![new_user_session_path, new_user_registration_path, new_user_password_path, edit_user_password_path].include?(request.path) && !request.xhr? && request.request_method == 'GET'
             session[:previous_url] = request.fullpath 
             session[:two_urls_back] = session[:previous_url]

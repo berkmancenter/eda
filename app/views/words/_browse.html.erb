@@ -4,6 +4,8 @@
           <%= link_to first_letter, by_letter_words_path(first_letter), :'data-letter' => first_letter %>
         <% end %>
     </div>
-    <div class="alphabet-results lexicon-results"></div>
+    <div class="alphabet-results lexicon-results">
+      <p class="help"><%= raw t( 'words_browse_help' )%></p>
+    </div>
     <div class="lexicon-word"></div>
 </section>

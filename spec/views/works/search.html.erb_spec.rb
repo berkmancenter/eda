@@ -29,7 +29,7 @@ describe ( 'works/search' ) {
     }
 
     it {
-      should have_css 'th:first-child', text: I18n.t( 'datatable.th_title' )
+      should have_css 'th:first-child', text: 'Rank'
     }
 
     it {

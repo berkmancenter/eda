@@ -11,7 +11,12 @@ en:
   home_browse_title: 'Browse for Manuscript Images'
   home_lex_title: 'Lexicon'
 
+  collections_help: 'Browse for Manuscript Images by library collection.'
+
   works_search_h1: 'Search for Manuscript Images'
+  works_browse_help: 'Browse for Manuscript Images by first line, date, recipient, or edition.'
+
+  words_browse_help: "Browse alphabetically through more than 9,000 words in Dickinson’s poetry, as defined in her dictionary, Webster's 1844 <i>American Dictionary of the English Language</i>."
 
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
@@ -46,6 +51,7 @@ en:
   no_notes: 'You have not yet made any notes.'
 
   create_new_edition: 'Create New Edition'
+  edit_edition: 'Edit Edition'
   or: 'or'
   cannot_edit_edition: 'You do not have permissions to modify that edition.'
 

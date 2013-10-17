@@ -1,3 +1,5 @@
+<h1>Browse Images by Collection</h1>
+<p class="help"><%= t 'collections_help' %></p>
 <ol class="sortable_tree expandable"
     data-expand_node_url="<%= expand_node_collections_url %>">
     <% cache cache_key_for_collections(@collections) do %>

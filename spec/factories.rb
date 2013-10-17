@@ -205,7 +205,13 @@ FactoryGirl.define do
 
     factory :image_two do
       url "ms_am_1118_10_10_0002"
-      metadata {{ 'Imported' => '2013-07-11 12:00:00 -0400' }}
+      title 'Houghton Library - p. 1, L912, Fr1658, HCL (H B90)'
+      metadata {{
+        'Imported' => '2013-07-11 12:00:00 -0400',
+        'Order' => '2',
+        'Order Label' => '',
+        'Label' => 'Houghton Library - p. 1, L912, Fr1658, HCL (H B90)'
+      }}
       credits "Provided by Harvard University"
       web_width 500
       web_height 748

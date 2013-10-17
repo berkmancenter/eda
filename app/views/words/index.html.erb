@@ -1,3 +1,8 @@
+<% if !@xhr %>
+<h1>Browse Words</h1>
+<p class="help"><%= raw t( 'words_browse_help' )%></p>
+<% end %>
+
 <% cache cache_key_for_multiple(@words) do %>
 <div class="word-filter-wrapper">
     <%= label_tag(:filter, t(:word_filter_label)) %>
@@ -15,6 +20,11 @@
         <% end %>
     <% end %>
 </ul>
+
+<% if !@xhr %>
+<a href="#">Back to top</a>
+<% end %>
+
 <script>
     $(function() {
         $('.word-filter').fastLiveFilter('.word-list');

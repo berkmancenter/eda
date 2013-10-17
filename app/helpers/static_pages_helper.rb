@@ -7,7 +7,7 @@ module StaticPagesHelper
 	e = Edition.find_by_work_number_prefix( edition_prefix )
 	i = Image.find_by_title( image_title )
 
-	is = e.image_set.leaves_containing( i ) unless is.nil?
+	is = e.image_set.leaves_containing( i ) unless i.nil?
 
 	edition_image_set_path( e, is.first ) unless is.nil? || is.count == 0
   end
