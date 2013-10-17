@@ -11,11 +11,11 @@ namespace :emily do
         unless email.strip!.blank? || password.strip!.blank?
             if admin = User.create!(:email => email, :password => password)
                 puts "The admin was created successfully. Log in at #{new_user_session_path}"
-                Collection.each do |collection|
+                Collection.all.each do |collection|
                     collection.owner = admin
                     collection.save!
                 end
-                Edition.each do |edition|
+                Edition.all.each do |edition|
                     edition.owner = admin
                     edition.save!
                 end
