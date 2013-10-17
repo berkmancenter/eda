@@ -37,10 +37,23 @@ class EditionsController < ApplicationController
         @edition = Edition.new(params[:edition])
         @edition.owner = current_user
         if @edition.save
-            if session[:work_revision]
-                @image_set = ImageSet.find(session[:work_revision][:from_image_set_id]).matching_node_in(@edition.image_set)
-                revision = create_revision_from_session(@edition)
-                redirect_to edit_edition_image_set_work_path(@edition, @image_set, revision)
+            if session[:from_other_edition]
+                @image_set = ImageSet.find(session[:from_other_edition][:from_image_set_id]).matching_node_in(@edition.image_set)
+                if session[:from_other_edition][:from_work_id]
+                    revises_work = Work.find(session[:from_other_edition][:from_work_id])
+                    if @edition.is_child? &&
+                        @edition.parent == revises_work.edition &&
+                        work = @edition.works.find_by_revises_work_id(revises_work.id)
+                        flash[:alert] = t :revision_already_exists
+                        redirect_to edit_edition_image_set_work_path(@edition, @image_set, work)
+                    else
+                        revision = create_revision_from_session(@edition)
+                        redirect_to edit_edition_image_set_work_path(@edition, @image_set, revision)
+                    end
+                else
+                    session.delete(:from_other_edition)
+                    redirect_to new_edition_image_set_work_path(@edition, @image_set)
+                end
             else
                 flash[:notice] = t :edition_successfully_created
                 redirect_to edition_works_path(@edition)

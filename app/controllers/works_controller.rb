@@ -63,9 +63,8 @@ class WorksController < ApplicationController
                     redirect_to edit_edition_image_set_work_path(@edition, @image_set, revision)
                 end
             else
-                @work = @edition.works.new
                 session.delete(:from_other_edition)
-                redirect_to new_edition_image_set_work_path(@edition, @image_set, @work)
+                redirect_to new_edition_image_set_work_path(@edition, @image_set)
             end
         # Creating a brand new work
         else

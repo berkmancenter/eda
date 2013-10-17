@@ -404,11 +404,12 @@ namespace :emily do
 
         namespace :images do 
             desc 'Import image instances from METS records'
-            task :harvard, [:directory, :j_to_f_map_file, :max_images] => [:environment] do |task, args|
+            task :harvard, [:directory, :j_to_f_map_file, :exclude_list, :max_images] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
+                exclude_list = args[:exclude_list] || File.join(Eda::Application.config.emily['data_directory'], 'harvard_images_to_exclude.csv')
                 max_images = args[:max_images]
-                HarvardImageImporter.new.import(directory, map_file, max_images)
+                HarvardImageImporter.new.import(directory, map_file, exclude_list, max_images)
             end
 
             desc 'Import Amherst images'
@@ -516,6 +517,8 @@ namespace :emily do
             Rake::Task["emily:import:recipients"].execute
             Rake::Task["emily:generate:image_credits"].execute
             Rake::Task["emily:clean_up_metadata"].execute
+            # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
+            # m.subtype = 'cancellation'; m.save}
         end
 
         desc 'Import minimum content necessary to test'
