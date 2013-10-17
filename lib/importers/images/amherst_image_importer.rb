@@ -30,9 +30,12 @@ class AmherstImageImporter
                 'Amherst Location' => doc.css('identifier[type=uri]').text
             }
             metadata = metadata.merge(mets_metadata(image_filename, mets_directory))
+            title = "Amherst - #{metadata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}"
+            title += " - #{metadata['Accession Number']}" if metadata['Accession Number']
+            title += " - p. #{metadata['Page']}" if metadata['Page']
 
             image = Image.create(
-                title: "Amherst - #{metadata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}",
+                title: title,
                 url: image_url,
                 credits: 'Amherst credits',
                 metadata: metadata
@@ -50,7 +53,6 @@ class AmherstImageImporter
         doc.css('title').each{ |n| metadata['Title'] = n.text }
         doc.css('identifier').each{ |n| metadata['Accession Number'] = n.text }
         doc.css('hasPageNumber').each{ |n| metadata['Page'] = n.text }
-        puts metadata.inspect
         metadata
     end
 

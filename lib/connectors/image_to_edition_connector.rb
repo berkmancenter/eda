@@ -86,6 +86,8 @@ class ImageToEditionConnector
         end
 
         pbar = ProgressBar.new("Connecting", Image.count)
+        image_set = ImageSet.create(name: 'Other Images')
+        image_set.move_to_child_of root_image_set
         Collection.all.each do |collection|
             collection = collection.duplicate
             collection.leaves.each do |leaf|
@@ -94,7 +96,7 @@ class ImageToEditionConnector
                 end
                 pbar.inc
             end
-            collection.move_to_child_of root_image_set
+            collection.move_to_child_of image_set
         end
 
         Edition.all.each do |edition|
