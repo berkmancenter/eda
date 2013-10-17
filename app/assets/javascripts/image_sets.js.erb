@@ -9,6 +9,10 @@ $( function( ) {
 
   var $drawerHandle = $( '.left.drawer-handle,.right.drawer-handle' );
 
+  $( '.page-order-selector' ).on( 'change', function( ) {
+    window.location.href = $( this ).val( );
+  } );
+
   $(".edition-selector").on('change', function() {
       window.location.href = $(this).val();
   });
