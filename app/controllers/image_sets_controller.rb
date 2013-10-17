@@ -1,6 +1,6 @@
 class ImageSetsController < ApplicationController
     before_filter :authenticate_user!, only: :rebuild
-    before_filter :load_edition, except: [:index]
+    before_filter :load_edition, except: [:index, :show]
     before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
 
@@ -17,6 +17,11 @@ class ImageSetsController < ApplicationController
     end
 
     def show
+        if params[:edition_id]
+            load_edition
+        else
+            @edition = Eda::Application.config.emily['default_edition']
+        end
         unless user_signed_in? && @note = current_user.note_for(@image_set)
             @note = @image_set.notes.new
         end

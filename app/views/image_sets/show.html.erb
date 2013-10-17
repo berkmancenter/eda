@@ -2,7 +2,7 @@
 <% provide :view_classes, 'side-by-side' %>
 
 <% cache @image_set do %>
-  <h2><%= @image_set.name %></h2>
+  <%= sanitize breadcrumb(@image_set) %> <h2><%= @image_set.name %></h2>
   <script>
       var images = [
       <% @image_set.all_images.each do |image| %>

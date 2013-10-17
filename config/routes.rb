@@ -39,6 +39,7 @@ Eda::Application.routes.draw do
     end
 
     resources :collections, only: [:index, :show] do
+        resources :image_sets
         collection do
             post :expand_node
         end
