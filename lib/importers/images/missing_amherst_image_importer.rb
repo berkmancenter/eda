@@ -1,7 +1,7 @@
 class MissingAmherstImageImporter
     def import(image_directory)
         puts 'Importing Amherst Images'
-        collection = Collection.find_by_name('Amherst College Library')
+        collection = Collection.find_by_name('Amherst College')
         pbar = ProgressBar.new('Amherst', Dir.entries(image_directory).count)
         sheet_group = ImageSet.create(name: 'Other Images')
         Naturally.sort(Dir.entries(image_directory)).each_with_index do |image_filename, i|
