@@ -29,8 +29,7 @@ class AmherstImageImporter
                 'Title' => doc.at('title').text,
                 'Amherst Location' => doc.css('identifier[type=uri]').text
             }
-            mets_metadata(image_filename)
-            next
+            metadata = metadata.merge(mets_metadata(image_filename, mets_directory))
 
             image = Image.create(
                 title: "Amherst - #{metadata['Identifiers'].find{|i| i.include?('Amherst')}} - #{metadata['Title']}",
@@ -43,17 +42,41 @@ class AmherstImageImporter
         collection.save!
     end
 
-    def parse_image_filename(image_filename)
-        pattern = /^asc-(?<asc>\d+)-(?<page>\d+)(-(?<subpage>0|1))?\.tif$/
-        image_filename.match(pattern).named_captures
+    def mets_metadata(image_filename, mets_directory)
+        mets_filename = find_mods_file(image_filename, mets_directory)
+        metadata = {}
+        doc = Nokogiri::XML::Document.parse(File.join(mets_directory, mets_filename), nil, nil, Nokogiri::XML::ParseOptions::RECOVER)
+        doc.css('dc:title').each{ |n| metadata['Title'] = n.text }
+        doc.css('dc:identifier').each{ |n| metadata['Accession Number'] = n.text }
+        doc.css('amherst:hasPageNumber').each{ |n| metadata['Page'] = n.text }
+        metadata
     end
 
+    def parse_image_filename(image_filename)
+        pattern = /^asc-(?<asc>\d+)-(?<page>\d+)(-(?<subpage>0|1))?\.tif$/
+        image_filename.match(pattern)
+    end
+
+    def parse_mets_filename(filename)
+        pattern = /asc:(?<asc>\d+)\.xml/
+        filename.match(pattern)
+    end
+                        
     def find_mods_file(image_filename, mets_directory)
         possible_files = []
-        Dir.entries(mets_directory).each do |filename|
+        image_filename_parts = parse_image_filename(image_filename)
+        manuscript_asc = image_filename_parts[:asc]
+        page_number = image_filename_parts[:page]
+        man_asc_pattern = %Q|<fedora:isPartOf rdf:resource="info:fedora/asc:#{manuscript_asc}"></fedora:isPartOf>|
+        page_number_pattern = "<amherst:hasPageNumber>#{page_number}</amherst:hasPageNumber>"
+        Naturally.sort(Dir.entries(mets_directory)).find do |filename|
+            full_filename = File.join(mets_directory, filename)
+            filename_parts = parse_mets_filename(filename)
+            next unless File.file?(full_filename)
+            next unless filename_parts[:asc].to_i >= manuscript_asc.to_i && filename_parts[:asc].to_i < manuscript_asc.to_i + 100
+            file_text = File.read(full_filename)
+            file_text.match(man_asc_pattern) && file_text.match(page_number_pattern)
         end
-        <fedora:isPartOf rdf:resource="info:fedora/asc:17270"></fedora:isPartOf>
-        <amherst:hasPageNumber>11</amherst:hasPageNumber>
     end
 
     def new_sheet_group(collection, doc)

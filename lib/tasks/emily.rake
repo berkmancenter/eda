@@ -1,5 +1,30 @@
 namespace :emily do
 
+    desc 'Add admin account'
+    task :create_admin => :environment do
+        include Rails.application.routes.url_helpers
+        puts "You will be prompted to enter an email address and password for the new admin"
+        puts "Enter an email address:"
+        email = STDIN.gets
+        puts "Enter a password:"
+        password = STDIN.gets
+        unless email.strip!.blank? || password.strip!.blank?
+            if admin = User.create!(:email => email, :password => password)
+                puts "The admin was created successfully. Log in at #{new_user_session_path}"
+                Collection.each do |collection|
+                    collection.owner = admin
+                    collection.save!
+                end
+                Edition.each do |edition|
+                    edition.owner = admin
+                    edition.save!
+                end
+            else
+                puts "Sorry, the admin was not created!"
+            end
+        end
+    end
+
     desc 'Get image names from URLs'
     task :map_from_urls, [:url_file, :output_file] => [:environment] do |task, args|
         require 'csv'
@@ -481,6 +506,7 @@ namespace :emily do
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
             Rake::Task["emily:import:images:all"].execute
+            Rake::Task["emily:create_admin"].execute
             Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:connect:images_to_transcriptions"].execute

@@ -85,7 +85,7 @@ class ImageToEditionConnector
             pbar.inc
         end
 
-        pbar = ProgressBar.new("Connecting", Image.count - added_images.count)
+        pbar = ProgressBar.new("Connecting", Image.count)
         Collection.all.each do |collection|
             collection = collection.duplicate
             collection.leaves.each do |leaf|
