@@ -25,6 +25,29 @@ class ImageSetsController < ApplicationController
             pull_works_for_edition_image_set(@edition, @image_set)
             @next_image = @image_set.root.leaf_after(@image_set)
             @previous_image = @image_set.root.leaf_before(@image_set)
+
+            default_edition = Eda::Application.config.emily['default_edition']
+
+            @library_image_set = nil
+            Collection.all.each do |c|
+              c_leaves = c.leaves_containing @image_set.image
+              if c_leaves.count > 0
+                @library_image_set = edition_image_set_path( @edition, c_leaves.first )
+                break;
+              end
+            end
+
+            @edition_image_set = nil
+            e_leaves = @edition.image_set.leaves_containing @image_set.image
+            if e_leaves.count > 0
+              @edition_image_set = edition_image_set_path( @edition, e_leaves.first )
+            else
+              # use default edition
+              # or should we hide the selector?
+              e_leaves = default_edition.image_set.leaves_containing @image_set.image
+              @edition_image_set = edition_image_set_path( default_edition, e_leaves.first )
+            end
+
             render "image_sets/works"
         else
             render

@@ -1,5 +1,5 @@
 defaults: &DEFAULTS
-    default_edition: "The Poems of Emily Dickinson: Variorum Edition"
+    default_edition: "Franklin Variorum 1998"
     image_download_max_width: 1200
     small_image_preview_width: 200
 

@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     factory :franklin do
       name "The Poems of Emily Dickinson: Variorum Edition"
-      short_name 'Franklin Edition'
+      short_name 'Franklin Variorum 1998'
       author "R. W. Franklin"
       date "1998-01-01"
       work_number_prefix "F"
@@ -243,10 +243,14 @@ FactoryGirl.define do
   end
 
   factory :collection do
-    factory :iset_harvard do
-      name 'Harvard Collection'
+    factory :col_houghton do
+      name 'Houghton Library'
+      #editable nil
       #parent nil
-      metadata {{ "Library" => "Houghton" }}
+      metadata {{
+        "Long Name" => "Houghton Library, Harvard University",
+        "Code" => "H,HCL"
+      }}
       type 'Collection'
     end
   end
@@ -260,6 +264,14 @@ FactoryGirl.define do
     factory :iset_franklin do
       name 'Images for Franklin Edition'
       editable true
+    end
+
+    # image_set for Houghton collection
+    factory :iset_houghton do
+      name 'Dickinson, Emily, 1830-1886'
+      metadata {{ "Hollis ID" => '959043' }}
+      type 'ImageSet'
+      editable false
     end
 
     # visually, the following image_sets look like this, where the numbers are work numbers and the blocks are scanned images

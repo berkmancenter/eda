@@ -51,15 +51,17 @@ namespace :db do
 
       iset_four << Image.new
 
-      # harvard collection root
-      # (image set for franklin)
-      #iset_harvard = FactoryGirl.create :iset_harvard
+      # Houghton collection root
+      col_houghton = FactoryGirl.create :col_houghton
 
-      # not sure what to do about collections, do they get a clone of every iset?
-      # an iset can not have more than one parent
-      #iset_harvard.children << FactoryGirl.create( :iset_one )
-      #iset_one.parent = iset_harvard
+      iset_houghton = FactoryGirl.create :iset_houghton
+      iset_houghton.move_to_child_of col_houghton
 
+      iset_houghton << image_one
+      iset_houghton << image_five
+      iset_houghton << image_two
+      iset_houghton << image_four
+      iset_houghton << image_three
 
       # some works
  

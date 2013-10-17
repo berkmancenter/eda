@@ -1,8 +1,14 @@
 <%
-  options = [
-    [ 'Edition', 'edition' ],
-    [ 'Library', 'library' ]
-  ]
+  if ! ( @edition_image_set.nil? || @library_image_set.nil? )
+    options = [
+      [ 'Edition', @edition_image_set ],
+      [ 'Library', @library_image_set ]
+    ]
+
+    selected = edition_image_set_path( @edition, @image_set )
 %>
 
-<%= select_tag 'order', options_for_select( options, selected: params['order'] ), class: 'page-order-selector' %>
+<%= label_tag 'order', 'Page Order' %>
+<%= select_tag 'order', options_for_select( options, selected: selected ), class: 'page-order-selector' %>
+
+<% end %>
