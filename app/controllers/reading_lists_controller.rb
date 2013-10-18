@@ -12,7 +12,7 @@ class ReadingListsController < ApplicationController
     def show
         @reading_list = @reading_list.self_and_descendants
         if request.xhr?
-            render 'reading_lists/ajax_show'
+            render 'reading_lists/ajax_show', layout: false
         else
             render 'reading_lists/show'
         end

@@ -189,7 +189,7 @@ class WorksController < ApplicationController
     private
     def move_to_editable_edition
         unless current_user == @edition.owner
-            flash[:alert] = t :cannot_edit_edition
+            flash[:notice] = t :cannot_edit_edition
             session[:from_other_edition] = { from_image_set_id: @image_set.id }
             if @work
                 session[:from_other_edition][:from_work_id] = @work.id

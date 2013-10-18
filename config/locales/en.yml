@@ -53,7 +53,7 @@ en:
   create_new_edition: 'Create New Edition'
   edit_edition: 'Edit Edition'
   or: 'or'
-  cannot_edit_edition: 'You do not have permissions to modify that edition.'
+  cannot_edit_edition: "Choose an existing edition as the basis for your new edition (or start from scratch) and provide an edition name."
 
   cannot_view_reading_list: 'You are not the owner of that reading list'
   revision_already_exists: "You've already begun editing this work in this edition."
