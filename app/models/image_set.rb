@@ -50,4 +50,12 @@ class ImageSet < Sett
     def all_images
         self_and_descendants.map{|image_set| image_set.image}.compact
     end
+
+    def collection
+      parent = self.parent
+      while !parent.nil? do
+        return parent if parent.is_a? Collection
+        parent = parent.parent
+      end
+    end
 end
