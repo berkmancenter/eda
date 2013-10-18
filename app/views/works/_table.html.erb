@@ -16,13 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        <%
-            public_works = works.joins(:edition).where(edition: {public: true})
-            private_works = works.joins(:edition).where(edition: {public: nil})
-            cache cache_key_for_works(public_works) do
-public_works.each do |work| %><tr><% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %><td><%= link_to work.title.strip, image_set_path_from_work(work) %></td><td><%= work.date.strftime('%Y') if work.date %></td><td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td><% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %><td><%= strip_tags work.full_id %></td><td><a class="m" href="#" data-i="<%= work.id %>">+</a></td></tr><% end %>
-<% end %>
-<% private_works.each do |work| %><tr><% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %><td><%= link_to work.title.strip, image_set_path_from_work(work) %></td><td><%= work.date.strftime('%Y') if work.date %></td><td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td><% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %><td><%= strip_tags work.full_id %></td><td><a class="m" href="#" data-i="<%= work.id %>">+</a></td></tr><% end %>
+        <% works.each do |work| %><tr><% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %><td><%= link_to work.title.strip, image_set_path_from_work(work) %></td><td><%= work.date.strftime('%Y') if work.date %></td><td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td><% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %><td><%= strip_tags work.full_id %></td><td><a class="m" href="#" data-i="<%= work.id %>">+</a></td></tr><% end %>
     </tbody>
     <tfoot>
         <tr>
