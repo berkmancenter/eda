@@ -26,11 +26,13 @@ describe 'layout requests' do
 
     it { should have_selector( 'footer' ) }
 
-    it { should have_selector( 'footer a[title="Berkman Center for Internet and Society"]' ) }
+    it { should_not have_selector( 'footer a[title="Berkman Center for Internet and Society"]' ) }
 
     it { should have_selector( 'footer nav.footer' ) }
 
-    it { should have_selector( 'footer nav.footer a[href*="' + terms_path + '"]', { text: 'Copyright and Terms of Use' } ) }
+    it { should have_selector( "footer nav.footer a[href*='#{team_path}']", { text: 'Partners & Credits' } ) }
+
+    it { should have_selector( "footer nav.footer a[href*='#{terms_path}']", { text: 'Copyright & Terms of Use' } ) }
     it { should have_selector( 'footer nav.footer a[href*="' + privacy_path + '"]', { text: 'Privacy' } ) }
     it { should have_selector( 'footer nav.footer a[href*="' + contact_path + '"]', { text: 'Contact Us' } ) }
   end
