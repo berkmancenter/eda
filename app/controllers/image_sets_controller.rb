@@ -22,6 +22,9 @@ class ImageSetsController < ApplicationController
         else
             @edition = Eda::Application.config.emily['default_edition']
         end
+        if params[:collection_id]
+            @collection = Collection.find(params[:collection_id])
+        end
         unless user_signed_in? && @note = current_user.note_for(@image_set)
             @note = @image_set.notes.new
         end
@@ -83,13 +86,17 @@ class ImageSetsController < ApplicationController
 
       @collection = nil
       @library_image_set = nil
-      Collection.all.each do |c|
-        c_leaves = c.leaves_containing @image_set.image
-        if c_leaves.count > 0
-          @collection = c
-          @library_image_set = edition_image_set_path( @edition, c_leaves.first )
-          break;
-        end
+      if @image_set.root.is_a?(Collection)
+          @collection = @image_set.root
+          @library_image_set = edition_image_set_path( @edition, @image_set.root.leaves_containing(@image_set.image).first )
+      else
+          Collection.all.each do |c|
+              c_leaves = c.leaves_containing @image_set.image
+              if c_leaves.count > 0
+                  @library_image_set = edition_image_set_path( @edition, c_leaves.first )
+                  break;
+              end
+          end
       end
 
       @edition_image_set = nil

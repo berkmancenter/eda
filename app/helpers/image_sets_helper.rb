@@ -10,4 +10,15 @@ module ImageSetsHelper
         output = "#{top_level} #{output}"
         output
     end
+
+    def image_set_link_url(image)
+        if @collection
+            puts 'collection'
+            edition_image_set_path(@edition, @collection.leaves_containing(image).first)
+        elsif page = @edition.image_set.leaves_containing(image).first 
+            edition_image_set_path(@edition, page)
+        else
+            ''
+        end
+    end
 end

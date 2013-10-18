@@ -4,7 +4,15 @@
 <% cache @image_set do %>
   <%= sanitize breadcrumb(@image_set) %> <h2><%= @image_set.name %></h2>
   <script>
-      var images = [<% @image_set.all_images.each do |image| %>{imageFilename: "<%= image.url %>",<% if page = @edition.image_set.leaves_containing(image).first %>linkUrl: "<%= edition_image_set_path(@edition, page) %>"<% else %>linkUrl: ""<% end %>,imageTitle:"<%= h image.title %>"},<% end %>];
+      var images = [
+      <% @image_set.all_images.each do |image| %>
+          {
+              imageFilename: "<%= image.url %>",
+              linkUrl: "<%= image_set_link_url image %>",
+              imageTitle:"<%= h image.title %>"
+          },
+      <% end %>
+      ];
       var numberOfPages = images.length;
   </script>
 
