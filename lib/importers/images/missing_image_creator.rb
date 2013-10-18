@@ -15,9 +15,11 @@ class MissingImageCreator
                 pbar.inc
             end
             edition.image_set = edition.image_set.duplicate
+            image_set = ImageSet.create(name: 'Unavailable Images')
+            image_set.move_to_child_of edition.image_set
             edition.save!
             images.each do |image|
-                edition.image_set << image
+                image_set << image
             end
         end
     end

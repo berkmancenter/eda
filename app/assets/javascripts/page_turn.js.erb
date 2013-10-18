@@ -11,7 +11,7 @@ $(function() {
             // If not then add the page
             book.turn('addPage', element, page);
 
-            element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl}));
+            element.html($('<img />', {'src': fullImageUrl(images[page - 1].imageFilename), 'data-page-url': images[page - 1].linkUrl, 'data-image-title': images[page - 1].imageTitle}));
         }
     }
 
@@ -27,7 +27,7 @@ $(function() {
     var sbsPages = $( ".sbs-pages" );
 
     if ( sbsPages.length > 0 ) {
-        var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.82;
+        var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.75;
         var imageWidth = imageHeight * targetAspectRatio;
 
         // Event handlers
@@ -36,10 +36,10 @@ $(function() {
 
         // Make controls prettier
         //$('.page-controls div').css({margin: '0.2em 0 0', width: imageWidth + 'px'}).find('a').css('margin', 0);
-        $('.page-links>div').not('.page-counter-container').css({width: (imageWidth-64) + 'px'});
+        $('.page-links>div').not('.page-counter-container, .image-titles').css({width: (imageWidth-64) + 'px'});
 
         $( window ).on( 'resize', function( ) {
-          $('.page-links>div').not('.page-counter-container').css({width: (imageWidth-64) + 'px'});
+          $('.page-links>div').not('.page-counter-container, .image-titles').css({width: (imageWidth-64) + 'px'});
         } );
 
         $('.total-pages').html(numberOfPages);
@@ -52,7 +52,6 @@ $(function() {
             acceleration: true,
             pages: numberOfPages,
             elevation: 50,
-            gradients: !$.isTouch,
             page: page,
             height: imageHeight,
             width: Math.round(imageWidth * 1.95),
@@ -72,15 +71,25 @@ $(function() {
                     }
                     view.forEach(function(page, i) { 
                         var url = $('#page-' + page + ' img').data('page-url');
+                        var title = $('#page-' + page + ' img').data('image-title') || '';
                         var link = $('<a />', { href: url, title: 'Manuscript View for this Image' });
                         if (url == '' || page == 0) { link = ''; }
-                        if (page % 2 == 0) { 
+                        if (i == 0) { 
                             $('.left-image-link').html(link);
+                            $('.left-image-title').html(title).attr('title', title);
                         } else {
                             $('.right-image-link').html(link);
+                            $('.right-image-title').html(title).attr('title', title);
                         }
                     });
                     $('.current-page-number').html(page);
+                    console.log(page);
+                    $('.previous-page-container, .next-page-container').css('visibility', 'visible');
+                    if (page == numberOfPages) {
+                        $('.next-page-container').css('visibility', 'hidden');
+                    } else if (page == 1) {
+                        $('.previous-page-container').css('visibility', 'hidden');
+                    }
                 }
             }
         });

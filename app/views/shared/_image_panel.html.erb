@@ -1,5 +1,5 @@
 <div id="interactive-image-panel" class="panel">
-  <h1><%= raw image_set.image && image_set.image.title ? image_set.image.title : '&nbsp;' %></h1>
+    <h1 title="<%= image_set.image.url %>"><%= raw image_set.image && image_set.image.title ? image_set.image.title : '&nbsp;' %></h1>
     <%= render partial: "image_sets/interactive_image", locals: { image_set: image_set } %>
 
     <div class="image-drawer bottom drawer">

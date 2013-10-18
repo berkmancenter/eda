@@ -72,7 +72,7 @@ en:
   download_image: 'Download Image'
   image_not_found: 'Image not found'
   default_reading_list: 'My Reading List'
-  inscription_notes: 'Inscription Notes'
+  inscription_notes: 'Textual Notes'
 
   home_link: 'Home'
   manuscript_link: 'Manuscripts'
@@ -84,6 +84,8 @@ en:
   my_notes_link: 'My Notes'
   my_account_link: 'My Account'
   my_profile_link: 'My Profile'
+
+  malformed_tei: "We were not able to successfully parse your TEI. Please download a transcription for an example of correct formatting."
 
   datatable:
     th_title: 'First Line/Title'

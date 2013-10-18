@@ -39,6 +39,7 @@ Eda::Application.routes.draw do
     end
 
     resources :collections, only: [:index, :show] do
+        resources :image_sets
         collection do
             post :expand_node
         end
@@ -50,6 +51,7 @@ Eda::Application.routes.draw do
             get :metadata
         end
         collection do
+            get '/new/edition' => 'works#choose_edition', :as => :choose_edition_new
             match '/:first_letter' => 'works#browse', :as => :by_letter, :first_letter => /[A-Za-z]/
         end
     end

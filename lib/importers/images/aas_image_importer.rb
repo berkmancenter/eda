@@ -11,7 +11,7 @@ class AASImageImporter
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('AAS Images', total_files)
         metadata_csv = CSV.open(metadata_csv, headers: true)
-        Dir.open(directory).each_with_index do |filename, i|
+        Naturally.sort(Dir.entries(directory)).each_with_index do |filename, i|
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             metadata = {}

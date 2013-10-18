@@ -2,17 +2,14 @@
 <% provide :view_classes, 'side-by-side' %>
 
 <% cache @image_set do %>
-  <h2><%= @image_set.name %></h2>
+  <%= sanitize breadcrumb(@image_set) %> <h2><%= @image_set.name %></h2>
   <script>
       var images = [
       <% @image_set.all_images.each do |image| %>
           {
               imageFilename: "<%= image.url %>",
-              <% if page = @edition.image_set.leaves_containing(image).first %>
-                  linkUrl: "<%= edition_image_set_path(@edition, page) %>"
-              <% else %>
-                  linkUrl: ""
-              <% end %>
+              linkUrl: "<%= image_set_link_url image %>",
+              imageTitle:"<%= h image.title %>"
           },
       <% end %>
       ];
@@ -30,6 +27,10 @@
   </div>
 
   <div class="page-links">
+      <div class="image-titles">
+          <div class="left-image-title">&nbsp;</div>
+          <div class="right-image-title">&nbsp;</div>
+      </div>
       <div class="left-image-link">&nbsp;</div>
 
       <div class="page-counter-container">

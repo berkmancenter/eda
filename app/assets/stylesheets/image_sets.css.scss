@@ -103,6 +103,8 @@
         position: relative;
         text-align: center;
         top: -0.5em;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
       }
     }
 
@@ -341,6 +343,9 @@
 
       .sbs-pages {
         margin: 0 auto;
+        .page {
+            background: $gray;
+        }
       }
 
       .previous-page-container {
@@ -360,6 +365,25 @@
             display: inline-block;
             height: 40px;
             margin: 0;
+        }
+
+        .image-titles {
+            display: block;
+            height: 1.2em;
+            .left-image-title, .right-image-title {
+                display: inline-block;
+                width: 50%;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+            }
+            .left-image-title {
+                padding-right: 1em;
+                text-align: right;
+            }
+            .right-image-title {
+                padding-left: 1em;
+                text-align: left;
+            }
         }
 
         .left-image-link {

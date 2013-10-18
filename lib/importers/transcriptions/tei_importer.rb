@@ -55,10 +55,21 @@ class TEIImporter
 
     end
 
+    def parse_id(string)
+        string.match(/^(?<prefix>[A-Z]+([0-9]*-)?)(?<number>\d+)(?<variant>[A-Z](\.[0-9])?)?/)
+    end
+
     def import(string, work = nil)
         doc = Nokogiri::XML(string)
-        edition_prefix, work_number, work_variant = parse_id(doc.at('body > div[type=transcript]')['id'])
-        work ||= get_work(edition_prefix, work_number, work_variant)
+        if work
+            work_number = work.number
+            work_variant = work.variant
+        else
+            id_parts = parse_id(doc.at('body > div[type=transcript]')['id'])
+            work_number = id_parts[:number]
+            work_variant = id_parts[:variant]
+            work = Work.new
+        end
         work.title = doc.css('title').text
         work.number = work_number
         work.variant = work_variant
@@ -69,7 +80,7 @@ class TEIImporter
             stanza.css('l').each do |line|
                 line_index += 1
                 line_object, modifiers = parse_line(line, line_index).values
-                line_index = line_object.line_num
+                line_index = line_object.number
                 s.lines << line_object
             end
             work.stanzas << s

@@ -4,11 +4,11 @@ class WorksController < ApplicationController
     before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
     before_filter :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
     before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
-    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :choose_edition, :metadata]
+    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :metadata]
     before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
-        @works = Work.starts_with(params[:first_letter])
+        @works = Work.starts_with(params[:first_letter]).reorder(:title)
         if request.xhr?
             render 'works/list', layout: false
         else
@@ -37,7 +37,10 @@ class WorksController < ApplicationController
                 end
             end
             format.txt{ render layout: false }
-            format.tei{ render layout: false }
+            format.tei{
+                response.headers['Content-Disposition'] = "attachment; filename=\"#{@work.full_id}.tei.xml\""
+                render layout: false
+            }
         end
     end
 
@@ -49,22 +52,39 @@ class WorksController < ApplicationController
 
     def create
         # Creating as a revision
-        if @edition && session[:work_revision]
-            revises_work = Work.find(session[:work_revision][:revises_work_id])
-            @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:work_revision][:from_image_set_id]).image).first
-            if @edition.is_child? &&
-                @edition.parent == revises_work.edition &&
-                work = @edition.works.find_by_revises_work_id(revises_work.id)
-                flash[:alert] = t :revision_already_exists
-                redirect_to edit_edition_image_set_work_path(@edition, @image_set, work)
+        if session[:from_other_edition]
+            @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition][:from_image_set_id]).image).first
+            if session[:from_other_edition][:from_work_id]
+                revises_work = Work.find(session[:from_other_edition][:from_work_id])
+                if @edition.is_child? &&
+                    @edition.parent == revises_work.edition &&
+                    work = @edition.works.find_by_revises_work_id(revises_work.id)
+                    flash[:alert] = t :revision_already_exists
+                    redirect_to edit_edition_image_set_work_path(@edition, @image_set, work)
+                else
+                    revision = create_revision_from_session(@edition)
+                    redirect_to edit_edition_image_set_work_path(@edition, @image_set, revision)
+                end
             else
-                revision = create_revision_from_session(@edition)
-                redirect_to edit_edition_image_set_work_path(@edition, @image_set, revision)
+                session.delete(:from_other_edition)
+                redirect_to new_edition_image_set_work_path(@edition, @image_set)
             end
         # Creating a brand new work
         else
-            @work = @edition.works.new(params[:work])
             load_image_set
+            if params[:work][:tei]
+                #begin
+                    parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
+                #rescue
+                #    flash[:alert] = I18n.t(:malformed_tei)
+                #    redirect_to edition_image_set_path(@edition, @image_set)
+                #    return
+                #end
+                @work = parsed_tei
+                @work.edition = @edition
+            else
+                @work = @edition.works.new(params[:work])
+            end
             if @work.number_variant_is_unique
                 if @work.save
                     @work.image_set << @image_set.image
@@ -91,7 +111,14 @@ class WorksController < ApplicationController
 
     def update
         if params[:work][:tei]
-            @work = TEIImporter.new.import(params[:work][:tei].read, @work)
+            begin
+                parsed_tei = TEIImporter.new.import(params[:work][:tei].read, @work)
+            rescue
+                flash[:alert] = I18n.t(:malformed_tei)
+                redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
+                return
+            end
+            @work = parsed_tei
         else
             num_work_images = @work.divisions.page_breaks.count + 1
             if params[:commit] == t(:continue_to_next_image)
@@ -147,8 +174,9 @@ class WorksController < ApplicationController
 
     def choose_edition
         @edition = Edition.new
-        if session[:work_revision]
-            @edition.parent = Work.find(session[:work_revision][:revises_work_id]).edition
+        if session[:from_other_edition] && session[:from_other_edition][:from_work_id]
+            load_work
+            @edition.parent = Work.find(session[:from_other_edition][:from_work_id]).edition
         end
     end
 
@@ -162,9 +190,13 @@ class WorksController < ApplicationController
     def move_to_editable_edition
         unless current_user == @edition.owner
             flash[:alert] = t :cannot_edit_edition
-            session[:work_revision] = { revises_work_id: @work.id, from_image_set_id: @image_set.id }
-            logger.info("look: #{session[:work_revision].inspect}")
-            redirect_to choose_edition_work_path(@work)
+            session[:from_other_edition] = { from_image_set_id: @image_set.id }
+            if @work
+                session[:from_other_edition][:from_work_id] = @work.id
+                redirect_to choose_edition_work_path(@work)
+            else
+                redirect_to choose_edition_new_works_path
+            end
         end
     end
 

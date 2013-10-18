@@ -175,7 +175,7 @@ $(document).ready(function() {
     });
 
 
-    $('.toggler').on('click', function() {
+    $('.toggler, .right-toggler').on('click', function() {
         $(this).toggleClass('expanded').next('.toggleable').slideToggle(200);
     });
 });

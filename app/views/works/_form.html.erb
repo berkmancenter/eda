@@ -16,6 +16,6 @@
     <%= f.actions do %>
         <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>
         <%= f.action :submit, label: t(:continue_to_next_image), button_html: { class: 'eda-btn-light' } %>
-        <%= f.action :cancel %>
+        <%= link_to 'Cancel', edition_image_set_path(edition, image_set) %>
     <% end %>
 <% end %>

@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     end
 
     def create_revision_from_session(in_edition)
-        revises_work = Work.find(session[:work_revision][:revises_work_id])
+        revises_work = Work.find(session[:from_other_edition][:from_work_id])
         revision = revises_work.dup
         text = revises_work.text
         revision.text = text
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
         revision.edition = in_edition
         revision.image_set = revises_work.image_set.duplicate
         revision.save!
-        session.delete(:work_revision)
+        session.delete(:from_other_edition)
         revision
     end
 
@@ -100,10 +100,6 @@ class ApplicationController < ActionController::Base
     end
 
     def store_location
-        if Rails.env.development?
-          puts request.fullpath
-        end
-
         if ![new_user_session_path, new_user_registration_path, new_user_password_path, edit_user_password_path].include?(request.path) && !request.xhr? && request.request_method == 'GET'
             session[:previous_url] = request.fullpath 
             session[:two_urls_back] = session[:previous_url]

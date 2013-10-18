@@ -83,7 +83,7 @@ class Edition < ActiveRecord::Base
     end
 
     def setup_name
-        self.short_name = name unless self.short_name
+        self.short_name = name if self.short_name.empty?
     end
 
     def setup_sets
@@ -91,7 +91,7 @@ class Edition < ActiveRecord::Base
             if is_child?
                 copy_tree_from_parent(:image_set)
             else
-                self.image_set = ImageSet.create
+                self.image_set = Eda::Application.config.emily['default_edition'].image_set.duplicate
             end
         end
         if work_set.nil?

@@ -1,5 +1,64 @@
 namespace :emily do
 
+    desc 'Add admin account'
+    task :create_admin => :environment do
+        include Rails.application.routes.url_helpers
+        puts "You will be prompted to enter an email address and password for the new admin"
+        puts "Enter an email address:"
+        email = STDIN.gets
+        puts "Enter a password:"
+        password = STDIN.gets
+        unless email.strip!.blank? || password.strip!.blank?
+            if admin = User.create!(:email => email, :password => password)
+                puts "The admin was created successfully. Log in at #{new_user_session_path}"
+                Collection.all.each do |collection|
+                    collection.owner = admin
+                    collection.save!
+                end
+                Edition.all.each do |edition|
+                    edition.owner = admin
+                    edition.save!
+                end
+            else
+                puts "Sorry, the admin was not created!"
+            end
+        end
+    end
+
+    desc 'Get image names from URLs'
+    task :map_from_urls, [:url_file, :output_file] => [:environment] do |task, args|
+        require 'csv'
+        urls_file = args[:url_file] || File.join(Eda::Application.config.emily['data_directory'], 'urls.csv')
+        output_file = args[:output_file] || Rails.root.join('tmp', 'map_from_urls.csv')
+        output_file = CSV.open(output_file, 'wb')
+        output_file << ['url', 'image_url', 'J', 'F']
+        franklin = Edition.find_by_work_number_prefix('F')
+        johnson = Edition.find_by_work_number_prefix('J')
+        CSV.foreach(urls_file) do |row|
+            image_set_id = row[0].match(/\/image_sets\/(\d+)$/)[1]
+            image_set = ImageSet.find(image_set_id)
+            if image_set.leaf?
+                images = [image_set.image]
+            else
+                images = image_set.all_images
+            end
+            images.each do |image|
+                works = Work.in_image(image)
+                if works.empty?
+                        output_file << [row[0], image.url]
+                else
+                    works.each do |work|
+                        if work.edition == franklin
+                            output_file << [row[0], image.url, nil, work.full_id]
+                        elsif work.edition == johnson
+                            output_file << [row[0], image.url, work.full_id, nil]
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     desc 'Rename images to match holder ids'
     task :rename_images => [:environment] do |t|
         directory = '/home/justin/Desktop/previews/'
@@ -272,11 +331,6 @@ namespace :emily do
             WorkMetadataImporter.new.import(filename, edition_prefix)
         end
 
-        desc 'Import library editions'
-        task :library_editions => [:environment] do |task|
-
-        end
-
         desc 'Import work publication history CSV'
         task :publication_history, [:filename, :edition_prefix] => [:environment] do |task, args|
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_publication_history.csv')
@@ -349,19 +403,35 @@ namespace :emily do
         end
 
         namespace :images do 
+
+            desc 'Import image fascicle and set order'
+            task :fascicle_order, [:input_file] => [:environment] do |task, args|
+                require 'csv'
+                input_file = args[:input_file] || File.join(Eda::Application.config.emily['data_directory'], 'dumped_image_set.csv')
+                CSV.foreach(input_file, headers: true) do |row|
+                    image = Image.find_by_url(row[0])
+                    image.metadata['fascicle']
+                    image.metadata['fascicle_order']
+                    image.metadata['set']
+
+                end
+            end
+
             desc 'Import image instances from METS records'
-            task :harvard, [:directory, :j_to_f_map_file, :max_images] => [:environment] do |task, args|
+            task :harvard, [:directory, :j_to_f_map_file, :exclude_list, :max_images] => [:environment] do |task, args|
                 directory = args[:directory] || File.join(Eda::Application.config.emily['data_directory'], 'mets')
                 map_file = args[:j_to_f_map_file] || File.join(Eda::Application.config.emily['data_directory'], 'johnson_to_franklin.csv')
+                exclude_list = args[:exclude_list] || File.join(Eda::Application.config.emily['data_directory'], 'harvard_images_to_exclude.csv')
                 max_images = args[:max_images]
-                HarvardImageImporter.new.import(directory, map_file, max_images)
+                HarvardImageImporter.new.import(directory, map_file, exclude_list, max_images)
             end
 
             desc 'Import Amherst images'
-            task :amherst, [:image_directory, :mods_directory] => [:environment] do |t, args|
+            task :amherst, [:image_directory, :mods_directory, :mets_directory] => [:environment] do |t, args|
                 image_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst_output')
-                mods_directory = args[:image_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
-                AmherstImageImporter.new.import(image_directory, mods_directory)
+                mods_directory = args[:mods_directory] || File.join(Eda::Application.config.emily['data_directory'], 'images', 'amherst')
+                mets_directory = args[:mets_directory] || File.join(Eda::Application.config.emily['data_directory'], 'amherst_image_mets')
+                AmherstImageImporter.new.import(image_directory, mods_directory, mets_directory)
             end
 
             desc 'Import missing Amherst images'
@@ -451,15 +521,18 @@ namespace :emily do
             Rake::Task["emily:import:metadata"].execute
             Rake::Task["emily:import:publication_history"].execute
             Rake::Task["emily:import:images:all"].execute
+            Rake::Task["emily:create_admin"].execute
             Rake::Task["emily:generate:transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:generate:images_to_transcriptions_map"].execute unless use_existing_maps
             Rake::Task["emily:connect:images_to_transcriptions"].execute
             Rake::Task["emily:connect:images_to_editions"].execute
             Rake::Task["emily:import:images:missing"].execute
             Rake::Task["emily:import:lexicon"].execute
-            Rake::Task["emily:generate:image_credits"].execute
             Rake::Task["emily:import:recipients"].execute
+            Rake::Task["emily:generate:image_credits"].execute
             Rake::Task["emily:clean_up_metadata"].execute
+            # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
+            # m.subtype = 'cancellation'; m.save}
         end
 
         desc 'Import minimum content necessary to test'
@@ -496,6 +569,19 @@ namespace :emily do
             output_file = args[:output_file] || Rails.root.join('tmp', 'dumped_image_metadata.csv')
             ImageMetadataDumper.new.dump(output_file)
         end
+
+        desc 'Dump edition image set order'
+        task :image_set, [:output_file] => [:environment] do |t, args|
+            require 'csv'
+            output_file = args[:output_file] || File.join(Eda::Application.config.emily['data_directory'], 'dumped_image_set.csv')
+            franklin = Edition.find_by_work_number_prefix('F')
+            output = CSV.open(output_file, 'wb')
+            output << ['image_filename', 'parent_name', 'position_in_parent']
+            franklin.image_set.leaves.each do |leaf|
+                next unless leaf.image && leaf.image.url
+                csv << [leaf.image.url, leaf.parent.name, leaf.position_in_level]
+            end
+        end
     end
 
     desc 'Request everything now so the caches are warm'
@@ -503,13 +589,38 @@ namespace :emily do
         app = ActionDispatch::Integration::Session.new(Rails.application)
         app.get(Rails.application.routes.url_helpers.works_path)
         Edition.all.each do |edition|
-            # Visit the edition work list
-            app.get(Rails.application.routes.url_helpers.edition_works_path(edition))
             # Visit all image sets
             edition.image_set.self_and_descendants.each do |image_set|
                 puts "getting #{edition.id} - #{image_set.id}"
                 app.get(Rails.application.routes.url_helpers.edition_image_set_path(edition, image_set))
             end
+        end
+    end
+    
+    desc 'General clean up'
+    task :clean_up => [:environment] do |t|
+            # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
+            # m.subtype = 'cancellation'; m.save}
+            Rake::Task["emily:remove_empty_image_sets"].execute
+            Rake::Task["emily:clean_up_metadata"].execute
+            Rake::Task["emily:connect:images_to_editions"].execute
+    end
+
+    desc 'Remove empty image sets'
+    task :remove_empty_image_sets => [:environment] do |t|
+        pbar = ProgressBar.new('Removing', Collection.count + Edition.count)
+        Collection.all.each do |collection|
+            collection.leaves.each do |leaf|
+                leaf.destroy unless leaf.image
+            end
+            pbar.inc
+        end
+
+        Edition.all.each do |edition|
+            edition.image_set.leaves.each do |leaf|
+                leaf.destroy unless leaf.image
+            end
+            pbar.inc
         end
     end
 
@@ -528,6 +639,7 @@ namespace :emily do
             "fascicle_order" => nil,
             "Source" => nil,
             "Source Code" => nil,
+            "Inscription Notes" => "Textual Notes",
             "set" => "Set"
         }
         pbar = ProgressBar.new('Cleanup', Work.count)

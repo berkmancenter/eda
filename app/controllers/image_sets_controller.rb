@@ -1,6 +1,6 @@
 class ImageSetsController < ApplicationController
     before_filter :authenticate_user!, only: :rebuild
-    before_filter :load_edition, except: [:index]
+    before_filter :load_edition, except: [:index, :show]
     before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
     before_filter :check_edition_owner, only: :rebuild
 
@@ -17,6 +17,14 @@ class ImageSetsController < ApplicationController
     end
 
     def show
+        if params[:edition_id]
+            load_edition
+        else
+            @edition = Eda::Application.config.emily['default_edition']
+        end
+        if params[:collection_id]
+            @collection = Collection.find(params[:collection_id])
+        end
         unless user_signed_in? && @note = current_user.note_for(@image_set)
             @note = @image_set.notes.new
         end
@@ -26,27 +34,7 @@ class ImageSetsController < ApplicationController
             @next_image = @image_set.root.leaf_after(@image_set)
             @previous_image = @image_set.root.leaf_before(@image_set)
 
-            default_edition = Eda::Application.config.emily['default_edition']
-
-            @library_image_set = nil
-            Collection.all.each do |c|
-              c_leaves = c.leaves_containing @image_set.image
-              if c_leaves.count > 0
-                @library_image_set = edition_image_set_path( @edition, c_leaves.first )
-                break;
-              end
-            end
-
-            @edition_image_set = nil
-            e_leaves = @edition.image_set.leaves_containing @image_set.image
-            if e_leaves.count > 0
-              @edition_image_set = edition_image_set_path( @edition, e_leaves.first )
-            else
-              # use default edition
-              # or should we hide the selector?
-              e_leaves = default_edition.image_set.leaves_containing @image_set.image
-              @edition_image_set = edition_image_set_path( default_edition, e_leaves.first )
-            end
+            load_page_order_options
 
             render "image_sets/works"
         else
@@ -91,6 +79,37 @@ class ImageSetsController < ApplicationController
 
     def load_image_set
         @image_set = ImageSet.find(params[:id])
+    end
+
+    def load_page_order_options
+      default_edition = Eda::Application.config.emily['default_edition']
+
+      @collection = nil
+      @library_image_set = nil
+      if @image_set.root.is_a?(Collection)
+          @collection = @image_set.root
+          @library_image_set = edition_image_set_path( @edition, @image_set.root.leaves_containing(@image_set.image).first )
+      else
+          Collection.all.each do |c|
+              c_leaves = c.leaves_containing @image_set.image
+              if c_leaves.count > 0
+                  @library_image_set = edition_image_set_path( @edition, c_leaves.first )
+                  break;
+              end
+          end
+      end
+
+      @edition_image_set = nil
+      e_leaves = @edition.image_set.leaves_containing @image_set.image
+      if e_leaves.count > 0
+        @edition_image_set = edition_image_set_path( @edition, e_leaves.first )
+      else
+        # use default edition
+        # or should we hide the selector?
+        e_leaves = default_edition.image_set.leaves_containing @image_set.image
+        @edition_image_set = edition_image_set_path( default_edition, e_leaves.first )
+      end
+
     end
 end
 

@@ -1,6 +1,6 @@
 require 'csv'
 class HarvardImageImporter
-    def import(directory, johnson_franklin_map, max_images = nil)
+    def import(directory, johnson_franklin_map, exclude_list, max_images = nil)
         puts "Importing Harvard images"
         collection = Collection.create!(:name => 'Houghton Library')
         collection.metadata = {
@@ -11,6 +11,7 @@ class HarvardImageImporter
         image_count = 0
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new("Harvard Img", total_files)
+        images_to_exclude = CSV.read(exclude_list).flatten.compact.map(&:strip)
 
         Dir.open(directory).each_with_index do |filename, i|
             pbar.inc
@@ -32,6 +33,7 @@ class HarvardImageImporter
                 else
                     next
                 end
+                next if images_to_exclude.include?(image_url)
                 image = Image.new(
                     :title => "Houghton Library - #{page['LABEL']}",
                     :url => image_url,
@@ -48,6 +50,7 @@ class HarvardImageImporter
 
                 sheet_group << image
             end
+            sheet_group.destroy if sheet_group.all_images.empty?
         end
         collection.save!
     end
