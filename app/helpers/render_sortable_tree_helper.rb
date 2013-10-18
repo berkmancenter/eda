@@ -32,7 +32,11 @@ module RenderSortableTreeHelper
         ns   = options[:namespace]
         options[:edition] = Eda::Application.config.emily['default_edition'] unless options[:edition]
         if node.is_a? ImageSet
-            url = h.edition_image_set_url(options[:edition], node)
+            if node.root.is_a?(Collection) && !node.leaf?
+                url = h.collection_image_set_url(node.root, node)
+            else
+                url = h.edition_image_set_url(options[:edition], node)
+            end
         elsif node.is_a? ReadingList
             url = ''
         elsif node.is_a? WorkSet

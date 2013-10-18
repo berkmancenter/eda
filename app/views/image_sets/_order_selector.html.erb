@@ -8,6 +8,8 @@
     selected = edition_image_set_path( @edition, @image_set )
 %>
 
+<%= @edition_image_set.inspect %>
+<%= @library_image_set.inspect %>
 <%= label_tag 'order', 'Page Order' %>
 <%= select_tag 'order', options_for_select( options, selected: selected ), class: 'page-order-selector' %>
 

@@ -204,7 +204,7 @@ class Work < ActiveRecord::Base
         line_number = 0
         text.lines.each_with_index do |line, i|
             if line.match(page_break_pattern)
-                address = text.lines.to_a[i - 1].length - 2
+                address = text.lines.to_a[i - 1].length - 1
                 self.divisions << Division.new(
                     start_line_number: line_number,
                     end_line_number: line_number,

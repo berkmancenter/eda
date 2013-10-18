@@ -91,7 +91,7 @@ class Edition < ActiveRecord::Base
             if is_child?
                 copy_tree_from_parent(:image_set)
             else
-                self.image_set = ImageSet.create
+                self.image_set = Eda::Application.config.emily['default_edition'].image_set.duplicate
             end
         end
         if work_set.nil?

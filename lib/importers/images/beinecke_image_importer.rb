@@ -23,8 +23,10 @@ class BeineckeImageImporter
                 end
             end
             metadata['Imported'] = Time.now.to_s
+            title = "#{collection.name} - #{image_url}"
+            title += "- #{metadata['Page']}" if metadata['Page']
             image = Image.new(
-                :title => "Yale - #{image_url} - #{metadata['Page']}",
+                :title => title,
                 :url => image_url,
                 :credits => 'Beinecke credits',
                 :metadata => metadata

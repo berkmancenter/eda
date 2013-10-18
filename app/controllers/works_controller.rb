@@ -37,7 +37,10 @@ class WorksController < ApplicationController
                 end
             end
             format.txt{ render layout: false }
-            format.tei{ render layout: false }
+            format.tei{
+                response.headers['Content-Disposition'] = "attachment; filename=\"#{@work.full_id}.tei.xml\""
+                render layout: false
+            }
         end
     end
 
@@ -68,8 +71,20 @@ class WorksController < ApplicationController
             end
         # Creating a brand new work
         else
-            @work = @edition.works.new(params[:work])
             load_image_set
+            if params[:work][:tei]
+                #begin
+                    parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
+                #rescue
+                #    flash[:alert] = I18n.t(:malformed_tei)
+                #    redirect_to edition_image_set_path(@edition, @image_set)
+                #    return
+                #end
+                @work = parsed_tei
+                @work.edition = @edition
+            else
+                @work = @edition.works.new(params[:work])
+            end
             if @work.number_variant_is_unique
                 if @work.save
                     @work.image_set << @image_set.image
@@ -101,6 +116,7 @@ class WorksController < ApplicationController
             rescue
                 flash[:alert] = I18n.t(:malformed_tei)
                 redirect_to edit_edition_image_set_work_path(@edition, @image_set, @work)
+                return
             end
             @work = parsed_tei
         else
