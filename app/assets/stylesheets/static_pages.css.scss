@@ -192,6 +192,12 @@ body.static-pages.home {
 }
 
 body.static-pages.faq {
+  .icons div {
+    margin: 1em 0;
+  }
+}
+
+body.static-pages.faq {
   ol>li {
     list-style-type: decimal;
   }
