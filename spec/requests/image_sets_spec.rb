@@ -259,7 +259,7 @@ describe ( 'image_sets requests' ) {
         before { visit edition_image_set_path( w.edition, image_set ) }
 
         it ( 'should have header' ) {
-          should have_css '#interactive-image-panel h1', text: 'Amherst - Amherst Manuscript # 794 - Awake ye muses nine'
+          should have_css '#interactive-image-panel h1', text: 'p. 2, Your - Riches - taught me - poverty! , L258, J299, Fr418'
         }
         
       end
@@ -396,7 +396,7 @@ describe ( 'image_sets requests' ) {
 
     }
 
-    context ( 'non-leaf/sbs view' ) {
+    context 'reading view', :js => true do
       describe ( 'get /editions/:edition_id/image_sets/:id' ) {
 
         describe ( 'with valid image set having multiple images' ) {
@@ -409,13 +409,13 @@ describe ( 'image_sets requests' ) {
           }
 
           it ( 'should have img tags for all ImageSet images' ) {
-            should have_css( "img[src*='#{preview_url( w.image_set.children[0].image )}']" );
-            should have_css( "img[src*='#{preview_url( w.image_set.children[1].image )}']", visible: false );
-            should have_css( "img[src*='#{preview_url( w.image_set.children[2].image )}']", visible: false );
+            should have_css "img[src*='#{ w.image_set.children[0].image.url }']"
+            should have_css "img[src*='#{ w.image_set.children[1].image.url }']", visible: false
+            should have_css "img[src*='#{ w.image_set.children[2].image.url }']", visible: false
           }
         }
       }
-    }
+    end
   }
 }
 
