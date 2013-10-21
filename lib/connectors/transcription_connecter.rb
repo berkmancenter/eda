@@ -131,6 +131,33 @@ class TranscriptionConnecter
         Edition.find_by_work_number_prefix('SH14-').works.all.select{|w| w.metadata['Page'] && pages.include?(w.metadata['Page'])}
     end
 
+    def remove_map_dupes(map)
+        map = CSV.table(map)
+        franklin = Edition.find_by_work_number_prefix('F')
+        output = CSV.open(Rails.root.join('tmp', 'new_map_output.csv'), 'wb')
+        headers = []
+        Edition.all.each{|e| headers << e.work_number_prefix }
+        output << headers
+        similarity_maps = {
+            'P90-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P90-')).read,
+            'P91-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P91-')).read,
+            'P96-' => similarity_map(franklin, Edition.find_by_work_number_prefix('P96-')).read
+        }
+        similarity_maps.keys.each do |edition_prefix|
+            header = edition_prefix.downcase.sub('-', '').to_sym
+            repeated = map[header].group_by(&:to_s).delete_if{|k, v| v.size < 2 || k.empty?}.keys
+            repeated.each do |full_id|
+                franklin_work = matching_work_by_text(similarity_maps[edition_prefix], Work.find_by_full_id(full_id), nil).full_id
+                updated_rows = map.select{|row| row[header] == full_id}.each do |row|
+                    row[header] = nil unless row[:f] == franklin_work
+                end
+            end
+        end
+        map.each do |row|
+            output << row
+        end
+    end
+
     def connect(work_map)
         puts 'Connecting Transcriptions'
         map = CSV.open(work_map, 'wb')
