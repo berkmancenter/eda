@@ -8,15 +8,15 @@ namespace :db do
       #
       # johnson
       # 
-      johnson = FactoryGirl.create :johnson
-      johnson.create_image_set( FactoryGirl.attributes_for :iset_franklin )
-      johnson.create_work_set( FactoryGirl.attributes_for :wset_franklin )
+      johnson = Edition.new( FactoryGirl.attributes_for :johnson )
+      johnson.create_image_set( FactoryGirl.attributes_for :iset_johnson )
+      johnson.create_work_set( FactoryGirl.attributes_for :wset_johnson )
       johnson.save
 
       #
       # franklin
       #
-      franklin = FactoryGirl.create :franklin
+      franklin = Edition.new( FactoryGirl.attributes_for :franklin )
       franklin.create_image_set( FactoryGirl.attributes_for :iset_franklin )
       franklin.create_work_set( FactoryGirl.attributes_for :wset_franklin )
       franklin.save
@@ -136,7 +136,7 @@ namespace :db do
       #
       # tested
       # 
-      tested = FactoryGirl.create( :tested )
+      tested = Edition.new( FactoryGirl.attributes_for :tested )
       tested.create_image_set( FactoryGirl.attributes_for :iset_tested )
       tested.create_work_set( FactoryGirl.attributes_for :wset_tested )
       tested.save

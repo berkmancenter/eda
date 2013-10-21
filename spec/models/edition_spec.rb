@@ -1,18 +1,27 @@
 require 'spec_helper'
 
 describe( "Edition model" ) {
+
+  describe ( 'create from scratch' ) {
+    it {
+      johnson = FactoryGirl.create :johnson
+      johnson.create_image_set( FactoryGirl.attributes_for :iset_johnson )
+      johnson.create_work_set( FactoryGirl.attributes_for :wset_johnson )
+      johnson.should be_valid
+    } 
+  }
+
   let ( :franklin ) { Edition.find_by_work_number_prefix 'F' }
 
   subject { franklin }
 
-  context 'with works, and images' do
-
+  context ( 'with works, and images' ) {
     it {
       should be_valid
       should respond_to :work_set
       should respond_to :image_set
     }
-  end
+  }
 
   describe ( 'all_works' ) {
     context ( 'normal edition' ) {

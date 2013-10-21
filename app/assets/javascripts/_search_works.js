@@ -10,7 +10,7 @@ $( function( ) {
   $( '.search-works-options-toggle' ).click( function( e ) {
     var toggle = $('.search-works-options, .search-works-options-toggle').toggleClass('open');
     if (window.sessionStorage) {
-      window.sessionStorage.setItem('search-works-options-toggle', toggle.is(':visible') ? 'open' : '');
+      window.sessionStorage.setItem('search-works-options-toggle', toggle.hasClass('open') ? 'open' : '');
     }
     return false;
   } );

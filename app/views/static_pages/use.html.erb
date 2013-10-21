@@ -67,13 +67,18 @@ will download as a separate text file
 </p>
 <h3>Page Turning and Reading View</h3>
 <p>
-&ldquo;Previous Page&rdquo; and &ldquo;Next Page&rdquo; move between manuscript images in order. 
-&ldquo;Reading View&rdquo; shows facing pages and simulates physical page-turning with interactive animation. 
-The order of pages is determined by the edition or library context you choose; 
-this can be changed using the menu provided (including your own page order, if you have signed in and created an edition). 
+&ldquo;Reading View&rdquo; shows facing pages and simulates physical page-turning with interactive animation. &ldquo;Manuscript View&rdquo; shows a single page with tools to inspect the image, text to compare, and new or related search options. &ldquo;Previous Page&rdquo; and &ldquo;Next Page&rdquo; move between manuscript images in order. The order of pages is determined by the edition or library context you choose. When browsing by image, library order is the default; when searching or browsing by work, edition order is the default. The default order can be changed using the &ldquo;Page Order&rdquo; menu. The edition page order reflects Franklin fascicle order or your own order (if you have signed in and created an edition).
 </p>
 
-<%= image_tag 'use_page_controls.png' %>
+<div class="icons">
+
+<div><%= image_tag 'use_page_controls.png', title: 'Previous Page, Switch to Manuscript View, and Next Page buttons' %></div>
+
+<div><%= image_tag 'manuscript_view_icon.png', title: 'Switch to Manuscript View button' %></div>
+
+<div><%= image_tag 'use_page_order.gif', title: 'Switch between Edition and Library page order' %></div>
+
+</div>
 
 <h2 id="text">Text</h2>
 <h3>Transcripts</h3>
@@ -113,7 +118,7 @@ Once saved, your edition is available for you to search for manuscript images an
 Browse alphabetically through more than 9,000 words in Dickinson&rsquo;s poetry, as defined in her dictionary, Webster's 1844 <i>American Dictionary of the English Language</i>. 
 Each word details a part of speech and definition&mdash;
 often with many different senses. 
-From each lexicon entry, search for words in Dickinson&rsquo;s poems to see their use in context. 
+<%# From each lexicon entry, search for words in Dickinson&rsquo;s poems to see their use in context. %>
 <%= link_to 'Resources', resources_path %> links to images of Dickinson&rsquo;s Webster&rsquo;s Dictionary under the Dickinson family library.
 </p>
 
