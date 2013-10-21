@@ -8,7 +8,7 @@ class WorksController < ApplicationController
     before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
-        @works = Work.starts_with(params[:first_letter]).reorder(:title)
+        @works = Work.starts_with(params[:first_letter]).reorder('title, number, variant')
         if request.xhr?
             render 'works/list', layout: false
         else
