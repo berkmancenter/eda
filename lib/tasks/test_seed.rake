@@ -85,10 +85,18 @@ namespace :db do
       z_f1a0.lines << FactoryGirl.create( :l_f1a05 )
       z_f1a0.lines << FactoryGirl.create( :l_f1a06 )
       z_f1a0.lines << FactoryGirl.create( :l_f1a07 )
+      z_f1a0.lines << FactoryGirl.create( :l_f1a08 )
       z_f1a0.save
 
-      work_f1a.divisions << FactoryGirl.create( :d_f1a03 )
-      work_f1a.divisions << FactoryGirl.create( :d_f1a06 )
+      work_f1a.line_modifiers << FactoryGirl.create( :d_f1a03 )
+      work_f1a.line_modifiers << FactoryGirl.create( :d_f1a06 )
+
+      e_f1a08 = FactoryGirl.create( :e_f1a08 )
+      d_f1a08 = FactoryGirl.create( :d_f1a08 )
+      e_f1a08.children << d_f1a08
+      work_f1a.line_modifiers << e_f1a08
+      work_f1a.line_modifiers << d_f1a08
+
       work_f1a.save
 
       work_f1a.index!
@@ -166,6 +174,12 @@ namespace :db do
       awake_adj.definitions << FactoryGirl.create( :awake_one )
       awake_adj.definitions << FactoryGirl.create( :awake_two )
       awake_adj.save
+
+      # user
+      if User.count == 0
+        test_user_attr = FactoryGirl.attributes_for :test_user
+        test_user = User.create!( test_user_attr )
+      end
 
       Sunspot.commit
     end

@@ -156,6 +156,11 @@ FactoryGirl.define do
       number 7
     end
 
+    factory :l_f1a08 do
+      text 'Safe in their  Chambers - '
+      number 8
+    end
+
     # f131a
     factory :l_f131a01 do
       text 'Besides the Autumn poets sing'
@@ -184,6 +189,32 @@ FactoryGirl.define do
       end_line_number 6
       end_address 54
       original_characters 'air,'
+    end
+
+    factory :d_f1a08 do
+      type 'Division'
+      subtype 'line'
+      #work :work_f1a
+      #parent :e_f1a08
+      start_line_number 8
+      start_address 9
+      end_line_number 8
+      end_address 9
+      original_characters 'Alabas -'
+    end
+  end
+
+  factory :emendation do
+    factory :e_f1a08 do
+      type 'Emendation'
+      subtype nil
+      #work :work_f1a
+      start_line_number 8
+      start_address 14
+      end_line_number 8
+      end_address 23
+      original_characters 'Alabas -  ter'
+      new_characters 'Alabaster'
     end
   end
 
@@ -350,6 +381,20 @@ FactoryGirl.define do
       #word_variant awake_adj
       number 2
       definition 'Living; physically functioning.'
+    end
+  end
+
+  factory :user do
+    factory :test_user do
+      email 'user@example.com'
+      password 'p4ssw0rd'
+      password_confirmation 'p4ssw0rd'
+    end
+
+    factory :test_user_model do
+      email 'user_model@example.com'
+      password 'p4ssw0rd'
+      password_confirmation 'p4ssw0rd'
     end
   end
 end

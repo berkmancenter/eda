@@ -25,6 +25,38 @@ module WorkHelper
         output
     end
 
+    def render_mod_line_pre_br(line)
+        output = ''
+        line.chars.each_with_index do |char, i|
+            if line.mods_at(i).count > 0
+              break
+            end
+            output += char
+        end
+        output
+    end
+
+    def render_mod_line_post_br(line)
+        output = ''
+        br = false
+        line.chars.each_with_index do |char, i|
+          if line.mods_at(i).count > 0
+            br = true
+          end
+
+          if br
+            line.mods_at(i).each do |mod|
+                output += render_mod(mod)
+            end
+            output += char
+          end
+        end
+        line.mods_at(line.chars.count).each do |mod|
+            output += render_mod(mod)
+        end
+        output
+    end
+
     def render_work_result_link(  work )
       raw( "<span class='work-number'>#{work.edition.work_number_prefix}#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
     end
