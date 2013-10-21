@@ -448,6 +448,22 @@ describe ( 'image_sets requests' ) {
         }
       end
 
+      context 'user content', :js => true do
+        before {
+          visit edition_image_set_path( w.edition, w.image_set.children.first )
+        }
+
+        it ( 'should sign in' ) {
+          click_link 'Sign In'
+          should have_css 'form.new_user'
+
+          test_user = FactoryGirl.attributes_for :test_user
+          fill_in 'Email', with: test_user[:email]
+          fill_in 'Password', with: test_user[:password]
+          click_button 'Sign in'
+        }
+
+      end
     }
 
     context 'reading view', :js => true do
