@@ -1,4 +1,5 @@
 <%= form_for [notable, note], :remote => true do |f| %>
-  <%= f.text_area :note, rows: nil %>
-  <div><%= f.submit 'Save', { class: 'save-button eda-btn-light' } %><span class="note-save-result"></span></div>
+  <%= f.text_area :note, cols: nil, rows: nil %>
+  <%= f.submit 'Save', { class: 'save-button eda-btn-dark' } %>
+  <div class="note-save-result"></div>
 <% end %>

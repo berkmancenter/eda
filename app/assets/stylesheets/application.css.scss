@@ -69,6 +69,8 @@ summary {
   width: 100%;
 }
 
+/* should refactor to .eda-btn but split for now */
+
 .eda-btn-light {
   font-family: 'Source Sans Pro';
   background: $tan;
@@ -87,6 +89,28 @@ summary {
     a {
         color: $darkGray;
         text-decoration: none;
+    }
+  }
+}
+
+.eda-btn-dark {
+  font-family: 'Source Sans Pro';
+  background: $darkGray;
+  background: linear-gradient($darkGray, $highlightGray);
+  border: solid 1px $lightGray;
+  border-radius: 2px;
+  box-shadow: 0 0 2px #8F7341;
+  color: $lightGray;
+  cursor: pointer;
+  padding: 0.2em 1em;
+
+  &:hover {
+    background: $gray;
+    color: $tan;
+
+    a {
+      color: $tan;
+      text-decoration: none;
     }
   }
 }
