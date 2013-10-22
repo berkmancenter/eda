@@ -221,6 +221,12 @@ namespace :emily do
             TranscriptionConnecter.new.connect(map_file)
         end
 
+        desc 'Remove dupes from transcriptions connector map'
+        task :remove_work_map_dupes, [:map_file] => [:environment] do |task, args|
+            map_file = args[:map_file] || File.join(Eda::Application.config.emily['data_directory'], 'work_map.csv')
+            TranscriptionConnecter.new.remove_map_dupes(map_file)
+        end
+
         desc 'Generate image credits'
         task :image_credits => [:environment] do |task, args|
             ImageCreditGenerator.new.generate!
@@ -676,5 +682,12 @@ namespace :emily do
             pbar.inc
             work.save!
         end
+        Image.all.each do |image|
+            if image.metadata && image.metadata['Rights']
+                image.metadata.delete('Rights')
+                image.save!
+            end
+        end
+        LineModifier.where(subtype: 'cancel').each{|m| m.subtype = 'cancellation'; m.save!}
     end
 end
