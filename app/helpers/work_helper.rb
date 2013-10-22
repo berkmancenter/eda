@@ -25,6 +25,38 @@ module WorkHelper
         output
     end
 
+    def render_mod_line_pre_br(line)
+        output = ''
+        line.chars.each_with_index do |char, i|
+            if line.mods_at(i).count > 0
+              break
+            end
+            output += char
+        end
+        output
+    end
+
+    def render_mod_line_post_br(line)
+        output = ''
+        br = false
+        line.chars.each_with_index do |char, i|
+          if line.mods_at(i).count > 0
+            br = true
+          end
+
+          if br
+            line.mods_at(i).each do |mod|
+                output += render_mod(mod)
+            end
+            output += char
+          end
+        end
+        line.mods_at(line.chars.count).each do |mod|
+            output += render_mod(mod)
+        end
+        output
+    end
+
     def render_work_result_link(  work )
       raw( "<span class='work-number'>#{work.edition.work_number_prefix}#{work.number} #{work.variant}</span><span class='work-title'>#{work.title}</span>" )
     end
@@ -43,6 +75,26 @@ module WorkHelper
             image_set = work.edition.image_set.leaves_showing_work(work).first
             edition_image_set_path(work.edition, image_set) if image_set
         end
+    end
+
+    def edition_selector_by_image(image, selected_edition, id = nil)
+        options = []
+        disabled = []
+        selected = selected_edition.id
+        Edition.for_user(current_user).each do |edition|
+            link = edition.id
+            images_in_this_edition = edition.image_set.leaves_containing(image)
+            if edition.works.in_image(image).empty?
+                disabled << link unless link == selected_edition.id
+            else
+                link = edition_image_set_path(edition, images_in_this_edition.first)
+                selected = link if edition == selected_edition
+            end
+            options << [edition.short_name, link]
+        end
+        options = options.sort_by{|o| o[1] == selected ? 1 : 2}
+
+        select_tag 'edition[id]', options_for_select(options, disabled: disabled, selected: selected), class: 'edition-selector', id: id
     end
 
     def edition_selector(other_editions_works, selected_edition, id = nil)

@@ -61,7 +61,6 @@ module RenderExpandableTreeHelper
         "
           <div class='controls'>
             #{ h.link_to 'Edit', edit_path, :class => :edit }
-            #{ h.link_to 'Delete', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           </div>
         "
       end

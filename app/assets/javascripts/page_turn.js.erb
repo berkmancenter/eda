@@ -27,7 +27,7 @@ $(function() {
     var sbsPages = $( ".sbs-pages" );
 
     if ( sbsPages.length > 0 ) {
-        var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.75;
+        var imageHeight = ($(window).height() - $('header').height() - $('footer').height() - $('section.side-by-side > h2').height()) * 0.70;
         var imageWidth = imageHeight * targetAspectRatio;
 
         // Event handlers
@@ -83,7 +83,6 @@ $(function() {
                         }
                     });
                     $('.current-page-number').html(page);
-                    console.log(page);
                     $('.previous-page-container, .next-page-container').css('visibility', 'visible');
                     if (page == numberOfPages) {
                         $('.next-page-container').css('visibility', 'hidden');
