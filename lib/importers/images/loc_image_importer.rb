@@ -9,7 +9,7 @@ class LOCImageImporter
         }
         total_files = Dir.entries(directory).count
         pbar = ProgressBar.new('LOC Images', total_files)
-        Dir.open(directory).each_with_index do |filename, i|
+        Naturally.sort(Dir.entries(directory)).each_with_index do |filename, i|
             next if filename[0] == '.'
             image_url = File.basename(filename, File.extname(filename))
             image = Image.new(
