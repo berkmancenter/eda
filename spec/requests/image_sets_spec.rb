@@ -450,7 +450,7 @@ describe ( 'image_sets requests' ) {
 
       context 'user content', :js => true do
         before {
-          page.driver.resize( 1280, 768 )
+          #DatabaseCleaner.start
           visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=0"
         }
 
@@ -526,7 +526,6 @@ describe ( 'image_sets requests' ) {
 
                   it ( 'should have found edited work' ) {
                     should have_css '.search-works-results a span.work-number', text: "#{user_edition[:work_number_prefix]}#{w.number}"
-                    snap
                   }
                 }
               }
@@ -583,6 +582,9 @@ describe ( 'image_sets requests' ) {
           }
         }
 
+        after {
+          #DatabaseCleaner.clean
+        }
       end
     }
 

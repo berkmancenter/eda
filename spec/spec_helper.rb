@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/poltergeist'
+require 'database_cleaner'
 
 def snap
   save_screenshot("tmp/screenshots/#{(Time.now.to_f * 1000).floor}.png")
@@ -13,13 +14,14 @@ end
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-#Capybara.register_driver :slow_poltergeist do |app|
-#  Capybara::Poltergeist::Driver.new app, {
-#    timeout: 2.minutes
-#  }
-#end
+Capybara.register_driver :slow_poltergeist do |app|
+  Capybara::Poltergeist::Driver.new( app, {
+    timeout: 2.minutes,
+    window_size: [ 1280, 1024 ]
+  } )
+end
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :slow_poltergeist
 #Capybara.current_driver = :poltergeist
 
 RSpec.configure do |config|
@@ -51,4 +53,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.before( :suite ) do
+    DatabaseCleaner.strategy = :transaction
+  end
 end
