@@ -8,7 +8,7 @@ class WorksController < ApplicationController
     before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
-        @works = Work.starts_with(params[:first_letter]).reorder(:title)
+        @works = Work.starts_with(params[:first_letter]).reorder('title, number, variant')
         if request.xhr?
             render 'works/list', layout: false
         else
@@ -54,6 +54,11 @@ class WorksController < ApplicationController
         # Creating as a revision
         if session[:from_other_edition]
             @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition][:from_image_set_id]).image).first
+            # Add the image if it's missing somehow
+            if @image_set.nil?
+                @edition.image_set << ImageSet.find(session[:from_other_edition][:from_image_set_id]).image
+                @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition][:from_image_set_id]).image).first
+            end
             if session[:from_other_edition][:from_work_id]
                 revises_work = Work.find(session[:from_other_edition][:from_work_id])
                 if @edition.is_child? &&

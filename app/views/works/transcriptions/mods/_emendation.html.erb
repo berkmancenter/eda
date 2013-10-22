@@ -1,2 +1,2 @@
-<% em_with_br = mod.children && mod.children.first.type == 'Division' %>
-<ruby class="emendation"><%= mod.children ? raw( em_with_br ? render_mod_line_pre_br(mod) : render_line(mod) ) : mod.original_characters %><rp>(</rp><rt><%= mod.new_characters %></rt><rp>)</rp></ruby><%= raw(render_mod_line_post_br(mod)) if em_with_br %>
+<% em_with_br = !mod.children.empty? && mod.children.first.type == 'Division' %>
+<ruby class="emendation"><%= !mod.children.empty? ? raw( em_with_br ? render_mod_line_pre_br(mod) : render_line(mod) ) : mod.original_characters %><rp>(</rp><rt><%= mod.new_characters %></rt><rp>)</rp></ruby><%= raw(render_mod_line_post_br(mod)) if em_with_br %>

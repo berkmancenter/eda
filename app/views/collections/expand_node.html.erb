@@ -1,3 +1,4 @@
+<% cache cache_key_for_multiple(@children) do %>
 <ol class="nested_set">
     <%= build_server_tree(
         @children,
@@ -5,3 +6,4 @@
         title: :name
     ) %>
 </ol>
+<% end %>

@@ -16,7 +16,24 @@
         </tr>
     </thead>
     <tbody>
-        <% works.each do |work| %><tr><% if defined?(search) && !search.nil? %><td><%= search_rank(search, work) %></td><% end %><td><%= link_to work.title.strip, image_set_path_from_work(work) %></td><td><%= work.date.strftime('%Y') if work.date %></td><td><%= work.metadata['Recipient'] if work.metadata['Recipient'] %></td><% if !defined?(edition) || edition.nil? %><td><%= work.edition.short_name %></td><% end %><td><%= strip_tags work.full_id %></td><td><a class="m" href="#" data-i="<%= work.id %>">+</a></td></tr><% end %>
+        <%
+            if works.is_a? ActiveRecord::Relation 
+                cache_key = cache_key_for_multiple(works.joins(:edition).where(edition: {public: true}))
+                grouped_works = works.all.group_by{|w| w.edition.public}
+            else
+                grouped_works = works.group_by{|w| w.edition.public}
+            end
+            public_works = (grouped_works[true] || []).compact
+            private_works = (grouped_works.values_at(false, nil) || []).flatten.compact
+        %>
+        <%= render partial: 'works/table_body', locals: { works: private_works, search: defined?(search) ? search : nil } %>
+        <% if cache_key
+            cache cache_key do %>
+                <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil } %>
+            <% end %>
+        <% else %>
+            <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil } %>
+        <% end %>
     </tbody>
     <tfoot>
         <tr>

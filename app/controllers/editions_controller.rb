@@ -37,6 +37,13 @@ class EditionsController < ApplicationController
         @edition = Edition.new(params[:edition])
         @edition.owner = current_user
         if @edition.save
+            if (@edition.parent && @edition.image_set.all_images.count != @edition.parent.image_set.all_images.count) ||
+                (@edition.parent.nil? && @edition.image_set.all_images.count != Eda::Application.config.emily['default_edition'].image_set.all_images.count)
+                @edition.destroy
+                flash[:alert] = t :error_creating_edition
+                redirect_to root_path
+                return
+            end
             if session[:from_other_edition]
                 from_image_set = ImageSet.find(session[:from_other_edition][:from_image_set_id])
                 @image_set = @edition.image_set.leaves_containing(from_image_set.image).first
