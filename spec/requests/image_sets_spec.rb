@@ -450,7 +450,8 @@ describe ( 'image_sets requests' ) {
 
       context 'user content', :js => true do
         before {
-          visit edition_image_set_path( w.edition, w.image_set.children.first )
+          page.driver.resize( 1280, 768 )
+          visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=0"
         }
 
         it ( 'should sign in' ) {
@@ -461,6 +462,125 @@ describe ( 'image_sets requests' ) {
           fill_in 'Email', with: test_user[:email]
           fill_in 'Password', with: test_user[:password]
           click_button 'Sign in'
+          should have_css 'a', text: 'My Account'
+        }
+
+        context ( 'with sign in' ) {
+          before {
+            click_link 'Sign In'
+            test_user = FactoryGirl.attributes_for :test_user
+            fill_in 'Email', with: test_user[:email]
+            fill_in 'Password', with: test_user[:password]
+            click_button 'Sign in'
+          }
+
+          it {
+            should have_css 'a', text: 'My Account'
+          }
+
+          describe ( 'edit transcription' ) {
+            before {
+              click_link 'Edit transcription'
+            }
+
+            it { 
+              should have_css 'h2', text: 'Create New Edition'
+            }
+
+            describe ( 'create user edition from blank edition' ) {
+              let ( :user_edition ) { FactoryGirl.attributes_for :user_edition }
+              let ( :new_work_text ) { 'User edition transcription update which can be searched' }
+
+              before {
+                select '[None]', from: 'edition_parent_id'
+                fill_in 'Name', with: user_edition[:name]
+                fill_in 'Short name', with: user_edition[:short_name]
+                fill_in 'Author', with: user_edition[:author]
+                fill_in 'Description', with: user_edition[:description]
+                fill_in 'Work number prefix', with: user_edition[:work_number_prefix]
+                click_button 'Create Edition'
+              }
+
+              it {
+                should have_css 'form.work'
+              }
+
+              describe ( 'update transcription' ) {
+                before {
+                  fill_in 'Text', with: new_work_text
+                  click_button 'Update Work'
+                }
+
+                it {
+                  should_not have_css 'form.work'
+
+                  should have_css 'h3', "#{user_edition[:work_number_prefix]}#{w.number}#{w.variant}"
+                  should have_css '.line', text: new_work_text
+                }
+
+                describe ( 'search for updated transcription' ) {
+                  before {
+                    fill_in 'Search for:', with: 'searched'
+                    click_button 'Search'
+                  }
+
+                  it ( 'should have found edited work' ) {
+                    should have_css '.search-works-results a span.work-number', text: "#{user_edition[:work_number_prefix]}#{w.number}"
+                    snap
+                  }
+                }
+              }
+            }
+          }
+
+          describe ( 'edit note on public edition' ) {
+            before {
+              click_link 'My Notes'
+              fill_in 'note_note', with: 'a test note'
+              click_button 'Save'
+            }
+
+            it {
+              find( '#note_note' ).value.should eq( 'a test note' )
+            }
+
+            describe ( 'persists after refresh' ) {
+              it {
+                visit current_path
+                find( '#note_note', visible: false ).value.should eq( 'a test note' )
+              }
+            }
+
+            describe ( 'update existing note' ) {
+              before {
+                fill_in 'note_note', with: 'a test note 2'
+                click_button 'Save'
+              }
+
+              it {
+                find( '#note_note' ).value.should eq( 'a test note 2' )
+              }
+
+              describe ( 'persists after refresh' ) {
+                it {
+                  visit current_path
+                  find( '#note_note', visible: false ).value.should eq( 'a test note 2' )
+                }
+              }
+
+              describe ( 'my notes' ) {
+                before {
+                  visit my_notes_path
+                }
+
+                it {
+                  should have_css 'h2', text: 'My Notes'
+                  should have_css 'li p', text: 'a test note 2'
+                }
+              }
+
+            }
+          }
         }
 
       end

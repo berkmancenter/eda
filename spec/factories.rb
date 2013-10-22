@@ -22,12 +22,20 @@ FactoryGirl.define do
 
     factory :tested do
       name 'Test Edition'
-      short_name 'Test Edition'
+      short_name 'Test'
       author 'Ryan Westphal'
       date '2013-06-06'
       work_number_prefix 'T'
       completeness 0.1
       public true
+    end
+
+    factory :user_edition do
+      name 'User Edition'
+      short_name 'User'
+      author 'Test User'
+      description 'A user-created test edition'
+      work_number_prefix 'U'
     end
   end
 
