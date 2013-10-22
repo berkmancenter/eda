@@ -5,7 +5,7 @@
 <ul>
 <% @notes.each do |note| %>
     <li>
-    On: <%= link_to(note.notable.name, edition_image_set_path(Edition.find_by_image_set_id(note.notable.root.id), note.notable)) %>
+    On: <%= link_to(note.notable.name, edition_image_set_path(Edition.find_by_image_set_id(note.notable.root.id) || Eda::Application.config.emily['default_edition'], note.notable)) %>
     <p><%= note.note %></p>
     </li>
 <% end %>
