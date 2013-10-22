@@ -54,6 +54,7 @@ en:
   edit_edition: 'Edit Edition'
   or: 'or'
   cannot_edit_edition: "Choose an existing edition as the basis for your new edition (or start from scratch) and provide an edition name."
+  error_creating_edition: 'We apologize, but there was an error creating your edition. Please try again later.'
 
   cannot_view_reading_list: 'You are not the owner of that reading list'
   revision_already_exists: "You've already begun editing this work in this edition."
