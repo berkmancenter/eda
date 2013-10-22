@@ -45,8 +45,14 @@ class ApplicationController < ActionController::Base
         params[:q] = query unless query.nil?
         sync_search_params_and_session
         return unless params[:q]
+        visible_editions = Edition.for_user(current_user).map(&:id)
+        if params[:current_edition] && visible_editions.include?(params[:current_edition].to_i)
+            edition_ids = [params[:current_edition]]
+        else
+            edition_ids = visible_editions
+        end
         @search = Work.search do
-            with(:edition_id, params[:current_edition]) if params[:current_edition]
+            with(:edition_id).any_of(edition_ids)
             case params[:limit_to_field]
             when 'work_text'
                 fulltext params[:q] do
