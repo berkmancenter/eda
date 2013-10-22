@@ -64,7 +64,6 @@ module RenderSortableTreeHelper
         "
           <div class='controls'>
             #{ h.link_to '', edit_path, :class => :edit }
-            #{ h.link_to '', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
           </div>
         "
       end
