@@ -14,8 +14,6 @@ describe ( 'image_sets requests' ) {
   subject { page }
 
   describe ( 'get /editions/:edition_id/image_sets/:id' ) {
-
-
     context ( 'leaf/page view' ) {
       # require test:seed
       let ( :w ) { awake_work }
@@ -450,7 +448,6 @@ describe ( 'image_sets requests' ) {
 
       context 'user content', :js => true do
         before {
-          #DatabaseCleaner.start
           visit "#{edition_image_set_path( w.edition, w.image_set.children.first )}#work-panel=0"
         }
 
@@ -580,10 +577,6 @@ describe ( 'image_sets requests' ) {
 
             }
           }
-        }
-
-        after {
-          #DatabaseCleaner.clean
         }
       end
     }
