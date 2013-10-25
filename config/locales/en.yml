@@ -16,7 +16,9 @@ en:
   works_search_h1: 'Search for Manuscript Images'
   works_browse_help: 'Browse for Manuscript Images by first line, date, recipient, or edition.'
 
-  words_browse_help: "Browse alphabetically through more than 9,000 words in Dickinson’s poetry, as defined in her dictionary, Webster's 1844 <i>American Dictionary of the English Language</i>."
+  words_browse_help: "Browse alphabetically through more than 9,000 words in Dickinson’s poetry, as defined in the <a href=\"http://edl.byu.edu/\">Emily Dickinson Lexicon</a>, based in part on her dictionary, Webster's 1844 American Dictionary of the English Language (<a href=\"http://pds.lib.harvard.edu/pds/view/44810046\">Vol. 1</a> and <a href=\"http://pds.lib.harvard.edu/pds/view/44810047\">Vol. 2</a>)."
+
+  image_sets_works_words_browse_help: "Browse alphabetically through more than 9,000 words in Dickinson’s poetry, as defined in the Emily Dickinson Lexicon, based in part on her dictionary, Webster's 1844 American Dictionary of the English Language."
 
   choose_own_edition: 'Choose an Existing Edition'
   edit_transcription_link: 'Please %{sign_in_link} to edit this transcription'
