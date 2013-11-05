@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
     before_filter :do_search
     #helper_method :image_set_path_from_work
 
+    def not_found
+        raise ActionController::RoutingError.new('Not Found')
+    end
+
     def check_edition_owner
         unless current_user == @edition.owner
             flash[:alert] = t :cannot_edit_edition

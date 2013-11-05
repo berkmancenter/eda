@@ -579,6 +579,14 @@ describe ( 'image_sets requests' ) {
           }
         }
       end
+
+      context ( 'with nonexistant id' ) {
+        it {
+          expect {
+            visit edition_image_set_path( w.edition, 31337 )
+          }.to raise_error( ActionController::RoutingError )
+        }
+      }
     }
 
     context 'reading view', :js => true do

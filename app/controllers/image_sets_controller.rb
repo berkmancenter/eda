@@ -22,6 +22,7 @@ class ImageSetsController < ApplicationController
         else
             @edition = Eda::Application.config.emily['default_edition']
         end
+
         if params[:collection_id]
             @collection = Collection.find(params[:collection_id])
         end
@@ -78,7 +79,9 @@ class ImageSetsController < ApplicationController
     private
 
     def load_image_set
-        @image_set = ImageSet.find(params[:id])
+        image_sets = ImageSet.where( id: params[:id] )
+        not_found if image_sets.empty?
+        @image_set = image_sets.first
     end
 
     def load_page_order_options
