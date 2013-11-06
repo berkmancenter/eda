@@ -73,6 +73,7 @@ Eda::Application.configure do
   }
 
   config.action_mailer.default_url_options = { :host => 'www.edickinson.org' }
+  Rails.application.routes.default_url_options[:host] = 'www.edickinson.org'
 
   config.action_mailer.delivery_method = :sendmail
   config.action_mailer.perform_deliveries = true
