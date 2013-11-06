@@ -36,6 +36,18 @@ describe ( 'image_sets requests' ) {
         }
       end
 
+      context ( 'with invalid image' ) {
+        let ( :image_set ) { ImageSet.find( 23 ) }
+
+        before {
+          visit edition_image_set_path( w.edition, image_set )
+        }
+
+        it {
+          page.status_code.should eq( 404 )
+        }
+      }
+
       context 'with valid next image' do
         let ( :image_set ) { w.image_set.children.first }
 
@@ -581,10 +593,12 @@ describe ( 'image_sets requests' ) {
       end
 
       context ( 'with nonexistant id' ) {
+        before {
+          visit edition_image_set_path( w.edition, 31337 )
+        }
+
         it {
-          expect {
-            visit edition_image_set_path( w.edition, 31337 )
-          }.to raise_error( ActionController::RoutingError )
+          page.status_code.should eq( 404 )
         }
       }
     }

@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
     before_filter :do_search
+    rescue_from ActionController::RoutingError, with: :render_not_found
     #helper_method :image_set_path_from_work
 
     def not_found
@@ -145,5 +146,11 @@ class ApplicationController < ActionController::Base
         end
         @other_editions_works = all_works[false]
         @variants = @this_editions_works.map{|w| w.variants}.flatten.compact.uniq if @this_editions_works
+    end
+
+    protected
+    
+    def render_not_found
+      render file: "#{Rails.root}/public/404", layout: false, status: 404
     end
 end

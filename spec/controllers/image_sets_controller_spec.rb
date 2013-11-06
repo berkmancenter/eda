@@ -16,9 +16,8 @@ describe ( ImageSetsController ) {
 
       context ( 'with nonexistant id' ) {
         it {
-          expect {
-            get :show, edition_id: e.id, id: 31337
-          }.to raise_error( ActionController::RoutingError )
+          get :show, edition_id: e.id, id: 31337
+          response.code.should eq( '404' )
         }
       }
     }

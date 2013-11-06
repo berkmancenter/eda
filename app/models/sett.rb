@@ -69,7 +69,7 @@ class Sett < ActiveRecord::Base
     end
 
     def leaves_containing(member)
-        leaves.where(nestable_id: member.id, nestable_type: member.class.name)
+        leaves.where(nestable_id: ( member.id unless member.nil? ), nestable_type: member.class.name)
     end
 
     def empty?
