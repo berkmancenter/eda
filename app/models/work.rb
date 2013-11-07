@@ -44,6 +44,9 @@ class Work < ActiveRecord::Base
 
     serialize :metadata
 
+    include WorkHelper
+    include Rails.application.routes.url_helpers
+
     searchable do
         integer :edition_id
         string(:number) { |work| work.number.to_s }
@@ -239,6 +242,21 @@ class Work < ActiveRecord::Base
         works.first
     end
 
+    def oai_dc_identifier
+        root_url + image_set_path_from_work(self)
+    end
+
+    def oai_dc_title
+        full_title
+    end
+
+    def sets
+        output = OaiRepository.sets.dup.select do |set|
+            set[:spec] == 'work' || set[:spec] == "edition:#{Work.find(id).edition.short_name.parameterize}"
+        end
+        output.map{|o| o.delete(:model); OAI::Set.new(o)}
+    end
+
     protected
 
     def metadata_size
@@ -250,7 +268,9 @@ class Work < ActiveRecord::Base
     private
     
     def setup_defaults
-        self.metadata ||= {}
+        if self.has_attribute?(:metadata)
+        self.metadata ||= {} 
+        end
     end
 
     def setup_work
