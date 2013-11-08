@@ -8,9 +8,9 @@
   <% end %>
 
   <% if !@collection.nil? %>
-    <%= link_to('', collection_image_set_path(@collection, image_set.parent, page: (image_set.position_in_level + 1)), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) unless image_set.image.url.nil? %>
+    <%= link_to('', collection_image_set_path(@collection, image_set.parent, image: image_set.image.id), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) unless image_set.image.url.nil? %>
   <% else %>
-    <%= link_to('', edition_image_set_url(edition, image_set.parent, page: (image_set.position_in_level + 1)), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) unless image_set.image.url.nil? %>
+    <%= link_to('', edition_image_set_url(edition, image_set.parent, image: image_set.image.id), { id: 'sbs-view', title: 'Reading View', alt: 'Reading View' }) unless image_set.image.url.nil? %>
   <% end %>
 
   <% if next_image %>
