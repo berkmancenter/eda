@@ -43,9 +43,9 @@ $(function() {
         } );
 
         $('.total-pages').html(numberOfPages);
-        var page;
-        if ( $.isNumeric( $.url().param('page') ) ) {
-            page = parseInt( $.url().param('page') );
+        var page = 1;
+        if ( $.isNumeric( $.url().param('page') ) && parseInt( $.url().param('page') ) > 0) {
+            page = Math.min(parseInt( $.url().param('page') ), numberOfPages);
         }
 
         sbsPages.turn({
