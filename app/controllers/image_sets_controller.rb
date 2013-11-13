@@ -106,13 +106,7 @@ class ImageSetsController < ApplicationController
       e_leaves = @edition.image_set.leaves_containing @image_set.image
       if e_leaves.count > 0
         @edition_image_set = edition_image_set_path( @edition, e_leaves.first )
-      else
-        # use default edition
-        # or should we hide the selector?
-        e_leaves = default_edition.image_set.leaves_containing @image_set.image
-        @edition_image_set = edition_image_set_path( default_edition, e_leaves.first )
       end
-
     end
 end
 
