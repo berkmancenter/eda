@@ -44,7 +44,8 @@ describe ( 'image_sets requests' ) {
         }
 
         it {
-          page.status_code.should eq( 404 )
+          # just show missing_image instead of raising 404
+          page.status_code.should eq( 200 )
         }
       }
 

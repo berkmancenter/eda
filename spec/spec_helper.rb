@@ -15,7 +15,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 Capybara.register_driver :slow_poltergeist do |app|
   Capybara::Poltergeist::Driver.new( app, {
-    timeout: 2.minutes,
+    timeout: 3.minutes,
     window_size: [ 1280, 1024 ]
   } )
 end

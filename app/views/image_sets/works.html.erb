@@ -1,4 +1,4 @@
-<% provide :title, "Manuscript View for #{@image_set.image.title}" unless @image_set.image.url.nil? %>
+<% provide :title, "Manuscript View for #{@image_set.image.title}" unless @image_missing %>
 <% provide :view_classes, 'three-panel minus-work-panel' %>
 
 <%= render partial: 'shared/search_panel' %>
