@@ -12,6 +12,8 @@ describe ( 'works/search' ) {
         end
       )
 
+      assign( :edition, nil )
+
       render
     }
 

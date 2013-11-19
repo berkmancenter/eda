@@ -44,7 +44,6 @@ describe 'works requests', :js => true do
 
           it {
             filter = page.evaluate_script "$('.dataTables_filter input').val()"
-            puts filter
             filter.should eq( 'sing' )
           }
 
