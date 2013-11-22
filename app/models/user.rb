@@ -41,6 +41,11 @@ class User < ActiveRecord::Base
         notable.notes.where(:owner_id => id).first
     end
 
+    def notes_for(notable)
+        return unless notable.notes
+        notable.notes.where(:owner_id => id)
+    end
+
     private
 
     def create_reading_list

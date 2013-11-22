@@ -26,9 +26,9 @@ class ImageSetsController < ApplicationController
         if params[:collection_id]
             @collection = Collection.find(params[:collection_id])
         end
-        unless user_signed_in? && @note = current_user.note_for(@image_set)
-            @note = @image_set.notes.new
-        end
+
+        @notes = current_user.notes_for( @image_set ) if user_signed_in?
+        @note = @image_set.notes.new
 
         if @image_set.leaf?
             pull_works_for_edition_image_set(@edition, @image_set)
