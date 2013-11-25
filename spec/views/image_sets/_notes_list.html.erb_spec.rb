@@ -28,4 +28,16 @@ describe ( 'image_sets/_notes_list' ) {
       should have_css 'li a.delete-note', text: 'x'
     }
   }
+
+  context ( 'nil notes' ) {
+    let ( :notes ) { nil }
+
+    before {
+      render partial: 'image_sets/notes_list', locals: { notes: notes }
+    }
+
+    it { 
+      should_not have_css 'ul.notes'
+    }
+  }
 }

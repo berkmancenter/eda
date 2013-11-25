@@ -1,8 +1,10 @@
-<ul class="notes">
-  <% notes.each do |note| %>
-    <li class="note">
-      <span class="note-text"><%= note.note %></span>
-      <a class="delete-note">x</a>
-    </li>
-  <% end %>
-</ul>
+<% if notes.present? %>
+  <ul class="notes">
+    <% notes.each do |note| %>
+      <li class="note">
+        <span class="note-text"><%= note.note %></span>
+        <a href="javascript:void" class="delete-note" title="Delete this Note">x</a>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
