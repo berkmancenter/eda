@@ -43,9 +43,19 @@ $(function() {
         } );
 
         $('.total-pages').html(numberOfPages);
-        var page;
-        if ( $.isNumeric( $.url().param('page') ) ) {
-            page = parseInt( $.url().param('page') );
+        var page = 1;
+        if ( $.isNumeric( $.url().param('page') ) && parseInt( $.url().param('page') ) > 0) {
+            page = Math.min(parseInt( $.url().param('page') ), numberOfPages);
+        }
+        var imageId;
+        if ( $.isNumeric( $.url().param('image') ) && parseInt( $.url().param('image') ) > 0) {
+            imageId = parseInt( $.url().param('image') );
+            $.each(images, function(i, image) {
+                if (image.id == imageId) {
+                    page = i + 1;
+                    return false;
+                }
+            });
         }
 
         sbsPages.turn({

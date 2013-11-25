@@ -140,6 +140,8 @@ $(document).ready(function() {
           sSearch: "Search within these results: "
         },
 
+        bStateSave: true,
+
         aoColumnDefs: [
         {
           sType: "natural",

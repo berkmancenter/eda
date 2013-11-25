@@ -118,9 +118,12 @@ $( function( ) {
         $(".stanza").toggleClass("linebreak-emily");
     });
 
-  $( '.new_note,.edit_note' ).on( 'ajax:success', function( ) {
-    var d = new Date();
-    $( '.note-save-result' ).css('display', 'inline').text( 'Saved' ).delay(1000).fadeOut(1000);
+  $( '#set-notes' ).on( 'ajax:success', function( e, result ) {
+    $( '.notes-container' ).html( result );
+  } );
+
+  $( '.new_note' ).on( 'ajax:success', function( e, result ) {
+    $( '#note_note' ).val( '' );
   } );
 
   function fullImageUrl(filename, width, height) {

@@ -26,14 +26,16 @@ class ImageSetsController < ApplicationController
         if params[:collection_id]
             @collection = Collection.find(params[:collection_id])
         end
-        unless user_signed_in? && @note = current_user.note_for(@image_set)
-            @note = @image_set.notes.new
-        end
+
+        @notes = current_user.notes_for( @image_set ) if user_signed_in?
+        @note = @image_set.notes.new
 
         if @image_set.leaf?
             pull_works_for_edition_image_set(@edition, @image_set)
             @next_image = @image_set.root.leaf_after(@image_set)
             @previous_image = @image_set.root.leaf_before(@image_set)
+            
+            @image_missing = @image_set.image.nil? || @image_set.image.url.nil?
 
             load_page_order_options
 
@@ -106,13 +108,7 @@ class ImageSetsController < ApplicationController
       e_leaves = @edition.image_set.leaves_containing @image_set.image
       if e_leaves.count > 0
         @edition_image_set = edition_image_set_path( @edition, e_leaves.first )
-      else
-        # use default edition
-        # or should we hide the selector?
-        e_leaves = default_edition.image_set.leaves_containing @image_set.image
-        @edition_image_set = edition_image_set_path( default_edition, e_leaves.first )
       end
-
     end
 end
 

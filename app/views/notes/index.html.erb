@@ -1,5 +1,5 @@
 <h2><%= t :my_notes %></h2>
-<% if @notes.empty? %>
+<% if @notes.nil? || @notes.empty? %>
     <p><%= t :no_notes %></p>
 <% else %>
 <ul>

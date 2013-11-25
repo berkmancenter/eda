@@ -1,5 +1,5 @@
-<section class="interactive-image <%= 'missing-image' if image_set.image.url.nil? %>">
-  <% if image_set.image.url.nil? %>
+<section class="interactive-image <%= 'missing-image' if @image_missing %>">
+  <% if @image_missing %>
     <%= image_tag asset_path("missing_image.jpg") %>
   <% else %>
       <div id="page-image"></div>

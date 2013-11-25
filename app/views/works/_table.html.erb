@@ -26,13 +26,13 @@
             public_works = (grouped_works[true] || []).compact
             private_works = (grouped_works.values_at(false, nil) || []).flatten.compact
         %>
-        <%= render partial: 'works/table_body', locals: { works: private_works, search: defined?(search) ? search : nil } %>
+        <%= render partial: 'works/table_body', locals: { works: private_works, search: defined?(search) ? search : nil, edition: edition } %>
         <% if cache_key
             cache cache_key do %>
-                <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil } %>
+                <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil, edition: edition } %>
             <% end %>
         <% else %>
-            <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil } %>
+            <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil, edition: edition } %>
         <% end %>
     </tbody>
     <tfoot>

@@ -7,6 +7,7 @@
       var images = [
       <% @image_set.all_images.each do |image| %>
           {
+              id: <%= image.id %>,
               imageFilename: "<%= image.url %>",
               linkUrl: "<%= image_set_link_url image %>",
               imageTitle:"<%= h image.title %>"
