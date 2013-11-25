@@ -1,7 +1,7 @@
 <div id="set-notes" class="<%= 'hidden' unless @image_missing %>" data-image-set-id="<%= params[ :id ] %>">
   <% if user_signed_in? %>
     <div class="notes-container">
-      <%= render partial: 'image_sets/notes_list', locals: { notes: @notes } %>
+      <%= render partial: 'image_sets/notes_list', locals: { sett: image_set, notes: @notes } %>
     </div>
     <%= render partial: 'shared/forms/note', locals:{ notable: image_set, note: note} %>
   <% else %>

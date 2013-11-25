@@ -3,7 +3,8 @@
     <% notes.each do |note| %>
       <li class="note">
         <span class="note-text"><%= note.note %></span>
-        <a href="javascript:void" class="delete-note" title="Delete this Note">x</a>
+        <%# might want to pass in generic sett path or change variable name to image_set from sett %>
+        <%= link_to "x", image_set_note_path( sett, note ), method: :delete, remote: true %>
       </li>
     <% end %>
   </ul>

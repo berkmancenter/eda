@@ -4,12 +4,14 @@ describe ( 'image_sets/_notes_list' ) {
   subject { rendered }
 
   context ( 'normal notes' ) {
+    let ( :sett ) { mock_model( ImageSet ) }
+
     let ( :notes ) {
       [ mock_model( Note ), mock_model( Note ) ]
     }
 
     before {
-      render partial: 'image_sets/notes_list', locals: { notes: notes }
+      render partial: 'image_sets/notes_list', locals: { sett: sett, notes: notes }
     }
 
     it {
@@ -33,7 +35,7 @@ describe ( 'image_sets/_notes_list' ) {
     let ( :notes ) { nil }
 
     before {
-      render partial: 'image_sets/notes_list', locals: { notes: notes }
+      render partial: 'image_sets/notes_list', locals: { sett: sett, notes: notes }
     }
 
     it { 

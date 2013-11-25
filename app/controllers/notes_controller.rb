@@ -8,7 +8,7 @@ class NotesController < ApplicationController
       if request.xhr?
         if @note.save!
           # return the updated html list
-          render( partial: 'image_sets/notes_list', locals: { notes: current_user.notes_for( @sett ) } )
+          render( partial: 'image_sets/notes_list', locals: { sett: @sett, notes: current_user.notes_for( @sett ) } )
         else
           render :text => 'false'
         end
@@ -25,6 +25,18 @@ class NotesController < ApplicationController
         else
             redirect_to :back
         end
+    end
+
+    def destroy
+      @note = Note.find(params[:id])
+      @note.destroy
+
+      if request.xhr?
+        # return the updated html list
+        render( partial: 'image_sets/notes_list', locals: { sett: @sett, notes: current_user.notes_for( @sett ) } )
+      else
+        redirect_to :back
+      end
     end
 
     private

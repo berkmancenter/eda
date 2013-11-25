@@ -577,6 +577,19 @@ describe ( 'image_sets requests' ) {
                 should have_css '.notes-container li.note', text: 'a test note'
               }
 
+              describe ( 'delete note' ) {
+                before {
+                  within( :css, 'li.note' ) do
+                    click_link 'x'
+                  end
+                }
+
+                it {
+                  snap
+                  should_not have_css '.notes-container li.note'
+                }
+              }
+
               describe ( 'view in My Notes' ) {
                 before {
                   visit my_notes_path
@@ -595,12 +608,20 @@ describe ( 'image_sets requests' ) {
                 before {
                   fill_in 'note_note', with: 'editing in same context'
                   click_button 'Save'
-                  visit my_notes_path
                 }
 
                 it {
-                  snap
-                  should have_css '.view li', count: 2
+                  should have_css '.notes-container li.note', count: 2
+                }
+
+                describe ( 'check out My Notes' ) {
+                  before {
+                    visit my_notes_path
+                  }
+
+                  it {
+                    should have_css '.view li', count: 2
+                  }
                 }
               }
             }
