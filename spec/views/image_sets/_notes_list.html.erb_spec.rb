@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe ( 'image_sets/_notes_list' ) {
+  let ( :sett ) { mock_model( ImageSet ) }
+
   subject { rendered }
 
   context ( 'normal notes' ) {
-    let ( :sett ) { mock_model( ImageSet ) }
-
     let ( :notes ) {
       [ mock_model( Note ), mock_model( Note ) ]
     }
