@@ -4,7 +4,7 @@
       <li class="note">
         <span class="note-text"><%= note.note %></span>
         <%# might want to pass in generic sett path or change variable name to image_set from sett %>
-        <%= link_to "x", image_set_note_path( sett, note ), method: :delete, remote: true %>
+        <%= link_to "x", image_set_note_path( sett, note ), method: :delete, remote: true, class: 'delete-note' %>
       </li>
     <% end %>
   </ul>
