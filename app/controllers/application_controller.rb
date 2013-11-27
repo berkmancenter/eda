@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
     #helper_method :image_set_path_from_work
 
     def not_found
-        raise ActionController::RoutingError.new('Not Found')
+        raise ActionController::RoutingError.new('Not Found') unless Rails.env.development?
     end
 
     def check_edition_owner

@@ -1,5 +1,5 @@
 <div id="image-set-info">
-  <% unless image.metadata.nil? %>
+  <% unless image.nil? || image.metadata.nil? %>
   <dl class="credits">
       <dt class="image-credits">Credits</dt><dd><%= raw image.credits %></dd>
   </dl>
@@ -9,7 +9,7 @@
           <h2>Image Metadata</h2>
           <dl><%= render partial: 'shared/metadata', locals: { object: image } %></dl>
       </div>
-      <% if image.url %>
+      <% unless @image_missing %>
           <%= link_to t(:download_image), download_image_path(image), class: 'eda-btn-light' %>
       <% end %>
   </div>

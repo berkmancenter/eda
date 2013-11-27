@@ -1,5 +1,10 @@
 <div id="interactive-image-panel" class="panel">
-    <h1 title="<%= image_set.image.url %>"><%= raw image_set.image && image_set.image.title ? image_set.image.title : '&nbsp;' %></h1>
+  <% if @image_missing %>
+    <h1>&nbsp;</h1>
+  <% else %>
+    <h1 title="<%= image_set.image.url %>"><%= image_set.image.title %></h1>
+  <% end %>
+
     <%= render partial: "image_sets/interactive_image", locals: { image_set: image_set } %>
 
     <div class="image-drawer bottom drawer">
@@ -12,11 +17,11 @@
           <%= render partial: 'image_sets/order_selector' %>
         </div>
 
-        <% if image_set.image.url.present? %>
+        <% unless @image_missing %>
           <a href="#" class="one bottom drawer-handle" data-drawer="image-set-info"><%= t :image_info %></a>
         <% end %>
 
-        <a href="#" class="two bottom drawer-handle <%= 'hidden' unless image_set.image.url.nil? %>" data-drawer="set-notes"><%= t :my_notes %></a>
+        <a href="#" class="two bottom drawer-handle <%= 'hidden' unless @image_missing %>" data-drawer="set-notes"><%= t :my_notes %></a>
       </div>
 
       <div class="image-drawer-content">

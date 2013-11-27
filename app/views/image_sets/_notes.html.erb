@@ -1,4 +1,4 @@
-<div id="set-notes" class="<%= 'hidden' unless image_set.image.url.nil? %>">
+<div id="set-notes" class="<%= 'hidden' unless @image_missing %>">
   <% if user_signed_in? %>
       <%= render partial: 'shared/forms/note', locals:{ notable: image_set, note: note} %>
   <% else %>
