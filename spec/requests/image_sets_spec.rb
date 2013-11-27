@@ -548,7 +548,11 @@ describe ( 'image_sets requests' ) {
             }
 
             it {
-              should have_css 'textarea[name="note[note]"]'
+              should have_css '#set-notes .notes-container'
+            }
+
+            it {
+              should have_css 'input[name="note[note]"]'
             }
 
             it {
@@ -566,7 +570,24 @@ describe ( 'image_sets requests' ) {
               }
 
               it {
-                should have_css '.note-save-result', text: 'Saved'
+                should_not have_css '.note-save-result', text: 'Saved'
+              }
+
+              it {
+                should have_css '.notes-container li.note', text: 'a test note'
+              }
+
+              describe ( 'delete note' ) {
+                before {
+                  within( :css, 'li.note' ) do
+                    click_link 'x'
+                  end
+                }
+
+                it {
+                  snap
+                  should_not have_css '.notes-container li.note'
+                }
               }
 
               describe ( 'view in My Notes' ) {
@@ -587,65 +608,24 @@ describe ( 'image_sets requests' ) {
                 before {
                   fill_in 'note_note', with: 'editing in same context'
                   click_button 'Save'
-                  visit my_notes_path
                 }
 
                 it {
-                  snap
-                  should have_css '.view li', count: 1
+                  should have_css '.notes-container li.note', count: 2
+                }
+
+                describe ( 'check out My Notes' ) {
+                  before {
+                    visit my_notes_path
+                  }
+
+                  it {
+                    should have_css '.view li', count: 2
+                  }
                 }
               }
             }
           }
-
-#          describe ( 'edit note on public edition' ) {
-#            before {
-#              click_link 'My Notes'
-#              fill_in 'note_note', with: 'a test note'
-#              click_button 'Save'
-#            }
-#
-#            it {
-#              find( '#note_note' ).value.should eq( 'a test note' )
-#            }
-#
-#            describe ( 'persists after refresh' ) {
-#              it {
-#                visit current_path
-#                find( '#note_note', visible: false ).value.should eq( 'a test note' )
-#              }
-#            }
-#
-#            describe ( 'update existing note' ) {
-#              before {
-#                fill_in 'note_note', with: 'a test note 2'
-#                click_button 'Save'
-#              }
-#
-#              it {
-#                find( '#note_note' ).value.should eq( 'a test note 2' )
-#              }
-#
-#              describe ( 'persists after refresh' ) {
-#                it {
-#                  visit current_path
-#                  find( '#note_note', visible: false ).value.should eq( 'a test note 2' )
-#                }
-#              }
-#
-#              describe ( 'my notes' ) {
-#                before {
-#                  visit my_notes_path
-#                }
-#
-#                it {
-#                  should have_css 'h2', text: 'My Notes'
-#                  should have_css 'li p', text: 'a test note 2'
-#                }
-#              }
-#
-#            }
-#          }
         }
       end
 
