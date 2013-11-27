@@ -23,7 +23,7 @@ class Image < ActiveRecord::Base
 
     def published
         # Not published if Amherst or blank
-        image = Image.find(id)
+        image = ::Image.find(id)
         !image.blank? && image.collection && image.collection.name != 'Amherst College'
     end
 
@@ -37,7 +37,7 @@ class Image < ActiveRecord::Base
     end
 
     def oai_dc_identifier
-        collection = Image.find(id).collection
+        collection = ::Image.find(id).collection
         leaf = collection.leaves_containing(self).first
         collection_image_set_url(collection, leaf, page: leaf.position_in_level + 1)
     end
