@@ -243,7 +243,7 @@ class Work < ActiveRecord::Base
     end
 
     def oai_dc_identifier
-        root_url + image_set_path_from_work(self)
+        image_set_url_from_work(self)
     end
 
     def oai_dc_title
