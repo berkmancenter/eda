@@ -45,6 +45,7 @@ class Work < ActiveRecord::Base
     serialize :metadata
 
     include WorkHelper
+    include ImagesHelper
     include Rails.application.routes.url_helpers
 
     searchable do
@@ -250,8 +251,18 @@ class Work < ActiveRecord::Base
         full_title
     end
 
-    def oai_mods_identifier
+    alias_method :mods_title, :oai_dc_title
+
+    def mods_identifier
         "#{model.class.name}_#{id}"
+    end
+
+    def mods_full_image
+      large_jpg_url(image_set.all_images.first) unless image_set.all_images.empty?
+    end
+
+    def mods_thumbnail
+      preview_url(image_set.all_images.first) unless image_set.all_images.empty?
     end
 
     def sets

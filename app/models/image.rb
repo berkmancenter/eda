@@ -20,11 +20,12 @@ class Image < ActiveRecord::Base
     serialize :metadata
     
     include Rails.application.routes.url_helpers
+    include ImagesHelper
 
     def published
         # Not published if Amherst or blank
         image = ::Image.find(id)
-        !image.blank? && image.collection && image.collection.name != 'Amherst College'
+        !image.blank?# && image.collection && image.collection.name != 'Amherst College'
     end
 
     def blank?
@@ -32,8 +33,10 @@ class Image < ActiveRecord::Base
     end
 
     def collection
-        collection_set = image_sets.find{|s| s.root.is_a? Collection}
-        collection_set.root if collection_set
+        #cache_key = "imagecollection-image-#{id}-#{updated_at.try(:utc).try(:to_s, :number)}"
+        #Rails.cache.fetch(cache_key) do
+        Collection.all.find{|c| !c.leaves_containing(self).empty?}
+        #end
     end
 
     def oai_dc_identifier
@@ -44,6 +47,20 @@ class Image < ActiveRecord::Base
 
     def oai_dc_title
         title
+    end
+
+    def mods_identifier
+        "#{model.class.name}_#{id}"
+    end
+
+    alias_method :mods_title, :oai_dc_title
+
+    def mods_full_image
+      large_jpg_url(self)
+    end
+
+    def mods_thumbnail
+      preview_url(self)
     end
 
     def sets
