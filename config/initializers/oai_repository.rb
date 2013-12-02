@@ -79,6 +79,7 @@ OaiRepository.setup do |config|
   # config.additional_formats = [
   #   OAI::Provider::Metadata::RIFCS
   # ]
-  config.additional_formats = []
+  require 'mods_format.rb'
+  config.additional_formats = [OAI::Provider::Metadata::MODS]
 
 end
