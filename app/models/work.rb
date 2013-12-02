@@ -250,6 +250,10 @@ class Work < ActiveRecord::Base
         full_title
     end
 
+    def oai_mods_identifier
+        "#{model.class.name}_#{id}"
+    end
+
     def sets
         output = OaiRepository.sets.dup.select do |set|
             set[:spec] == 'work' || set[:spec] == "edition:#{Work.find(id).edition.short_name.parameterize}"
