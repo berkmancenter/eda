@@ -110,8 +110,7 @@ class WorksController < ApplicationController
     end
 
     def edit
-        setup_image_set_view_variables
-        render 'image_sets/works', layout: !request.xhr?
+        @image_sets = @work.image_set.leaves
     end
 
     def update

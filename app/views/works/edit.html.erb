@@ -1,0 +1,23 @@
+<%= semantic_form_for @work do |f| %>
+    <%= f.inputs do %>
+        <%= f.input :number %>
+        <%= f.input :variant %>
+        <%= f.input :title %>
+        <%= f.input :date %>
+    <% end %>
+    <%= f.actions do %>
+        <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>
+    <% end %>
+<% end %>
+
+<ol class="sortable_tree"
+    data-rebuild_url="<%= rebuild_work_image_sets_url(@work) %>">
+    <%= build_server_tree(
+        @image_sets,
+        type: :sortable,
+        edition: @edition,
+        max_levels: 1,
+        title: :name,
+        rebuild_url: rebuild_work_image_sets_url(@work)
+    ) %>
+</ol>
