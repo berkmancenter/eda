@@ -1,3 +1,4 @@
+if Sett.table_exists?
 OaiRepository.setup do |config|
 
   config.repository_name = 'Emily Dickinson Archive'
@@ -81,4 +82,5 @@ OaiRepository.setup do |config|
   # ]
   config.additional_formats = []
 
+end
 end
