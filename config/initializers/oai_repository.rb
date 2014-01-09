@@ -1,3 +1,4 @@
+if Sett.table_exists?
 OaiRepository.setup do |config|
 
   config.repository_name = 'Emily Dickinson Archive'
@@ -66,4 +67,5 @@ OaiRepository.setup do |config|
   require 'mods_format.rb'
   config.additional_formats = [OAI::Provider::Metadata::MODS]
 
+end
 end
