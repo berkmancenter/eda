@@ -243,35 +243,6 @@ class Work < ActiveRecord::Base
         works.first
     end
 
-    def oai_dc_identifier
-        image_set_url_from_work(self)
-    end
-
-    def oai_dc_title
-        full_title
-    end
-
-    alias_method :mods_title, :oai_dc_title
-
-    def mods_identifier
-        "#{model.class.name}_#{id}"
-    end
-
-    def mods_full_image
-      large_jpg_url(image_set.all_images.first) unless image_set.all_images.empty?
-    end
-
-    def mods_thumbnail
-      preview_url(image_set.all_images.first) unless image_set.all_images.empty?
-    end
-
-    def sets
-        output = OaiRepository.sets.dup.select do |set|
-            set[:spec] == 'work' || set[:spec] == "edition:#{Work.find(id).edition.short_name.parameterize}"
-        end
-        output.map{|o| o.delete(:model); OAI::Set.new(o)}
-    end
-
     protected
 
     def metadata_size

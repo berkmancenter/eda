@@ -23,14 +23,14 @@ OaiRepository.setup do |config|
   config.admin_email = 'jclark@cyber.law.harvard.edu'
 
   # The number of records shown at a time (when doing a ListRecords)
-  config.limit = 100
+  config.limit = 25
 
   # The values for "models" should be the class name of the ActiveRecord model 
   # class that is being identified with the given set. It doesn't actually have
   # to be a ActiveRecord model class, but it should act like one.
   #
   # You must supply at least one model.
-  config.models = [ Work, Image ]
+  config.models = [ Image ]
 
   # List the sets (and the ActiveRecord model they belong to). E.g.
   #
@@ -47,27 +47,11 @@ OaiRepository.setup do |config|
   #     description: 'Things that are services'
   #   }
   # ]
-  #
-  config.sets = [
-      {
-          spec: 'work',
-          name: 'Works',
-          model: Work
-      },
-      {
-          spec: 'image',
-          name: 'Images',
-          model: Image
-      },
-  ]
+
+  config.sets = []
   Collection.roots.each do |c|
       config.sets << { spec: "collection:#{c.name.parameterize}", name: c.name, model: Image }
   end
-  Edition.is_public.each do |e|
-      config.sets << { spec: "edition:#{e.short_name.parameterize}", name: e.name, model: Work }
-  end
-
-
 
   # By default, an OAI repository must emit its records in OAI_DC (Dublin Core)
   # format. If you want to provide other output formats for your repository
