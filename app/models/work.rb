@@ -49,7 +49,7 @@ class Work < ActiveRecord::Base
 
     searchable do
         integer :edition_id
-        string(:number) { |work| work.number.to_s }
+        text(:number) { |work| work.number.to_s }
         text :title
         text :lines, stored: true do
             lines.map{|l| l.text }
