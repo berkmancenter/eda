@@ -54,6 +54,11 @@ class Image < ActiveRecord::Base
     end
 
     def text_credits
-        ActionController::Base.helpers.strip_tags(credits.gsub('<br />', "\n"))
+      ActionController::Base.helpers.strip_tags(
+        self.credits.gsub('<br />', "\n").gsub(
+          /<a href="(?<url>[^"]*)" target="_blank">(?<text>[^<]*)<\/a>/,
+          "\\k<text>\n\\k<url>"
+        )
+      )
     end
 end
