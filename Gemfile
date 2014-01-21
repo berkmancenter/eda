@@ -26,7 +26,7 @@ gem 'naturally'
 gem 'roman-numerals'
 gem 'exception_notification'
 gem 'autoprefixer-rails'
-gem 'oai_repository', :git => 'https://github.com/IntersectAustralia/oai_repository.git', :ref => 'b4376ec571ce04fbed00b759bec3201721e39a31'
+gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository', :ref => 'ab3e018f59c1c53dcef4736476a56bac179e45f0'
 
 # For MODS generation
 gem 'builder'

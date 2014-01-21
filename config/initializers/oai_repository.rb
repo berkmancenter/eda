@@ -24,7 +24,7 @@ OaiRepository.setup do |config|
   config.admin_email = 'jclark@cyber.law.harvard.edu'
 
   # The number of records shown at a time (when doing a ListRecords)
-  config.limit = 25
+  config.limit = 5
 
   # The values for "models" should be the class name of the ActiveRecord model 
   # class that is being identified with the given set. It doesn't actually have

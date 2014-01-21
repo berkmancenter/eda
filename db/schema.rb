@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130821160430) do
+ActiveRecord::Schema.define(:version => 20140115175124) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_variant_id"
@@ -56,9 +56,12 @@ ActiveRecord::Schema.define(:version => 20130821160430) do
     t.integer  "full_height"
     t.integer  "web_width"
     t.integer  "web_height"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "collection_id"
   end
+
+  add_index "images", ["collection_id"], :name => "index_images_on_collection_id"
 
   create_table "line_modifiers", :force => true do |t|
     t.integer  "work_id"
