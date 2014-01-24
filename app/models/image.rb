@@ -26,7 +26,7 @@ class Image < ActiveRecord::Base
     def published
         # Not published if Amherst or blank
         return false if self.blank?
-        if collection && collection.name == 'Amherst College'
+        if self.collection && self.collection.name == 'Amherst College'
           return false
         else
           return true
@@ -63,7 +63,13 @@ class Image < ActiveRecord::Base
     end
 
     def text_credits
-        ActionController::Base.helpers.strip_tags(self.credits.gsub('<br />', "\n"))
+      # Looks complex, but just moves URLs out into text on next line
+      ActionController::Base.helpers.strip_tags(
+        self.credits.gsub('<br />', "\n").gsub(
+          /<a href="(?<url>[^"]*)" target="_blank">(?<text>[^<]*)<\/a>/,
+          "\\k<text>\n\\k<url>"
+        )
+      )
     end
 
     def to_mods
@@ -102,7 +108,7 @@ class Image < ActiveRecord::Base
         xml.tag! :genre, 'Poems-United States-19th century'
 
         xml.tag! :originInfo do
-          years = (franklin_works.all + johnson_works.all).map{|w| w.date.year}.uniq
+          years = (franklin_works.all + johnson_works.all).map{|w| w.date.year unless w.date.nil?}.compact.uniq
           years.each do |year|
             xml.tag! :dateCreated, year, qualifier: 'questionable'
           end
@@ -113,7 +119,11 @@ class Image < ActiveRecord::Base
         end
 
         xml.tag! :note, title
-        xml.tag! :note, text_credits
+        xml.tag! :note, "Credits: #{text_credits}"
+        franklin_works.all.uniq(&:number).each do |fw|
+          xml.tag! :note,
+            "Publication History (from Franklin Variorum 1998): #{ActionController::Base.helpers.strip_tags(fw.metadata['Publications'])}"
+        end
 
         xml.tag! :subject, authority: 'lcsh' do
           xml.tag! :topic, 'American poetry-19th century'

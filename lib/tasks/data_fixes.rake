@@ -1,12 +1,38 @@
 namespace :emily do
   namespace :data_changes do
 
-    desc 'Add EDA credits to all images'
-    task :eda_credits => [:environment] do 
-      Image.where{url != nil}.each do |image|
-        image.credits += '<br />' unless image.credits.match(/<br ?\/>$/)
-        image.credits += '<br />Emily Dickinson Archive<br />http://www.edickinson.org<br />Copyright & Terms of Use:<br />CC BY-NC-ND 3.0<br />http://www.edickinson.org/terms'
-        image.save!
+    desc 'Update images from smaller libs'
+    task :update_image_metadata, [:input_file] => [:environment] do |t, args|
+      require 'csv'
+      input_file = args[:input_file] || File.join(Eda::Application.config.emily['data_directory'], 'new_image_names.csv')
+      not_found_image_ids = []
+      csv = CSV.read(input_file, headers: true)
+      csv.each do |row|
+        url = row['image_id'].sub(/\.tiff?/i, '').strip
+        image = Image.find_by_url(url)
+        image = Image.find_by_title(url) unless image
+        if image
+          image.metadata['Library ID'] = row['library_id']
+          image.title = row['description']
+          image.save!
+        else
+          not_found_image_ids << url
+          next
+        end
+      end
+      puts "Not found: #{not_found_image_ids}"
+    end
+
+    desc 'Add back publication history'
+    task :add_publication_history, [:input_file] => [:environment] do |t, args|
+      require 'csv'
+      input_file = args[:input_file] || File.join(Eda::Application.config.emily['data_directory'], 'publication_history.csv')
+      franklin = Edition.find_by_work_number_prefix('F')
+      CSV.foreach(input_file) do |row|
+        franklin.works.where(number: row[0]).each do |work|
+          work.metadata['Publications'] = row[1]
+          work.save
+        end
       end
     end
 
@@ -80,6 +106,9 @@ namespace :emily do
       remove_image 'asc-4339-1'
       remove_image 'asc-4339-2'
       fix_amherst_order 72432
+
+      remove_image 'F807B-typed-back'
+      remove_image 'F807B-typed-front'
     end
   end
 end

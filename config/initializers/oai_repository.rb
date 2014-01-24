@@ -51,7 +51,8 @@ OaiRepository.setup do |config|
 
   config.sets = []
   Collection.roots.each do |c|
-      config.sets << { spec: "collection:#{c.name.parameterize}", name: c.name, model: Image }
+    next if c.name == 'Amherst College'
+    config.sets << { spec: "collection:#{c.name.parameterize}", name: c.name, model: Image }
   end
 
   # By default, an OAI repository must emit its records in OAI_DC (Dublin Core)

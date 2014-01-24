@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
             case params[:limit_to_field]
             when 'work_text'
                 fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
+                    fields(:lines, :number, :title => 2.0)
                 end
             when 'title'
                 fulltext params[:q] do
@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
                 end
             else
                 fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
+                    fields(:lines, :number, :title => 2.0)
                 end
             end
             paginate page: 1, per_page: Work.count
