@@ -129,12 +129,12 @@ class Image < ActiveRecord::Base
           xml.tag! :topic, 'American poetry-19th century'
         end
 
-        franklin_works.each do |work|
+        franklin_works.uniq.each do |work|
           xml.tag! :relatedItem, type: 'isReferencedBy' do
             xml.tag! :note, "#{franklin.name}, #{work.full_id}"
           end
         end
-        johnson_works.each do |work|
+        johnson_works.uniq.each do |work|
           xml.tag! :relatedItem, type: 'isReferencedBy' do
             xml.tag! :note, "#{johnson.name}, #{work.full_id}"
           end
