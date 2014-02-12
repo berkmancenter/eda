@@ -91,11 +91,13 @@ class Image < ActiveRecord::Base
 
         franklin_titles = franklin_works.map(&:title).uniq
         johnson_titles = johnson_works.map(&:title).uniq - franklin_titles
-        xml.tag! :titleInfo do
-          franklin_titles.each do |title|
+        franklin_titles.each do |title|
+          xml.tag! :titleInfo do
             xml.tag! :title, title 
           end
-          johnson_titles.each do |title|
+        end
+        johnson_titles.each do |title|
+          xml.tag! :titleInfo do
             xml.tag! :title, title, type: 'alternative'
           end
         end
@@ -125,10 +127,6 @@ class Image < ActiveRecord::Base
 
         xml.tag! :note, title
         xml.tag! :note, "Credits: #{text_credits}"
-        franklin_works.all.uniq(&:number).each do |fw|
-          xml.tag! :note,
-            "Publication History (from Franklin Variorum 1998): #{ActionController::Base.helpers.strip_tags(fw.metadata['Publications'])}"
-        end
 
         xml.tag! :subject, authority: 'lcsh' do
           xml.tag! :topic, 'American poetry-19th century'
@@ -152,6 +150,7 @@ class Image < ActiveRecord::Base
         end
 
         xml.tag! :location do
+          xml.tag! :physicalLocation, collection.metadata['Long Name']
           xml.tag! :url,
             edition_image_set_url(franklin, franklin.image_set.leaves_containing(self).first),
             displayLabel: "View in the Emily Dickinson Archive",
@@ -159,7 +158,6 @@ class Image < ActiveRecord::Base
             access: 'object in context'
           xml.tag! :url, mods_full_image, :displayLabel => "Full Image"
           xml.tag! :url, mods_thumbnail, :displayLabel => "Thumbnail"
-          xml.tag! :physicalLocation, collection.metadata['Long Name']
         end
       end
       xml.target!
