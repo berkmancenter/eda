@@ -16,6 +16,7 @@
         </tr>
     </thead>
     <tbody>
+    <% unless works.empty? %>
         <%
             if works.is_a? ActiveRecord::Relation 
                 cache_key = cache_key_for_multiple(works.joins(:edition).where(edition: {public: true}))
@@ -34,6 +35,7 @@
         <% else %>
             <%= render partial: 'works/table_body', locals: { works: public_works, search: defined?(search) ? search : nil, edition: edition } %>
         <% end %>
+    <% end %>
     </tbody>
     <tfoot>
         <tr>

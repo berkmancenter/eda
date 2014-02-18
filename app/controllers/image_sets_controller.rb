@@ -81,9 +81,7 @@ class ImageSetsController < ApplicationController
     private
 
     def load_image_set
-        image_sets = ImageSet.where( id: params[:id] )
-        not_found if image_sets.empty?
-        @image_set = image_sets.first
+        @image_set = ImageSet.find(params[:id])
     end
 
     def load_page_order_options

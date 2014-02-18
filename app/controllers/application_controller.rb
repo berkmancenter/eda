@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
     before_filter :do_search
-    rescue_from ActionController::RoutingError, with: :render_not_found
     #helper_method :image_set_path_from_work
 
     def not_found
