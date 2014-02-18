@@ -97,8 +97,8 @@ class Image < ActiveRecord::Base
           end
         end
         johnson_titles.each do |title|
-          xml.tag! :titleInfo do
-            xml.tag! :title, title, type: 'alternative'
+          xml.tag! :titleInfo, type: 'alternative' do
+            xml.tag! :title, title
           end
         end
 
