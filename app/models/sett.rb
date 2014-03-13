@@ -26,7 +26,7 @@ class Sett < ActiveRecord::Base
     validates :name, length: { maximum: 1000 }
 
     serialize :metadata
-    acts_as_nested_set
+    has_ancestry
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
