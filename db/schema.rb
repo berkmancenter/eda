@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(:version => 20140313153057) do
     t.integer  "owner_id"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
-    t.integer  "order"
+    t.integer  "level_order"
     t.string   "ancestry"
     t.boolean  "is_leaf",       :default => true
   end

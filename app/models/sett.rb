@@ -29,7 +29,8 @@ class Sett < ActiveRecord::Base
     #acts_as_nested_set
     has_ancestry
     include RankedModel
-    ranks :level_order
+    ranks :level_order, with_same: :parent_id
+    default_scope rank(:level_order)
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
@@ -85,6 +86,16 @@ class Sett < ActiveRecord::Base
 
     def move_to_child_of(node)
         self.parent = node
+    end
+
+    def move_right
+      self.update_attribute :level_order_position, :down
+      self
+    end
+
+    def move_left
+      self.update_attribute :level_order_position, :up
+      self
     end
 
     def leaves
