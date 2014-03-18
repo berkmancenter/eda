@@ -27,9 +27,9 @@ class Sett < ActiveRecord::Base
 
     serialize :metadata
     #acts_as_nested_set
-   # has_ancestry
-   # include RankedModel
-   # ranks :order
+    has_ancestry
+    include RankedModel
+    ranks :level_order
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
@@ -81,6 +81,10 @@ class Sett < ActiveRecord::Base
 
     def leaf?
         is_leaf
+    end
+
+    def move_to_child_of(node)
+        self.parent = node
     end
 
     def leaves

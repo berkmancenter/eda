@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140313165034) do
+ActiveRecord::Schema.define(:version => 20140313153057) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_variant_id"
@@ -127,9 +127,9 @@ ActiveRecord::Schema.define(:version => 20140313165034) do
     t.integer  "owner_id"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
-    t.boolean  "is_leaf",       :default => true
-    t.string   "ancestry"
     t.integer  "order"
+    t.string   "ancestry"
+    t.boolean  "is_leaf",       :default => true
   end
 
   add_index "setts", ["ancestry"], :name => "index_setts_on_ancestry"
