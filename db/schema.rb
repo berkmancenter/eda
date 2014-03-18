@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140313153057) do
+ActiveRecord::Schema.define(:version => 20140313165034) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_variant_id"
@@ -125,12 +125,15 @@ ActiveRecord::Schema.define(:version => 20140313153057) do
     t.integer  "nestable_id"
     t.string   "nestable_type"
     t.integer  "owner_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "is_leaf",       :default => true
     t.string   "ancestry"
+    t.integer  "order"
   end
 
   add_index "setts", ["ancestry"], :name => "index_setts_on_ancestry"
+  add_index "setts", ["is_leaf"], :name => "index_setts_on_is_leaf"
   add_index "setts", ["lft"], :name => "index_setts_on_lft"
   add_index "setts", ["nestable_id"], :name => "index_setts_on_nestable_id"
   add_index "setts", ["nestable_type"], :name => "index_setts_on_nestable_type"

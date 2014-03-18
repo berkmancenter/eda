@@ -26,7 +26,10 @@ class Sett < ActiveRecord::Base
     validates :name, length: { maximum: 1000 }
 
     serialize :metadata
-    has_ancestry
+    #acts_as_nested_set
+   # has_ancestry
+   # include RankedModel
+   # ranks :order
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
@@ -74,6 +77,18 @@ class Sett < ActiveRecord::Base
 
     def empty?
         leaves.empty?
+    end
+
+    def leaf?
+        is_leaf
+    end
+
+    def leaves
+        self.descendants.where(is_leaf: true)
+    end
+
+    def self_and_descendants
+        [self] + descendants
     end
 
     def duplicate

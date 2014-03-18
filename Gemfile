@@ -26,7 +26,9 @@ gem 'roman-numerals'
 gem 'exception_notification'
 gem 'autoprefixer-rails'
 gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository', :ref => 'ab3e018f59c1c53dcef4736476a56bac179e45f0'
+gem 'awesome_nested_set'
 gem 'ancestry'
+gem 'ranked-model'
 
 # For MODS generation
 gem 'builder'
