@@ -4,13 +4,19 @@ class AddAncestryToSetts < ActiveRecord::Migration
     add_index :setts, :ancestry
     add_column :setts, :is_leaf, :boolean, :default => true
     add_index :setts, :is_leaf
+    add_column :setts, :ancestry_depth, :integer, :default => 0
+    add_index :setts, :ancestry_depth
 
-    parent_ids = Sett.select(:parent_id).uniq.map{|s| s.read_attribute(:parent_id)}.compact
+    parent_ids = Sett.unscoped.select(:parent_id).uniq.map{|s| s.read_attribute(:parent_id)}.compact
     Sett.where(:id => parent_ids).each do |sett|
       sett.update_column :is_leaf, false
     end
 
+    puts "
+    Don't forget:
     Sett.build_ancestry_from_parent_ids!
+    Sett.rebuild_depth_cache!
+    "
   end
 
   def down
@@ -18,5 +24,7 @@ class AddAncestryToSetts < ActiveRecord::Migration
     remove_column :setts, :ancestry
     remove_index :setts, :is_leaf
     remove_column :setts, :is_leaf
+    remove_column :setts, :ancestry_depth
+    remove_index :setts, :ancestry_depth
   end
 end

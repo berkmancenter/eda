@@ -125,14 +125,16 @@ ActiveRecord::Schema.define(:version => 20140313153057) do
     t.integer  "nestable_id"
     t.string   "nestable_type"
     t.integer  "owner_id"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "level_order"
     t.string   "ancestry"
-    t.boolean  "is_leaf",       :default => true
+    t.boolean  "is_leaf",        :default => true
+    t.integer  "ancestry_depth", :default => 0
   end
 
   add_index "setts", ["ancestry"], :name => "index_setts_on_ancestry"
+  add_index "setts", ["ancestry_depth"], :name => "index_setts_on_ancestry_depth"
   add_index "setts", ["is_leaf"], :name => "index_setts_on_is_leaf"
   add_index "setts", ["lft"], :name => "index_setts_on_lft"
   add_index "setts", ["nestable_id"], :name => "index_setts_on_nestable_id"

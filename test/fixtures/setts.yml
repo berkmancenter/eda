@@ -1,0 +1,150 @@
+# 1
+#   2
+#     3
+#       4
+#     5
+#   6
+#     7
+#   8
+#     9
+#     10
+#     11
+#       12
+#         13
+#         14
+
+# 15
+#   16
+#   17
+#     18
+#   19
+root:
+  id: 1
+  is_leaf: false
+  ancestry_depth: 0
+  level_order: 1
+
+two:
+  id: 2
+  ancestry: '1'
+  is_leaf: false
+  level_order: 2
+  ancestry_depth: 1
+
+three:
+  id: 3
+  ancestry: '1/2'
+  is_leaf: false
+  level_order: 5
+  ancestry_depth: 2
+
+four:
+  id: 4
+  ancestry: '1/2/3'
+  is_leaf: true
+  level_order: 11
+  ancestry_depth: 3
+
+five:
+  id: 5
+  ancestry: '1/2'
+  is_leaf: true
+  level_order: 6
+  ancestry_depth: 2
+
+six:
+  id: 6
+  ancestry: '1'
+  is_leaf: false
+  level_order: 3
+  ancestry_depth: 1
+
+seven:
+  id: 7
+  ancestry: '1/6'
+  is_leaf: true
+  level_order: 7
+  ancestry_depth: 2
+
+eight:
+  id: 8
+  ancestry: '1'
+  is_leaf: false
+  level_order: 4
+  ancestry_depth: 1
+
+nine:
+  id: 9
+  ancestry: '1/8'
+  is_leaf: true
+  level_order: 8
+  ancestry_depth: 2
+
+ten:
+  id: 10
+  ancestry: '1/8'
+  is_leaf: true
+  level_order: 9
+  ancestry_depth: 2
+
+eleven:
+  id: 11
+  ancestry: '1/8'
+  is_leaf: false
+  level_order: 10
+  ancestry_depth: 2
+
+twelve:
+  id: 12
+  ancestry: '1/8/11'
+  is_leaf: false
+  level_order: 12
+  ancestry_depth: 3
+
+thirteen:
+  id: 13
+  ancestry: '1/8/11/12'
+  is_leaf: true
+  level_order: 13
+  ancestry_depth: 4
+
+fourteen:
+  id: 14
+  ancestry: '1/8/11/12'
+  is_leaf: true
+  level_order: 14
+  ancestry_depth: 4
+
+fifteen:
+  id: 15
+  is_leaf: false
+  level_order: 15
+  ancestry_depth: 0
+
+sixteen:
+  id: 16
+  ancestry: '15'
+  is_leaf: true
+  level_order: 16
+  ancestry_depth: 1
+
+seventeen:
+  id: 17
+  ancestry: '15'
+  is_leaf: false
+  level_order: 17
+  ancestry_depth: 1
+
+eighteen:
+  id: 18
+  ancestry: '15/17'
+  is_leaf: true
+  level_order: 19
+  ancestry_depth: 2
+
+nineteen:
+  id: 19
+  ancestry: '15'
+  is_leaf: true
+  level_order: 18
+  ancestry_depth: 1
