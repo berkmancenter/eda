@@ -5,7 +5,7 @@ class CollectionsController < ApplicationController
         @collections = Collection.roots.order(:name)
     end
     def show
-        @collection = Collection.find(param[:id])
+        @collection = Collection.find(params[:id])
     end
 
     def sortable_model

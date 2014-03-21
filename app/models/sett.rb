@@ -2,19 +2,20 @@
 #
 # Table name: setts
 #
-#  id            :integer          not null, primary key
-#  name          :text
-#  metadata      :text
-#  type          :string(255)
-#  editable      :boolean
-#  parent_id     :integer
-#  lft           :integer
-#  rgt           :integer
-#  depth         :integer
-#  nestable_id   :integer
-#  nestable_type :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id             :integer          not null, primary key
+#  name           :text
+#  metadata       :text
+#  type           :string(255)
+#  editable       :boolean
+#  nestable_id    :integer
+#  nestable_type  :string(255)
+#  owner_id       :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  level_order    :integer
+#  ancestry       :string(255)
+#  is_leaf        :boolean          default(TRUE)
+#  ancestry_depth :integer          default(0)
 #
 
 class Sett < ActiveRecord::Base
@@ -29,24 +30,26 @@ class Sett < ActiveRecord::Base
     has_ancestry cache_depth: true
 
     include RankedModel
-    ranks :level_order, with_same: :parent_id
+    include TheSortableTree::Scopes
+    ranks :level_order, with_same: :ancestry
+
     default_scope rank(:level_order)
 
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
+    scope :nested_set, rank(:level_order)
+    scope :reversed_nested_set, rank(:level_order).reverse_order
 
     scope :leafy, where(is_leaf: true)
     scope :parental, where(is_leaf: false)
 
-    include TheSortableTree::Scopes
+    alias_method :self_and_ancestors, :path
+    alias_method :self_and_descendants, :subtree
 
     def leaf?
       is_leaf
     end 
-
-    alias_method :self_and_ancestors, :path
-    alias_method :self_and_descendants, :subtree
 
     def leaves_after(node, num = 1)
       # Order isn't guaranteed
@@ -74,16 +77,14 @@ class Sett < ActiveRecord::Base
     def leaf_after(node)
       # Check this level first
       leaf = leaf_after_and_same_depth_or_deeper(node)
-      return leaf unless leaf.empty?
+      return leaf unless leaf.nil?
 
       # Look at all our ancestors until our designated root
       node.ancestors.from_depth(depth + 1).reorder('ancestry_depth DESC').each do |n|
         leaf = leaf_after_and_same_depth_or_deeper(n)
-        return leaf unless leaf.empty?
+        return leaf unless leaf.nil?
       end
-
-      # Return an activerecord relation so we can chain
-      Sett.limit(0)
+      nil
     end
 
     def leaves_before(node)
@@ -112,37 +113,33 @@ class Sett < ActiveRecord::Base
 
     def leaf_after_and_same_depth_or_deeper(node)
       node.next_siblings.each do |sib|
-        return self.class.where(id: sib.id) if sib.leaf?
+        return sib if sib.leaf?
         leaf = sib.leaves.limit(1)
-        return leaf unless leaf.empty?
+        return leaf.first unless leaf.empty?
       end
-
-      Sett.limit(0)
+      nil
     end
 
     def leaf_before_and_same_depth_or_deeper(node)
       node.prev_siblings.each do |sib|
-        return self.class.where(id: sib.id) if sib.leaf?
+        return sib if sib.leaf?
         leaf = sib.leaves.limit(1)
-        return leaf unless leaf.empty?
+        return leaf.first unless leaf.empty?
       end
-
-      Sett.limit(0)
+      nil
     end
 
     def leaf_before(node)
       # Check this level first
       leaf = leaf_before_and_same_depth_or_deeper(node)
-      return leaf unless leaf.empty?
+      return leaf unless leaf.nil?
 
       # Look at all our ancestors until our designated root
       node.ancestors.from_depth(depth + 1).reorder('ancestry_depth DESC').each do |n|
         leaf = leaf_before_and_same_depth_or_deeper(n)
-        return leaf unless leaf.empty?
+        return leaf unless leaf.nil?
       end
-
-      # Return an activerecord relation so we can chain
-      Sett.limit(0)
+      nil
     end
 
     def next_siblings
@@ -200,8 +197,10 @@ class Sett < ActiveRecord::Base
       descendants.each do |node|
         new_node = node.dup
         new_nodes << new_node
+        new_node.id = node.id + id_difference
         without_ancestry_callbacks do 
           new_node.ancestry = node.ancestor_ids.map{ |i| i + id_difference}.join('/')
+          new_node.nestable = node.nestable
         end
       end
       Sett.import new_nodes, validate: false

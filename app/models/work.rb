@@ -2,18 +2,18 @@
 #
 # Table name: works
 #
-#  id                        :integer          not null, primary key
-#  title                     :string(255)
-#  date                      :datetime
-#  number                    :integer
-#  variant                   :string(255)
-#  metadata                  :text
-#  edition_id                :integer
-#  image_set_id              :integer
-#  cross_edition_work_set_id :integer
-#  revises_work_id           :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  id               :integer          not null, primary key
+#  title            :string(255)
+#  date             :datetime
+#  number           :integer
+#  variant          :string(255)
+#  secondary_source :boolean
+#  metadata         :text
+#  edition_id       :integer
+#  image_set_id     :integer
+#  revises_work_id  :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 
 class Work < ActiveRecord::Base
@@ -178,8 +178,9 @@ class Work < ActiveRecord::Base
 
     def self.in_image(image)
         # This assumes work image sets contain only one level
+        # INNER JOIN setts AS s2 ON s1.id = s2.parent_id
         joins("INNER JOIN setts AS s1 ON s1.id = works.image_set_id AND s1.type = 'ImageSet'
-              INNER JOIN setts AS s2 ON s1.id = s2.parent_id
+              INNER JOIN setts AS s2 ON (s2.ancestry = CAST(s1.id AS text) OR s2.ancestry = (s1.ancestry || '/' || s1.id))
               INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
               where(images: { id: ( image.id unless image.nil? ) })
     end

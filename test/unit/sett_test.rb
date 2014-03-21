@@ -21,7 +21,7 @@ class SettTest < ActiveSupport::TestCase
     assert Sett.find(8).children.first.id == 9 
     assert Sett.find(8).children.last.id == 11
     Sett.find(8).children.last.move_up
-    assert Sett.find(8).children.first.id == 11
+    assert Sett.find(8).children.first.id == 9
     assert Sett.find(8).children.last.id == 10
   end
 
@@ -79,21 +79,21 @@ class SettTest < ActiveSupport::TestCase
 
   test "leaf after leaf" do
     root = Sett.find(1)
-    assert root.leaf_after(Sett.find(4)).first.id == 5
-    assert root.leaf_after(Sett.find(5)).first.id == 7
-    assert root.leaf_after(Sett.find(7)).first.id == 9
-    assert root.leaf_after(Sett.find(9)).first.id == 10
-    assert root.leaf_after(Sett.find(10)).first.id == 13
-    assert Sett.find(15).leaf_after(Sett.find(16)).first.id == 18
-    assert Sett.find(2).leaf_after(Sett.find(5)).empty?
+    assert root.leaf_after(Sett.find(4)).id == 5
+    assert root.leaf_after(Sett.find(5)).id == 7
+    assert root.leaf_after(Sett.find(7)).id == 9
+    assert root.leaf_after(Sett.find(9)).id == 10
+    assert root.leaf_after(Sett.find(10)).id == 13
+    assert Sett.find(15).leaf_after(Sett.find(16)).id == 18
+    assert Sett.find(2).leaf_after(Sett.find(5)).nil?
   end
 
   test "leaf after non-leaf" do
     root = Sett.find(1)
-    assert root.leaf_after(Sett.find(3)).first.id == 5
-    assert root.leaf_after(Sett.find(6)).first.id == 9
-    assert root.leaf_after(Sett.find(2)).first.id == 7
-    assert Sett.find(8).leaf_after(Sett.find(11)).empty?
+    assert root.leaf_after(Sett.find(3)).id == 5
+    assert root.leaf_after(Sett.find(6)).id == 9
+    assert root.leaf_after(Sett.find(2)).id == 7
+    assert Sett.find(8).leaf_after(Sett.find(11)).nil?
   end
 
   test "leaves before leaf" do
@@ -108,20 +108,20 @@ class SettTest < ActiveSupport::TestCase
 
   test "leaf before leaf" do
     root = Sett.find(1)
-    assert root.leaf_before(Sett.find(5)).first.id == 4
-    assert root.leaf_before(Sett.find(7)).first.id == 5
-    assert root.leaf_before(Sett.find(9)).first.id == 7
-    assert root.leaf_before(Sett.find(10)).first.id == 9
-    assert root.leaf_before(Sett.find(13)).first.id == 10
-    assert Sett.find(2).leaf_before(Sett.find(4)).empty?
-    assert Sett.find(15).leaf_before(Sett.find(19)).first.id == 18
+    assert root.leaf_before(Sett.find(5)).id == 4
+    assert root.leaf_before(Sett.find(7)).id == 5
+    assert root.leaf_before(Sett.find(9)).id == 7
+    assert root.leaf_before(Sett.find(10)).id == 9
+    assert root.leaf_before(Sett.find(13)).id == 10
+    assert Sett.find(2).leaf_before(Sett.find(4)).nil?
+    assert Sett.find(15).leaf_before(Sett.find(19)).id == 18
   end
 
   test "leaf before non-leaf" do
     root = Sett.find(1)
-    assert root.leaf_before(Sett.find(3)).empty?
-    assert root.leaf_before(Sett.find(11)).first.id == 10
-    assert root.leaf_before(Sett.find(8)).first.id == 7
+    assert root.leaf_before(Sett.find(3)).nil?
+    assert root.leaf_before(Sett.find(11)).id == 10
+    assert root.leaf_before(Sett.find(8)).id == 7
   end
 
   test "position in level" do

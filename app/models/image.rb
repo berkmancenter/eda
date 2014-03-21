@@ -2,16 +2,18 @@
 #
 # Table name: images
 #
-#  id          :integer          not null, primary key
-#  url         :text
-#  metadata    :text
-#  credits     :text
-#  full_width  :integer
-#  full_height :integer
-#  web_width   :integer
-#  web_height  :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id            :integer          not null, primary key
+#  title         :text
+#  url           :text
+#  metadata      :text
+#  credits       :text
+#  full_width    :integer
+#  full_height   :integer
+#  web_width     :integer
+#  web_height    :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  collection_id :integer
 #
 
 class Image < ActiveRecord::Base
