@@ -41,21 +41,6 @@ class Sett < ActiveRecord::Base
 
     include TheSortableTree::Scopes
 
-    def matching_node_in(set)
-        # Maybe do this by nestable?
-        return unless root.self_and_descendants.count == set.root.self_and_descendants.count
-        offset = set.root.lft - root.lft
-        set.descendants.where(lft: lft + offset, rgt: rgt + offset).first
-    end
-
-    def lft=(left)
-        write_attribute(:lft, left)
-    end
-
-    def rgt=(right)
-        write_attribute(:rgt, right)
-    end
-
     def leaf?
       is_leaf
     end 
@@ -64,6 +49,7 @@ class Sett < ActiveRecord::Base
     alias_method :self_and_descendants, :subtree
 
     def leaves_after(node, num = 1)
+      # Order isn't guaranteed
       ids = []
       # Look at all our ancestors until our designated root
       node.self_and_ancestors.from_depth(depth + 1).each do |n|
@@ -85,10 +71,6 @@ class Sett < ActiveRecord::Base
       leaves.where(id: ids)
     end
 
-    def leaves_before(set, num = 1)
-        leaves.where{rgt < set.lft}.reorder('rgt DESC').limit(num)
-    end
-
     def leaf_after(node)
       # Check this level first
       leaf = leaf_after_and_same_depth_or_deeper(node)
@@ -104,13 +86,33 @@ class Sett < ActiveRecord::Base
       Sett.limit(0)
     end
 
-    def leaf_after_and_same_depth_or_deeper(node)
-      # Pick all leafy siblings after node
-      leaf = node.next_siblings.leafy.limit(1)
-      return leaf unless leaf.empty?
+    def leaves_before(node)
+      # Order isn't guaranteed
+      ids = []
+      # Look at all our ancestors until our designated root
+      node.self_and_ancestors.from_depth(depth + 1).each do |n|
+        # Pick all leafy siblings after node
+        ids += n.prev_siblings.leafy.pluck(:id)
+        # Pick all leaves of parental siblings after node
+        conditions = []
+        n.prev_siblings.parental.each do |sib|
+          conditions << sib.descendant_conditions
+        end
+        unless conditions.empty?
+          sql = conditions.map(&:first).join(' or ')
+          values = conditions.map{|c| c[1, 2]}.flatten
+          ids += leaves.where(sql, *values).pluck(:id)
+        end
+      end
 
-      # Pick all leaves of parental siblings after node
-      node.next_siblings.parental.each do |sib|
+      # Return an activerecord relation so we can chain
+      leaves.where(id: ids)
+    end
+
+
+    def leaf_after_and_same_depth_or_deeper(node)
+      node.next_siblings.each do |sib|
+        return self.class.where(id: sib.id) if sib.leaf?
         leaf = sib.leaves.limit(1)
         return leaf unless leaf.empty?
       end
@@ -120,7 +122,7 @@ class Sett < ActiveRecord::Base
 
     def leaf_before_and_same_depth_or_deeper(node)
       node.prev_siblings.each do |sib|
-        return self.class.find(sib.id) if sib.leaf?
+        return self.class.where(id: sib.id) if sib.leaf?
         leaf = sib.leaves.limit(1)
         return leaf unless leaf.empty?
       end
@@ -153,11 +155,14 @@ class Sett < ActiveRecord::Base
 
     def position_in_level
         # zero-indexed
-        siblings.where{rgt < my{lft}}.count
+        prev_siblings.count
     end
 
     def leaves_containing(member)
-        leaves.where(nestable_id: ( member.id unless member.nil? ), nestable_type: member.class.name)
+        leaves.where(
+          nestable_id: ( member.id unless member.nil? ),
+          nestable_type: member.class.name
+        )
     end
 
     def empty?
@@ -166,6 +171,7 @@ class Sett < ActiveRecord::Base
 
     def move_to_child_of(node)
         self.parent = node
+        self.level_order_position = :last
     end
 
     def move_right
@@ -184,44 +190,21 @@ class Sett < ActiveRecord::Base
         self.descendants.leafy
     end
 
-
     def duplicate
-        self.class.skip_callback :create, :before, :set_default_left_and_right
-        self.class.skip_callback :save, :before, :store_new_parent
-        self.class.skip_callback :save, :after, :move_to_new_parent
-        self.class.skip_callback :save, :after, :set_depth!
+      new_root = self.dup
+      new_root.save
+      new_id = new_root.id
+      id_difference = new_id - id
 
-        offset = Sett.maximum('rgt') + 1 - lft
-
-        tree = self_and_descendants.all
-        clones = []
-
-        tree.each do |original_item|
-            clone = original_item.dup
-            clone.lft += offset
-            clone.rgt += offset
-            clones << clone
+      new_nodes = []
+      descendants.each do |node|
+        new_node = node.dup
+        new_nodes << new_node
+        without_ancestry_callbacks do 
+          new_node.ancestry = node.ancestor_ids.map{ |i| i + id_difference}.join('/')
         end
-
-        Sett.import clones, validate: false
-
-        cloned_tree = Sett.find_by_lft(offset + lft).self_and_descendants.all
-
-        map = Hash[tree.map(&:id).zip(cloned_tree.map(&:id))]
-
-        Sett.transaction do
-            cloned_tree.each do |clone|
-                next if clone.root?
-                clone.update_column(:parent_id, map[clone.parent_id])
-                clone.save!
-            end
-        end
-
-        self.class.set_callback :create, :before, :set_default_left_and_right
-        self.class.set_callback :save, :before, :store_new_parent
-        self.class.set_callback :save, :after, :move_to_new_parent
-        self.class.set_callback :save, :after, :set_depth!
-
-        cloned_tree.first
+      end
+      Sett.import new_nodes, validate: false
+      new_root
     end
 end
