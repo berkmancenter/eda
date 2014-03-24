@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.17'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg', '0.16.0'
 gem 'nokogiri'
-gem 'sunspot_rails'
-gem 'sunspot_solr'
+gem 'sunspot_rails', '~> 2.0.0'
+gem 'sunspot_solr', '~> 2.0.0'
 gem 'devise'
 gem 'flickraw'
 gem 'squeel'
@@ -26,7 +26,6 @@ gem 'roman-numerals'
 gem 'exception_notification'
 gem 'autoprefixer-rails'
 gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository', :ref => 'ab3e018f59c1c53dcef4736476a56bac179e45f0'
-gem 'awesome_nested_set'
 gem 'ancestry'
 gem 'ranked-model'
 

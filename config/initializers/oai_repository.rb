@@ -1,4 +1,4 @@
-if false && Sett.table_exists?
+if Sett.table_exists?
 OaiRepository.setup do |config|
 
   config.repository_name = 'Emily Dickinson Archive'

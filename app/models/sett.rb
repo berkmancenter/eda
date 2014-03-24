@@ -204,6 +204,8 @@ class Sett < ActiveRecord::Base
         end
       end
       Sett.import new_nodes, validate: false
+      # Requires postgres
+      ActiveRecord::Base.connection.reset_pk_sequence!(Sett.table_name)
       new_root
     end
 end
