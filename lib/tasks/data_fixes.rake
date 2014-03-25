@@ -36,6 +36,21 @@ namespace :emily do
       end
     end
 
+    desc 'Sort Amherst'
+    task :sort_amherst => [:environment] do |t|
+      collection = Collection.find_by_name('Amherst College')
+      collection.children.each do |kid|
+        kid.name = kid.name.sub(/#(\d)/, '# \1')
+        kid.save
+      end
+      SettSorter.sort_set(collection.id)
+    end
+
+    desc 'Sort Beinecke'
+    task :sort_beinecke => [:environment] do |t|
+      SettSorter.sort_set(Collection.find_by_name('Beinecke Library').id)
+    end
+
     desc 'Apply data changes'
     task :apply => [:environment] do 
       def remove_image(url)

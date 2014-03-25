@@ -1,4 +1,4 @@
-if Sett.table_exists?
+if Sett.table_exists? && ActiveRecord::Base.connection.column_exists?(:setts, :ancestry)
 OaiRepository.setup do |config|
 
   config.repository_name = 'Emily Dickinson Archive'

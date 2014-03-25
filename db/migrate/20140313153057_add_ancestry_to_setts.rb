@@ -12,19 +12,13 @@ class AddAncestryToSetts < ActiveRecord::Migration
       sett.update_column :is_leaf, false
     end
 
-    puts "
-    Don't forget:
     Sett.build_ancestry_from_parent_ids!
     Sett.rebuild_depth_cache!
-    "
   end
 
   def down
-    remove_index :setts, :ancestry
     remove_column :setts, :ancestry
-    remove_index :setts, :is_leaf
     remove_column :setts, :is_leaf
     remove_column :setts, :ancestry_depth
-    remove_index :setts, :ancestry_depth
   end
 end

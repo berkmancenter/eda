@@ -12,6 +12,5 @@ class AddCollectionIdToImage < ActiveRecord::Migration
 
   def down
     remove_column :images, :collection_id
-    remove_index :images, :collection_id
   end
 end
