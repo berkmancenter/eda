@@ -184,8 +184,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sql-logging (3.0.8)
-      rails (> 3.0.0)
     squeel (1.1.1)
       activerecord (>= 3.0)
       activesupport (>= 3.0)
@@ -253,7 +251,6 @@ DEPENDENCIES
   ruby-prof
   rubyzip
   sass-rails (~> 3.2.3)
-  sql-logging
   squeel
   sunspot_rails (~> 2.0.0)
   sunspot_solr (~> 2.0.0)
