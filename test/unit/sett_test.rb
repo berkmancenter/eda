@@ -143,4 +143,12 @@ class SettTest < ActiveSupport::TestCase
       dup.id + 11
     ]
   end
+
+  test "updating leaf status" do
+    assert Sett.find(13).is_leaf
+    s = Sett.create
+    s.move_to_child_of Sett.find(13)
+    s.save!
+    assert !Sett.find(13).is_leaf
+  end
 end

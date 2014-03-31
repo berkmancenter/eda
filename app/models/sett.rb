@@ -49,6 +49,8 @@ class Sett < ActiveRecord::Base
     alias_method :self_and_ancestors, :path
     alias_method :self_and_descendants, :subtree
 
+    before_save :update_leaf_status
+
     def leaf?
       is_leaf
     end 
@@ -217,5 +219,13 @@ class Sett < ActiveRecord::Base
       # Requires postgres
       ActiveRecord::Base.connection.reset_pk_sequence!(Sett.table_name)
       new_root
+    end
+
+    private
+
+    def update_leaf_status
+      if !root? && parent.is_leaf
+        parent.update_attribute :is_leaf, false
+      end
     end
 end

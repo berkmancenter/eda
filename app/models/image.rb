@@ -31,6 +31,8 @@ class Image < ActiveRecord::Base
         if self.collection && self.collection.name == 'Amherst College'
           return false
         else
+          puts self.inspect
+          exit
           franklin = Edition.find_by_work_number_prefix('F')
           johnson = Edition.find_by_work_number_prefix('J')
           franklin_works = franklin.works.in_image(self)
@@ -90,6 +92,11 @@ class Image < ActiveRecord::Base
         {'xmlns' => "http://www.loc.gov/mods/v3" ,
         'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance" ,
         'xsi:schemaLocation' => "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd"} do
+
+        xml.tag! :recordInfo do
+          xml.tag! :recordChangeDate, updated_at.iso8601, encoding: 'iso8601'
+          xml.tag! :recordIdentifier, "#{self.class.name}-#{id}", source: 'EDA'
+        end
 
         franklin_titles = franklin_works.map(&:title).uniq
         johnson_titles = johnson_works.map(&:title).uniq - franklin_titles
