@@ -1,0 +1,24 @@
+work_one:
+  title: 'Work One'
+  number: 1
+  variant: 'A'
+
+work_two:
+  title: 'Work Two'
+  number: 2
+  variant: 'A'
+
+work_three:
+  title: 'Work Three'
+  number: 2
+  variant: 'B'
+
+work_four:
+  title: 'Work Four'
+  number: 3
+  variant: 'A'
+
+work_five:
+  title: 'Work Five'
+  number: 4
+  variant: 'A'
