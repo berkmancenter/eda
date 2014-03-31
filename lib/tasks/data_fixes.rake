@@ -46,6 +46,19 @@ namespace :emily do
       SettSorter.sort_set(collection.id)
     end
 
+    desc 'Sort Houghton'
+    task :sort_houghton, [:set_labels] => [:environment] do |t, args|
+      collection = Collection.find_by_name('Houghton Library')
+      set_labels = args[:set_labels] || File.join(Eda::Application.config.emily['data_directory'], 'houghton_set_labels_in_order.txt')
+      set_labels_in_order = File.readlines(set_labels).map{|l| l.chomp.strip}
+      order = []
+      collection.children.each do |kid|
+        order[set_labels_in_order.index(kid.name)] = kid.id
+      end
+      ids_in_order = order.compact
+      SettSorter.sort_set(collection.id, ids_in_order)
+    end
+
     desc 'Sort Beinecke'
     task :sort_beinecke => [:environment] do |t|
       image_url_order = ['10883042', '10883043', '10883044', '10883048', '10883049-0', '10883049-1', '10883050', '10883051', '10883052-0', '10883052-1', '10883053', '10883054', '10883055b-0', '10883055b-1', '10883056', '10883057', '10883058-0', '10883058-1', '10883059', '10883060', '10891837', '10883061', '10891838', '10883062', '10883063', '10883064', '10883065', '10883066', '10883067b-0', '10883067b-1', '10891839', '10883068', '10883069', '10883070', '10883071', '10883072', '10883073', '10883074', '10883075', '10883076', '10883077', '10883078']
