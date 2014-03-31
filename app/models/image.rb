@@ -31,8 +31,6 @@ class Image < ActiveRecord::Base
         if self.collection && self.collection.name == 'Amherst College'
           return false
         else
-          puts self.inspect
-          exit
           franklin = Edition.find_by_work_number_prefix('F')
           johnson = Edition.find_by_work_number_prefix('J')
           franklin_works = franklin.works.in_image(self)

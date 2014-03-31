@@ -37,7 +37,7 @@ group :development, :test do
   gem 'annotate'
   gem 'ruby-prof'
   gem 'test-unit'
-  gem 'sql-logging'
+  #gem 'sql-logging'
 end
 
 group :test do
