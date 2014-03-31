@@ -44,6 +44,8 @@ class Sett < ActiveRecord::Base
     scope :leafy, where(is_leaf: true)
     scope :parental, where(is_leaf: false)
 
+    scope :none, where('1=2')
+
     alias_method :self_and_ancestors, :path
     alias_method :self_and_descendants, :subtree
 
@@ -143,11 +145,19 @@ class Sett < ActiveRecord::Base
     end
 
     def next_siblings
-      siblings.where{level_order > my{self.level_order}}
+      if root?
+        self.class.none
+      else
+        siblings.where{level_order > my{self.level_order}}
+      end
     end
 
     def prev_siblings
-      siblings.where{level_order < my{self.level_order}}.reverse_order
+      if root?
+        self.class.none
+      else
+        siblings.where{level_order < my{self.level_order}}.reverse_order
+      end
     end
 
     def position_in_level

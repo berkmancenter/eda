@@ -29,7 +29,7 @@ class ReadingList < WorkSet
         new = new_work_ids - existing_work_ids
         updated = new_work_ids & existing_work_ids
         deleted = existing_work_ids - new_work_ids
-        
+
         new.each do |id|
             add_work(new_works.find{|w| w.id == id}, true)
         end
@@ -47,7 +47,8 @@ class ReadingList < WorkSet
         return if contains_work?(work) unless skip_check
         c = WorkSet.new
         c.work = work
-        children << c
+        c.move_to_child_of(self)
+        c.save!
     end
 
     def contains_work?(work)

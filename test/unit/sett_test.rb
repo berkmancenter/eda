@@ -8,7 +8,7 @@ class SettTest < ActiveSupport::TestCase
 
   test "root is root" do
     roots = Sett.roots
-    assert roots.count == 2
+    assert roots.count == 3
   end
 
   test "leaves" do
@@ -136,6 +136,11 @@ class SettTest < ActiveSupport::TestCase
   test "duplication" do
     assert Sett.find(13).ancestor_ids == [1, 8, 11, 12]
     dup = Sett.find(1).duplicate
-    assert Sett.find(32).ancestor_ids == [20, 27, 30, 31]
+    assert Sett.find(dup.id + 13).ancestor_ids == [
+      dup.id,
+      dup.id + 7,
+      dup.id + 10,
+      dup.id + 11
+    ]
   end
 end

@@ -73,7 +73,7 @@ class Work < ActiveRecord::Base
     end
 
     def full_id
-        "#{edition.work_number_prefix}#{number}#{variant}"
+        "#{edition.work_number_prefix if edition}#{number}#{variant}"
     end
 
     def full_title

@@ -148,3 +148,10 @@ nineteen:
   is_leaf: true
   level_order: 18
   ancestry_depth: 1
+
+reading_list:
+  id: 20
+  level_order: 19
+  ancestry_depth: 0
+  type: 'ReadingList'
+  name: 'My Reading List'
