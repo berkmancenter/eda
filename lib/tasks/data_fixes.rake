@@ -46,6 +46,12 @@ namespace :emily do
       SettSorter.sort_set(collection.id)
     end
 
+    desc 'Sort Smith'
+    task :sort_smith => [:environment] do |t|
+      collection = Collection.find_by_name('Smith College Libraries')
+      SettSorter.sort_set(collection.id)
+    end
+
     desc 'Sort Houghton'
     task :sort_houghton, [:set_labels] => [:environment] do |t, args|
       collection = Collection.find_by_name('Houghton Library')
