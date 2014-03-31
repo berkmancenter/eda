@@ -11,9 +11,6 @@ class AddAncestryToSetts < ActiveRecord::Migration
     Sett.where(:id => parent_ids).each do |sett|
       sett.update_column :is_leaf, false
     end
-
-    Sett.build_ancestry_from_parent_ids!
-    Sett.rebuild_depth_cache!
   end
 
   def down
