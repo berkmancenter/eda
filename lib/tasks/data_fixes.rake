@@ -48,7 +48,9 @@ namespace :emily do
 
     desc 'Sort Beinecke'
     task :sort_beinecke => [:environment] do |t|
-      SettSorter.sort_set(Collection.find_by_name('Beinecke Library').id)
+      image_url_order = ['10883042', '10883043', '10883044', '10883048', '10883049-0', '10883049-1', '10883050', '10883051', '10883052-0', '10883052-1', '10883053', '10883054', '10883055b-0', '10883055b-1', '10883056', '10883057', '10883058-0', '10883058-1', '10883059', '10883060', '10891837', '10883061', '10891838', '10883062', '10883063', '10883064', '10883065', '10883066', '10883067b-0', '10883067b-1', '10891839', '10883068', '10883069', '10883070', '10883071', '10883072', '10883073', '10883074', '10883075', '10883076', '10883077', '10883078']
+      id_order = image_url_order.map{|url| Image.find_by_url(url).id}
+      SettSorter.sort_set(Collection.find_by_name('Beinecke Library').id, id_order)
     end
 
     desc 'Apply data changes'
