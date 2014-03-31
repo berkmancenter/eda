@@ -46,6 +46,19 @@ namespace :emily do
       SettSorter.sort_set(collection.id)
     end
 
+    desc 'Sort Houghton'
+    task :sort_houghton, [:set_labels] => [:environment] do |t, args|
+      collection = Collection.find_by_name('Houghton Library')
+      set_labels = args[:set_labels] || File.join(Eda::Application.config.emily['data_directory'], 'houghton_set_labels_in_order.txt')
+      set_labels_in_order = File.readlines(set_labels).map{|l| l.chomp.strip}
+      order = []
+      collection.children.each do |kid|
+        order[set_labels_in_order.index(kid.name)] = kid.id
+      end
+      ids_in_order = order.compact
+      SettSorter.sort_set(collection.id, ids_in_order)
+    end
+
     desc 'Sort Beinecke'
     task :sort_beinecke => [:environment] do |t|
       collection = Collection.find_by_name('Beinecke Library')
