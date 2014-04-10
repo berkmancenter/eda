@@ -8,7 +8,7 @@ class SettTest < ActiveSupport::TestCase
 
   test "root is root" do
     roots = Sett.roots
-    assert roots.count == 3
+    assert roots.count == 4
   end
 
   test "leaves" do
@@ -113,6 +113,8 @@ class SettTest < ActiveSupport::TestCase
     assert root.leaf_before(Sett.find(9)).id == 7
     assert root.leaf_before(Sett.find(10)).id == 9
     assert root.leaf_before(Sett.find(13)).id == 10
+    assert Sett.find(49).leaf_before(Sett.find(52)).id == 51
+    assert Sett.find(49).leaf_before(Sett.find(54)).id == 52
     assert Sett.find(2).leaf_before(Sett.find(4)).nil?
     assert Sett.find(15).leaf_before(Sett.find(19)).id == 18
   end

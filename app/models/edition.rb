@@ -78,6 +78,7 @@ class Edition < ActiveRecord::Base
         ws.work = work
         ws.save!
         ws.move_to_child_of work_set
+        ws.save!
     end
 
     def copy_tree_from_parent(relation)

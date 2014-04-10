@@ -41,10 +41,11 @@ class ImageSet < Sett
 
     def <<(image)
         save! if changed?
-        is = ImageSet.new
+        is = self.class.new
         is.image = image
         is.save!
         is.move_to_child_of self
+        is.save!
         save! if changed?
     end
 

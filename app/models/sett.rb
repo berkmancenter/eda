@@ -127,7 +127,7 @@ class Sett < ActiveRecord::Base
     def leaf_before_and_same_depth_or_deeper(node)
       node.prev_siblings.each do |sib|
         return sib if sib.leaf?
-        leaf = sib.leaves.limit(1)
+        leaf = sib.leaves.reorder('ancestry_depth ASC, level_order DESC').limit(1)
         return leaf.first unless leaf.empty?
       end
       nil
