@@ -44,12 +44,24 @@ namespace :emily do
         kid.save
       end
       SettSorter.sort_set(collection.id)
+      Edition.is_public.each do |e|
+        coll = e.image_set.descendants.find_by_name('Amherst College')
+        coll.children.each do |kid|
+          kid.name = kid.name.sub(/#(\d)/, '# \1')
+          kid.save
+        end
+        SettSorter.sort_set(coll.id)
+      end
     end
 
     desc 'Sort Smith'
     task :sort_smith => [:environment] do |t|
       collection = Collection.find_by_name('Smith College Libraries')
       SettSorter.sort_set(collection.id)
+      Edition.is_public.each do |e|
+        coll = e.image_set.descendants.find_by_name('Smith College Libraries')
+        SettSorter.sort_set(coll.id)
+      end
     end
 
     desc 'Sort Houghton'
@@ -63,6 +75,15 @@ namespace :emily do
       end
       ids_in_order = order.compact
       SettSorter.sort_set(collection.id, ids_in_order)
+      Edition.is_public.each do |e|
+        coll = e.image_set.descendants.find_by_name('Houghton Library')
+        order = []
+        coll.children.each do |kid|
+          order[set_labels_in_order.index(kid.name)] = kid.id
+        end
+        ids_in_order = order.compact
+        SettSorter.sort_set(coll.id, ids_in_order)
+      end
     end
 
     desc 'Sort Beinecke'
@@ -70,7 +91,12 @@ namespace :emily do
       collection = Collection.find_by_name('Beinecke Library')
       image_url_order = ['10883042', '10883043', '10883044', '10883048', '10883049-0', '10883049-1', '10883050', '10883051', '10883052-0', '10883052-1', '10883053', '10883054', '10883055b-0', '10883055b-1', '10883056', '10883057', '10883058-0', '10883058-1', '10883059', '10883060', '10891837', '10883061', '10891838', '10883062', '10883063', '10883064', '10883065', '10883066', '10883067b-0', '10883067b-1', '10891839', '10883068', '10883069', '10883070', '10883071', '10883072', '10883073', '10883074', '10883075', '10883076', '10883077', '10883078']
       id_order = image_url_order.map{|url| collection.children.where(nestable_id: Image.find_by_url(url).id).first.id}
-      SettSorter.sort_set(Collection.find_by_name('Beinecke Library').id, id_order)
+      SettSorter.sort_set(collection.id, id_order)
+      Edition.is_public.each do |e|
+        coll = e.image_set.descendants.find_by_name('Beinecke Library')
+        id_order = image_url_order.map{|url| coll.children.where(nestable_id: Image.find_by_url(url).id).first.id}
+        SettSorter.sort_set(coll.id, id_order)
+      end
     end
 
     desc 'Apply data changes'
@@ -86,8 +112,10 @@ namespace :emily do
         end
       end
 
-      def fix_amherst_order(image_set)
-        ImageSet.find(image_set).leaves.first.move_right.move_right.move_right
+      def fix_amherst_order(image_set, repeat = 1)
+        repeat.times do
+          ImageSet.find(image_set).leaves.first.move_right.move_right.move_right
+        end
       end
 
       def replace_works_image_set(work_full_id, new_image_urls)
@@ -101,6 +129,7 @@ namespace :emily do
 
       new_work_image_sets = {
         'F676A'    => ['ms_am_1118_3_180_0001', 'ms_am_1118_3_180_0002'],
+        'F976A'    => ['ms_am_1118_3_178_0003'],
         'F977A'    => ['ms_am_1118_3_178_0004'],
         'F978A'    => ['ms_am_1118_3_179_0001'],
         'F979A'    => ['ms_am_1118_3_179_0002'],
@@ -116,7 +145,9 @@ namespace :emily do
         'F380A'    => ['10883066','10883067b-1'],
         'F1637A.1' => ['10883073'],
         'F1458A'   => [''],
-        'F1672A'   => ['']
+        'F1672A'   => [''],
+        'F325B'    => ['asc-4339-1-1', 'asc-4339-2-0', 'asc-4339-2-1', 'asc-4339-1-0'],
+        'F895C'    => ['asc-1761-1-1', 'asc-1761-2-1', 'asc-1761-1-0'],
       }
       new_work_image_sets.each do |full_id, image_urls|
         replace_works_image_set(full_id, image_urls)
@@ -144,8 +175,14 @@ namespace :emily do
       remove_image 'asc-4339-2'
       fix_amherst_order 72432
 
+      fix_amherst_order 72158
+
       remove_image 'F807B-typed-back'
       remove_image 'F807B-typed-front'
+
+      remove_image '10883045'
+      remove_image '10883046'
+      remove_image '10883047'
     end
   end
 end

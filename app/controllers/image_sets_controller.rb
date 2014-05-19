@@ -45,22 +45,6 @@ class ImageSetsController < ApplicationController
         end
     end
 
-    def new
-        @image_set = ImageSet.new
-    end
-
-    def create
-        @image_set = ImageSet.new(params[:image_set])
-        @image_set.move_to_child_of @edition.image_set
-        if @image_set.save
-            flash[:notice] = t :successful_creation
-            redirect_to edition_image_sets_path(@edition)
-        else
-            flash[:alert] = t :form_error, count: @image_set.errors.count
-            render :new
-        end
-    end
-
     def edit
     end
 

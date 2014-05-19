@@ -330,6 +330,11 @@ namespace :emily do
     end
 
     namespace :import do
+        desc 'Import image zip'
+        task :image_zip, [:filename] => [:environment] do |task, args|
+          ZipImageImporter.new.import(args[:filename])
+        end
+
         desc 'Import work metadata CSV'
         task :metadata, [:filename, :edition_prefix] => [:environment] do |task, args|
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_metadata.csv')

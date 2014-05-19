@@ -47,6 +47,7 @@ class ImageSet < Sett
         is.move_to_child_of self
         is.save!
         save! if changed?
+        is
     end
 
     def all_images

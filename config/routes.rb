@@ -8,7 +8,7 @@ Eda::Application.routes.draw do
                 post :add_to_reading_list
             end
         end
-        resources :image_sets do
+        resources :image_sets, only: [:index, :show, :edit, :update] do
             collection do 
                 post :rebuild
                 post :expand_node
