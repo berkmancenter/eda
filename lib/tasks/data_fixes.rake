@@ -183,6 +183,7 @@ namespace :emily do
       remove_image '10883045'
       remove_image '10883046'
       remove_image '10883047'
+      Rake::Task["emily:import:images:missing"].execute
     end
   end
 end
