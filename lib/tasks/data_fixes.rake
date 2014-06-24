@@ -152,6 +152,17 @@ namespace :emily do
     desc 'Apply data changes'
     task :apply => [:environment] do
 
+      def remove_image(url)
+        image = Image.find_by_url(url)
+        return unless image
+        image.url = nil
+        image.save!
+        ImageSet.where(nestable_id: image.id).each do |is|
+          is.parent_id = nil
+          is.save!
+        end
+      end
+
       def fix_amherst_order(image_set, repeat = 1)
         repeat.times do
           ImageSet.find(image_set).leaves.first.move_right.move_right.move_right
