@@ -102,8 +102,8 @@ class ZipImageImporter
       image_set = parent << image
 
       if image_info['edition_set_next_sibling_name']
-        next_sibling = parent.children.find_by_name(image_info['collection_next_sibling_name'])
-        raise ::ArgumentError, 'collection_next_sibling_name not found' unless next_sibling
+        next_sibling = parent.children.find{|c| c.name == image_info['collection_next_sibling_name']}
+        raise ::ArgumentError, "collection_next_sibling_name '#{image_info['collection_next_sibling_name']}' not found" unless next_sibling
         image_set.level_order_position = next_sibling.position_in_level
       end
       image_set.save!

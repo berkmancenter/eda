@@ -99,8 +99,8 @@ namespace :emily do
       end
     end
 
-    desc 'Apply data changes'
-    task :apply => [:environment] do 
+    desc 'Apply image data fixes'
+    task :apply_image_fixes => [:environment] do
       def remove_image(url)
         image = Image.find_by_url(url)
         return unless image
@@ -111,6 +111,46 @@ namespace :emily do
           is.save!
         end
       end
+
+      def move_image_set!(image_set, delta)
+        method = delta > 0 ? :move_right : :move_left
+        delta.abs.times do
+          image_set.send(method)
+        end
+      end
+
+      def move_image!(url, delta)
+        image = Image.find_by_url(url)
+
+        collection = image.collection
+        image_set = collection.leaves_containing(image).first
+        move_image_set!(image_set, delta)
+
+        Edition.is_public.each do |edition|
+          image_set = edition.image_set.leaves_containing(image).first
+          move_image_set!(image_set, delta)
+        end
+      end
+
+      remove_image 'ms_am_1118_5_B175_0002'
+      move_image!('ms_am_1118_5_B175_0001', 4)
+
+      remove_image 'ms_am_1118_5_B74c_0002'
+
+      remove_image 'ms_am_1118_5_B79_0002'
+
+      image = Image.find_by_url 'ms_am_1118_5_B79_0005'
+      puts image.title
+      title = image.title.dup
+      title['p. 6-'] = '. ' if title.include?('p. 6-')
+      image.title = title
+      image.save!
+
+      remove_image 'ms_am_1118_5_B74a_0002'
+    end
+
+    desc 'Apply data changes'
+    task :apply => [:environment] do
 
       def fix_amherst_order(image_set, repeat = 1)
         repeat.times do
