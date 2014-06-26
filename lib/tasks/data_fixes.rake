@@ -133,14 +133,13 @@ namespace :emily do
       end
 
       remove_image 'ms_am_1118_5_B175_0002'
-      move_image!('ms_am_1118_5_B175_0001', 4)
+      move_image!('ms_am_1118_5_B175_0001', 2)
 
       remove_image 'ms_am_1118_5_B74c_0002'
 
       remove_image 'ms_am_1118_5_B79_0002'
 
       image = Image.find_by_url 'ms_am_1118_5_B79_0005'
-      puts image.title
       title = image.title.dup
       title['p. 6-'] = '. ' if title.include?('p. 6-')
       image.title = title
