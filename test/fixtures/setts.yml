@@ -25,6 +25,14 @@
 # 53
 #   54
 #   55
+
+# 57
+#   56
+#   59
+#   58
+#     60
+#     61
+
 root:
   id: 1
   is_leaf: false
@@ -204,6 +212,50 @@ fiftyfive:
   is_leaf: true
   level_order: 55
   ancestry_depth: 2
+
+# 57
+#   56
+#   59
+#   58
+#     60
+#     61
+
+fiftysix:
+  id: 56
+  ancestry: '57'
+  is_leaf: true
+  level_order: 156
+  ancestry_depth: 1
+fiftyseven:
+  id: 57
+  is_leaf: false
+  level_order: 57
+  ancestry_depth: 0
+fiftyeight:
+  id: 58
+  ancestry: '57'
+  is_leaf: false
+  level_order: 158
+  ancestry_depth: 1
+fiftynine:
+  id: 59
+  ancestry: '57'
+  is_leaf: true
+  level_order: 157
+  ancestry_depth: 1
+sixty:
+  id: 60
+  ancestry: '57/58'
+  is_leaf: true
+  level_order: 260
+  ancestry_depth: 2
+sixtyone:
+  id: 61
+  ancestry: '57/58'
+  is_leaf: true
+  level_order: 261
+  ancestry_depth: 2
+
 
 reading_list:
   id: 20

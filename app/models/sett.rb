@@ -47,9 +47,12 @@ class Sett < ActiveRecord::Base
     scope :none, where('1=2')
 
     alias_method :self_and_ancestors, :path
-    alias_method :self_and_descendants, :subtree
 
     before_save :update_leaf_status
+
+    def self_and_descendants
+      self.class.sort_by_ancestry(subtree) {|a, b| a.level_order <=> b.level_order}
+    end
 
     def leaf?
       is_leaf

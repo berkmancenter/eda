@@ -8,7 +8,7 @@ class SettTest < ActiveSupport::TestCase
 
   test "root is root" do
     roots = Sett.roots
-    assert roots.count == 4
+    assert roots.count == 5
   end
 
   test "leaves" do
@@ -43,7 +43,8 @@ class SettTest < ActiveSupport::TestCase
   end
 
   test "self and descendants" do
-    assert Sett.find(2).self_and_descendants.map(&:id).sort == [2, 3, 4, 5]
+    assert Sett.find(2).self_and_descendants.map(&:id) == [2, 3, 4, 5]
+    assert Sett.find(57).self_and_descendants.map(&:id) == [57, 56, 59, 58, 60, 61]
   end
 
   test "self and ancestors" do
