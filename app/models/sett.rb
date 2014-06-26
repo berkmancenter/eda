@@ -51,7 +51,9 @@ class Sett < ActiveRecord::Base
     before_save :update_leaf_status
 
     def self_and_descendants
-      self.class.sort_by_ancestry(subtree) {|a, b| a.level_order <=> b.level_order}
+      nodes_in_order = Sett.sort_by_ancestry(subtree){|a, b| a.level_order <=> b.level_order}
+      ids_in_order = nodes_in_order.map(&:id)
+      Sett.where(id: ids_in_order).reorder("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')")
     end
 
     def leaf?
