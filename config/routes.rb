@@ -74,12 +74,11 @@ Eda::Application.routes.draw do
 
     match 'search(/:q)' => 'works#search', :as => 'search_works'
 
-    mount OaiRepository::Engine => "/oai"
-
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'
 
     devise_for :users, module: :devise
+    mount OaiRepository::Engine => "/oai"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
