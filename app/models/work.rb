@@ -179,10 +179,13 @@ class Work < ActiveRecord::Base
     def self.in_image(image)
         # This assumes work image sets contain only one level
         # INNER JOIN setts AS s2 ON s1.id = s2.parent_id
-        joins("INNER JOIN setts AS s1 ON s1.id = works.image_set_id AND s1.type = 'ImageSet'
-              INNER JOIN setts AS s2 ON (s2.ancestry = CAST(s1.id AS text) OR s2.ancestry = (s1.ancestry || '/' || s1.id))
-              INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
-              where(images: { id: ( image.id unless image.nil? ) })
+        ids = Rails.cache.fetch("wrks_in_img-#{image.work_assoc_cache_key}") do
+          joins("INNER JOIN setts AS s1 ON s1.id = works.image_set_id AND s1.type = 'ImageSet'
+                INNER JOIN setts AS s2 ON (s2.ancestry = CAST(s1.id AS text) OR s2.ancestry = (s1.ancestry || '/' || s1.id))
+                INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
+                where(images: { id: ( image.id unless image.nil? ) }).pluck(:id)
+        end
+        Work.where(id: ids)
     end
 
     def self.in_editions(editions)

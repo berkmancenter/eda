@@ -1,6 +1,17 @@
 namespace :emily do
   namespace :data_changes do
 
+    desc 'Ensure all images are parts of a collection'
+    task :images_to_collections => [:environment] do |t|
+      images = Image.all.select{|i| i.collection.nil? && i.url.present? }
+      images.each do |image|
+        if image.url.starts_with?('ms_am_')
+          image.collection = Collection.find_by_name('Houghton Library')
+          image.save!
+        end
+      end
+    end
+
     desc 'Update images from smaller libs'
     task :update_image_metadata, [:input_file] => [:environment] do |t, args|
       require 'csv'

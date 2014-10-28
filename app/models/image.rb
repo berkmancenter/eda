@@ -79,6 +79,10 @@ class Image < ActiveRecord::Base
       )
     end
 
+    def work_assoc_cache_key
+      Digest::MD5::hexdigest("#{id}-#{updated_at}-#{Work.maximum(:updated_at)}")
+    end
+
     def to_mods
       franklin = Edition.find_by_work_number_prefix('F')
       johnson = Edition.find_by_work_number_prefix('J')
