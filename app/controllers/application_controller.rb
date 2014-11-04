@@ -117,7 +117,7 @@ class ApplicationController < ActionController::Base
             new_user_password_path,
             edit_user_password_path
         ]
-        if ![non_stored_locations].include?(request.path) && !request.xhr? && request.request_method == 'GET'
+        if !non_stored_locations.include?(request.path) && !request.xhr? && request.request_method == 'GET'
             session[:previous_url] = request.fullpath 
             session[:two_urls_back] = session[:previous_url]
         end
