@@ -110,17 +110,14 @@ class ApplicationController < ActionController::Base
     end
 
     def store_location
-        if request.path == oai_repository_path
-            non_stored_locations = [oai_repository_path]
-        else
-            non_stored_locations = [
-                oai_repository_path,
-                new_user_session_path,
-                new_user_registration_path,
-                new_user_password_path,
-                edit_user_password_path
-            ]
-        end
+        logger.debug("Store location paths: #{request.path} - #{oai_repository_path}")
+        non_stored_locations = [
+            oai_repository_path,
+            new_user_session_path,
+            new_user_registration_path,
+            new_user_password_path,
+            edit_user_password_path
+        ]
         if !non_stored_locations.include?(request.path) && !request.xhr? && request.request_method == 'GET'
             session[:previous_url] = request.fullpath 
             session[:two_urls_back] = session[:previous_url]

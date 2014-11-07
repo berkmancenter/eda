@@ -2,6 +2,8 @@ Eda::Application.routes.draw do
 
     root :to => 'static_pages#home'
 
+    devise_for :users, module: :devise
+
     resources :editions do
         resources :works do
             member do
@@ -77,7 +79,6 @@ Eda::Application.routes.draw do
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'
 
-    devise_for :users, module: :devise
     mount OaiRepository::Engine => "/oai"
 
   # The priority is based upon order of creation:
