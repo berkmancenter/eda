@@ -35,6 +35,6 @@ Eda::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+  config.action_mailer.default_url_options = { :host => 'qa.edickinson.org' }
+  Rails.application.routes.default_url_options[:host] = 'qa.edickinson.org'
 end

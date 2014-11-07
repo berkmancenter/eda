@@ -7,7 +7,7 @@ OaiRepository.setup do |config|
   # If you're deploying to different hostnames (e.g. development, QA and
   # production environments, each with different hostnames), you could
   # dynamically set this.
-  config.repository_url = 'http://localhost:3000/oai'
+  config.repository_url = 'http://www.edickinson.org/oai'
 
   # By default the (unique) identifier of each record will be composed as
   # #{record_prefix}/#{record.id}
@@ -16,7 +16,7 @@ OaiRepository.setup do |config|
   #
   # Most probably you'll create an oai_dc_identifier attribute or method in
   # the AR models you intend to serve. That value will supplant the default.
-  config.record_prefix = 'http://localhost:3000/'
+  config.record_prefix = 'http://www.edickinson.org'
 
   # This is your repository administrator's email address.
   # This will appear in the information returned from an "Identify" call to
