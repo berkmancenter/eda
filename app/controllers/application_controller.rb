@@ -111,6 +111,7 @@ class ApplicationController < ActionController::Base
 
     def store_location
         logger.debug("Store location paths: #{request.path} - #{oai_repository_path}")
+        return if request.path.starts_with?('/oai/')
         non_stored_locations = [
             oai_repository_path,
             new_user_session_path,
