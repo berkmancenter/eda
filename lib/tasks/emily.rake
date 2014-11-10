@@ -597,6 +597,7 @@ namespace :emily do
 
     desc 'Request everything now so the caches are warm'
     task :warm_cache => [:environment] do |t|
+        Image.all.each{ |i| Work.in_image(i) }
         app = ActionDispatch::Integration::Session.new(Rails.application)
         puts "Warming works list"
         app.get(Rails.application.routes.url_helpers.works_path)
