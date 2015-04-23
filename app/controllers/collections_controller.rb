@@ -2,10 +2,10 @@ class CollectionsController < ApplicationController
     include TheSortableTreeController::ExpandNode
 
     def index
-        @collections = Collection.scoped.order(:name)
+        @collections = Collection.roots.order(:name)
     end
     def show
-        @collection = Collection.find(param[:id])
+        @collection = Collection.find(params[:id])
     end
 
     def sortable_model

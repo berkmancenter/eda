@@ -330,6 +330,11 @@ namespace :emily do
     end
 
     namespace :import do
+        desc 'Import image zip'
+        task :image_zip, [:filename] => [:environment] do |task, args|
+          ZipImageImporter.new.import(args[:filename])
+        end
+
         desc 'Import work metadata CSV'
         task :metadata, [:filename, :edition_prefix] => [:environment] do |task, args|
             filename = args[:filename] || File.join(Eda::Application.config.emily['data_directory'], 'franklin_metadata.csv')
@@ -593,11 +598,12 @@ namespace :emily do
     desc 'Request everything now so the caches are warm'
     task :warm_cache => [:environment] do |t|
         app = ActionDispatch::Integration::Session.new(Rails.application)
+        puts "Warming works list"
         app.get(Rails.application.routes.url_helpers.works_path)
         Edition.all.each do |edition|
             # Visit all image sets
             edition.image_set.self_and_descendants.each do |image_set|
-                puts "getting #{edition.id} - #{image_set.id}"
+                puts "Warming Edition: #{edition.id} - Image Set: #{image_set.id}"
                 app.get(Rails.application.routes.url_helpers.edition_image_set_path(edition, image_set))
             end
         end
@@ -638,8 +644,8 @@ namespace :emily do
             "holder_subcode" => nil,
             "Note" => "Notes",
             "holder_id" => nil,
-            "Publication" => "Publications",
             "Publications" => nil,
+            "Publication" => "Publications",
             "notes" => "Additional Notes",
             "fascicle" => nil,
             "fascicle_order" => nil,

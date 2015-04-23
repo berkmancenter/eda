@@ -4,6 +4,8 @@
 #
 #  id                 :integer          not null, primary key
 #  name               :string(255)
+#  short_name         :string(255)
+#  citation           :string(255)
 #  author             :string(255)
 #  date               :datetime
 #  work_number_prefix :string(255)
@@ -15,6 +17,7 @@
 #  parent_id          :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  public             :boolean
 #
 
 class Edition < ActiveRecord::Base
@@ -75,6 +78,7 @@ class Edition < ActiveRecord::Base
         ws.work = work
         ws.save!
         ws.move_to_child_of work_set
+        ws.save!
     end
 
     def copy_tree_from_parent(relation)

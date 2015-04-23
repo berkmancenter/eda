@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
     protect_from_forgery
     after_filter :store_location
     before_filter :do_search
-    rescue_from ActionController::RoutingError, with: :render_not_found
     #helper_method :image_set_path_from_work
 
     def not_found
@@ -61,7 +60,7 @@ class ApplicationController < ActionController::Base
             case params[:limit_to_field]
             when 'work_text'
                 fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
+                    fields(:lines, :number, :title => 2.0)
                 end
             when 'title'
                 fulltext params[:q] do
@@ -73,7 +72,7 @@ class ApplicationController < ActionController::Base
                 end
             else
                 fulltext params[:q] do
-                    fields(:lines, :title => 2.0)
+                    fields(:lines, :number, :title => 2.0)
                 end
             end
             paginate page: 1, per_page: Work.count
@@ -151,6 +150,6 @@ class ApplicationController < ActionController::Base
     protected
     
     def render_not_found
-      render file: "#{Rails.root}/public/404.html", layout: false, status: 404
+      render file: "#{Rails.root}/public/404", layout: false, status: 404
     end
 end

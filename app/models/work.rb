@@ -2,18 +2,18 @@
 #
 # Table name: works
 #
-#  id                        :integer          not null, primary key
-#  title                     :string(255)
-#  date                      :datetime
-#  number                    :integer
-#  variant                   :string(255)
-#  metadata                  :text
-#  edition_id                :integer
-#  image_set_id              :integer
-#  cross_edition_work_set_id :integer
-#  revises_work_id           :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  id               :integer          not null, primary key
+#  title            :string(255)
+#  date             :datetime
+#  number           :integer
+#  variant          :string(255)
+#  secondary_source :boolean
+#  metadata         :text
+#  edition_id       :integer
+#  image_set_id     :integer
+#  revises_work_id  :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 
 class Work < ActiveRecord::Base
@@ -45,11 +45,12 @@ class Work < ActiveRecord::Base
     serialize :metadata
 
     include WorkHelper
+    include ImagesHelper
     include Rails.application.routes.url_helpers
 
     searchable do
         integer :edition_id
-        string(:number) { |work| work.number.to_s }
+        text(:number) { |work| "#{work.number} #{work.full_id} #{work.edition.work_number_prefix}#{work.number}" }
         text :title
         text :lines, stored: true do
             lines.map{|l| l.text }
@@ -72,7 +73,7 @@ class Work < ActiveRecord::Base
     end
 
     def full_id
-        "#{edition.work_number_prefix}#{number}#{variant}"
+        "#{edition.work_number_prefix if edition}#{number}#{variant}"
     end
 
     def full_title
@@ -177,8 +178,9 @@ class Work < ActiveRecord::Base
 
     def self.in_image(image)
         # This assumes work image sets contain only one level
+        # INNER JOIN setts AS s2 ON s1.id = s2.parent_id
         joins("INNER JOIN setts AS s1 ON s1.id = works.image_set_id AND s1.type = 'ImageSet'
-              INNER JOIN setts AS s2 ON s1.id = s2.parent_id
+              INNER JOIN setts AS s2 ON (s2.ancestry = CAST(s1.id AS text) OR s2.ancestry = (s1.ancestry || '/' || s1.id))
               INNER JOIN images ON s2.nestable_id = images.id AND s2.nestable_type = 'Image'").
               where(images: { id: ( image.id unless image.nil? ) })
     end
@@ -240,21 +242,6 @@ class Work < ActiveRecord::Base
         works = works.where(number: match[:number])
         works = works.where(variant: match[:variant]) if match[:variant]
         works.first
-    end
-
-    def oai_dc_identifier
-        image_set_url_from_work(self)
-    end
-
-    def oai_dc_title
-        full_title
-    end
-
-    def sets
-        output = OaiRepository.sets.dup.select do |set|
-            set[:spec] == 'work' || set[:spec] == "edition:#{Work.find(id).edition.short_name.parameterize}"
-        end
-        output.map{|o| o.delete(:model); OAI::Set.new(o)}
     end
 
     protected

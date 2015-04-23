@@ -3,7 +3,7 @@ require 'spec_helper'
 describe( 'oai requests' ) {
   subject { page }
 
-  describe ( 'get /oai?verb-ListRecords&metadataPrefix=oai_dc' ) {
+  describe ( 'get /oai?verb=ListRecords&metadataPrefix=oai_dc' ) {
     before { visit "#{oai_repository_path}?verb=ListRecords&metadataPrefix=oai_dc" }
 
     it {

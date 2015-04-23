@@ -54,7 +54,7 @@ class GeneralImageProcessor
 
         extension = File.extname(output_file)
         base = File.basename(output_file, extension)
-        web_version(output_file, "#{web_image_output_dir}/#{base}.jpg")
+        #web_version(output_file, "#{web_image_output_dir}/#{base}.jpg")
     end
 
     def web_version(input_file, output_file)

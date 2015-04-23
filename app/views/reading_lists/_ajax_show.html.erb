@@ -2,7 +2,7 @@
     <% if reading_list.count == 1 %>
         <li><p><%= t :reading_list_empty %></p></li>
     <% end %>
-    <% reading_list.root.works.each do |work| %>
+    <% reading_list.first.root.works.each do |work| %>
         <%= render partial: 'works/list_item', locals: { work: work } %>
     <% end %>
 </ul>

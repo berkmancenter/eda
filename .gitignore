@@ -17,7 +17,6 @@
 /tmp
 
 # Ignore local rails config
-Gemfile.lock
 config/database.yml
 
 # Ignore vim swap

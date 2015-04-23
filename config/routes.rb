@@ -8,7 +8,7 @@ Eda::Application.routes.draw do
                 post :add_to_reading_list
             end
         end
-        resources :image_sets do
+        resources :image_sets, only: [:index, :show, :edit, :update] do
             collection do 
                 post :rebuild
                 post :expand_node
@@ -79,12 +79,12 @@ Eda::Application.routes.draw do
 
     match 'search(/:q)' => 'works#search', :as => 'search_works'
 
-    devise_for :users
+    mount OaiRepository::Engine => "/oai"
 
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'
 
-    mount OaiRepository::Engine => "/oai"
+    devise_for :users, module: :devise
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

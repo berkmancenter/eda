@@ -1,3 +1,4 @@
+if Sett.table_exists? && ActiveRecord::Base.connection.column_exists?(:setts, :ancestry)
 OaiRepository.setup do |config|
 
   config.repository_name = 'Emily Dickinson Archive'
@@ -30,7 +31,7 @@ OaiRepository.setup do |config|
   # to be a ActiveRecord model class, but it should act like one.
   #
   # You must supply at least one model.
-  config.models = [ Work, Image ]
+  config.models = [ Image ]
 
   # List the sets (and the ActiveRecord model they belong to). E.g.
   #
@@ -47,27 +48,12 @@ OaiRepository.setup do |config|
   #     description: 'Things that are services'
   #   }
   # ]
-  #
-  config.sets = [
-      {
-          spec: 'work',
-          name: 'Works',
-          model: Work
-      },
-      {
-          spec: 'image',
-          name: 'Images',
-          model: Image
-      },
-  ]
+
+  config.sets = []
   Collection.roots.each do |c|
-      config.sets << { spec: "collection:#{c.name.parameterize}", name: c.name, model: Image }
+    next if c.name == 'Amherst College'
+    config.sets << { spec: "collection:#{c.name.parameterize}", name: c.name, model: Image }
   end
-  Edition.is_public.each do |e|
-      config.sets << { spec: "edition:#{e.short_name.parameterize}", name: e.name, model: Work }
-  end
-
-
 
   # By default, an OAI repository must emit its records in OAI_DC (Dublin Core)
   # format. If you want to provide other output formats for your repository
@@ -79,6 +65,8 @@ OaiRepository.setup do |config|
   # config.additional_formats = [
   #   OAI::Provider::Metadata::RIFCS
   # ]
-  config.additional_formats = []
+  require 'mods_format.rb'
+  config.additional_formats = [OAI::Provider::Metadata::MODS]
 
+end
 end

@@ -1,17 +1,24 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  title: MyString
-  date: 2013-04-11 14:00:10
+work_one:
+  title: 'Work One'
   number: 1
-  edition: 
-  image_group: 
-  metadata: MyText
+  variant: 'A'
 
-two:
-  title: MyString
-  date: 2013-04-11 14:00:10
-  number: 1
-  edition: 
-  image_group: 
-  metadata: MyText
+work_two:
+  title: 'Work Two'
+  number: 2
+  variant: 'A'
+
+work_three:
+  title: 'Work Three'
+  number: 2
+  variant: 'B'
+
+work_four:
+  title: 'Work Four'
+  number: 3
+  variant: 'A'
+
+work_five:
+  title: 'Work Five'
+  number: 4
+  variant: 'A'
