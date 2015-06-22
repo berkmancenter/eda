@@ -1,4 +1,4 @@
-<%= semantic_form_for @work do |f| %>
+<%= semantic_form_for [ @edition, @image_set, @work ] do |f| %>
     <%= f.inputs do %>
         <%= f.input :number %>
         <%= f.input :variant %>
