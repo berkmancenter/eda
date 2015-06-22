@@ -5,7 +5,7 @@ gem 'rails', '3.2.17'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg', '0.16.0'
+gem 'pg', '0.18.1'
 gem 'nokogiri'
 gem 'sunspot_rails', '~> 2.0.0'
 gem 'sunspot_solr', '~> 2.0.0'
@@ -62,7 +62,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 # To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt', '~> 3.1.7'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
