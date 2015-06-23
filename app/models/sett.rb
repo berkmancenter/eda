@@ -219,7 +219,9 @@ class Sett < ActiveRecord::Base
           new_node.ancestry = node.ancestor_ids.map{ |i| i + id_difference}.join('/')
           new_node.nestable = node.nestable
         end
+        new_node.move_to_child_of new_root
       end
+
       Sett.import new_nodes, validate: false
       # Requires postgres
       ActiveRecord::Base.connection.reset_pk_sequence!(Sett.table_name)
