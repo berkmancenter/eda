@@ -66,6 +66,13 @@ FactoryGirl.define do
       number 1
       variant 'A'
       date '1850-01-01'
+      metadata {{
+        'Manuscript' => '4 March 1850, an unsigned valentine (a 794) headed "Valentine Week" and dated thus, sent to Elbridge G. Bowdoin, then 30 and practicing law with Edward Dickinson. The "six true, and comely maidens" of lines 31-32 were probably Sarah Tracy, Eliza Coleman, Emeline Kellogg, Harriet Merrill, Susan Gilbert, and ed herself ("she with curling hair"), then 19. ed observed a consistent arrangement of lines in which first words were capitalized selectively.',
+        'Recipient' => 'Elbridge Gridley Bowdoin',
+        'Notes' => '4 March 1850, an unsigned valentine (a794) headed "Valentine Week" and dated thus, sent to Elbridge G. Bowdoin, then 30 and practicing law with Edward Dickinson. The "six true, and comely maidens" of lines 31-32 were probably Sarah Tracy, Eliza Coleman, Emeline Kellogg, Harriet Merrill, Susan Gilbert, and ed herself ("she with curling hair"), then 19. ed observed a consistent arrangement of lines in which first words were capitalized selectively.',
+        'Array' => ['one', 'two']
+      }}
+
     end
 
     factory :work_f2a do
