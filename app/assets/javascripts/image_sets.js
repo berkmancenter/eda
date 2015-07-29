@@ -39,7 +39,9 @@ $( function( ) {
 
     if ( typeof seadragonViewer !== "undefined" ) {
       setTimeout(function() {
-        seadragonViewer.viewport.ensureVisible(true);
+        if ( seadragonViewer.viewport !== null ) {
+          seadragonViewer.viewport.ensureVisible(true);
+        }
       }, 333);
     }
   } );
