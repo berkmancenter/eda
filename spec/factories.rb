@@ -411,6 +411,12 @@ FactoryGirl.define do
       password 'p4ssw0rd'
       password_confirmation 'p4ssw0rd'
     end
+
+    factory :franklin_user do
+      email 'franklin@example.com'
+      password 'p4ssw0rd'
+      password_confirmation 'p4ssw0rd'
+    end
   end
 end
 

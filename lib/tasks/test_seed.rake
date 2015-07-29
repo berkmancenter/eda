@@ -5,6 +5,10 @@ namespace :db do
     task :seed => :environment do
       Sunspot.remove_all!
 
+      # user
+      test_user = FactoryGirl.create :test_user
+      franklin_user = FactoryGirl.create :franklin_user
+
       #
       # johnson
       # 
@@ -17,6 +21,7 @@ namespace :db do
       # franklin
       #
       franklin = Edition.new( FactoryGirl.attributes_for :franklin )
+      franklin.owner = franklin_user
 
       # image sets
       franklin_image_set = FactoryGirl.create :iset_franklin
@@ -183,12 +188,6 @@ namespace :db do
       awake_adj.definitions << FactoryGirl.create( :awake_one )
       awake_adj.definitions << FactoryGirl.create( :awake_two )
       awake_adj.save
-
-      # user
-      if User.count == 0
-        test_user_attr = FactoryGirl.attributes_for :test_user
-        test_user = User.create!( test_user_attr )
-      end
 
       Sunspot.commit
     end
