@@ -4,6 +4,8 @@
         <%= f.input :variant %>
         <%= f.input :title %>
         <%= f.input :date %>
+
+        <%= render partial: 'works/metadata_inputs', object: @work, locals: { f: f } %>
     <% end %>
     <%= f.actions do %>
         <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>

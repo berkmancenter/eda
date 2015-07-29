@@ -1,0 +1,10 @@
+<%# locals: f %>
+<div class="metadata-inputs">
+  <h2>Metadata</h2>
+<% metadata_inputs.metadata.each { |k, v| %>
+  <label>
+    <span><%= k %></span>
+    <input type="text" name="work[metadata][<%= k %>]" value="<%= v %>" />
+  </label>
+<% } %>
+</div>
