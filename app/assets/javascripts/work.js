@@ -182,6 +182,11 @@ $(document).ready(function() {
     });
 
     if ( $( 'body.works.edit' ).length ) {
+      $( '.metadata-inputs' ).on( 'click', '.remove-field', function( ) {
+        $( this ).closest( 'label' ).remove();
+        return false;
+      } );
+
       $( '#btn-add-field' ).click( function() {
         var fieldName = $( '#add-field' ).val();
         if ( fieldName.length ) {

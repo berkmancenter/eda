@@ -5,7 +5,7 @@
   <div class="metadata-inputs">
     <% metadata_inputs.metadata.each { |k, v| %>
       <label>
-        <span><%= k %></span>
+        <span><%= k %> <a class="remove-field" href="#">x</a></span>
         <input type="text" name="work[metadata][<%= k %>]" value="<%= v %>" />
       </label>
     <% } %>
