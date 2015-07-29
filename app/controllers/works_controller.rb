@@ -110,8 +110,7 @@ class WorksController < ApplicationController
     end
 
     def edit
-        setup_image_set_view_variables
-        render 'image_sets/works', layout: !request.xhr?
+        @image_sets = @work.image_set.leaves
     end
 
     def update
@@ -130,6 +129,7 @@ class WorksController < ApplicationController
                 on_work_page = @work.image_set.leaves_containing(@image_set.image).first.position_in_level
                 params[:work][:text] << t(:page_break) unless (on_work_page + 1) < num_work_images
             end
+
             @work.update_attributes(params[:work])
 
             new_num_work_images = @work.divisions.page_breaks.count + 1

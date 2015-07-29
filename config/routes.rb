@@ -48,6 +48,11 @@ Eda::Application.routes.draw do
     end
 
     resources :works do
+        resources :image_sets do
+            collection do
+                post :rebuild
+            end
+        end
         member do 
             get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
             get :metadata

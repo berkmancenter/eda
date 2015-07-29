@@ -27,6 +27,17 @@ b {
 
 body.works.edit, body.works.new, body.works.create {
     overflow: hidden;
+
+    .metadata-inputs {
+      label {
+        display: inline-block;
+        width: auto;
+
+        span {
+          display: block;
+        }
+      }
+    }
 }
 
 // work-transcription section rendered from shared

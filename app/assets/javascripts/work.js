@@ -180,4 +180,19 @@ $(document).ready(function() {
     $('.toggler, .right-toggler').on('click', function() {
         $(this).toggleClass('expanded').next('.toggleable').slideToggle(200);
     });
+
+    if ( $( 'body.works.edit' ).length ) {
+      $( '.metadata-inputs' ).on( 'click', '.remove-field', function( ) {
+        $( this ).closest( 'label' ).remove();
+        return false;
+      } );
+
+      $( '#btn-add-field' ).click( function() {
+        var fieldName = $( '#add-field' ).val();
+        if ( fieldName.length ) {
+          $( '.metadata-inputs' ).append( '<label><span>' + fieldName + '</span><input type="text" name="work[metadata][' + fieldName + ']" value="" /></label>' );
+          $( '#add-field' ).val('');
+        }
+      } );
+    }
 });

@@ -1,0 +1,22 @@
+<%# locals: f %>
+<div>
+  <h2>Metadata</h2>
+
+  <div class="metadata-inputs">
+    <% metadata_inputs.metadata.each { |k, v| %>
+      <label>
+        <span><%= k %> <a class="remove-field" href="#">x</a></span>
+        <input type="text" name="work[metadata][<%= k %>]" value="<%= v %>" />
+      </label>
+    <% } %>
+  </div>
+
+  <div>
+    <label>
+      <span>Add Metadata Field</span>
+      <input id="add-field" />
+      <button id="btn-add-field" type="button" class="eda-btn-light">Add</button>
+    </label>
+  </div>
+
+</div>
