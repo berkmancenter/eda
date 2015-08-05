@@ -526,7 +526,7 @@ namespace :emily do
             if args[:use_existing_maps].nil?
                 use_existing_maps = true
             else
-                !!use_existing_maps.match(/(true|t|yes|y|1)$/i)
+                use_existing_maps = !!args[:use_existing_maps].match(/(true|t|yes|y|1)$/i)
             end
             Rake::Task["emily:import:transcriptions:all"].execute
             Rake::Task["emily:import:metadata"].execute
