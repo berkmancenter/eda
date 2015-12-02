@@ -6,6 +6,8 @@
         <%= f.input :date %>
 
         <%= render partial: 'works/metadata_inputs', object: @work, locals: { f: f } %>
+
+        <%= f.input :tei, as: :file, label: raw( "TEI #{link_to( "(download current)", edition_work_path(@edition, @work, format: :tei) )}" ) %>
     <% end %>
     <%= f.actions do %>
         <%= f.action :submit, button_html: { class: 'eda-btn-light' } %>
