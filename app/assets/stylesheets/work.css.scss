@@ -28,6 +28,10 @@ b {
 body.works.edit, body.works.new, body.works.create {
     overflow: hidden;
 
+    .metadata-wrapper {
+      margin-bottom: 1em;
+    }
+
     .metadata-inputs {
       label {
         display: inline-block;
@@ -37,6 +41,12 @@ body.works.edit, body.works.new, body.works.create {
           display: block;
         }
       }
+
+    }
+
+    #work_tei_input .label {
+      display: block;
+      white-space: nowrap;
     }
 }
 
