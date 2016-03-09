@@ -1,5 +1,10 @@
 namespace :emily do
 
+  def puts_log( message )
+    Rails.logger.info message
+    puts message
+  end
+
     desc 'Add admin account'
     task :create_admin => :environment do
         include Rails.application.routes.url_helpers
@@ -23,6 +28,39 @@ namespace :emily do
                 puts "Sorry, the admin was not created!"
             end
         end
+    end
+
+    desc 'Create editor account'
+    task :set_master_editor, [ :email ] => [ :environment ] do |task, args|
+      set_master_editor( args[ :email ] )
+    end
+
+    def set_master_editor( email )
+      if email.nil?
+        puts "usage: rake emily:set_master_editor['email@example.com']"
+        return
+      end
+
+      users = User.where email: email
+      if users.empty?
+        puts_log "[set_master_editor] cannot not find a user with the email address: #{email}"
+        return
+      end
+
+      u = users.first
+
+      editions = Edition.where owner_id: nil
+      if editions.empty?
+        puts_log '[set_master_editor] cannot find unowned (master) editions'
+        return
+      end
+
+      editions.all.each { |e|
+        puts_log "[set_master_editor] setting owner for #{e.short_name} (#{e.id}) to #{u.email} (#{u.id})"
+        e.owner = u
+        e.save
+      }
+
     end
 
     desc 'Get image names from URLs'
