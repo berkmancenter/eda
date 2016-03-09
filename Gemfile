@@ -1,9 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.22.1'
+gem 'rails', '3.2.22.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
+
+gem 'rake', '10.5.0'
 
 gem 'pg', '0.18.1'
 gem 'nokogiri'
