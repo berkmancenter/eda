@@ -51,8 +51,16 @@ namespace :emily do
 
       editions = Edition.where owner_id: nil
       if editions.empty?
-        puts_log '[set_master_editor] cannot find unowned (master) editions'
-        return
+        puts_log "[set_master_editor] cannot find unowned editions"
+
+        e = Edition.first
+        if e.nil?
+          puts_log "[set_master_editor] no editions"
+          return
+        end
+
+        puts_log "[set_master_editor] previous master editor: #{e.owner.email} (#{e.owner.id})"
+        editions = Edition.where owner_id: e.owner_id
       end
 
       editions.all.each { |e|
