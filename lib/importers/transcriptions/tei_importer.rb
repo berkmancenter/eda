@@ -21,9 +21,8 @@ class TEIImporter
             line_num = line_index
         end
         if line_num.nil?
-            puts 'Need line number:'
-            puts line
-            exit
+            Rails.logger.info "[parse_line] need line number for: #{line}"
+            return nil
         end
         line.traverse do |child|
             next unless child.class == Nokogiri::XML::Element
@@ -80,8 +79,11 @@ class TEIImporter
             stanza.css('l').each do |line|
                 line_index += 1
                 line_object, modifiers = parse_line(line, line_index).values
-                line_index = line_object.number
-                s.lines << line_object
+                if line_object.present?
+                    line_index = line_object.number
+                    s.lines << line_object
+                    work.line_modifiers << modifiers
+                end
             end
             work.stanzas << s
         end
