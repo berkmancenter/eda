@@ -16,7 +16,7 @@
     </teiHeader>
     <text>
         <body>
-            <div type="transcript" id="<%= @work.full_id %>">
+            <div type="transcript" xml:id="<%= @work.full_id %>">
 <%= render partial: "works/transcriptions/show", locals: { work: @work } %>
             </div>     
         </body>
