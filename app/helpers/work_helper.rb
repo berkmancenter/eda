@@ -12,7 +12,7 @@ module WorkHelper
     end
 
     def render_line(line)
-        puts "[render_line] line: #{line}"
+        puts "[render_line] line: #{line.inspect}"
         output = ''
         line.chars.each_with_index do |char, i|
           puts "[render_line] line.chars char: #{char}, i: #{i}"
