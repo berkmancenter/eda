@@ -64,7 +64,10 @@ class TEIImporter
             work_number = work.number
             work_variant = work.variant
         else
-            id_parts = parse_id(doc.at('body > div[type=transcript]')['id'])
+            transcript_div = doc.at('body > div[type=transcript]')
+            id = div['id'] if div['id'].present?
+            id = div['xml:id'] if div['xml:id'].present?
+            id_parts = parse_id(id)
             work_number = id_parts[:number]
             work_variant = id_parts[:variant]
             work = Work.new
