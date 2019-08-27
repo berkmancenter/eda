@@ -373,6 +373,27 @@ namespace :emily do
             require 'csv'
             output_file = args[:output_file] || Rails.root.join('tmp', 'should_not_have_images.csv')
         end
+
+        desc 'Find works that both have images and do not have images'
+        task :works_with_conflicting_images, [:output_file] => [:environment] do |task, args|
+            pbar = ProgressBar.create(title: 'Works', total: Work.count, format: '%t: |%B| %c/%C (%P%) %a -%E ')
+            Work.all.each do |work|
+                pbar.increment
+                if work.image_set.nil?
+                   pbar.log "No image set for work #{work.id}"
+                   next
+                end
+                urls = work.image_set.all_images.map(&:url)
+                if urls.include?(nil) && urls.compact.length > 0
+                  work.image_set.children.each do |is|
+                    if is.leaf? && is.image.url.nil?
+                      is.destroy
+                      pbar.log "Destroyed ImageSet #{is.id} for Work #{work.id}"
+                    end
+                  end
+                end
+            end
+        end
     end
 
     namespace :import do
