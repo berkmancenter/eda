@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'csv'
 
 class ZipImageImporter
 
@@ -58,6 +59,10 @@ class ZipImageImporter
           work_ids.each do |work_id|
             work = Work.find_by_full_id(work_id)
             raise ::ArgumentError, "Work #{work_id} not found" unless work
+
+            if work.image_set.all_images.map(&:url).all?(&:nil?)
+              work.image_set.children.destroy_all
+            end
             work.image_set << image
           end
         end

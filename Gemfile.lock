@@ -133,7 +133,7 @@ GEM
       activerecord (>= 3.0)
     polyglot (0.3.5)
     pr_geohash (1.0.0)
-    progressbar (0.21.0)
+    progressbar (1.10.1)
     rack (1.4.7)
     rack-cache (1.6.1)
       rack (>= 0.4)
@@ -249,7 +249,7 @@ DEPENDENCIES
   oai_repository!
   pg (= 0.18.1)
   poltergeist
-  progressbar
+  progressbar (~> 1.0)
   rails (= 3.2.22.2)
   rake (= 10.5.0)
   ranked-model
@@ -266,4 +266,4 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
 
 BUNDLED WITH
-   1.10.6
+   1.16.6
