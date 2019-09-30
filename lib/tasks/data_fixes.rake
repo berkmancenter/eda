@@ -47,6 +47,12 @@ namespace :emily do
       end
     end
 
+    desc 'Sort edition images by work number'
+    task :sort_edition_images, [:edition_id] => [:environment] do |t, args|
+      edition_id = args[:edition_id].to_i
+      EditionImageSorter.sort(edition_id)
+    end
+
     desc 'Sort Amherst'
     task :sort_amherst => [:environment] do |t|
       collection = Collection.find_by_name('Amherst College')

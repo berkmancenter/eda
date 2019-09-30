@@ -151,7 +151,7 @@ namespace :emily do
 
         desc 'Process Amherst images to cut double images into singles'
         task :amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             AmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -160,7 +160,7 @@ namespace :emily do
 
         desc 'Process missing Amherst images to cut double images into singles'
         task :missing_amherst_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_missing'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_missing'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/amherst_missing_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             MissingAmherstImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -168,7 +168,7 @@ namespace :emily do
 
         desc 'Process BPL images to create tifs'
         task :bpl_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/bpl_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             BPLImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -177,7 +177,7 @@ namespace :emily do
 
         desc 'Process LOC images to create tifs'
         task :loc_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/loc_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -186,7 +186,7 @@ namespace :emily do
 
         desc 'Process LOC images to create tifs'
         task :aas_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/aas_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -195,7 +195,7 @@ namespace :emily do
 
         desc 'Process Beinecke images to create tifs'
         task :beinecke_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/beinecke'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/beinecke'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/beinecke_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -204,7 +204,7 @@ namespace :emily do
 
         desc 'Process Smith images to create tifs'
         task :smith_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/smith'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/smith'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/smith_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
@@ -213,7 +213,7 @@ namespace :emily do
 
         desc 'Process Vassar images to create tifs'
         task :vassar_images, [:input_dir, :output_dir, :web_image_output_dir] => [:environment] do |t, args|
-            input_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/vassar'
+            input_dir = args[:input_dir] || Eda::Application.config.emily['data_directory'] + '/images/vassar'
             output_dir = args[:output_dir] || Eda::Application.config.emily['data_directory'] + '/images/vassar_output'
             web_image_output_dir = args[:web_image_output_dir] || Rails.root.join('app', 'assets', 'images', 'previews')
             GeneralImageProcessor.new.process_directory(input_dir, output_dir, web_image_output_dir)
