@@ -18,7 +18,7 @@
     <tbody>
     <% unless works.empty? %>
         <%
-            if works.is_a? ActiveRecord::Relation 
+            if works.is_a? ActiveRecord::Relation
                 cache_key = cache_key_for_multiple(works.joins(:edition).where(edition: {public: true}))
                 grouped_works = works.all.group_by{|w| w.edition.public}
             else

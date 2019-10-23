@@ -13,7 +13,7 @@ class ImageSetsController < ApplicationController
     end
 
     def collections
-        @image_sets = Collection.scoped
+        @image_sets = Collection.all
     end
 
     def show
@@ -34,7 +34,7 @@ class ImageSetsController < ApplicationController
             pull_works_for_edition_image_set(@edition, @image_set)
             @next_image = @image_set.root.leaf_after(@image_set)
             @previous_image = @image_set.root.leaf_before(@image_set)
-            
+
             @image_missing = @image_set.image.nil? || @image_set.image.url.nil?
 
             load_page_order_options
@@ -61,7 +61,7 @@ class ImageSetsController < ApplicationController
 
     def destroy
     end
-    
+
     private
 
     def load_image_set
@@ -93,4 +93,3 @@ class ImageSetsController < ApplicationController
       end
     end
 end
-

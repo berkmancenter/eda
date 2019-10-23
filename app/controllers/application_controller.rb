@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
     def set_users_current_edition
         return unless @edition
-        if user_signed_in? 
+        if user_signed_in?
             current_user.current_edition = @edition
             current_user.save!
         end
@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
 
         if params[:q].strip.empty?
             @search = nil
-            clear_search 
+            clear_search
         end
     end
 
@@ -120,7 +120,7 @@ class ApplicationController < ActionController::Base
             edit_user_password_path
         ]
         if !non_stored_locations.include?(request.path) && !request.xhr? && request.request_method == 'GET'
-            session[:previous_url] = request.fullpath 
+            session[:previous_url] = request.fullpath
             session[:two_urls_back] = session[:previous_url]
         end
     end
@@ -157,7 +157,7 @@ class ApplicationController < ActionController::Base
     end
 
     protected
-    
+
     def render_not_found
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     end

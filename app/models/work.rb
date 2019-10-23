@@ -22,8 +22,8 @@ class Work < ActiveRecord::Base
     belongs_to :image_set, dependent: :destroy
 
     has_many :sets, as: :nestable, class_name: 'WorkSet'
-    has_many :stanzas, order: :position, dependent: :destroy
-    has_many :lines, through: :stanzas, order: :number, dependent: :destroy
+    has_many :stanzas, -> { order('position') }, dependent: :destroy
+    has_many :lines, -> { order('number') }, through: :stanzas, dependent: :destroy
     has_many :line_modifiers, dependent: :destroy
     has_many :divisions, dependent: :destroy
     has_many :emendations, dependent: :destroy
@@ -39,7 +39,7 @@ class Work < ActiveRecord::Base
 
     after_initialize :setup_defaults
     before_create :setup_work
-    default_scope order(:number, :variant)
+    default_scope { order(:number, :variant) }
     scope :starts_with, lambda { |first_letter| where('title ILIKE ?', "#{first_letter}%") }
 
     serialize :metadata
@@ -55,7 +55,7 @@ class Work < ActiveRecord::Base
         text :lines, stored: true do
             lines.map{|l| l.text }
         end
-        text :metadata do 
+        text :metadata do
             metadata.reduce('') do |all, m|
                 value = m.last.is_a?(Array) ? m.last.join(' ') : m.last.to_s
                 value = ActionController::Base.helpers.strip_tags(value)
@@ -79,7 +79,7 @@ class Work < ActiveRecord::Base
     def full_title
         "#{full_id} - #{title}"
     end
-    
+
     def next
         edition.works.where{
             (number > my{number}) | ((number == my{number}) & (variant > my{variant}))
@@ -95,7 +95,7 @@ class Work < ActiveRecord::Base
     def variants
         edition.works.where{(number == my{number}) & (variant != my{variant})}
     end
-        
+
     def apps_at_address(line, char_index)
         (divisions + emendations + revisions + alternates).select do |apparatus|
             apparatus.line_num == line && apparatus.start_address == char_index
@@ -197,7 +197,7 @@ class Work < ActiveRecord::Base
     def text
         # Shut up, I know.
         controller = ApplicationController.new
-        controller.with_format(:txt) do 
+        controller.with_format(:txt) do
             controller.render_to_string(
                 partial: 'works/transcriptions/show',
                 locals: { work: self }
@@ -219,7 +219,7 @@ class Work < ActiveRecord::Base
                     start_line_number: line_number,
                     end_line_number: line_number,
                     start_address: address,
-                    end_address: address, 
+                    end_address: address,
                     subtype: 'page_or_column',
                 )
             elsif line.match(stanza_break_pattern)
@@ -258,10 +258,10 @@ class Work < ActiveRecord::Base
     end
 
     private
-    
+
     def setup_defaults
         if self.has_attribute?(:metadata)
-        self.metadata ||= {} 
+        self.metadata ||= {}
         end
     end
 

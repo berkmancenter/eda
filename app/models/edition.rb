@@ -37,7 +37,7 @@ class Edition < ActiveRecord::Base
     validates :date, length: { maximum: 200 }
     validates :work_number_prefix, length: { maximum: 6 }
 
-    scope :is_public, where(public: true)
+    scope :is_public, -> { where('public=true') }
     scope :for_user, lambda { |user|
         if user.nil?
             is_public
@@ -45,7 +45,7 @@ class Edition < ActiveRecord::Base
             joins{owner.outer}.where{(owner.id == my{user.id}) | (public == true)}
         end
     }
-    default_scope order(:completeness)
+    default_scope { order(:completeness) }
 
     before_create :setup_sets, :setup_name
 
