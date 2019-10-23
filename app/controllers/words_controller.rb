@@ -3,12 +3,12 @@ class WordsController < ApplicationController
         if params[:first_letter]
             @words = Word.starts_with(params[:first_letter])
         else
-            @words = Word.scoped
+            @words = Word.all
         end
         @xhr = request.xhr?
         render :layout => !@xhr
     end
-    
+
     def show
         @word = Word.find(params[:id])
         render :layout => !request.xhr?

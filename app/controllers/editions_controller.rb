@@ -1,7 +1,7 @@
 class EditionsController < ApplicationController
-    before_filter :authenticate_user!, only: [:new, :create, :edit, :update]
-    before_filter :load_edition, only: [:edit, :update, :show, :destroy]
-    before_filter :check_edition_owner, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+    before_action :load_edition, only: [:edit, :update, :show, :destroy]
+    before_action :check_edition_owner, only: [:show, :edit, :update, :destroy]
 
     def index
         if user_signed_in?
@@ -45,10 +45,10 @@ class EditionsController < ApplicationController
                 return
             end
             if session[:from_other_edition]
-                from_image_set = ImageSet.find(session[:from_other_edition][:from_image_set_id])
+                from_image_set = ImageSet.find(session[:from_other_edition]['from_image_set_id'])
                 @image_set = @edition.image_set.leaves_containing(from_image_set.image).first
-                if session[:from_other_edition][:from_work_id]
-                    revises_work = Work.find(session[:from_other_edition][:from_work_id])
+                if session[:from_other_edition]['from_work_id']
+                    revises_work = Work.find(session[:from_other_edition]['from_work_id'])
                     if @edition.is_child? &&
                         @edition.parent == revises_work.edition &&
                         work = @edition.works.find_by_revises_work_id(revises_work.id)

@@ -8,7 +8,7 @@ class TEIImporter
        works = Work.joins(:edition)
        works = works.where(number: number) if number
        works = works.where(variant: variant) if variant
-       works = works.where(edition: { work_number_prefix: edition_prefix }) if edition_prefix
+       works = works.where(editions: { work_number_prefix: edition_prefix }) if edition_prefix
        works.first
     end
 

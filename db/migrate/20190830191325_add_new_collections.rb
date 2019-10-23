@@ -1,4 +1,4 @@
-class AddNewCollections < ActiveRecord::Migration
+class AddNewCollections < ActiveRecord::Migration[5.2]
   def up
     collection = Collection.create(name: 'Dumbarton Oaks, Harvard University')
     collection.metadata = {

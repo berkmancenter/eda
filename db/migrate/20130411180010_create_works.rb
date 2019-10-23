@@ -1,4 +1,4 @@
-class CreateWorks < ActiveRecord::Migration
+class CreateWorks < ActiveRecord::Migration[5.2]
   def change
     create_table :works do |t|
       t.string :title
@@ -13,8 +13,5 @@ class CreateWorks < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :works, :edition_id
-    add_index :works, :image_set_id
-    add_index :works, :revises_work_id
   end
 end

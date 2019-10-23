@@ -1,4 +1,4 @@
-class RemoveOldTreeFieldsFromSetts < ActiveRecord::Migration
+class RemoveOldTreeFieldsFromSetts < ActiveRecord::Migration[5.2]
   def up
     remove_column :setts, :parent_id
     remove_column :setts, :lft

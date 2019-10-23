@@ -20,11 +20,11 @@
 #  public             :boolean
 #
 
-class Edition < ActiveRecord::Base
-    belongs_to :owner, :class_name => 'User'
-    belongs_to :parent, :class_name => 'Edition'
-    belongs_to :image_set, dependent: :destroy
-    belongs_to :work_set, dependent: :destroy
+class Edition < ApplicationRecord
+    belongs_to :owner, :class_name => 'User', optional: true
+    belongs_to :parent, :class_name => 'Edition', optional: true
+    belongs_to :image_set, dependent: :destroy, optional: true
+    belongs_to :work_set, dependent: :destroy, optional: true
 
     has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
 
@@ -37,15 +37,15 @@ class Edition < ActiveRecord::Base
     validates :date, length: { maximum: 200 }
     validates :work_number_prefix, length: { maximum: 6 }
 
-    scope :is_public, where(public: true)
+    scope :is_public, -> { where('public=true') }
     scope :for_user, lambda { |user|
         if user.nil?
             is_public
         else
-            joins{owner.outer}.where{(owner.id == my{user.id}) | (public == true)}
+            joining{ owner.outer }.where.has{ |t| (t.owner.id == user.id) | (t.public == true) }
         end
     }
-    default_scope order(:completeness)
+    default_scope { order(:completeness) }
 
     before_create :setup_sets, :setup_name
 

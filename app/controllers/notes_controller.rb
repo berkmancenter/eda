@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
-    before_filter :authenticate_user!
-    before_filter :load_image_set
+    before_action :authenticate_user!
+    before_action :load_image_set
 
     def create
       @note = @sett.notes.new(params[:note])

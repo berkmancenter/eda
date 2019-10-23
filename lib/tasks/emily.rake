@@ -480,7 +480,7 @@ namespace :emily do
 
         end
 
-        namespace :images do 
+        namespace :images do
 
             desc 'Import image fascicle and set order'
             task :fascicle_order, [:input_file] => [:environment] do |task, args|
@@ -677,7 +677,7 @@ namespace :emily do
             end
         end
     end
-    
+
     desc 'General clean up'
     task :clean_up => [:environment] do |t|
             # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|

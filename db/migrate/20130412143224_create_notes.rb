@@ -1,4 +1,4 @@
-class CreateNotes < ActiveRecord::Migration
+class CreateNotes < ActiveRecord::Migration[5.2]
   def change
     create_table :notes do |t|
       t.integer :notable_id
@@ -8,6 +8,5 @@ class CreateNotes < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :notes, :owner_id
   end
 end

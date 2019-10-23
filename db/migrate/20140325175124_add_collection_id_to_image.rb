@@ -1,4 +1,4 @@
-class AddCollectionIdToImage < ActiveRecord::Migration
+class AddCollectionIdToImage < ActiveRecord::Migration[5.2]
   def up
     add_column :images, :collection_id, :integer
     add_index :images, :collection_id

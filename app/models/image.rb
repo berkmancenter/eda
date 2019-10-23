@@ -16,12 +16,12 @@
 #  collection_id :integer
 #
 
-class Image < ActiveRecord::Base
+class Image < ApplicationRecord
     has_many :image_sets, class_name: 'ImageSet', foreign_key: 'nestable_id'
-    belongs_to :collection
+    belongs_to :collection, optional: true
     attr_accessible :credits, :url, :metadata, :web_width, :web_height, :title
     serialize :metadata
-    
+
     include Rails.application.routes.url_helpers
     include ImagesHelper
 
@@ -104,7 +104,7 @@ class Image < ActiveRecord::Base
         johnson_titles = johnson_works.map(&:title).uniq - franklin_titles
         franklin_titles.each do |title|
           xml.tag! :titleInfo do
-            xml.tag! :title, title 
+            xml.tag! :title, title
           end
         end
         johnson_titles.each do |title|
@@ -113,7 +113,7 @@ class Image < ActiveRecord::Base
           end
         end
 
-        xml.tag! :name, type: 'personal' do 
+        xml.tag! :name, type: 'personal' do
           xml.tag! :namePart, 'Dickinson, Emily'
           xml.tag! :namePart, '1830-1886', type: 'date'
           xml.tag! :role do

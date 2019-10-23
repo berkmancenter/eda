@@ -1,4 +1,4 @@
-class AddLevelOrderToSetts < ActiveRecord::Migration
+class AddLevelOrderToSetts < ActiveRecord::Migration[5.2]
   def up
     add_column :setts, :level_order, :integer
 
