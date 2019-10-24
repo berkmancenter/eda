@@ -1,4 +1,4 @@
-class CreateLines < ActiveRecord::Migration
+class CreateLines < ActiveRecord::Migration[5.2]
   def change
     create_table :lines do |t|
       t.references :stanza
@@ -7,6 +7,5 @@ class CreateLines < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :lines, :stanza_id
   end
 end

@@ -1,4 +1,4 @@
-class CreateDefinitions < ActiveRecord::Migration
+class CreateDefinitions < ActiveRecord::Migration[5.2]
   def change
     create_table :definitions do |t|
       t.references :word_variant
@@ -7,6 +7,5 @@ class CreateDefinitions < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :definitions, :word_variant_id
   end
 end

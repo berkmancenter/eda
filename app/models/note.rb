@@ -12,7 +12,7 @@
 #
 
 class Note < ApplicationRecord
-    belongs_to :owner, :class_name => 'User'
-    belongs_to :notable, :polymorphic => true
+    belongs_to :owner, :class_name => 'User', optional: true
+    belongs_to :notable, :polymorphic => true, optional: true
     attr_accessible :notable_id, :notable_type, :note
 end

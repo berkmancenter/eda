@@ -201,7 +201,7 @@ module FranklinVentura
         end
 
         def breakup_publications(work)
-            work.metadata['Publications'] = work.metadata['Publication'].split(/(\.|;)/).selecting{|s| !['.',';'].include?(s)}
+            work.metadata['Publications'] = work.metadata['Publication'].split(/(\.|;)/).select{|s| !['.',';'].include?(s)}
         end
 
         def parse_xml(simple_string, complex_string)

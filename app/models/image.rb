@@ -18,7 +18,7 @@
 
 class Image < ApplicationRecord
     has_many :image_sets, class_name: 'ImageSet', foreign_key: 'nestable_id'
-    belongs_to :collection
+    belongs_to :collection, optional: true
     attr_accessible :credits, :url, :metadata, :web_width, :web_height, :title
     serialize :metadata
 

@@ -13,6 +13,6 @@
 
 class WordVariant < ApplicationRecord
     attr_accessible :endings, :part_of_speech, :word, :etymology
-    belongs_to :word
+    belongs_to :word, optional: true
     has_many :definitions, -> { order('number') }
 end

@@ -51,7 +51,7 @@ class ImageSet < Sett
     end
 
     def all_images
-        self_and_descendants.map{|image_set| image_set.image}.compact
+        self_and_descendants.includes(:nestable).map{|image_set| image_set.image}.compact
     end
 
     def collection

@@ -11,7 +11,7 @@
 #
 
 class Definition < ApplicationRecord
-  belongs_to :word_variant
+  belongs_to :word_variant, optional: true
   attr_accessible :definition, :number
   default_scope { order(:number) }
 end

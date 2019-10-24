@@ -19,8 +19,8 @@
 #
 
 class Sett < ApplicationRecord
-    belongs_to :nestable, polymorphic: true
-    belongs_to :owner, :class_name => 'User'
+    belongs_to :nestable, polymorphic: true, optional: true
+    belongs_to :owner, :class_name => 'User', optional: true
     has_many :notes, :as => :notable
     attr_accessible :name, :editable, :type, :metadata
 
@@ -59,7 +59,7 @@ class Sett < ApplicationRecord
     def self_and_descendants
       nodes_in_order = Sett.sort_by_ancestry(subtree){|a, b| a.level_order <=> b.level_order}
       ids_in_order = nodes_in_order.map(&:id)
-      Sett.where(id: ids_in_order).reorder("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')")
+      Sett.where(id: ids_in_order).reorder(Arel.sql("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')"))
     end
 
     def leaf?

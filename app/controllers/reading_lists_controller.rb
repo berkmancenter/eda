@@ -17,7 +17,7 @@ class ReadingListsController < ApplicationController
             render 'reading_lists/show'
         end
     end
-    
+
     def edit
     end
 
@@ -28,7 +28,7 @@ class ReadingListsController < ApplicationController
     end
 
     def create
-        if current_user.reading_lists.create(params[:reading_list])
+        if current_user.reading_lists.create!(params.require(:reading_list).permit(:name))
             flash[:notice] = t :reading_list_successfully_created
         else
             flash[:alert] = t :error_creating_reading_list

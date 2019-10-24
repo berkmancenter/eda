@@ -17,9 +17,9 @@
 #
 
 class Work < ApplicationRecord
-    belongs_to :edition
-    belongs_to :revises_work, class_name: 'Work'
-    belongs_to :image_set, dependent: :destroy
+    belongs_to :edition, optional: true
+    belongs_to :revises_work, class_name: 'Work', optional: true
+    belongs_to :image_set, dependent: :destroy, optional: true
 
     has_many :sets, as: :nestable, class_name: 'WorkSet'
     has_many :stanzas, -> { order('position') }, dependent: :destroy
@@ -56,7 +56,7 @@ class Work < ApplicationRecord
             lines.map{|l| l.text }
         end
         text :metadata do
-            metadata.reduce('') do |all, m|
+            metadata.permit!.to_h.reduce('') do |all, m|
                 value = m.last.is_a?(Array) ? m.last.join(' ') : m.last.to_s
                 value = ActionController::Base.helpers.strip_tags(value)
                 "#{all} #{value}"

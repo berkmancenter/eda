@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
     end
 
     def create_revision_from_session(in_edition)
-        revises_work = Work.find(session[:from_other_edition][:from_work_id])
+        revises_work = Work.find(session[:from_other_edition]['from_work_id'])
         revision = revises_work.dup
         text = revises_work.text
         revision.text = text
@@ -149,7 +149,7 @@ class ApplicationController < ActionController::Base
         @this_editions_works = all_works[true]
         if @this_editions_works.nil? && edition.is_child?
             @this_editions_works = Work.joins(:edition).where(
-                edition: { id: edition.parent.id}
+                editions: { id: edition.parent.id}
             ).in_image(image_set.image)
         end
         @other_editions_works = all_works[false]

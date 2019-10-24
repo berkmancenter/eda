@@ -21,10 +21,10 @@
 #
 
 class Edition < ApplicationRecord
-    belongs_to :owner, :class_name => 'User'
-    belongs_to :parent, :class_name => 'Edition'
-    belongs_to :image_set, dependent: :destroy
-    belongs_to :work_set, dependent: :destroy
+    belongs_to :owner, :class_name => 'User', optional: true
+    belongs_to :parent, :class_name => 'Edition', optional: true
+    belongs_to :image_set, dependent: :destroy, optional: true
+    belongs_to :work_set, dependent: :destroy, optional: true
 
     has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
 

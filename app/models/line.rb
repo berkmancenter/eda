@@ -11,7 +11,7 @@
 #
 
 class Line < ApplicationRecord
-  belongs_to :stanza
+  belongs_to :stanza, optional: true
   has_one :work, :through => :stanza
   has_many :line_modifiers, -> (object) {
     where('start_line_number <= ? and end_line_number >= ?', object.number, object.number)
@@ -29,9 +29,9 @@ class Line < ApplicationRecord
       if @mods.nil?
           output = []
       else
-          output = @mods.selecting{|m| m.start_address == address && m.parent_id == nil}
+          output = @mods.select{|m| m.start_address == address && m.parent_id == nil}
       end
-      #work.line_modifiers.all.selecting{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
+
       output
   end
 

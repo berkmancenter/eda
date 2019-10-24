@@ -13,7 +13,7 @@
 #
 
 class WorkAppearance < ApplicationRecord
-  belongs_to :work
+  belongs_to :work, optional: true
   has_many :notes, as: :notable
   attr_accessible :date, :publication, :pages, :year
 end

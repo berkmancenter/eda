@@ -12,7 +12,7 @@ class LexiconImporter
                 :part_of_speech => row[4],
             )
             variant.etymology = unescape(row[6].strip) if row[6]
-            word_defs = defs.selecting{|d| d[1] == row[0]}
+            word_defs = defs.select{|d| d[1] == row[0]}
             word_defs.each do |word_def|
                 puts word_def.inspect unless word_def[2]
                 variant.definitions << Definition.new(

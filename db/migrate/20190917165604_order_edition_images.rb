@@ -1,4 +1,4 @@
-class OrderEditionImages < ActiveRecord::Migration
+class OrderEditionImages < ActiveRecord::Migration[5.2]
   def up
     edition_to_old_image_set_id = {}
     begin

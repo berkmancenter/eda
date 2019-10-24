@@ -19,7 +19,7 @@
 #
 
 class User < ApplicationRecord
-    belongs_to :current_edition, :class_name => 'Edition'
+    belongs_to :current_edition, :class_name => 'Edition', optional: true
     has_many :notes, :foreign_key => 'owner_id'
     has_many :reading_lists, :foreign_key => 'owner_id'
     has_many :editions, :foreign_key => 'owner_id'

@@ -344,7 +344,7 @@ namespace :emily do
             works = edition.works.all.group_by(&:number)
             works.each do |number, variants|
                 next unless variants.count > 1
-                duplicated_images = variants.map{|w| w.image_set.all_images}.flatten.group_by(&:id).selecting{|id, is| is.count > 1}.values.flatten.uniq
+                duplicated_images = variants.map{|w| w.image_set.all_images}.flatten.group_by(&:id).select{|id, is| is.count > 1}.values.flatten.uniq
                 duplicated_images.each do |i|
                     work_ids = edition.works.in_image(i).map(&:full_id).uniq
                     csv << [i.url, work_ids.join(', ')] if work_ids.length > 1
@@ -358,7 +358,7 @@ namespace :emily do
             output_file = args[:output_file] || Rails.root.join('tmp', 'without_images.csv')
             csv = CSV.open(output_file, 'wb')
             csv << ['work_id', 'holder_info']
-            works = Edition.find_by_work_number_prefix('F').works.all.selecting{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}
+            works = Edition.find_by_work_number_prefix('F').works.all.select{|w| !w.secondary_source && w.image_set.all_images.all?{|i| i.url.nil?}}
             works.each do |work|
                 metadata = nil
                 if work.metadata['holder_code']
@@ -480,7 +480,7 @@ namespace :emily do
 
         end
 
-        namespace :images do 
+        namespace :images do
 
             desc 'Import image fascicle and set order'
             task :fascicle_order, [:input_file] => [:environment] do |task, args|
@@ -677,7 +677,7 @@ namespace :emily do
             end
         end
     end
-    
+
     desc 'General clean up'
     task :clean_up => [:environment] do |t|
             # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
