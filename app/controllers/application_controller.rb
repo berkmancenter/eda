@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
     protect_from_forgery
-    after_filter :store_location
-    before_filter :do_search
+    after_action :store_location
+    before_action :do_search
     #helper_method :image_set_path_from_work
 
     def not_found

@@ -10,7 +10,7 @@
 #  updated_at      :datetime         not null
 #
 
-class Definition < ActiveRecord::Base
+class Definition < ApplicationRecord
   belongs_to :word_variant
   attr_accessible :definition, :number
   default_scope { order(:number) }

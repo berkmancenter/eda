@@ -1,7 +1,7 @@
 class EditionsController < ApplicationController
-    before_filter :authenticate_user!, only: [:new, :create, :edit, :update]
-    before_filter :load_edition, only: [:edit, :update, :show, :destroy]
-    before_filter :check_edition_owner, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+    before_action :load_edition, only: [:edit, :update, :show, :destroy]
+    before_action :check_edition_owner, only: [:show, :edit, :update, :destroy]
 
     def index
         if user_signed_in?

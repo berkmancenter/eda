@@ -110,7 +110,7 @@ class ImageToTranscriptionConnector
             work_numbers = match[1].split(';').map(&:strip)
             franklin.works.where(number: work_numbers).each do |w|
                 next unless w.metadata && w.metadata['holder_code']
-                indices = w.metadata['holder_code'].each_index.select{|i| w.metadata['holder_code'][i] == 'a'}
+                indices = w.metadata['holder_code'].each_index.selecting{|i| w.metadata['holder_code'][i] == 'a'}
                 next if indices.empty?
                 work_am_manuscript_nums = [w.metadata['holder_id'].values_at(*indices)].flatten
                 next if (work_am_manuscript_nums.map(&:to_i) & image_am_manuscript_nums.map(&:to_i)).empty?

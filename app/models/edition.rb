@@ -20,7 +20,7 @@
 #  public             :boolean
 #
 
-class Edition < ActiveRecord::Base
+class Edition < ApplicationRecord
     belongs_to :owner, :class_name => 'User'
     belongs_to :parent, :class_name => 'Edition'
     belongs_to :image_set, dependent: :destroy
@@ -42,7 +42,7 @@ class Edition < ActiveRecord::Base
         if user.nil?
             is_public
         else
-            joins{owner.outer}.where{(owner.id == my{user.id}) | (public == true)}
+            joining{ owner.outer }.where.has{ |t| (t.owner.id == user.id) | (t.public == true) }
         end
     }
     default_scope { order(:completeness) }

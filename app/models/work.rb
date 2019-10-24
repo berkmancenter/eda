@@ -16,7 +16,7 @@
 #  updated_at       :datetime         not null
 #
 
-class Work < ActiveRecord::Base
+class Work < ApplicationRecord
     belongs_to :edition
     belongs_to :revises_work, class_name: 'Work'
     belongs_to :image_set, dependent: :destroy
@@ -81,19 +81,19 @@ class Work < ActiveRecord::Base
     end
 
     def next
-        edition.works.where{
-            (number > my{number}) | ((number == my{number}) & (variant > my{variant}))
+        edition.works.where.has{
+            |t| (t.number > number) | ((t.number == number) & (t.variant > variant))
         }.order(:number, :variant).first
     end
 
     def previous
-        edition.works.where{
-            (number < my{number}) | ((number == my{number}) & (variant < my{variant}))
+        edition.works.where.has{
+            |t| (t.number < number) | ((t.number == number) & (t.variant < variant))
         }.order(:number, :variant).last
     end
 
     def variants
-        edition.works.where{(number == my{number}) & (variant != my{variant})}
+        edition.works.where.has{ |t| (t.number == number) & (t.variant != variant)}
     end
 
     def apps_at_address(line, char_index)
@@ -191,7 +191,7 @@ class Work < ActiveRecord::Base
     end
 
     def self.in_editions(editions)
-        includes(:edition).where(edition: { id: editions})
+        includes(:edition).where(editions: { id: editions})
     end
 
     def text

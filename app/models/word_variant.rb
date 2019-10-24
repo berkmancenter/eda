@@ -11,7 +11,7 @@
 #  updated_at     :datetime         not null
 #
 
-class WordVariant < ActiveRecord::Base
+class WordVariant < ApplicationRecord
     attr_accessible :endings, :part_of_speech, :word, :etymology
     belongs_to :word
     has_many :definitions, -> { order('number') }

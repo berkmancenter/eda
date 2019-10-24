@@ -1,11 +1,11 @@
 class WorksController < ApplicationController
     include WorkHelper
 
-    before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
-    before_filter :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
-    before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
-    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :metadata]
-    before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
+    before_action :authenticate_user!, only: [:edit, :update, :choose_edition]
+    before_action :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
+    before_action :load_image_set, only: [:new, :edit, :destroy, :update]
+    before_action :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :metadata]
+    before_action :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
         @works = Work.starts_with(params[:first_letter]).reorder('title, number, variant')

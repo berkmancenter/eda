@@ -1,9 +1,9 @@
 class ReadingListsController < ApplicationController
-    before_filter :authenticate_user!
-    before_filter :load_reading_list, :except => [:index, :create]
-    before_filter :check_reading_list_owner, except: [:index, :create]
+    before_action :authenticate_user!
+    before_action :load_reading_list, :except => [:index, :create]
+    before_action :check_reading_list_owner, except: [:index, :create]
 
-    include TheSortableTreeController::Rebuild
+    include ::TheSortableTreeController::Rebuild
 
     def index
         @reading_lists = current_user.reading_lists

@@ -17,7 +17,7 @@
 #  updated_at          :datetime         not null
 #
 
-class LineModifier < ActiveRecord::Base
+class LineModifier < ApplicationRecord
   belongs_to :start_line
   belongs_to :work
   belongs_to :parent, :class_name => 'LineModifier'

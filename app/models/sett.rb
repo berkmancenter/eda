@@ -18,7 +18,7 @@
 #  ancestry_depth :integer          default(0)
 #
 
-class Sett < ActiveRecord::Base
+class Sett < ApplicationRecord
     belongs_to :nestable, polymorphic: true
     belongs_to :owner, :class_name => 'User'
     has_many :notes, :as => :notable
@@ -30,7 +30,7 @@ class Sett < ActiveRecord::Base
     has_ancestry cache_depth: true
 
     include RankedModel
-    include TheSortableTree::Scopes
+    include ::TheSortableTree::Scopes
     ranks :level_order, with_same: :ancestry
 
     default_scope { rank(:level_order) }
@@ -161,7 +161,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order > my{self.level_order}}
+        siblings.where.has{|t| t.level_order > self.level_order}
       end
     end
 
@@ -169,7 +169,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order < my{self.level_order}}.reverse_order
+        siblings.where.has{|t| t.level_order < self.level_order}.reverse_order
       end
     end
 

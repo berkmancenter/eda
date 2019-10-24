@@ -12,7 +12,7 @@
 #  updated_at  :datetime         not null
 #
 
-class WorkAppearance < ActiveRecord::Base
+class WorkAppearance < ApplicationRecord
   belongs_to :work
   has_many :notes, as: :notable
   attr_accessible :date, :publication, :pages, :year

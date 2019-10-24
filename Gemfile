@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '5.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -11,26 +11,28 @@ gem 'activerecord-import'
 gem 'amatch'
 gem 'ancestry'
 gem 'autoprefixer-rails'
+gem 'baby_squeel'
+gem 'bootsnap', require: false
 gem 'dalli'
 gem 'devise'
 gem 'exception_notification'
 gem 'flickraw'
 gem 'formtastic'
 gem 'htmlentities'
+gem 'listen'
 gem 'memcache-client'
 gem 'naturally', '1.3.2'
 gem 'nokogiri'
 gem 'oai_repository', :git => 'https://github.com/peter-hank/oai_repository', :branch => 'update-rails'
 gem 'pg', '0.18.1'
 gem 'progressbar', '~> 1.0'
-gem 'protected_attributes'
+gem 'protected_attributes_continued'
 gem 'ranked-model'
 gem 'roman-numerals'
 gem 'rubyzip', require: 'zip'
-gem 'squeel'
 gem 'sunspot_rails', '~> 2.5.0'
 gem 'sunspot_solr', '~> 2.5.0'
-gem 'the_sortable_tree'
+gem 'the_sortable_tree', '2.6.1'
 
 # For MODS generation
 gem 'builder'
@@ -52,8 +54,8 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'coffee-rails', '~> 4.2.2'
-  gem 'sass-rails',   '~> 4.0.5'
+  gem 'coffee-rails', '~> 5.0.0'
+  gem 'sass-rails',   '~> 5.1.0'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby

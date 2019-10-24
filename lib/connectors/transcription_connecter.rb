@@ -128,7 +128,7 @@ class TranscriptionConnecter
 
     def find_sh_works_by_page(pages)
         pages = pages.sub('116-17', '116-117').sub('150-51', '150-151').split('-')
-        Edition.find_by_work_number_prefix('SH14-').works.all.select{|w| w.metadata['Page'] && pages.include?(w.metadata['Page'])}
+        Edition.find_by_work_number_prefix('SH14-').works.all.selecting{|w| w.metadata['Page'] && pages.include?(w.metadata['Page'])}
     end
 
     def remove_map_dupes(map)
@@ -148,7 +148,7 @@ class TranscriptionConnecter
             repeated = map[header].group_by(&:to_s).delete_if{|k, v| v.size < 2 || k.empty?}.keys
             repeated.each do |full_id|
                 franklin_work = matching_work_by_text(similarity_maps[edition_prefix], Work.find_by_full_id(full_id), nil).full_id
-                updated_rows = map.select{|row| row[header] == full_id}.each do |row|
+                updated_rows = map.selecting{|row| row[header] == full_id}.each do |row|
                     row[header] = nil unless row[:f] == franklin_work
                 end
             end

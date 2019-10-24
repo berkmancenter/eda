@@ -16,7 +16,7 @@
 #  collection_id :integer
 #
 
-class Image < ActiveRecord::Base
+class Image < ApplicationRecord
     has_many :image_sets, class_name: 'ImageSet', foreign_key: 'nestable_id'
     belongs_to :collection
     attr_accessible :credits, :url, :metadata, :web_width, :web_height, :title

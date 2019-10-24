@@ -10,7 +10,7 @@
 #  updated_at :datetime         not null
 #
 
-class Line < ActiveRecord::Base
+class Line < ApplicationRecord
   belongs_to :stanza
   has_one :work, :through => :stanza
   has_many :line_modifiers, -> (object) {
@@ -29,9 +29,9 @@ class Line < ActiveRecord::Base
       if @mods.nil?
           output = []
       else
-          output = @mods.select{|m| m.start_address == address && m.parent_id == nil}
+          output = @mods.selecting{|m| m.start_address == address && m.parent_id == nil}
       end
-      #work.line_modifiers.all.select{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
+      #work.line_modifiers.all.selecting{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
       output
   end
 

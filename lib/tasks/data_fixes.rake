@@ -3,7 +3,7 @@ namespace :emily do
 
     desc 'Ensure all images are parts of a collection'
     task :images_to_collections => [:environment] do |t|
-      images = Image.all.select{|i| i.collection.nil? && i.url.present? }
+      images = Image.all.selecting{|i| i.collection.nil? && i.url.present? }
       images.each do |image|
         if image.url.starts_with?('ms_am_')
           image.collection = Collection.find_by_name('Houghton Library')
@@ -221,7 +221,7 @@ namespace :emily do
       end
 
       work = Work.find_by_full_id('F1488B.1')
-      work.lines.where{(number >= 0) & (number <= 7)}.each do |line|
+      work.lines.where.has{(number >= 0) & (number <= 7)}.each do |line|
         line.number += 1
         line.number += 1 if line.number > 4
         line.save!

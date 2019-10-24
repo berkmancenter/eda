@@ -1,10 +1,10 @@
 class ImageSetsController < ApplicationController
-    before_filter :authenticate_user!, only: :rebuild
-    before_filter :load_edition, except: [:index, :show]
-    before_filter :load_image_set, only: [:show, :update, :edit, :destroy]
-    before_filter :check_edition_owner, only: :rebuild
+    before_action :authenticate_user!, only: :rebuild
+    before_action :load_edition, except: [:index, :show]
+    before_action :load_image_set, only: [:show, :update, :edit, :destroy]
+    before_action :check_edition_owner, only: :rebuild
 
-    include TheSortableTreeController::Rebuild
+    include ::TheSortableTreeController::Rebuild
     include TheSortableTreeController::ExpandNode
 
     def index

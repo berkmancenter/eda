@@ -28,3 +28,6 @@ config/database.yml
 
 # Don't include config file
 /config/emily.yml
+/config/sunspot.yml
+/config/secrets.yml
+/config/cable.yml
