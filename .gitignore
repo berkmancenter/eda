@@ -31,3 +31,6 @@ config/database.yml
 /config/sunspot.yml
 /config/secrets.yml
 /config/cable.yml
+
+# Ignore compiled assets
+public/assets

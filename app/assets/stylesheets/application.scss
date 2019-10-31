@@ -157,7 +157,7 @@ body {
   }
 
   > header {
-    background: url("ornament-small.png") repeat-x 0 10px;
+    background: asset_url("ornament-small.png") repeat-x 0 10px;
     background-color: $highlightGray;
     margin: 0;
     padding: 0;
@@ -172,7 +172,7 @@ body {
       white-space: nowrap;
       width: 27px * 15;
       font-size: 0;
-      background-image: url("logo.png");
+      background-image: asset_url("logo.png");
     }
 
     .hr {
@@ -211,7 +211,7 @@ body {
     }
 
     a.berkman-link {
-      background: url('berkman_logo_small.png');
+      background: asset_url('berkman_logo_small.png');
       display: inline-block;
       height: 24px;
       vertical-align: middle;
@@ -242,10 +242,10 @@ body {
     display: block;
     top: 3px;
     right: 3px;
-    background: url('small_x.png');
+    background: asset_url('small_x.png');
     cursor: pointer;
     &:hover {
-        background: url('small_x_hover.png');
+        background: asset_url('small_x_hover.png');
     }
 }
 
