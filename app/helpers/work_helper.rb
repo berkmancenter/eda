@@ -76,19 +76,16 @@ module WorkHelper
 
     def image_set_path_from_work(work)
         cache_key = "ispfw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
-        Rails.cache.fetch(cache_key) do 
-            image_set = work.edition.image_set.leaves_showing_work(work).first
+        Rails.cache.fetch(cache_key) do
+            image_set = work.edition.image_set.descendants.where(name: work.full_id).first.children.first
             edition_image_set_path(work.edition, image_set) if image_set
         end
     end
 
     def image_set_url_from_work(work)
         cache_key = "isufw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
-        Rails.cache.fetch(cache_key) do 
-            image_set = work.edition.image_set.leaves.where(
-              nestable_type: 'Image',
-              nestable_id: work.image_set.all_images.first.id
-            ).first
+        Rails.cache.fetch(cache_key) do
+            image_set = work.edition.image_set.descendants.where(name: work.full_id).first.children.first
             edition_image_set_url(work.edition, image_set) if image_set
         end
     end

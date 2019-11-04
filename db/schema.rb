@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20190917165604) do
+ActiveRecord::Schema.define(:version => 20191028192735) do
 
   create_table "definitions", :force => true do |t|
     t.integer  "word_variant_id"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(:version => 20190917165604) do
   add_index "setts", ["ancestry"], :name => "index_setts_on_ancestry"
   add_index "setts", ["ancestry_depth"], :name => "index_setts_on_ancestry_depth"
   add_index "setts", ["is_leaf"], :name => "index_setts_on_is_leaf"
+  add_index "setts", ["name"], :name => "index_setts_on_name"
   add_index "setts", ["nestable_id"], :name => "index_setts_on_nestable_id"
   add_index "setts", ["nestable_type"], :name => "index_setts_on_nestable_type"
   add_index "setts", ["owner_id"], :name => "index_setts_on_owner_id"
