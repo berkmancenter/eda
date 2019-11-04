@@ -394,6 +394,29 @@ namespace :emily do
                 end
             end
         end
+
+      desc 'Find works with duplicate images'
+      task :find_works_with_duplicate_images => [:environment] do |t, args|
+        # This is because edition image sets are organized by work. If multiple
+        # works appear on a page, both instances of the image will currently
+        # show if we use #leaves_showing_work.
+        edition = Edition.find(1)
+        pbar = ProgressBar.create(title: 'Works', total: edition.works.count,
+                                  format: '%t: |%B| %c/%C (%P%) %a -%E ')
+        with_duplicates = []
+        edition.works.each do |work|
+          pbar.increment
+          has_duplicates = edition.image_set.leaves_showing_work(work)
+            .map(&:all_images).flatten.group_by(&:id).values
+            .map(&:count).select{|v|v>1}.count > 0
+          if has_duplicates
+            with_duplicates << work.id
+          end
+        end
+
+        puts "There are #{with_duplicates.count} works with duplicate images"
+        puts with_duplicates.sort
+      end
     end
 
     namespace :import do
