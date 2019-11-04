@@ -1,4 +1,4 @@
-class CreateSetts < ActiveRecord::Migration
+class CreateSetts < ActiveRecord::Migration[5.2]
   def change
     create_table :setts do |t|
       t.text :name
@@ -15,12 +15,9 @@ class CreateSetts < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :setts, :parent_id
     add_index :setts, :lft
     add_index :setts, :rgt
-    add_index :setts, :nestable_id
     add_index :setts, :nestable_type
     add_index :setts, :type
-    add_index :setts, :owner_id
   end
 end

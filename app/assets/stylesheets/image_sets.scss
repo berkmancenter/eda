@@ -61,12 +61,12 @@
       }
 
       span.icon {
-        background: url( 'search.png' ) 0 0;
+        background: asset_url( 'search.png' ) 0 0;
       }
 
       &:hover {
         span.icon {
-          background: url( 'search.png' ) -14px 0;
+          background: asset_url( 'search.png' ) -14px 0;
         }
       }
     }
@@ -156,7 +156,7 @@
 
         .panel-content {
             border-radius: 0 .2em .2em 0;
-            
+
             h2 {
                 margin-top: 0;
             }
@@ -234,7 +234,7 @@
               display: block;
                 height: 100%;
                 padding-top: 0.6em;
-                transform: rotate(-90deg);	
+                transform: rotate(-90deg);
             }
         }
 
@@ -316,7 +316,7 @@
           display: inline-block;
           width: 86%;
         }
-        
+
         .delete-note {
           margin-left: .2em;
           vertical-align: top;
@@ -431,7 +431,7 @@
         }
 
         a {
-          background: url( 'manuscript_view_icon.png' ) no-repeat;
+          background: asset_url( 'manuscript_view_icon.png' ) no-repeat;
           border: solid 2px $darkGray;
           border-radius: 2px;
           display: inline-block;

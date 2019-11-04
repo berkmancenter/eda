@@ -1,5 +1,4 @@
 Eda::Application.routes.draw do
-
     root :to => 'static_pages#home'
 
     devise_for :users, module: :devise
@@ -11,14 +10,14 @@ Eda::Application.routes.draw do
             end
         end
         resources :image_sets, only: [:index, :show, :edit, :update] do
-            collection do 
+            collection do
                 post :rebuild
                 post :expand_node
             end
             resources :works
         end
         resources :work_sets do
-            collection do 
+            collection do
                 post :rebuild
             end
         end
@@ -35,7 +34,7 @@ Eda::Application.routes.draw do
     end
 
     resources :reading_lists do
-        collection do 
+        collection do
             post :rebuild
         end
     end
@@ -53,33 +52,33 @@ Eda::Application.routes.draw do
                 post :rebuild
             end
         end
-        member do 
+        member do
             get '/edit/edition' => 'works#choose_edition', :as => :choose_edition
             get :metadata
         end
         collection do
             get '/new/edition' => 'works#choose_edition', :as => :choose_edition_new
-            match '/:first_letter' => 'works#browse', :as => :by_letter, :first_letter => /[A-Za-z]/
+            match '/:first_letter' => 'works#browse', :as => :by_letter, :first_letter => /[A-Za-z]/, via: [:get, :post]
         end
     end
     resources :words do
         collection do
-            match '/:first_letter' => 'words#index', :as => :by_letter, :first_letter => /[A-Za-z]/
+            match '/:first_letter' => 'words#index', :as => :by_letter, :first_letter => /[A-Za-z]/, via: [:get, :post]
         end
     end
 
-    match 'about' => 'static_pages#about'
-    match 'use' => 'static_pages#use'
-    match 'faq' => 'static_pages#faq'
-    match 'resources' => 'static_pages#resources'
-    match 'team' => 'static_pages#team'
-    match 'terms' => 'static_pages#terms'
-    match 'privacy' => 'static_pages#privacy'
-    match 'contact' => 'static_pages#contact'
+    match 'about' => 'static_pages#about', via: [:get, :post]
+    match 'use' => 'static_pages#use', via: [:get, :post]
+    match 'faq' => 'static_pages#faq', via: [:get, :post]
+    match 'resources' => 'static_pages#resources', via: [:get, :post]
+    match 'team' => 'static_pages#team', via: [:get, :post]
+    match 'terms' => 'static_pages#terms', via: [:get, :post]
+    match 'privacy' => 'static_pages#privacy', via: [:get, :post]
+    match 'contact' => 'static_pages#contact', via: [:get, :post]
 
-    match 'lexicon' => 'words#index'
+    match 'lexicon' => 'words#index', via: [:get, :post]
 
-    match 'search(/:q)' => 'works#search', :as => 'search_works'
+    match 'search(/:q)' => 'works#search', :as => 'search_works', via: [:get, :post]
 
     get 'my_notes' => 'users#my_notes'
     get 'my_reading_lists' => 'users#my_reading_lists'

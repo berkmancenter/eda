@@ -1,4 +1,4 @@
-class CreateStanzas < ActiveRecord::Migration
+class CreateStanzas < ActiveRecord::Migration[5.2]
   def change
     create_table :stanzas do |t|
       t.references :work
@@ -6,6 +6,5 @@ class CreateStanzas < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :stanzas, :work_id
   end
 end

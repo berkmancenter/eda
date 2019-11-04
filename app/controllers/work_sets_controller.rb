@@ -1,8 +1,8 @@
 class WorkSetsController < ApplicationController
-    before_filter :authenticate_user!, only: :rebuild
-    before_filter :load_edition
-    before_filter :check_edition_owner, only: :rebuild
-    include TheSortableTreeController::Rebuild
+    before_action :authenticate_user!, only: :rebuild
+    before_action :load_edition
+    before_action :check_edition_owner, only: :rebuild
+    include ::TheSortableTreeController::Rebuild
 
     def index
         @work_sets = @edition.work_set.self_and_descendants

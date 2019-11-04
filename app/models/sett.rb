@@ -18,9 +18,9 @@
 #  ancestry_depth :integer          default(0)
 #
 
-class Sett < ActiveRecord::Base
-    belongs_to :nestable, polymorphic: true
-    belongs_to :owner, :class_name => 'User'
+class Sett < ApplicationRecord
+    belongs_to :nestable, polymorphic: true, optional: true
+    belongs_to :owner, :class_name => 'User', optional: true
     has_many :notes, :as => :notable
     attr_accessible :name, :editable, :type, :metadata
 
@@ -30,21 +30,27 @@ class Sett < ActiveRecord::Base
     has_ancestry cache_depth: true
 
     include RankedModel
-    include TheSortableTree::Scopes
+    include ::TheSortableTree::Scopes
     ranks :level_order, with_same: :ancestry
 
-    default_scope rank(:level_order)
+    default_scope { rank(:level_order) }
 
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
-    scope :nested_set, rank(:level_order)
-    scope :reversed_nested_set, rank(:level_order).reverse_order
+    scope :nested_set, -> {
+      rank(:level_order)
+    }
+    scope :reversed_nested_set, -> {
+      rank(:level_order).reverse_order
+    }
 
-    scope :leafy, where(is_leaf: true)
-    scope :parental, where(is_leaf: false)
-
-    scope :none, where('1=2')
+    scope :leafy, -> {
+      where(is_leaf: true)
+    }
+    scope :parental, -> {
+      where(is_leaf: false)
+    }
 
     alias_method :self_and_ancestors, :path
 
@@ -53,12 +59,12 @@ class Sett < ActiveRecord::Base
     def self_and_descendants
       nodes_in_order = Sett.sort_by_ancestry(subtree){|a, b| a.level_order <=> b.level_order}
       ids_in_order = nodes_in_order.map(&:id)
-      Sett.where(id: ids_in_order).reorder("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')")
+      Sett.where(id: ids_in_order).reorder(Arel.sql("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')"))
     end
 
     def leaf?
       is_leaf
-    end 
+    end
 
     def leaves_after(node, num = 1)
       # Order isn't guaranteed
@@ -155,7 +161,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order > my{self.level_order}}
+        siblings.where.has{|t| t.level_order > self.level_order}
       end
     end
 
@@ -163,7 +169,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order < my{self.level_order}}.reverse_order
+        siblings.where.has{|t| t.level_order < self.level_order}.reverse_order
       end
     end
 
@@ -215,7 +221,7 @@ class Sett < ActiveRecord::Base
         new_node = node.dup
         new_nodes << new_node
         new_node.id = node.id + id_difference
-        without_ancestry_callbacks do 
+        without_ancestry_callbacks do
           new_node.ancestry = node.ancestor_ids.map{ |i| i + id_difference}.join('/')
           new_node.nestable = node.nestable
         end

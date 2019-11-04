@@ -1,7 +1,7 @@
 @import "colors";
 
 @mixin border-radius-top( $r ) {
-  border-radius: $r $r 0px 0px; 
+  border-radius: $r $r 0px 0px;
 }
 
 .search-works-form {
@@ -14,7 +14,7 @@
     }
 
     span.icon {
-      background: url( 'search.png' ) -28px 0;
+      background: asset_url( 'search.png' ) -28px 0;
       cursor: pointer;
       display: inline-block;
       height: 14px;

@@ -1,42 +1,46 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.22.2'
+gem 'rails', '5.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'rake', '10.5.0'
+gem 'rake', '~> 13.0.0'
 
-gem 'pg', '0.18.1'
-gem 'nokogiri'
-gem 'sunspot_rails', '~> 2.0.0'
-gem 'sunspot_solr', '~> 2.0.0'
-gem 'devise'
-gem 'flickraw'
-gem 'squeel'
-gem 'the_sortable_tree'
-gem 'formtastic'
-gem 'cache_digests'
-gem 'memcache-client'
 gem 'activerecord-import'
-gem 'rubyzip', require: 'zip'
 gem 'amatch'
-gem 'htmlentities'
-gem 'progressbar', '~> 1.0'
-gem 'naturally', '1.3.2'
-gem 'roman-numerals'
-gem 'exception_notification'
-gem 'autoprefixer-rails'
-gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository', :ref => 'ab3e018f59c1c53dcef4736476a56bac179e45f0'
 gem 'ancestry'
+gem 'autoprefixer-rails'
+gem 'baby_squeel'
+gem 'bootsnap', require: false
+gem 'dalli'
+gem 'devise'
+gem 'exception_notification'
+gem 'flickraw'
+gem 'formtastic'
+gem 'htmlentities'
+gem 'listen'
+gem 'memcache-client'
+gem 'naturally', '1.3.2'
+gem 'nokogiri'
+gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository'
+gem 'pg'
+gem 'polyamorous', '~> 1.3.3'
+gem 'progressbar', '~> 1.0'
+gem 'protected_attributes_continued'
 gem 'ranked-model'
+gem 'roman-numerals'
+gem 'rubyzip', require: 'zip'
+gem 'sunspot_rails', '~> 2.5.0'
+gem 'sunspot_solr', '~> 2.5.0'
+gem 'the_sortable_tree', '2.6.1'
 
 # For MODS generation
 gem 'builder'
 
 group :development, :test do
-  gem 'rspec-rails'
   gem 'annotate'
+  gem 'rspec-rails'
   gem 'ruby-prof'
   gem 'test-unit'
   #gem 'sql-logging'
@@ -44,15 +48,15 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'poltergeist'
   gem 'factory_girl_rails'
+  gem 'poltergeist'
 end
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-rails', '~> 5.0.0'
+  gem 'sass-rails',   '~> 5.1.0'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
