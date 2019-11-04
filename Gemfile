@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.3'
+gem 'rails', '5.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -23,8 +23,8 @@ gem 'listen'
 gem 'memcache-client'
 gem 'naturally', '1.3.2'
 gem 'nokogiri'
-gem 'oai_repository', :git => 'https://github.com/berkmancenter/oai_repository', :branch => 'rails5'
-gem 'pg', '0.18.1'
+gem 'oai_repository', :git => 'https://github.com/peter-hank/oai_repository', :branch => 'rails5'
+gem 'pg'
 gem 'polyamorous', '~> 1.3.3'
 gem 'progressbar', '~> 1.0'
 gem 'protected_attributes_continued'

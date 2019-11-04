@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/peter-hank/oai_repository
-  revision: bc06e8961c66ecad4921cf0c4ac5a4872a3ccbb1
-  branch: update-rails
+  revision: 1b9c24e7a237daf280bf5b66d52d09dc38c06ef9
+  branch: rails5
   specs:
     oai_repository (0.9.5)
       oai
@@ -146,24 +146,24 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     msgpack (1.3.1)
     msgpack (1.3.1-x86-mingw32)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     naturally (1.3.2)
     nio4r (2.5.2)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.4-x86-mingw32)
+    nokogiri (1.10.5-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     oai (0.4.0)
       builder (>= 3.1.0)
       faraday
       faraday_middleware
     orm_adapter (0.5.0)
-    pg (0.18.1)
-    pg (0.18.1-x86-mingw32)
+    pg (1.1.4)
+    pg (1.1.4-x86-mingw32)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -309,8 +309,9 @@ DEPENDENCIES
   naturally (= 1.3.2)
   nokogiri
   oai_repository!
-  pg (= 0.18.1)
+  pg
   poltergeist
+  polyamorous (~> 1.3.3)
   progressbar (~> 1.0)
   protected_attributes_continued
   rails (= 5.2.0)
