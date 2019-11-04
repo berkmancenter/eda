@@ -1,7 +1,6 @@
 GIT
-  remote: https://github.com/peter-hank/oai_repository
-  revision: 1b9c24e7a237daf280bf5b66d52d09dc38c06ef9
-  branch: rails5
+  remote: https://github.com/berkmancenter/oai_repository
+  revision: c63aa29315067da46022d88fab0b06e36a37486c
   specs:
     oai_repository (0.9.5)
       oai
