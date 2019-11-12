@@ -5,7 +5,7 @@ class OrderEditionImages < ActiveRecord::Migration[5.2]
       num_editions = Edition.is_public.count
       Edition.is_public.each_with_index do |edition, i|
         puts "Updating edition #{i+1} of #{num_editions}, ID #{edition.id}"
-        edition_to_old_image_set_id[edition.id] = EditionImageSorter.sort(edition)
+        edition_to_old_image_set_id[edition.id] = EditionImageSorter.sort(edition.id)
       end
     ensure
       # We don't remove the old image sets from the database so we can recover
