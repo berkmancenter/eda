@@ -115,6 +115,7 @@ GEM
       actionpack (>= 3.2.13)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    highline (2.0.3)
     htmlentities (4.3.4)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
@@ -160,6 +161,7 @@ GEM
       builder (>= 3.1.0)
       faraday
       faraday_middleware
+    options (2.3.2)
     orm_adapter (0.5.0)
     pg (1.1.4)
     pg (1.1.4-x86-mingw32)
@@ -171,6 +173,9 @@ GEM
     polyamorous (1.3.3)
       activerecord (>= 3.0)
     pr_geohash (1.0.0)
+    progress_bar (1.3.0)
+      highline (>= 1.6, < 3)
+      options (~> 2.3.0)
     progressbar (1.10.1)
     protected_attributes_continued (1.5.0)
       activemodel (>= 5.0)
@@ -311,6 +316,7 @@ DEPENDENCIES
   pg
   poltergeist
   polyamorous (~> 1.3.3)
+  progress_bar
   progressbar (~> 1.0)
   protected_attributes_continued
   rails (= 5.2.0)

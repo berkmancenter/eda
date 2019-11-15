@@ -56,7 +56,13 @@ class Work < ApplicationRecord
             lines.map{|l| l.text }
         end
         text :metadata do
-            metadata.permit!.to_h.reduce('') do |all, m|
+            metadata_permitted = if metadata.is_a? Hash
+                                   metadata
+                                 else
+                                   metadata.permit!.to_h
+                                 end
+
+            metadata_permitted.reduce('') do |all, m|
                 value = m.last.is_a?(Array) ? m.last.join(' ') : m.last.to_s
                 value = ActionController::Base.helpers.strip_tags(value)
                 "#{all} #{value}"
