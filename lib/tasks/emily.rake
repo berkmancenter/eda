@@ -664,19 +664,44 @@ namespace :emily do
 
     desc 'Request everything now so the caches are warm'
     task :warm_cache => [:environment] do |t|
+      puts 'Warming works table cache'
+      Rake::Task['emily:warm_works_table_cache'].invoke
+      puts 'Warming work-image association cache'
+      Rake::Task['emily:warm_work_image_cache'].invoke
+      puts 'Warming work-image view cache'
+      Rake::Task['emily:warm_work_image_view_cache'].invoke
+    end
+
+    desc 'Warm the works table cache'
+    task :warm_works_table_cache => [:environment] do |t|
         app = ActionDispatch::Integration::Session.new(Rails.application)
-        puts "Warming works list"
         app.get(Rails.application.routes.url_helpers.works_path)
-        puts "Warming work-image association cache"
-        Image.all.each{ |i| Work.in_image(i) }
+    end
+
+    desc 'Warm the cache of work-image associations'
+    task :warm_work_image_cache => [:environment] do |t|
+        pbar = ProgressBar.create(title: 'Warming', total: Image.count, format: '%t: |%B| %c/%C (%P%) %a -%E ')
+        Image.all.each do |i|
+          Work.in_image(i)
+          pbar.increment
+        end
+    end
+
+    desc 'Warm the view caches of edition-works'
+    task :warm_work_image_view_cache => [:environment] do |t|
+        app = ActionDispatch::Integration::Session.new(Rails.application)
+        pbar = ProgressBar.create(title: 'Warming',
+                                  total: Edition.all.sum{|e| e.image_set.self_and_descendants.count},
+                                  format:  '%t: |%B| %c/%C (%P%) %a -%E ')
         Edition.all.each do |edition|
             # Visit all image sets
             edition.image_set.self_and_descendants.each do |image_set|
-                puts "Warming Edition: #{edition.id} - Image Set: #{image_set.id}"
                 app.get(Rails.application.routes.url_helpers.edition_image_set_path(edition, image_set))
+                pbar.increment
             end
         end
     end
+
 
     desc 'General clean up'
     task :clean_up => [:environment] do |t|

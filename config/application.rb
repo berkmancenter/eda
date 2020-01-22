@@ -64,5 +64,9 @@ module Eda
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.cache_store = :mem_cache_store
+
+    # We use a file cache for the large "works" table so it can persist across
+    # restarts. This configures where to put it.
+    config.eda_file_cache = "#{Rails.root}/tmp/cache"
   end
 end
