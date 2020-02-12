@@ -702,7 +702,6 @@ namespace :emily do
         end
     end
 
-
     desc 'General clean up'
     task :clean_up => [:environment] do |t|
             # Don't forget: LineModifier.where(subtype: 'cancel').map{|m|
