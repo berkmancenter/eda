@@ -12,10 +12,10 @@ module WorkHelper
     end
 
     def render_line(line)
-        puts "[render_line] line: #{line.inspect}"
+        Rails.logger.debug "[render_line] line: #{line.inspect}"
         output = ''
         line.chars.each_with_index do |char, i|
-          puts "[render_line] line.chars char: #{char}, i: #{i}"
+            Rails.logger.debug "[render_line] line.chars char: #{char}, i: #{i}"
             line.mods_at(i).each do |mod|
                 output += render_mod(mod)
                 Rails.logger.debug "[render_line] output: [#{output}]"
@@ -23,7 +23,7 @@ module WorkHelper
             output += char
         end
         line.mods_at(line.chars.count).each do |mod|
-          puts "[render_line] line.chars i: #{line.chars.count}"
+            Rails.logger.debug "[render_line] line.chars i: #{line.chars.count}"
             output += render_mod(mod)
             Rails.logger.debug "[render_line] output: [#{output}]"
         end
