@@ -1,8 +1,6 @@
 <% provide :title, 'Works - Emily Dickinson Archive' %>
 <h1>Browse Images by Work</h1>
 <p class="help"><%= t 'works_browse_help' %></p>
-<% with_file_cache do %>
-  <% cache cache_key_for_works(@works, @edition) do %>
-    <%= render partial: 'works/table', locals: { works: @works, edition: @edition } %>
-  <% end %>
+<% cache cache_key_for_works(@works, @edition) do %>
+  <%= render partial: 'works/table', locals: { works: @works, edition: @edition } %>
 <% end %>
