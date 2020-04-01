@@ -9,7 +9,8 @@ if Rails.env.staging? || Rails.env.production?
       password: ENV['SMTP_PASSWORD'],
       authentication: :plain,
       tls: true,
-      domain: ENV['SMTP_DOMAIN']
+      domain: ENV['SMTP_DOMAIN'],
+      openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
     }.freeze
   end
 
