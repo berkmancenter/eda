@@ -4,13 +4,12 @@ if Rails.env.staging? || Rails.env.production?
   unless defined?(SMTP_SETTINGS)
     SMTP_SETTINGS = {
       address: ENV['SMTP_ADDRESS'],
-      port: ENV['SMTP_PORT'],
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD'],
       authentication: :plain,
-      tls: true,
+      enable_starttls_auto: false,
       domain: ENV['SMTP_DOMAIN'],
-      openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
+      password: ENV['SMTP_PASSWORD'],
+      user_name: ENV['SMTP_USERNAME'],
+      port: ENV['SMTP_PORT']
     }.freeze
   end
 
