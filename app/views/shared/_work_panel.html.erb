@@ -34,7 +34,7 @@
             <% end %>
             </div>
         <% else %>
-            <% this_editions_works.each do |work| %>
+            <% this_editions_works.sort_by{ |e| e.image_set.level_order }.each do |work| %>
                 <%= link_to "Edit Work", edit_edition_image_set_work_path(edition, image_set, work) %>
                 <% if work_to_edit && work == work_to_edit %>
                 <div class="work-body">
