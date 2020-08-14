@@ -83,13 +83,8 @@ class WorksController < ApplicationController
         else
             load_image_set
             if params[:work][:tei]
-                #begin
-                    parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
-                #rescue
-                #    flash[:alert] = I18n.t(:malformed_tei)
-                #    redirect_to edition_image_set_path(@edition, @image_set)
-                #    return
-                #end
+                parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
+
                 @work = parsed_tei
                 @work.edition = @edition
             else

@@ -38,7 +38,7 @@ class EditionsController < ApplicationController
         @edition.owner = current_user
         if @edition.save
             if (@edition.parent && @edition.image_set.all_images.count != @edition.parent.image_set.all_images.count) ||
-                (@edition.parent.nil? && @edition.image_set.all_images.count != Eda::Application.config.emily['default_edition'].image_set.all_images.count)
+                (@edition.parent.nil? && @edition.image_set.nil?)
                 @edition.destroy
                 flash[:alert] = t :error_creating_edition
                 redirect_to root_path
@@ -60,7 +60,7 @@ class EditionsController < ApplicationController
                     end
                 else
                     session.delete(:from_other_edition)
-                    redirect_to new_edition_image_set_work_path(@edition, @image_set)
+                    redirect_to new_edition_image_set_work_path(@edition, from_image_set)
                 end
             else
                 flash[:notice] = t :edition_successfully_created

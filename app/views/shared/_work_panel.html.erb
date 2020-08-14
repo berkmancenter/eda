@@ -13,7 +13,6 @@
         <% unless work_to_edit %>
         <label class="edition-select" for="edition-selector">Edition</label>
         <%= edition_selector_by_image(image_set.image, edition, 'edition-selector') %>
-        <%# edition_selector(other_editions_works, edition, 'edition-selector') %>
         <% end %>
 
         <% if work_to_edit && work_to_edit.new_record? %>

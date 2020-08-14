@@ -124,7 +124,9 @@ class Work < ApplicationRecord
         image_sets_before_current.each do |i_image_set|
             image_set << i_image_set.image
         end
+
         image_set << edition_image_set.image
+
         image_sets_after_current.each do |i_image_set|
             image_set << i_image_set.image
         end

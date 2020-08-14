@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_10_181020) do
+ActiveRecord::Schema.define(version: 2020_08_14_110456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2020_07_10_181020) do
     t.string "ancestry", limit: 255
     t.boolean "is_leaf", default: true
     t.integer "ancestry_depth", default: 0
+    t.index ["ancestry"], name: "ancestry_on_setts_text_full", opclass: :text_pattern_ops
     t.index ["ancestry"], name: "index_setts_on_ancestry"
     t.index ["ancestry_depth"], name: "index_setts_on_ancestry_depth"
     t.index ["is_leaf"], name: "index_setts_on_is_leaf"

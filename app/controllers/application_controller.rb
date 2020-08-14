@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
     protect_from_forgery
     after_action :store_location
     before_action :do_search
-    #helper_method :image_set_path_from_work
 
     def not_found
         raise ActionController::RoutingError.new('Not Found') unless Rails.env.development?
