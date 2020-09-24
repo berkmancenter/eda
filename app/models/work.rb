@@ -109,13 +109,12 @@ class Work < ApplicationRecord
     end
 
     def sync_text_and_image_set(edition_image_set)
-        on_work_page = image_set.leaves_containing(edition_image_set.image).first.position_in_level
-        num_work_images = divisions.page_breaks.count + 1
         image_sets_before_current = edition_image_set.root.leaves_before(
-            edition_image_set, on_work_page
+            edition_image_set
         )
+
         image_sets_after_current = edition_image_set.root.leaves_after(
-            edition_image_set, num_work_images - on_work_page - 1
+            edition_image_set
         )
 
         image_set.destroy

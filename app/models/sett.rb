@@ -66,7 +66,7 @@ class Sett < ApplicationRecord
       is_leaf
     end
 
-    def leaves_before(node, _num = 1)
+    def leaves_before(node)
       # Order isn't guaranteed
       ids = []
       # Look at all our ancestors until our designated root
@@ -91,7 +91,7 @@ class Sett < ApplicationRecord
       leaves.where(id: ids)
     end
 
-    def leaves_after(node, _num = 1)
+    def leaves_after(node)
       # Order isn't guaranteed
       ids = []
       # Look at all our ancestors until our designated root

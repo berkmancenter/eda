@@ -132,7 +132,9 @@ $(document).ready(function() {
     $('.m').on('click', function(e) {
         e.preventDefault();
         $.get(rootUrl + 'works/' + $(this).data('i') + '/metadata', function(data) {
-            $.modal(data);
+            $.modal(data, {
+              close: true
+            });
         });
     });
     var table = $('table.works').dataTable({
@@ -173,7 +175,9 @@ $(document).ready(function() {
 
     $('.show-metadata').on('click', function(e) {
         e.preventDefault();
-        $(this).parent().find('.metadata').modal();
+        $(this).parent().find('.metadata').modal({
+          close: true
+        });
     });
 
 

@@ -26,7 +26,9 @@ $( function( ) {
     e.preventDefault();
 
     $.get($(this).attr('href'), function(data) {
-      $.modal(data);
+      $.modal(data, {
+        close: true
+      });
     });
 
     return false;
