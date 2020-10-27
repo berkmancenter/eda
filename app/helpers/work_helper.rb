@@ -101,7 +101,7 @@ module WorkHelper
             link = edition.id
             next if edition.image_set.nil?
             images_in_this_edition = edition.image_set.leaves_containing(image)
-            if edition.works.in_image(image).empty? && images_in_this_edition.first.nil?
+            if edition.works.in_image(image).empty? || images_in_this_edition.first.nil?
                 disabled << link unless link == selected_edition.id
             else
                 link = edition_image_set_path(edition, images_in_this_edition.first)
