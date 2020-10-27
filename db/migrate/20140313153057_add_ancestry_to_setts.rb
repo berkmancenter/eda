@@ -1,4 +1,4 @@
-class AddAncestryToSetts < ActiveRecord::Migration
+class AddAncestryToSetts < ActiveRecord::Migration[5.2]
   def up
     add_column :setts, :ancestry, :string
     add_index :setts, :ancestry

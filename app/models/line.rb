@@ -10,10 +10,12 @@
 #  updated_at :datetime         not null
 #
 
-class Line < ActiveRecord::Base
-  belongs_to :stanza
+class Line < ApplicationRecord
+  belongs_to :stanza, optional: true
   has_one :work, :through => :stanza
-  has_many :line_modifiers, :through => :work, :conditions => proc{ "start_line_number <= #{number} AND end_line_number >= #{number}" }
+  has_many :line_modifiers, -> (object) {
+    where('start_line_number <= ? and end_line_number >= ?', object.number, object.number)
+  }, :through => :work
   attr_accessible :number, :text
 
   after_initialize :load_modifiers
@@ -29,7 +31,7 @@ class Line < ActiveRecord::Base
       else
           output = @mods.select{|m| m.start_address == address && m.parent_id == nil}
       end
-      #work.line_modifiers.all.select{|lm| lm.start_address == address && lm.start_line_number <= number && (lm.end_line_number >= number || lm.end_line_number.nil?)}
+
       output
   end
 

@@ -1,7 +1,7 @@
 class EditionsController < ApplicationController
-    before_filter :authenticate_user!, only: [:new, :create, :edit, :update]
-    before_filter :load_edition, only: [:edit, :update, :show, :destroy]
-    before_filter :check_edition_owner, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+    before_action :load_edition, only: [:edit, :update, :show, :destroy]
+    before_action :check_edition_owner, only: [:show, :edit, :update, :destroy]
 
     def index
         if user_signed_in?
@@ -38,17 +38,17 @@ class EditionsController < ApplicationController
         @edition.owner = current_user
         if @edition.save
             if (@edition.parent && @edition.image_set.all_images.count != @edition.parent.image_set.all_images.count) ||
-                (@edition.parent.nil? && @edition.image_set.all_images.count != Eda::Application.config.emily['default_edition'].image_set.all_images.count)
+                (@edition.parent.nil? && @edition.image_set.nil?)
                 @edition.destroy
                 flash[:alert] = t :error_creating_edition
                 redirect_to root_path
                 return
             end
             if session[:from_other_edition]
-                from_image_set = ImageSet.find(session[:from_other_edition][:from_image_set_id])
+                from_image_set = ImageSet.find(session[:from_other_edition]['from_image_set_id'])
                 @image_set = @edition.image_set.leaves_containing(from_image_set.image).first
-                if session[:from_other_edition][:from_work_id]
-                    revises_work = Work.find(session[:from_other_edition][:from_work_id])
+                if session[:from_other_edition]['from_work_id']
+                    revises_work = Work.find(session[:from_other_edition]['from_work_id'])
                     if @edition.is_child? &&
                         @edition.parent == revises_work.edition &&
                         work = @edition.works.find_by_revises_work_id(revises_work.id)
@@ -60,7 +60,7 @@ class EditionsController < ApplicationController
                     end
                 else
                     session.delete(:from_other_edition)
-                    redirect_to new_edition_image_set_work_path(@edition, @image_set)
+                    redirect_to new_edition_image_set_work_path(@edition, from_image_set)
                 end
             else
                 flash[:notice] = t :edition_successfully_created

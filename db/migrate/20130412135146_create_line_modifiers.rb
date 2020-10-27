@@ -1,4 +1,4 @@
-class CreateLineModifiers < ActiveRecord::Migration
+class CreateLineModifiers < ActiveRecord::Migration[5.2]
   def change
     create_table :line_modifiers do |t|
       t.references :work
@@ -14,8 +14,5 @@ class CreateLineModifiers < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :line_modifiers, :work_id
-    add_index :line_modifiers, :start_line_number
-    add_index :line_modifiers, :end_line_number
   end
 end

@@ -47,6 +47,12 @@ namespace :emily do
       end
     end
 
+    desc 'Sort edition images by work number'
+    task :sort_edition_images, [:edition_id] => [:environment] do |t, args|
+      edition_id = args[:edition_id].to_i
+      EditionImageSorter.sort(edition_id)
+    end
+
     desc 'Sort Amherst'
     task :sort_amherst => [:environment] do |t|
       collection = Collection.find_by_name('Amherst College')
@@ -215,7 +221,7 @@ namespace :emily do
       end
 
       work = Work.find_by_full_id('F1488B.1')
-      work.lines.where{(number >= 0) & (number <= 7)}.each do |line|
+      work.lines.where.has{(number >= 0) & (number <= 7)}.each do |line|
         line.number += 1
         line.number += 1 if line.number > 4
         line.save!

@@ -13,7 +13,6 @@
         <% unless work_to_edit %>
         <label class="edition-select" for="edition-selector">Edition</label>
         <%= edition_selector_by_image(image_set.image, edition, 'edition-selector') %>
-        <%# edition_selector(other_editions_works, edition, 'edition-selector') %>
         <% end %>
 
         <% if work_to_edit && work_to_edit.new_record? %>
@@ -34,7 +33,7 @@
             <% end %>
             </div>
         <% else %>
-            <% this_editions_works.each do |work| %>
+            <% this_editions_works.sort_by{ |e| e.image_set.level_order }.each do |work| %>
                 <%= link_to "Edit Work", edit_edition_image_set_work_path(edition, image_set, work) %>
                 <% if work_to_edit && work == work_to_edit %>
                 <div class="work-body">

@@ -8,7 +8,7 @@ class GeneralImageProcessor
             full_path = "#{input_dir}/#{filename}"
             if File.directory?(full_path) && filename[0] != '.'
                 process_directory(full_path, output_dir)
-            elsif File.file?(full_path) && extension.downcase == '.tif'
+            elsif File.file?(full_path) && ['.tif', '.jpg', '.tiff'].include?(extension.downcase)
                 queue << lambda { process_image(full_path, "#{output_dir}/#{base}.tif", web_image_output_dir) }
             end
         end

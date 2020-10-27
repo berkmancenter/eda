@@ -1,4 +1,4 @@
-class CreateEditions < ActiveRecord::Migration
+class CreateEditions < ActiveRecord::Migration[5.2]
   def change
     create_table :editions do |t|
       t.string :name
@@ -16,10 +16,6 @@ class CreateEditions < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :editions, :owner_id
-    add_index :editions, :parent_id
-    add_index :editions, :work_set_id
-    add_index :editions, :image_set_id
     add_index :editions, :completeness
   end
 end

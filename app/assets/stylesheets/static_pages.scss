@@ -16,7 +16,7 @@ body.static-pages {
     h1 {
       font-family: 'Source Sans Pro';
       font-size: 1.1em;
-      font-variant: small-caps; 
+      font-variant: small-caps;
       font-weight: normal;
       margin-left: 27px * 2;
     }
@@ -71,7 +71,7 @@ body.static-pages.home {
   }
 
   .home-logo {
-      background: url('EDAoutlines.png') no-repeat 50%;
+      background: asset_url('EDAoutlines.png') no-repeat 50%;
       height: 156px;
       margin-bottom: 1em;
       width: 100%;
@@ -118,12 +118,12 @@ body.static-pages.home {
 
       button {
         span.icon {
-          background: url( 'search.png' ) -14px 0;
+          background: asset_url( 'search.png' ) -14px 0;
         }
 
         &:hover {
           span.icon {
-            background: url( 'search.png' ) -28px 0;
+            background: asset_url( 'search.png' ) -28px 0;
           }
         }
       }
@@ -208,4 +208,3 @@ body.static-pages.resources {
     margin-top: 1em;
   }
 }
-

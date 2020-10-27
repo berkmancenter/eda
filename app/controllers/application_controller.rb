@@ -1,8 +1,7 @@
 class ApplicationController < ActionController::Base
     protect_from_forgery
-    after_filter :store_location
-    before_filter :do_search
-    #helper_method :image_set_path_from_work
+    after_action :store_location
+    before_action :do_search
 
     def not_found
         raise ActionController::RoutingError.new('Not Found') unless Rails.env.development?
@@ -23,7 +22,7 @@ class ApplicationController < ActionController::Base
 
     def set_users_current_edition
         return unless @edition
-        if user_signed_in? 
+        if user_signed_in?
             current_user.current_edition = @edition
             current_user.save!
         end
@@ -31,7 +30,7 @@ class ApplicationController < ActionController::Base
     end
 
     def create_revision_from_session(in_edition)
-        revises_work = Work.find(session[:from_other_edition][:from_work_id])
+        revises_work = Work.find(session[:from_other_edition]['from_work_id'])
         revision = revises_work.dup
         text = revises_work.text
         revision.text = text
@@ -105,7 +104,7 @@ class ApplicationController < ActionController::Base
 
         if params[:q].strip.empty?
             @search = nil
-            clear_search 
+            clear_search
         end
     end
 
@@ -120,7 +119,7 @@ class ApplicationController < ActionController::Base
             edit_user_password_path
         ]
         if !non_stored_locations.include?(request.path) && !request.xhr? && request.request_method == 'GET'
-            session[:previous_url] = request.fullpath 
+            session[:previous_url] = request.fullpath
             session[:two_urls_back] = session[:previous_url]
         end
     end
@@ -149,7 +148,7 @@ class ApplicationController < ActionController::Base
         @this_editions_works = all_works[true]
         if @this_editions_works.nil? && edition.is_child?
             @this_editions_works = Work.joins(:edition).where(
-                edition: { id: edition.parent.id}
+                editions: { id: edition.parent.id}
             ).in_image(image_set.image)
         end
         @other_editions_works = all_works[false]
@@ -157,7 +156,7 @@ class ApplicationController < ActionController::Base
     end
 
     protected
-    
+
     def render_not_found
       render file: "#{Rails.root}/public/404", layout: false, status: 404
     end

@@ -18,9 +18,9 @@
 #  ancestry_depth :integer          default(0)
 #
 
-class Sett < ActiveRecord::Base
-    belongs_to :nestable, polymorphic: true
-    belongs_to :owner, :class_name => 'User'
+class Sett < ApplicationRecord
+    belongs_to :nestable, polymorphic: true, optional: true
+    belongs_to :owner, :class_name => 'User', optional: true
     has_many :notes, :as => :notable
     attr_accessible :name, :editable, :type, :metadata
 
@@ -30,21 +30,27 @@ class Sett < ActiveRecord::Base
     has_ancestry cache_depth: true
 
     include RankedModel
-    include TheSortableTree::Scopes
+    include ::TheSortableTree::Scopes
     ranks :level_order, with_same: :ancestry
 
-    default_scope rank(:level_order)
+    default_scope { rank(:level_order) }
 
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
-    scope :nested_set, rank(:level_order)
-    scope :reversed_nested_set, rank(:level_order).reverse_order
+    scope :nested_set, -> {
+      rank(:level_order)
+    }
+    scope :reversed_nested_set, -> {
+      rank(:level_order).reverse_order
+    }
 
-    scope :leafy, where(is_leaf: true)
-    scope :parental, where(is_leaf: false)
-
-    scope :none, where('1=2')
+    scope :leafy, -> {
+      where(is_leaf: true)
+    }
+    scope :parental, -> {
+      where(is_leaf: false)
+    }
 
     alias_method :self_and_ancestors, :path
 
@@ -53,14 +59,39 @@ class Sett < ActiveRecord::Base
     def self_and_descendants
       nodes_in_order = Sett.sort_by_ancestry(subtree){|a, b| a.level_order <=> b.level_order}
       ids_in_order = nodes_in_order.map(&:id)
-      Sett.where(id: ids_in_order).reorder("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')")
+      Sett.where(id: ids_in_order).reorder(Arel.sql("position(CAST(id AS text) in '#{ids_in_order.join(' ')}')"))
     end
 
     def leaf?
       is_leaf
-    end 
+    end
 
-    def leaves_after(node, num = 1)
+    def leaves_before(node)
+      # Order isn't guaranteed
+      ids = []
+      # Look at all our ancestors until our designated root
+      node.self_and_ancestors.from_depth(depth + 1).each do |n|
+        # Pick all leafy siblings before node
+        ids += n.prev_siblings.leafy.pluck(:id)
+        # Pick all leaves of parental siblings before node
+        conditions = []
+        n.prev_siblings.parental.each do |sib|
+          conditions << sib.descendant_conditions
+        end
+        unless conditions.empty?
+          conditions_raw = []
+          conditions.each do |condition|
+            conditions_raw << Sett.where(condition).arel.constraints.reduce(:and).to_sql
+          end
+          ids += leaves.where(conditions_raw.join(' OR ')).pluck(:id)
+        end
+      end
+
+      # Return an activerecord relation so we can chain
+      leaves.where(id: ids)
+    end
+
+    def leaves_after(node)
       # Order isn't guaranteed
       ids = []
       # Look at all our ancestors until our designated root
@@ -73,9 +104,11 @@ class Sett < ActiveRecord::Base
           conditions << sib.descendant_conditions
         end
         unless conditions.empty?
-          sql = conditions.map(&:first).join(' or ')
-          values = conditions.map{|c| c[1, 2]}.flatten
-          ids += leaves.where(sql, *values).pluck(:id)
+          conditions_raw = []
+          conditions.each do |condition|
+            conditions_raw << Sett.where(condition).arel.constraints.reduce(:and).to_sql
+          end
+          ids += leaves.where(conditions_raw.join(' OR ')).pluck(:id)
         end
       end
 
@@ -95,30 +128,6 @@ class Sett < ActiveRecord::Base
       end
       nil
     end
-
-    def leaves_before(node)
-      # Order isn't guaranteed
-      ids = []
-      # Look at all our ancestors until our designated root
-      node.self_and_ancestors.from_depth(depth + 1).each do |n|
-        # Pick all leafy siblings after node
-        ids += n.prev_siblings.leafy.pluck(:id)
-        # Pick all leaves of parental siblings after node
-        conditions = []
-        n.prev_siblings.parental.each do |sib|
-          conditions << sib.descendant_conditions
-        end
-        unless conditions.empty?
-          sql = conditions.map(&:first).join(' or ')
-          values = conditions.map{|c| c[1, 2]}.flatten
-          ids += leaves.where(sql, *values).pluck(:id)
-        end
-      end
-
-      # Return an activerecord relation so we can chain
-      leaves.where(id: ids)
-    end
-
 
     def leaf_after_and_same_depth_or_deeper(node)
       node.next_siblings.each do |sib|
@@ -155,7 +164,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order > my{self.level_order}}
+        siblings.where.has{|t| t.level_order > self.level_order}
       end
     end
 
@@ -163,7 +172,7 @@ class Sett < ActiveRecord::Base
       if root?
         self.class.none
       else
-        siblings.where{level_order < my{self.level_order}}.reverse_order
+        siblings.where.has{|t| t.level_order < self.level_order}.reverse_order
       end
     end
 
@@ -207,22 +216,40 @@ class Sett < ActiveRecord::Base
     def duplicate
       new_root = self.dup
       new_root.save
-      new_id = new_root.id
-      id_difference = new_id - id
 
       new_nodes = []
+      new_to_old_ids = {}
+      new_root_id = new_root.id
+      i = 1
+      # Duplicate descendants
       descendants.each do |node|
         new_node = node.dup
-        new_nodes << new_node
-        new_node.id = node.id + id_difference
-        without_ancestry_callbacks do 
-          new_node.ancestry = node.ancestor_ids.map{ |i| i + id_difference}.join('/')
+        new_nodes[node.id] = new_node
+        new_node.id = new_root_id + i
+        new_to_old_ids[node.id] = new_node.id
+        without_ancestry_callbacks do
           new_node.nestable = node.nestable
         end
         new_node.move_to_child_of new_root
+        i += 1
       end
 
-      Sett.import new_nodes, validate: false
+      new_to_old_ids[id] = new_root_id
+
+      # Update ancestry with new ids of duplicated items
+      descendants.each do |node|
+        without_ancestry_callbacks do
+          new_nodes[node.id].ancestry = node.ancestor_ids.map do |ancestor_id|
+            matched_id = new_to_old_ids[ancestor_id]
+
+            ancestor_id = matched_id unless matched_id.nil?
+
+            ancestor_id
+          end.join('/')
+        end
+      end
+
+      Sett.import new_nodes.compact, validate: false
       # Requires postgres
       ActiveRecord::Base.connection.reset_pk_sequence!(Sett.table_name)
       new_root

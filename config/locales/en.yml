@@ -106,7 +106,7 @@ en:
     labels:
       work:
         tei: 'TEI'
-    hints: 
+    hints:
       edition:
         parent: 'Start with images and works from an existing edition'
         short_name: 'A shorter name for the edition'

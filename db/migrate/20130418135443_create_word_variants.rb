@@ -1,4 +1,4 @@
-class CreateWordVariants < ActiveRecord::Migration
+class CreateWordVariants < ActiveRecord::Migration[5.2]
   def change
     create_table :word_variants do |t|
       t.references :word

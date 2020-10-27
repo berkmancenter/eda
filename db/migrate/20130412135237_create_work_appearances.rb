@@ -1,4 +1,4 @@
-class CreateWorkAppearances < ActiveRecord::Migration
+class CreateWorkAppearances < ActiveRecord::Migration[5.2]
   def change
     create_table :work_appearances do |t|
       t.references :work
@@ -9,6 +9,5 @@ class CreateWorkAppearances < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :work_appearances, :work_id
   end
 end

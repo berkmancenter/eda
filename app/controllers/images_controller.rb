@@ -1,6 +1,6 @@
 require 'open-uri'
 class ImagesController < ApplicationController
-    before_filter :load_edition, only: [:index, :show]
+    before_action :load_edition, only: [:index, :show]
     include ImagesHelper
 
     def index

@@ -1,11 +1,11 @@
 class WorksController < ApplicationController
     include WorkHelper
 
-    before_filter :authenticate_user!, only: [:edit, :update, :choose_edition]
-    before_filter :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
-    before_filter :load_image_set, only: [:new, :edit, :destroy, :update]
-    before_filter :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :metadata]
-    before_filter :move_to_editable_edition, only: [:new, :create, :edit, :update]
+    before_action :authenticate_user!, only: [:edit, :update, :choose_edition]
+    before_action :load_edition, except: [:index, :browse, :search, :choose_edition, :metadata]
+    before_action :load_image_set, only: [:new, :edit, :destroy, :update]
+    before_action :load_work, only: [:edit, :update, :destroy, :add_to_reading_list, :metadata]
+    before_action :move_to_editable_edition, only: [:new, :create, :edit, :update]
 
     def browse
         @works = Work.starts_with(params[:first_letter]).reorder('title, number, variant')
@@ -19,9 +19,14 @@ class WorksController < ApplicationController
     def index
         if params[:edition_id]
             load_edition
-            @works = @edition.all_works
+            @works = @edition.all_works.includes(%i[lines image_set])
         else
-            @works = Work.where(edition_id: Edition.for_user(current_user))
+            @works = Work
+                     .includes(edition: :image_set)
+                     .includes(%i[lines image_set])
+                     .where(
+                       edition_id: Edition.for_user(current_user)
+                     )
         end
         render :layout => !request.xhr?
     end
@@ -53,14 +58,14 @@ class WorksController < ApplicationController
     def create
         # Creating as a revision
         if session[:from_other_edition]
-            @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition][:from_image_set_id]).image).first
+            @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition]['from_image_set_id']).image).first
             # Add the image if it's missing somehow
             if @image_set.nil?
-                @edition.image_set << ImageSet.find(session[:from_other_edition][:from_image_set_id]).image
-                @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition][:from_image_set_id]).image).first
+                @edition.image_set << ImageSet.find(session[:from_other_edition]['from_image_set_id']).image
+                @image_set = @edition.image_set.leaves_containing(ImageSet.find(session[:from_other_edition]['from_image_set_id']).image).first
             end
-            if session[:from_other_edition][:from_work_id]
-                revises_work = Work.find(session[:from_other_edition][:from_work_id])
+            if session[:from_other_edition]['from_work_id']
+                revises_work = Work.find(session[:from_other_edition]['from_work_id'])
                 if @edition.is_child? &&
                     @edition.parent == revises_work.edition &&
                     work = @edition.works.find_by_revises_work_id(revises_work.id)
@@ -78,13 +83,8 @@ class WorksController < ApplicationController
         else
             load_image_set
             if params[:work][:tei]
-                #begin
-                    parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
-                #rescue
-                #    flash[:alert] = I18n.t(:malformed_tei)
-                #    redirect_to edition_image_set_path(@edition, @image_set)
-                #    return
-                #end
+                parsed_tei = TEIImporter.new.import(params[:work][:tei].read)
+
                 @work = parsed_tei
                 @work.edition = @edition
             else
@@ -179,9 +179,9 @@ class WorksController < ApplicationController
 
     def choose_edition
         @edition = Edition.new
-        if session[:from_other_edition] && session[:from_other_edition][:from_work_id]
+        if session[:from_other_edition] && session[:from_other_edition]['from_work_id']
             load_work
-            @edition.parent = Work.find(session[:from_other_edition][:from_work_id]).edition
+            @edition.parent = Work.find(session[:from_other_edition]['from_work_id']).edition
         end
     end
 
@@ -197,7 +197,7 @@ class WorksController < ApplicationController
             flash[:notice] = t :cannot_edit_edition
             session[:from_other_edition] = { from_image_set_id: @image_set.id }
             if @work
-                session[:from_other_edition][:from_work_id] = @work.id
+                session[:from_other_edition]['from_work_id'] = @work.id
                 redirect_to choose_edition_work_path(@work)
             else
                 redirect_to choose_edition_new_works_path

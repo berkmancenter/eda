@@ -29,9 +29,9 @@
     }
 
     .handle {
-        background: rgba(0, 0, 0, 0) url(/assets/handle_icon_hover.png);
+        background: rgba(0, 0, 0, 0) asset_url('handle_icon_hover.png');
         &:hover {
-            background: rgba(0, 0, 0, 0) url(/assets/handle_icon_hover.png);
+            background: rgba(0, 0, 0, 0) asset_url('handle_icon_hover.png');
         }
     }
 

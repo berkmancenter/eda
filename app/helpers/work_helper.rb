@@ -12,10 +12,10 @@ module WorkHelper
     end
 
     def render_line(line)
-        puts "[render_line] line: #{line.inspect}"
+        Rails.logger.debug "[render_line] line: #{line.inspect}"
         output = ''
         line.chars.each_with_index do |char, i|
-          puts "[render_line] line.chars char: #{char}, i: #{i}"
+            Rails.logger.debug "[render_line] line.chars char: #{char}, i: #{i}"
             line.mods_at(i).each do |mod|
                 output += render_mod(mod)
                 Rails.logger.debug "[render_line] output: [#{output}]"
@@ -23,7 +23,7 @@ module WorkHelper
             output += char
         end
         line.mods_at(line.chars.count).each do |mod|
-          puts "[render_line] line.chars i: #{line.chars.count}"
+            Rails.logger.debug "[render_line] line.chars i: #{line.chars.count}"
             output += render_mod(mod)
             Rails.logger.debug "[render_line] output: [#{output}]"
         end
@@ -76,7 +76,7 @@ module WorkHelper
 
     def image_set_path_from_work(work)
         cache_key = "ispfw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
-        Rails.cache.fetch(cache_key) do 
+        Rails.cache.fetch(cache_key) do
             image_set = work.edition.image_set.leaves_showing_work(work).first
             edition_image_set_path(work.edition, image_set) if image_set
         end
@@ -84,7 +84,7 @@ module WorkHelper
 
     def image_set_url_from_work(work)
         cache_key = "isufw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
-        Rails.cache.fetch(cache_key) do 
+        Rails.cache.fetch(cache_key) do
             image_set = work.edition.image_set.leaves.where(
               nestable_type: 'Image',
               nestable_id: work.image_set.all_images.first.id
@@ -99,8 +99,9 @@ module WorkHelper
         selected = selected_edition.id
         Edition.for_user(current_user).each do |edition|
             link = edition.id
+            next if edition.image_set.nil?
             images_in_this_edition = edition.image_set.leaves_containing(image)
-            if edition.works.in_image(image).empty?
+            if edition.works.in_image(image).empty? || images_in_this_edition.first.nil?
                 disabled << link unless link == selected_edition.id
             else
                 link = edition_image_set_path(edition, images_in_this_edition.first)

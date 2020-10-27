@@ -12,8 +12,8 @@
 #  updated_at  :datetime         not null
 #
 
-class WorkAppearance < ActiveRecord::Base
-  belongs_to :work
+class WorkAppearance < ApplicationRecord
+  belongs_to :work, optional: true
   has_many :notes, as: :notable
   attr_accessible :date, :publication, :pages, :year
 end
