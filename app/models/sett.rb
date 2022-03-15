@@ -38,9 +38,11 @@ class Sett < ApplicationRecord
     scope :in_editions, lambda { |editions|
         joins(:editions).where(editions: { id: editions.map(&:id) })
     }
+
     scope :nested_set, -> {
       rank(:level_order)
     }
+
     scope :reversed_nested_set, -> {
       rank(:level_order).reverse_order
     }
@@ -48,6 +50,7 @@ class Sett < ApplicationRecord
     scope :leafy, -> {
       where(is_leaf: true)
     }
+
     scope :parental, -> {
       where(is_leaf: false)
     }
@@ -164,7 +167,7 @@ class Sett < ApplicationRecord
       if root?
         self.class.none
       else
-        siblings.where.has{|t| t.level_order > self.level_order}
+        siblings.where('level_order > ?', self.level_order)
       end
     end
 
@@ -172,7 +175,7 @@ class Sett < ApplicationRecord
       if root?
         self.class.none
       else
-        siblings.where.has{|t| t.level_order < self.level_order}.reverse_order
+        siblings.where('level_order < ?', self.level_order).reverse_order
       end
     end
 

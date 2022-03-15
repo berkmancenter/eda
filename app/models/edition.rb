@@ -26,7 +26,7 @@ class Edition < ApplicationRecord
     belongs_to :image_set, dependent: :destroy, optional: true
     belongs_to :work_set, dependent: :destroy, optional: true
 
-    has_many :works, dependent: :destroy #, after_add: :add_work_to_work_set
+    has_many :works, dependent: :destroy
 
     attr_accessible :author, :completeness, :date, :description, :name,
         :work_number_prefix, :parent_id, :public, :short_name, :citation
@@ -42,7 +42,7 @@ class Edition < ApplicationRecord
         if user.nil?
             is_public
         else
-            joining{ owner.outer }.where.has{ |t| (t.owner.id == user.id) | (t.public == true) }
+            left_outer_joins(:owner).where('owner_id = ? OR public = true', user.id)
         end
     }
     default_scope { order(:completeness) }
@@ -68,6 +68,18 @@ class Edition < ApplicationRecord
 
     def is_child?
         !parent.nil?
+    end
+
+    def self.find_by_work_number_prefix(prefix_to_find)
+      Edition.where(work_number_prefix: prefix_to_find).first
+    end
+
+    def self.find_by_image_set_id(image_set_id_to_find)
+      Edition.where(image_set_id: image_set_id_to_find).first
+    end
+
+    def self.find_by_author(author_to_find)
+      Edition.where(author: author_to_find).first
     end
 
     private

@@ -51,7 +51,7 @@ class EditionsController < ApplicationController
                     revises_work = Work.find(session[:from_other_edition]['from_work_id'])
                     if @edition.is_child? &&
                         @edition.parent == revises_work.edition &&
-                        work = @edition.works.find_by_revises_work_id(revises_work.id)
+                        work = @edition.works.where(revises_work_id: revises_work.id).first
                         flash[:alert] = t :revision_already_exists
                         redirect_to edit_edition_image_set_work_path(@edition, @image_set, work)
                     else

@@ -173,4 +173,8 @@ class Image < ApplicationRecord
       end
       xml.target!
     end
+
+    def self.find_by_url(url_to_find)
+      Image.where(url: url_to_find).first
+    end
 end
