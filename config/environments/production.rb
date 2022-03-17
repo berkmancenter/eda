@@ -98,11 +98,12 @@ Eda::Application.configure do
   Eda::Application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :sender_address => %{"Emily Dickinson" <eda-error@edickinson.org>},
-    :exception_recipients => ['jclark+eda@cyber.law.harvard.edu', 'rwestphal+eda@cyber.law.harvard.edu']
+    :exception_recipients => ['jclark+eda@cyber.law.harvard.edu']
   }
 
-  config.action_mailer.default_url_options = { :host => 'www.edickinson.org' }
-  Rails.application.routes.default_url_options[:host] = 'www.edickinson.org'
+  site_host = ENV['SITE_HOST'] || 'www.edickinson.org'
+  config.action_mailer.default_url_options = { :host => site_host }
+  Rails.application.routes.default_url_options[:host] = site_host
 
   config.action_mailer.delivery_method = ENV['MAILER_DELIVERY_METHOD']&.to_sym || :sendmail
   config.action_mailer.perform_deliveries = true
