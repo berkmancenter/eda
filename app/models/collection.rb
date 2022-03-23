@@ -19,4 +19,7 @@
 #
 
 class Collection < ImageSet
+  def self.find_by_name(name_to_find)
+    Collection.where(name: name_to_find).first
+  end
 end

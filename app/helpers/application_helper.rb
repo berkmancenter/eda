@@ -1,6 +1,6 @@
 module ApplicationHelper
   def body_class( params )
-    controller_name = params[:controller].clone
+    controller_name = params[:controller].dup
     if controller_name.index '_'
       controller_name[ '_' ] = '-'
     end

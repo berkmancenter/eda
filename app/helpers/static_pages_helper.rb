@@ -4,8 +4,8 @@ module StaticPagesHelper
   end
 
   def image_set_path_by_title( edition_prefix, image_title )
-	e = Edition.find_by_work_number_prefix( edition_prefix )
-	i = Image.find_by_title( image_title )
+	e = Edition.where(work_number_prefix: edition_prefix)
+	i = Image.where(title: image_title).first
 
 	is = e.image_set.leaves_containing( i ) unless i.nil?
 

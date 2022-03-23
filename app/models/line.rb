@@ -43,6 +43,10 @@ class Line < ApplicationRecord
       line_modifiers.exists?(:subtype => 'author')
   end
 
+  def self.find_by_number(number_to_find)
+    Line.where(number: number_to_find).first
+  end
+
   private
 
   def load_modifiers

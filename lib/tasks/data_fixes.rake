@@ -221,7 +221,7 @@ namespace :emily do
       end
 
       work = Work.find_by_full_id('F1488B.1')
-      work.lines.where.has{(number >= 0) & (number <= 7)}.each do |line|
+      work.lines.where('number >= ? AND number <= ?', 0, 7).each do |line|
         line.number += 1
         line.number += 1 if line.number > 4
         line.save!

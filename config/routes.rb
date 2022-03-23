@@ -1,7 +1,7 @@
 Eda::Application.routes.draw do
     root :to => 'static_pages#home'
 
-    devise_for :users, module: :devise
+    devise_for :users
 
     resources :editions do
         resources :works do

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.7'
+gem 'rails', '6.1.5'
 
 gem 'rake', '~> 13.0.0'
 
@@ -8,7 +8,6 @@ gem 'activerecord-import'
 gem 'amatch'
 gem 'ancestry'
 gem 'autoprefixer-rails'
-gem 'baby_squeel'
 gem 'bootsnap', require: false
 gem 'dalli'
 gem 'devise'
@@ -20,7 +19,7 @@ gem 'listen'
 gem 'memcache-client'
 gem 'naturally', '1.3.2'
 gem 'nokogiri'
-gem 'oai_repository', git: 'https://github.com/berkmancenter/oai_repository'
+gem 'oai_repository', git: 'https://github.com/peter-hank/oai_repository'
 gem 'pg'
 gem 'progress_bar'
 gem 'progressbar', '~> 1.0'

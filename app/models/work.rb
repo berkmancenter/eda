@@ -35,7 +35,6 @@ class Work < ApplicationRecord
 
     validates :date, :number, :title, :variant, length: { maximum: 200 }
     validates :number, numericality: { only_integer: true }
-    #validate :metadata_size
 
     after_initialize :setup_defaults
     before_create :setup_work
@@ -75,7 +74,7 @@ class Work < ApplicationRecord
     end
 
     def line(number)
-        lines.find_by_number(number)
+        Line.find_by_number(number)
     end
 
     def full_id
@@ -87,19 +86,15 @@ class Work < ApplicationRecord
     end
 
     def next
-        edition.works.where.has{
-            |t| (t.number > number) | ((t.number == number) & (t.variant > variant))
-        }.order(:number, :variant).first
+        edition.works.where('number > ? OR (number = ? AND variant > ?)', number, number, varaint).order(:number, :variant).first
     end
 
     def previous
-        edition.works.where.has{
-            |t| (t.number < number) | ((t.number == number) & (t.variant < variant))
-        }.order(:number, :variant).last
+        edition.works.where('number < ? OR (number = ? AND variant < ?)', number, number, varaint).order(:number, :variant).last
     end
 
     def variants
-        edition.works.where.has{ |t| (t.number == number) & (t.variant != variant)}
+        edition.works.where('number = ? AND variant != ?', number, variant)
     end
 
     def apps_at_address(line, char_index)

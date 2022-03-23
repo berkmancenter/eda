@@ -1,3 +1,5 @@
+require 'active_support/core_ext/integer/time'
+
 Eda::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -61,7 +63,7 @@ Eda::Application.configure do
 
   config.action_dispatch.rack_cache = nil
 
-  config.log_level = :info
+  config.log_level = :debug
 
   config.action_mailer.default_url_options = { :host => 'qa.edickinson.org' }
 
