@@ -24,10 +24,12 @@ gem 'pg'
 gem 'progress_bar'
 gem 'progressbar', '~> 1.0'
 gem 'protected_attributes_continued'
+gem 'psych', '< 4'
 gem 'ranked-model'
 gem 'roman-numerals'
 gem 'rubyzip', require: 'zip'
-gem 'sunspot_rails', '~> 2.5.0'
+# Support for ruby 3.1 is on the master branch, but there is no new release yet
+gem 'sunspot_rails', git: 'https://github.com/sunspot/sunspot', ref: 'f2f01a6'
 gem 'the_sortable_tree', '2.6.1'
 
 # For MODS generation
@@ -61,3 +63,7 @@ gem 'jquery-ui-rails'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
+gem "webrick", "~> 1.7"
+
+gem "rexml", "~> 3.2"
