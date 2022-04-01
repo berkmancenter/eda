@@ -40,7 +40,7 @@ class ImagesController < ApplicationController
             temp_metadata = Tempfile.new("metadata-file")
 
             temp_image.binmode
-            temp_image.write(open(large_jpg_url(@image)).read)
+            temp_image.write(URI.open(large_jpg_url(@image)).read)
             temp_image.rewind
 
             temp_metadata.write("Credits\n#{@image.text_credits}")
