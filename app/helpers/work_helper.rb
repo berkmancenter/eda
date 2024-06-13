@@ -75,7 +75,7 @@ module WorkHelper
     end
 
     def image_set_path_from_work(work)
-        cache_key = "ispfw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
+        cache_key = "ispfw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_formatted_s, :number)}"
         Rails.cache.fetch(cache_key) do
             image_set = work.edition.image_set.leaves_showing_work(work).first
             edition_image_set_path(work.edition, image_set) if image_set
@@ -83,7 +83,7 @@ module WorkHelper
     end
 
     def image_set_url_from_work(work)
-        cache_key = "isufw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_s, :number)}"
+        cache_key = "isufw-work-#{work.id}-#{work.updated_at.try(:utc).try(:to_formatted_s, :number)}"
         Rails.cache.fetch(cache_key) do
             image_set = work.edition.image_set.leaves.where(
               nestable_type: 'Image',
@@ -136,7 +136,7 @@ module WorkHelper
 
     def cache_key_for_works(works, edition=nil)
         count          = works.count
-        max_updated_at = works.maximum(:updated_at).try(:utc).try(:to_s, :number)
+        max_updated_at = works.maximum(:updated_at).try(:utc).try(:to_formatted_s, :number)
         edition_id = edition ? "-with_edition-#{edition.id}" : ''
         "works/many-#{count}-#{max_updated_at}#{edition_id}"
     end

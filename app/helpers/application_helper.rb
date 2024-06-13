@@ -35,7 +35,7 @@ module ApplicationHelper
 
   def cache_key_for_multiple(objects)
         count          = objects.count
-        max_updated_at = objects.maximum(:updated_at).try(:utc).try(:to_s, :number)
+        max_updated_at = objects.maximum(:updated_at).try(:utc).try(:to_formatted_s, :number)
         "#{objects.first.class.name.underscore.pluralize}/many-#{objects.first.id}-#{objects.last.id}-#{count}-#{max_updated_at}"
   end
 end

@@ -188,7 +188,7 @@ class WorksController < ApplicationController
     def add_to_reading_list
         @reading_list = ReadingList.find(params[:reading_list_id])
         @reading_list.add_work(@work)
-        render text: !!@reading_list.save!
+        render plain: !!@reading_list.save!
     end
 
     private

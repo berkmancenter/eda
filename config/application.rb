@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module Eda
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
+    config.load_defaults 7.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -68,5 +68,7 @@ module Eda
     # We use a file cache for the large "works" table so it can persist across
     # restarts. This configures where to put it.
     config.eda_file_cache = "#{Rails.root}/tmp/cache"
+
+    config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, Hash, Array, ActiveSupport::HashWithIndifferentAccess, ActionController::Parameters]
   end
 end

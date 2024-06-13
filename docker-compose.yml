@@ -1,22 +1,22 @@
-version: '2'
-
 services:
   postgres:
-    image: 'postgres:12.0'
+    image: 'postgres:16'
     volumes:
       - 'postgres:/var/lib/postgresql/data'
       - '.:/app'
-
+    environment:
+      POSTGRES_PASSWORD: password123
+  
   website:
     depends_on:
-      - 'postgres'
-      - 'solr'
+      - postgres
+      - solr
     environment:
-      - MAILER_DELIVERY_METHOD=smtp
-      - SMTP_ADDRESS=localhost
-      - SMTP_PORT=25
-      - SMTP_USERNAME=
-      - SMTP_PASSWORD= 
+      MAILER_DELIVERY_METHOD: smtp
+      SMTP_ADDRESS: localhost
+      SMTP_PORT: 25
+      SMTP_USERNAME: ''
+      SMTP_PASSWORD: ''
     build: .
     ports:
       - '3000:3000'
@@ -27,7 +27,7 @@ services:
   solr:
     image: solr:latest
     ports:
-      - "8983:8983"
+      - '8983:8983'
     volumes:
       - solr:/opt/solr/server/solr
       - ./config/solr/schema.xml:/opt/solr/server/solr/configsets/_default/conf/schema.xml
@@ -36,8 +36,7 @@ services:
       - docker-entrypoint.sh
       - solr-precreate
       - production
-    restart:
-      unless-stopped
+    restart: unless-stopped
 
 volumes:
   postgres:

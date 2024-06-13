@@ -1,14 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.1.5'
-
-gem 'rake', '~> 13.0.0'
-
 gem 'activerecord-import'
 gem 'amatch'
 gem 'ancestry'
 gem 'autoprefixer-rails'
 gem 'bootsnap', require: false
+# For MODS generation
+gem 'builder'
 gem 'dalli'
 gem 'devise'
 gem 'exception_notification'
@@ -19,21 +17,20 @@ gem 'listen'
 gem 'memcache-client'
 gem 'naturally', '1.3.2'
 gem 'nokogiri'
-gem 'oai_repository', git: 'https://github.com/peter-hank/oai_repository'
+gem 'oai_repository', git: 'https://github.com/berkmancenter/oai_repository.git'
 gem 'pg'
 gem 'progress_bar'
 gem 'progressbar', '~> 1.0'
 gem 'protected_attributes_continued'
 gem 'psych', '< 4'
+gem 'rake'
 gem 'ranked-model'
+gem 'rails', '~> 7.1.3'
 gem 'roman-numerals'
 gem 'rubyzip', require: 'zip'
-# Support for ruby 3.1 is on the master branch, but there is no new release yet
-gem 'sunspot_rails', git: 'https://github.com/sunspot/sunspot', ref: 'f2f01a6'
+gem 'sunspot_rails'
 gem 'the_sortable_tree', '2.6.1'
 
-# For MODS generation
-gem 'builder'
 
 group :development, :test do
   gem 'annotate'
