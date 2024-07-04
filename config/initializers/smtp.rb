@@ -10,7 +10,7 @@ if Rails.env.staging? || Rails.env.production?
       password: ENV['SMTP_PASSWORD'],
       user_name: ENV['SMTP_USERNAME'],
       port: ENV['SMTP_PORT']
-    }.freeze
+    }
   end
 
   Rails.application.config.action_mailer.smtp_settings = SMTP_SETTINGS
