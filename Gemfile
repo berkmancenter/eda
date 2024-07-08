@@ -69,4 +69,4 @@ gem "net-smtp", "~> 0.3.1"
 
 gem "net-imap", "~> 0.2.3"
 
-gem "net-pop", "~> 0.1.1"
+gem "net-pop", "~> 0.1.1", github: "ruby/net-pop"
