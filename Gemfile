@@ -9,6 +9,7 @@ gem 'bootsnap', require: false
 gem 'builder'
 gem 'dalli'
 gem 'devise'
+gem 'dotenv'
 gem 'exception_notification'
 gem 'flickraw'
 gem 'formtastic'

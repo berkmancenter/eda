@@ -139,6 +139,7 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     digest (3.1.1)
+    dotenv (3.1.2)
     drb (2.2.1)
     erubi (1.13.0)
     exception_notification (4.5.0)
@@ -389,6 +390,7 @@ DEPENDENCIES
   coffee-rails (~> 5.0.0)
   dalli
   devise
+  dotenv
   exception_notification
   factory_girl_rails
   flickraw
