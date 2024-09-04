@@ -70,5 +70,11 @@ module Eda
     config.eda_file_cache = "#{Rails.root}/tmp/cache"
 
     config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, Hash, Array, ActiveSupport::HashWithIndifferentAccess, ActionController::Parameters]
+
+    # Conditionally require the terser gem only during asset compilation
+    if defined?(Rake) && (Rake.application.top_level_tasks & ['assets:precompile', 'assets:clobber']).any?
+      require 'terser'
+      config.assets.js_compressor = :terser
+    end
   end
 end

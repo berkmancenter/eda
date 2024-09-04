@@ -30,6 +30,7 @@ gem 'rails', '~> 7.1.3'
 gem 'roman-numerals'
 gem 'rubyzip', require: 'zip'
 gem 'sunspot_rails'
+gem 'terser', require: false
 gem 'the_sortable_tree', '2.6.1'
 
 
@@ -52,7 +53,6 @@ end
 group :assets do
   gem 'coffee-rails', '~> 5.0.0'
   gem 'sass-rails',   '~> 5.1.0'
-  gem 'terser'
 end
 
 gem 'jquery-rails'
